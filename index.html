@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portafolio de Bases de Datos — Juan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ─────────────────────────────────────────────
+     CONFIG: cambia estos dos valores por los tuyos
+     ───────────────────────────────────────────── */
+  :root{
+    --bg-deep:#0a081a;
+    --bg-mid:#130f2e;
+    --purple:#bb9af7;
+    --magenta:#c77dff;
+    --violet:#9d4edd;
+    --blue:#7aa2f7;
+    --text:#c8d0f5;
+    --text-dim:#8b8fc4;
+    --card:#171334;
+    --card-hover:#1e1846;
+    --line:rgba(187,154,247,.18);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box}
+
+  body{
+    font-family:'Inter',sans-serif;
+    background:var(--bg-deep);
+    color:var(--text);
+    min-height:100vh;
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  /* Cielo de fondo con gradiente radial */
+  .sky{
+    position:fixed;
+    inset:0;
+    z-index:-2;
+    background:
+      radial-gradient(ellipse 90% 60% at 50% -10%, rgba(157,78,221,.25), transparent 60%),
+      radial-gradient(ellipse 70% 50% at 85% 100%, rgba(122,162,247,.12), transparent 55%),
+      linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-mid) 55%, var(--bg-deep) 100%);
+  }
+
+  /* Canvas de estrellas animadas */
+  #stars{
+    position:fixed;
+    inset:0;
+    z-index:-1;
+  }
+
+  .wrap{
+    max-width:1000px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+
+  /* ── HERO ── */
+  header{
+    text-align:center;
+    padding:clamp(90px,18vh,170px) 0 60px;
+  }
+
+  .eyebrow{
+    font-family:'Space Grotesk',sans-serif;
+    letter-spacing:.32em;
+    text-transform:uppercase;
+    font-size:.72rem;
+    color:var(--purple);
+    opacity:.85;
+    margin-bottom:22px;
+  }
+
+  h1{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;
+    font-size:clamp(2.4rem,6vw,4.2rem);
+    line-height:1.05;
+    letter-spacing:-.02em;
+    background:linear-gradient(120deg,#fff 20%,var(--purple) 55%,var(--blue) 90%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    margin-bottom:20px;
+  }
+
+  .subtitle{
+    color:var(--text-dim);
+    font-size:1.05rem;
+    max-width:520px;
+    margin:0 auto;
+    line-height:1.6;
+  }
+
+  .author{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    margin-top:28px;
+    padding:8px 18px;
+    border:1px solid var(--line);
+    border-radius:999px;
+    font-family:'Space Grotesk',sans-serif;
+    font-size:.85rem;
+    color:var(--text);
+    background:rgba(23,19,52,.5);
+    backdrop-filter:blur(6px);
+  }
+  .author .dot{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--magenta);
+    box-shadow:0 0 10px var(--magenta);
+  }
+
+  /* ── CONSTELACIÓN DE SECCIONES ── */
+  .section-label{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:.75rem;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--text-dim);
+    text-align:center;
+    margin:40px 0 34px;
+    position:relative;
+  }
+  .section-label::before,
+  .section-label::after{
+    content:"";
+    position:absolute;
+    top:50%;
+    width:70px;
+    height:1px;
+    background:linear-gradient(90deg,transparent,var(--line));
+  }
+  .section-label::before{right:calc(50% + 90px)}
+  .section-label::after{left:calc(50% + 90px);transform:scaleX(-1)}
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:20px;
+    padding-bottom:30px;
+  }
+
+  .card{
+    position:relative;
+    display:block;
+    text-decoration:none;
+    color:inherit;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:30px 28px;
+    overflow:hidden;
+    transition:transform .3s cubic-bezier(.2,.8,.2,1), border-color .3s, background .3s;
+  }
+  .card::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:radial-gradient(400px circle at var(--mx,50%) var(--my,0%), rgba(187,154,247,.14), transparent 45%);
+    opacity:0;
+    transition:opacity .35s;
+    pointer-events:none;
+  }
+  .card:hover{
+    transform:translateY(-5px);
+    border-color:rgba(187,154,247,.5);
+    background:var(--card-hover);
+  }
+  .card:hover::after{opacity:1}
+
+  .card .num{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:.78rem;
+    color:var(--violet);
+    letter-spacing:.15em;
+  }
+  .card .icon{
+    font-size:1.7rem;
+    margin:10px 0 16px;
+    display:block;
+  }
+  .card h3{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:600;
+    font-size:1.25rem;
+    margin-bottom:8px;
+    color:#fff;
+  }
+  .card p{
+    color:var(--text-dim);
+    font-size:.9rem;
+    line-height:1.55;
+  }
+  .card .go{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    margin-top:18px;
+    font-family:'Space Grotesk',sans-serif;
+    font-size:.82rem;
+    color:var(--purple);
+  }
+  .card .go svg{transition:transform .3s}
+  .card:hover .go svg{transform:translateX(4px)}
+
+  /* ── VIDEO / PRESENTACIÓN ── */
+  .presentacion{
+    margin:30px 0 20px;
+    background:linear-gradient(135deg,rgba(157,78,221,.14),rgba(122,162,247,.08));
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:38px 32px;
+    text-align:center;
+  }
+  .presentacion h2{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:1.5rem;
+    color:#fff;
+    margin-bottom:10px;
+  }
+  .presentacion p{color:var(--text-dim);font-size:.92rem;max-width:440px;margin:0 auto 22px;line-height:1.6}
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    padding:13px 26px;
+    background:linear-gradient(120deg,var(--violet),var(--blue));
+    color:#fff;
+    text-decoration:none;
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:600;
+    font-size:.92rem;
+    border-radius:12px;
+    transition:transform .25s, box-shadow .25s;
+    box-shadow:0 8px 24px rgba(157,78,221,.3);
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(157,78,221,.45)}
+
+  footer{
+    text-align:center;
+    padding:50px 0 60px;
+    color:var(--text-dim);
+    font-size:.82rem;
+  }
+  footer a{color:var(--purple);text-decoration:none}
+  footer a:hover{text-decoration:underline}
+
+  @media (max-width:640px){
+    .grid{grid-template-columns:1fr}
+    .section-label::before,.section-label::after{display:none}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .card{transition:none}
+    #stars{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="sky"></div>
+<canvas id="stars"></canvas>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Bitácora de aprendizaje</div>
+    <h1>Portafolio de<br>Bases de Datos</h1>
+    <p class="subtitle">Un registro vivo de ejercicios, talleres y descubrimientos —
+      cada entrada, un nodo más en el esquema.</p>
+    <div class="author"><span class="dot"></span> Juan · Ingeniería de Sistemas</div>
+  </header>
+
+  <section class="presentacion">
+    <h2>📹 Video de presentación</h2>
+    <p>Mi introducción al curso y a este portafolio. Míralo en el repositorio.</p>
+    <a class="btn" id="link-video" href="#">
+      Ver presentación
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </section>
+
+  <div class="section-label">Secciones</div>
+
+  <div class="grid">
+    <a class="card" id="link-ejercicios" href="#">
+      <span class="num">01</span>
+      <span class="icon">✦</span>
+      <h3>Ejercicios</h3>
+      <p>Resoluciones de práctica: consultas SQL, modelado y normalización.</p>
+      <span class="go">Explorar
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </span>
+    </a>
+
+    <a class="card" id="link-talleres" href="#">
+      <span class="num">02</span>
+      <span class="icon">✵</span>
+      <h3>Talleres</h3>
+      <p>Trabajos guiados y entregas más completas del curso.</p>
+      <span class="go">Explorar
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </span>
+    </a>
+
+    <a class="card" id="link-descubrimientos" href="#">
+      <span class="num">03</span>
+      <span class="icon">✧</span>
+      <h3>Descubrimientos</h3>
+      <p>Hallazgos, notas y conceptos que voy encontrando en el camino.</p>
+      <span class="go">Explorar
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </span>
+    </a>
+
+    <a class="card" id="link-repo" href="#">
+      <span class="num">04</span>
+      <span class="icon">✩</span>
+      <h3>Repositorio</h3>
+      <p>El código fuente completo de este portafolio en GitHub.</p>
+      <span class="go">Ir al repo
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </span>
+    </a>
+  </div>
+
+  <footer>
+    Hecho con curiosidad · <a id="link-footer" href="#">github.com</a>
+  </footer>
+</div>
+
+<script>
+  /* ═══════════════════════════════════════════════════
+     ⬇️  CAMBIA ESTOS DOS VALORES POR LOS TUYOS  ⬇️
+     ═══════════════════════════════════════════════════ */
+  const USUARIO = "OtherSpanish";       
+  const REPO    = "portafolio-bd";     
+  /* ═══════════════════════════════════════════════════ */
+
+  const base = `https://github.com/${USUARIO}/${REPO}`;
+  const tree = p => `${base}/tree/main/${p}`;
+  document.getElementById("link-video").href          = tree("presentacion");
+  document.getElementById("link-ejercicios").href     = tree("ejercicios");
+  document.getElementById("link-talleres").href       = tree("talleres");
+  document.getElementById("link-descubrimientos").href= tree("descubrimientos");
+  document.getElementById("link-repo").href           = base;
+  document.getElementById("link-footer").href         = base;
+  document.getElementById("link-footer").textContent  = `github.com/${USUARIO}`;
+
+  /* Brillo que sigue al cursor sobre las tarjetas */
+  document.querySelectorAll('.card').forEach(card=>{
+    card.addEventListener('mousemove',e=>{
+      const r=card.getBoundingClientRect();
+      card.style.setProperty('--mx',`${e.clientX-r.left}px`);
+      card.style.setProperty('--my',`${e.clientY-r.top}px`);
+    });
+  });
+
+  /* ── Campo de estrellas ── */
+  const canvas=document.getElementById('stars');
+  const ctx=canvas.getContext('2d');
+  let stars=[],w,h;
+  const COLORS=['#ffffff','#bb9af7','#c77dff','#7aa2f7'];
+
+  function resize(){
+    w=canvas.width=innerWidth;
+    h=canvas.height=innerHeight;
+    const count=Math.min(220,Math.floor(w*h/9000));
+    stars=Array.from({length:count},()=>({
+      x:Math.random()*w,
+      y:Math.random()*h,
+      r:Math.random()*1.4+.3,
+      c:COLORS[Math.floor(Math.random()*COLORS.length)],
+      tw:Math.random()*Math.PI*2,
+      sp:Math.random()*.03+.008
+    }));
+  }
+  function draw(){
+    ctx.clearRect(0,0,w,h);
+    for(const s of stars){
+      s.tw+=s.sp;
+      const a=.35+Math.abs(Math.sin(s.tw))*.6;
+      ctx.globalAlpha=a;
+      ctx.fillStyle=s.c;
+      ctx.beginPath();
+      ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fill();
+      if(s.r>1.1){
+        ctx.globalAlpha=a*.4;
+        ctx.beginPath();
+        ctx.arc(s.x,s.y,s.r*2.5,0,Math.PI*2);
+        ctx.fill();
+      }
+    }
+    ctx.globalAlpha=1;
+    requestAnimationFrame(draw);
+  }
+  addEventListener('resize',resize);
+  if(!matchMedia('(prefers-reduced-motion:reduce)').matches){
+    resize();draw();
+  }
+</script>
+</body>
+</html>
