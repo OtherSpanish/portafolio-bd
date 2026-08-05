@@ -8,9 +8,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  /* ─────────────────────────────────────────────
-     CONFIG: cambia estos dos valores por los tuyos
-     ───────────────────────────────────────────── */
   :root{
     --bg-deep:#0a081a;
     --bg-mid:#130f2e;
@@ -36,7 +33,6 @@
     position:relative;
   }
 
-  /* Cielo de fondo con gradiente radial */
   .sky{
     position:fixed;
     inset:0;
@@ -47,7 +43,6 @@
       linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-mid) 55%, var(--bg-deep) 100%);
   }
 
-  /* Canvas de estrellas animadas */
   #stars{
     position:fixed;
     inset:0;
@@ -60,7 +55,6 @@
     padding:0 24px;
   }
 
-  /* ── HERO ── */
   header{
     text-align:center;
     padding:clamp(90px,18vh,170px) 0 60px;
@@ -117,7 +111,6 @@
     box-shadow:0 0 10px var(--magenta);
   }
 
-  /* ── CONSTELACIÓN DE SECCIONES ── */
   .section-label{
     font-family:'Space Grotesk',sans-serif;
     font-size:.75rem;
@@ -210,7 +203,6 @@
   .card .go svg{transition:transform .3s}
   .card:hover .go svg{transform:translateX(4px)}
 
-  /* ── VIDEO / PRESENTACIÓN ── */
   .presentacion{
     margin:30px 0 20px;
     background:linear-gradient(135deg,rgba(157,78,221,.14),rgba(122,162,247,.08));
@@ -271,9 +263,8 @@
   <header>
     <div class="eyebrow">Bitácora de aprendizaje</div>
     <h1>Portafolio de<br>Bases de Datos</h1>
-    <p class="subtitle">Un registro vivo de ejercicios, talleres y descubrimientos —
-      cada entrada, un nodo más en el esquema.</p>
-    <div class="author"><span class="dot"></span> Juan · Ingeniería de Sistemas</div>
+    <p class="subtitle">Registro de ejercicios, talleres y descubrimientos.</p>
+    <div class="author"><span class="dot"></span> Juan Carlos Morales· Ingeniería de Sistemas· 4 Semestre</div>
   </header>
 
   <section class="presentacion">
@@ -292,7 +283,7 @@
       <span class="num">01</span>
       <span class="icon">✦</span>
       <h3>Ejercicios</h3>
-      <p>Resoluciones de práctica: consultas SQL, modelado y normalización.</p>
+      <p>Solucionario de actividades: .</p>
       <span class="go">Explorar
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </span>
@@ -302,7 +293,7 @@
       <span class="num">02</span>
       <span class="icon">✵</span>
       <h3>Talleres</h3>
-      <p>Trabajos guiados y entregas más completas del curso.</p>
+      <p>Almacenamiento de talleres calificados.</p>
       <span class="go">Explorar
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </span>
@@ -312,7 +303,7 @@
       <span class="num">03</span>
       <span class="icon">✧</span>
       <h3>Descubrimientos</h3>
-      <p>Hallazgos, notas y conceptos que voy encontrando en el camino.</p>
+      <p>Hallazgos, notas y conceptos que voy encontrando.</p>
       <span class="go">Explorar
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </span>
@@ -330,17 +321,15 @@
   </div>
 
   <footer>
-    Hecho con curiosidad · <a id="link-footer" href="#">github.com</a>
+    Universidad El Bosque - Bogotá D.C · <a id="link-footer" href="#">github.com</a>
   </footer>
 </div>
 
 <script>
-  /* ═══════════════════════════════════════════════════
-     ⬇️  CAMBIA ESTOS DOS VALORES POR LOS TUYOS  ⬇️
-     ═══════════════════════════════════════════════════ */
+
   const USUARIO = "OtherSpanish";       
   const REPO    = "portafolio-bd";     
-  /* ═══════════════════════════════════════════════════ */
+
 
   const base = `https://github.com/${USUARIO}/${REPO}`;
   const tree = p => `${base}/tree/main/${p}`;
@@ -352,7 +341,7 @@
   document.getElementById("link-footer").href         = base;
   document.getElementById("link-footer").textContent  = `github.com/${USUARIO}`;
 
-  /* Brillo que sigue al cursor sobre las tarjetas */
+
   document.querySelectorAll('.card').forEach(card=>{
     card.addEventListener('mousemove',e=>{
       const r=card.getBoundingClientRect();
@@ -361,7 +350,6 @@
     });
   });
 
-  /* ── Campo de estrellas ── */
   const canvas=document.getElementById('stars');
   const ctx=canvas.getContext('2d');
   let stars=[],w,h;
