@@ -55,6 +55,7 @@
     padding:0 24px;
   }
 
+  /* ── HERO ── */
   header{
     text-align:center;
     padding:clamp(90px,18vh,170px) 0 60px;
@@ -111,6 +112,45 @@
     box-shadow:0 0 10px var(--magenta);
   }
 
+  /* ── PRESENTACIÓN / VIDEO ── */
+  .presentacion{
+    margin:30px 0 20px;
+    background:linear-gradient(135deg,rgba(157,78,221,.14),rgba(122,162,247,.08));
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:40px 32px;
+    text-align:center;
+  }
+  .avatar{
+    width:180px;height:180px;
+    border-radius:50%;
+    object-fit:cover;
+    border:3px solid var(--purple);
+    box-shadow:0 0 32px rgba(187,154,247,.6);
+    margin-bottom:22px;
+  }
+  .presentacion h2{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:1.5rem;
+    color:#fff;
+    margin-bottom:10px;
+  }
+  .presentacion p{
+    color:var(--text-dim);
+    font-size:.92rem;
+    max-width:440px;
+    margin:0 auto 22px;
+    line-height:1.6;
+  }
+  .video-player{
+    width:100%;
+    max-width:640px;
+    border-radius:14px;
+    border:1px solid var(--line);
+    box-shadow:0 12px 40px rgba(0,0,0,.4);
+  }
+
+  /* ── SECCIONES ── */
   .section-label{
     font-family:'Space Grotesk',sans-serif;
     font-size:.75rem;
@@ -118,7 +158,7 @@
     text-transform:uppercase;
     color:var(--text-dim);
     text-align:center;
-    margin:40px 0 34px;
+    margin:50px 0 34px;
     position:relative;
   }
   .section-label::before,
@@ -203,38 +243,6 @@
   .card .go svg{transition:transform .3s}
   .card:hover .go svg{transform:translateX(4px)}
 
-  .presentacion{
-    margin:30px 0 20px;
-    background:linear-gradient(135deg,rgba(157,78,221,.14),rgba(122,162,247,.08));
-    border:1px solid var(--line);
-    border-radius:20px;
-    padding:38px 32px;
-    text-align:center;
-  }
-  .presentacion h2{
-    font-family:'Space Grotesk',sans-serif;
-    font-size:1.5rem;
-    color:#fff;
-    margin-bottom:10px;
-  }
-  .presentacion p{color:var(--text-dim);font-size:.92rem;max-width:440px;margin:0 auto 22px;line-height:1.6}
-  .btn{
-    display:inline-flex;
-    align-items:center;
-    gap:9px;
-    padding:13px 26px;
-    background:linear-gradient(120deg,var(--violet),var(--blue));
-    color:#fff;
-    text-decoration:none;
-    font-family:'Space Grotesk',sans-serif;
-    font-weight:600;
-    font-size:.92rem;
-    border-radius:12px;
-    transition:transform .25s, box-shadow .25s;
-    box-shadow:0 8px 24px rgba(157,78,221,.3);
-  }
-  .btn:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(157,78,221,.45)}
-
   footer{
     text-align:center;
     padding:50px 0 60px;
@@ -244,25 +252,10 @@
   footer a{color:var(--purple);text-decoration:none}
   footer a:hover{text-decoration:underline}
 
- .avatar{
-    width:180px;height:180px;
-    border-radius:50%;
-    object-fit:cover;
-    border:3px solid var(--purple);
-    box-shadow:0 0 32px rgba(187,154,247,.6);
-    margin-bottom:22px;
-  }
-  .video-player{
-    width:100%;
-    max-width:640px;
-    border-radius:14px;
-    margin-top:20px;
-    border:1px solid var(--line);
-  }
-
   @media (max-width:640px){
     .grid{grid-template-columns:1fr}
     .section-label::before,.section-label::after{display:none}
+    .avatar{width:140px;height:140px}
   }
 
   @media (prefers-reduced-motion:reduce){
@@ -277,16 +270,17 @@
 
 <div class="wrap">
   <header>
-    <div class="eyebrow">Bitácora</div>
+    <div class="eyebrow">Bitácora de aprendizaje</div>
     <h1>Portafolio de<br>Bases de Datos</h1>
-    <p class="subtitle">Registro de ejercicios, talleres y descubrimientos.</p>
-    <div class="author"><span class="dot"></span> Juan Carlos Morales · Ingeniería de Sistemas · 4 Semestre</div>
+    <p class="subtitle">Registro de ejercicios, talleres y descubrimientos —
+      cada entrada, un nodo más en el esquema.</p>
+    <div class="author"><span class="dot"></span> Juan Carlos Morales · Ingeniería de Sistemas · 4° Semestre</div>
   </header>
 
   <section class="presentacion">
-    <img src="avatar.jpeg" alt="Foto de Juan" class="avatar">
+    <img src="avatar.jpeg" alt="Foto de Juan Carlos" class="avatar">
     <h2>📹 Presentación</h2>
-    <p>Presentación, ¿Quién es Juan?.</p>
+    <p>Mi introducción al curso y a este portafolio.</p>
     <video controls preload="metadata" class="video-player">
       <source src="presentacion/presentacion_final.mp4" type="video/mp4">
       Tu navegador no soporta video HTML5.
@@ -338,76 +332,79 @@
   </div>
 
   <footer>
-    Universidad El Bosque - Bogotá D.C · <a id="link-footer" href="#">github.com</a>
+    Universidad El Bosque · Bogotá D.C · <a id="link-footer" href="#">github.com</a>
   </footer>
 </div>
 
 <script>
+  /* ── Config: tu usuario y repo de GitHub ── */
+  const USUARIO = "OtherSpanish";
+  const REPO    = "portafolio-bd";
 
-  const USUARIO = "OtherSpanish";       
-  const REPO    = "portafolio-bd";     
+  const base = "https://github.com/" + USUARIO + "/" + REPO;
+  const tree = function(p){ return base + "/tree/main/" + p; };
 
+  document.getElementById("link-ejercicios").href      = tree("ejercicios");
+  document.getElementById("link-talleres").href        = tree("talleres");
+  document.getElementById("link-descubrimientos").href = tree("descubrimientos");
+  document.getElementById("link-repo").href            = base;
+  var lf = document.getElementById("link-footer");
+  lf.href = base;
+  lf.textContent = "github.com/" + USUARIO;
 
-  const base = `https://github.com/${USUARIO}/${REPO}`;
-  const tree = p => `${base}/tree/main/${p}`;
-  document.getElementById("link-video").href          = tree("presentacion");
-  document.getElementById("link-ejercicios").href     = tree("ejercicios");
-  document.getElementById("link-talleres").href       = tree("talleres");
-  document.getElementById("link-descubrimientos").href= tree("descubrimientos");
-  document.getElementById("link-repo").href           = base;
-  document.getElementById("link-footer").href         = base;
-  document.getElementById("link-footer").textContent  = `github.com/${USUARIO}`;
-
-
-  document.querySelectorAll('.card').forEach(card=>{
-    card.addEventListener('mousemove',e=>{
-      const r=card.getBoundingClientRect();
-      card.style.setProperty('--mx',`${e.clientX-r.left}px`);
-      card.style.setProperty('--my',`${e.clientY-r.top}px`);
+  /* Brillo que sigue al cursor sobre las tarjetas */
+  document.querySelectorAll('.card').forEach(function(card){
+    card.addEventListener('mousemove', function(e){
+      var r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      card.style.setProperty('--my', (e.clientY - r.top) + 'px');
     });
   });
 
-  const canvas=document.getElementById('stars');
-  const ctx=canvas.getContext('2d');
-  let stars=[],w,h;
-  const COLORS=['#ffffff','#bb9af7','#c77dff','#7aa2f7'];
+  /* ── Campo de estrellas ── */
+  const canvas = document.getElementById('stars');
+  const ctx = canvas.getContext('2d');
+  let stars = [], w, h;
+  const COLORS = ['#ffffff','#bb9af7','#c77dff','#7aa2f7'];
 
   function resize(){
-    w=canvas.width=innerWidth;
-    h=canvas.height=innerHeight;
-    const count=Math.min(220,Math.floor(w*h/9000));
-    stars=Array.from({length:count},()=>({
-      x:Math.random()*w,
-      y:Math.random()*h,
-      r:Math.random()*1.4+.3,
-      c:COLORS[Math.floor(Math.random()*COLORS.length)],
-      tw:Math.random()*Math.PI*2,
-      sp:Math.random()*.03+.008
-    }));
+    w = canvas.width = innerWidth;
+    h = canvas.height = innerHeight;
+    const count = Math.min(220, Math.floor(w * h / 9000));
+    stars = Array.from({length:count}, function(){
+      return {
+        x: Math.random()*w,
+        y: Math.random()*h,
+        r: Math.random()*1.4+.3,
+        c: COLORS[Math.floor(Math.random()*COLORS.length)],
+        tw: Math.random()*Math.PI*2,
+        sp: Math.random()*.03+.008
+      };
+    });
   }
   function draw(){
     ctx.clearRect(0,0,w,h);
     for(const s of stars){
-      s.tw+=s.sp;
-      const a=.35+Math.abs(Math.sin(s.tw))*.6;
-      ctx.globalAlpha=a;
-      ctx.fillStyle=s.c;
+      s.tw += s.sp;
+      const a = .35 + Math.abs(Math.sin(s.tw))*.6;
+      ctx.globalAlpha = a;
+      ctx.fillStyle = s.c;
       ctx.beginPath();
-      ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
       ctx.fill();
-      if(s.r>1.1){
-        ctx.globalAlpha=a*.4;
+      if(s.r > 1.1){
+        ctx.globalAlpha = a*.4;
         ctx.beginPath();
-        ctx.arc(s.x,s.y,s.r*2.5,0,Math.PI*2);
+        ctx.arc(s.x, s.y, s.r*2.5, 0, Math.PI*2);
         ctx.fill();
       }
     }
-    ctx.globalAlpha=1;
+    ctx.globalAlpha = 1;
     requestAnimationFrame(draw);
   }
-  addEventListener('resize',resize);
+  addEventListener('resize', resize);
   if(!matchMedia('(prefers-reduced-motion:reduce)').matches){
-    resize();draw();
+    resize(); draw();
   }
 </script>
 </body>
