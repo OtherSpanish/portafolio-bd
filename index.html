@@ -244,6 +244,22 @@
   footer a{color:var(--purple);text-decoration:none}
   footer a:hover{text-decoration:underline}
 
+  .avatar{
+    width:110px;height:110px;
+    border-radius:50%;
+    object-fit:cover;
+    border:2px solid var(--purple);
+    box-shadow:0 0 24px rgba(187,154,247,.5);
+    margin-bottom:18px;
+  }
+  .video-player{
+    width:100%;
+    max-width:640px;
+    border-radius:14px;
+    margin-top:20px;
+    border:1px solid var(--line);
+  }
+
   @media (max-width:640px){
     .grid{grid-template-columns:1fr}
     .section-label::before,.section-label::after{display:none}
@@ -268,12 +284,13 @@
   </header>
 
   <section class="presentacion">
-    <h2>📹 Video de presentación</h2>
+    <img src="avatar.jpeg" alt="Foto de Juan" class="avatar">
+    <h2>📹 Presentación</h2>
     <p>Mi introducción al curso y a este portafolio.</p>
-    <a class="btn" id="link-video" href="#">
-      Ver presentación
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-    </a>
+    <video controls preload="metadata" class="video-player">
+      <source src="presentacion/presentacion_final.mp4" type="video/mp4">
+      Tu navegador no soporta video HTML5.
+    </video>
   </section>
 
   <div class="section-label">Secciones</div>
