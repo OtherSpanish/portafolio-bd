@@ -660,3 +660,30 @@ td.expr-mini sub{font-size:.7em;color:var(--blue)}
 .xl-hoja{background:#fff;color:#107c41;font-weight:bold;padding:3px 14px;border-right:1px solid #c8c8c8;border-bottom:2px solid #107c41}
 .xl-mas{color:#777;padding:3px 10px}
 .xl-grupo{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start}
+
+/* ── Profundidad 3D del fondo ── */
+.sky::before,.sky::after{
+  content:"";position:absolute;inset:-20%;pointer-events:none;
+}
+/* nebulosas lejanas que giran muy lento */
+.sky::before{
+  background:
+    radial-gradient(ellipse 40% 30% at 25% 35%, rgba(157,78,221,.16), transparent 70%),
+    radial-gradient(ellipse 35% 25% at 75% 65%, rgba(122,162,247,.12), transparent 70%);
+  filter:blur(30px);
+  animation:nebulosa 120s linear infinite;
+}
+/* viñeta que oscurece los bordes y da sensación de túnel */
+.sky::after{
+  inset:0;
+  background:radial-gradient(ellipse 75% 70% at 50% 50%, transparent 55%, rgba(4,3,12,.75) 100%);
+}
+@keyframes nebulosa{
+  from{transform:rotate(0deg) scale(1.1)}
+  to{transform:rotate(360deg) scale(1.1)}
+}
+#stars{z-index:-1}
+@media (prefers-reduced-motion:reduce){
+  .sky::before{animation:none}
+}
+.sky{overflow:hidden}

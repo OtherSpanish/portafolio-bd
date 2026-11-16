@@ -17,11 +17,11 @@ var ETAPAS = [
   { id: "relacional",    nombre: "Modelo relacional",  archivo: "relacional.html",    icono: "⊞", notaciones: false,
     descripcion: "Esquema lógico: tablas, tipos, llaves primarias y foráneas." },
   { id: "normalizacion", nombre: "Normalización",      archivo: "normalizacion.html", icono: "≡", notaciones: false,
-    descripcion: "Dependencias funcionales y paso por 1FN, 2FN, 3FN y FNBC." },
+    descripcion: "Dependencias funcionales y paso por 1FN, 2FN, 3FN, FNBC, 4FN y 5FN." },
   { id: "algebra",       nombre: "Álgebra relacional", archivo: "algebra.html",       icono: "σ", notaciones: false,
-    descripcion: "Consultas con σ, π, ⋈, ∪, ∩, −, ÷ y su resultado." },
+    descripcion: "Consultas con σ, π, ⋈, ∩, − y su resultado." },
   { id: "sql",           nombre: "Sentencias SQL",     archivo: "sql.html",           icono: "❯", notaciones: false,
-    descripcion: "DDL, DML y consultas, probadas en PostgreSQL." }
+    descripcion: "Consultas SQL y sus tablas resultado." }
 ];
 
 var EJERCICIOS = [
