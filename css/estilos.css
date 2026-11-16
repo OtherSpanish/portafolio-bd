@@ -618,3 +618,45 @@ td.expr-mini sub{font-size:.7em;color:var(--blue)}
 .archivo-sql .abrir{margin-top:0}
 .diagrama.tablero{overflow:auto}
 .diagrama.tablero svg{min-width:1150px}
+
+/* ── Visor emergente de diagramas ── */
+.diagrama.tablero{cursor:zoom-in;position:relative}
+.diagrama.tablero::after{
+  content:"⤢ Clic para ampliar";
+  position:absolute;right:10px;top:10px;
+  font-family:'Space Grotesk',sans-serif;font-size:.75rem;
+  background:rgba(10,8,26,.85);color:#fff;padding:4px 10px;border-radius:999px;
+  opacity:0;transition:opacity .2s;pointer-events:none;
+}
+.diagrama.tablero:hover::after{opacity:1}
+.visor{position:fixed;inset:0;z-index:100;background:rgba(6,5,16,.92);display:none;flex-direction:column}
+.visor.abierto{display:flex}
+.visor-barra{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px}
+.visor-barra button{
+  font-family:'Space Grotesk',sans-serif;font-size:1rem;min-width:40px;height:36px;padding:0 12px;
+  border-radius:10px;border:1px solid var(--line);background:var(--card);color:#fff;cursor:pointer;
+}
+.visor-barra button:hover{border-color:var(--purple)}
+.visor-zoom{font-family:'Space Grotesk',sans-serif;color:var(--text-dim);min-width:56px;text-align:center}
+.visor-lienzo{flex:1;overflow:hidden;position:relative;cursor:grab;margin:0 14px;border-radius:12px;background:#fff}
+.visor.arrastrando .visor-lienzo{cursor:grabbing}
+.visor-contenido{position:absolute;left:0;top:0;transform-origin:0 0}
+.visor-contenido svg{display:block}
+.visor-ayuda{text-align:center;color:var(--text-dim);font-size:.8rem;padding:8px}
+
+/* ── Tablas tipo captura de Excel ── */
+.xl{background:#fff;border:1px solid #c8c8c8;border-radius:4px;overflow-x:auto;margin:10px 0 14px;
+    font-family:Calibri,'Segoe UI',Arial,sans-serif;font-size:13px;color:#000;display:inline-block;max-width:100%;vertical-align:top}
+.xl table{border-collapse:collapse}
+.xl th,.xl td{border:1px solid #d4d4d4;padding:2px 8px;height:21px;white-space:nowrap;color:#000;text-align:left}
+.xl th.xl-col,.xl th.xl-esq{background:#f3f3f3;color:#555;font-weight:normal;text-align:center;font-size:12px}
+.xl td.xl-fila{background:#f3f3f3;color:#555;text-align:center;font-size:12px;min-width:28px;padding:2px 4px}
+.xl td.xl-cab{font-weight:bold;background:#fff}
+.xl td.xl-num{text-align:right}
+.xl td.xl-nulo{color:#9a9a9a;font-style:italic}
+.xl td.xl-marca{background:#fff2cc}
+.xl td.xl-cab.xl-marca{background:#ffe699}
+.xl-pie{display:flex;align-items:stretch;background:#f3f3f3;border-top:1px solid #c8c8c8;font-size:12px}
+.xl-hoja{background:#fff;color:#107c41;font-weight:bold;padding:3px 14px;border-right:1px solid #c8c8c8;border-bottom:2px solid #107c41}
+.xl-mas{color:#777;padding:3px 10px}
+.xl-grupo{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start}

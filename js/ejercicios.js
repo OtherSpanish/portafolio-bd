@@ -144,6 +144,7 @@ function pintarRuta(etapaId) {
 /* Página de etapa con notaciones: selector + vistas + ruta */
 function iniciarEtapa(etapaId) {
   pintarRuta(etapaId);
+  activarVisor();
   if (ETAPAS[buscarEtapa(etapaId)].notaciones) {
     mostrarVistas(notacionActual());
     pintarSelectorNotacion("selector-notacion", alCambiarNotacion);
@@ -217,4 +218,142 @@ function nombreNotacion(id) {
     if (NOTACIONES[i].id === id) { return NOTACIONES[i].nombre; }
   }
   return "";
+}
+
+/* ---------- visor emergente de diagramas: zoom y arrastre ---------- */
+
+var visor = null;
+
+function crearVisor() {
+  visor = document.createElement("div");
+  visor.className = "visor";
+  visor.innerHTML =
+    '<div class="visor-barra">' +
+    '  <button type="button" data-accion="menos" title="Alejar">−</button>' +
+    '  <span class="visor-zoom">100%</span>' +
+    '  <button type="button" data-accion="mas" title="Acercar">+</button>' +
+    '  <button type="button" data-accion="ajustar" title="Ver completo">Ajustar</button>' +
+    '  <button type="button" data-accion="cerrar" title="Cerrar (Esc)">✕</button>' +
+    '</div>' +
+    '<div class="visor-lienzo"><div class="visor-contenido"></div></div>' +
+    '<p class="visor-ayuda">Rueda del mouse o botones para el zoom · clic izquierdo y arrastrar para moverse · Esc para cerrar</p>';
+  document.body.appendChild(visor);
+
+  visor.estado = { escala: 1, x: 0, y: 0, arrastrando: false, ix: 0, iy: 0, ancho: 0, alto: 0 };
+  var lienzo = visor.querySelector(".visor-lienzo");
+
+  var botones = visor.querySelectorAll(".visor-barra button");
+  for (var i = 0; i < botones.length; i++) {
+    botones[i].addEventListener("click", accionVisor);
+  }
+  lienzo.addEventListener("wheel", ruedaVisor, { passive: false });
+  lienzo.addEventListener("mousedown", empezarArrastre);
+  window.addEventListener("mousemove", moverArrastre);
+  window.addEventListener("mouseup", terminarArrastre);
+  document.addEventListener("keydown", teclaVisor);
+}
+
+function abrirVisor(e) {
+  if (!visor) { crearVisor(); }
+  var svgOriginal = e.currentTarget.querySelector("svg");
+  var copia = svgOriginal.cloneNode(true);
+  var vb = svgOriginal.viewBox.baseVal;
+  copia.setAttribute("width", vb.width);
+  copia.setAttribute("height", vb.height);
+  copia.style.minWidth = "0";
+  var contenido = visor.querySelector(".visor-contenido");
+  contenido.innerHTML = "";
+  contenido.appendChild(copia);
+  visor.estado.ancho = vb.width;
+  visor.estado.alto = vb.height;
+  visor.classList.add("abierto");
+  document.body.style.overflow = "hidden";
+  ajustarVisor();
+}
+
+function cerrarVisor() {
+  visor.classList.remove("abierto");
+  document.body.style.overflow = "";
+}
+
+function aplicarVisor() {
+  var s = visor.estado;
+  visor.querySelector(".visor-contenido").style.transform =
+    "translate(" + s.x + "px," + s.y + "px) scale(" + s.escala + ")";
+  visor.querySelector(".visor-zoom").textContent = Math.round(s.escala * 100) + "%";
+}
+
+function ajustarVisor() {
+  var s = visor.estado;
+  var lienzo = visor.querySelector(".visor-lienzo");
+  var w = lienzo.clientWidth;
+  var h = lienzo.clientHeight;
+  s.escala = Math.min(w / s.ancho, h / s.alto) * 0.96;
+  s.x = (w - s.ancho * s.escala) / 2;
+  s.y = (h - s.alto * s.escala) / 2;
+  aplicarVisor();
+}
+
+/* zoom manteniendo fijo el punto (px, py) del lienzo */
+function zoomVisor(factor, px, py) {
+  var s = visor.estado;
+  var nueva = Math.min(8, Math.max(0.1, s.escala * factor));
+  var real = nueva / s.escala;
+  s.x = px - (px - s.x) * real;
+  s.y = py - (py - s.y) * real;
+  s.escala = nueva;
+  aplicarVisor();
+}
+
+function accionVisor(e) {
+  var accion = e.currentTarget.getAttribute("data-accion");
+  var lienzo = visor.querySelector(".visor-lienzo");
+  var cx = lienzo.clientWidth / 2;
+  var cy = lienzo.clientHeight / 2;
+  if (accion === "mas") { zoomVisor(1.25, cx, cy); }
+  if (accion === "menos") { zoomVisor(0.8, cx, cy); }
+  if (accion === "ajustar") { ajustarVisor(); }
+  if (accion === "cerrar") { cerrarVisor(); }
+}
+
+function ruedaVisor(e) {
+  e.preventDefault();
+  var r = e.currentTarget.getBoundingClientRect();
+  var factor = e.deltaY < 0 ? 1.15 : 1 / 1.15;
+  zoomVisor(factor, e.clientX - r.left, e.clientY - r.top);
+}
+
+function empezarArrastre(e) {
+  if (e.button !== 0) { return; }
+  var s = visor.estado;
+  s.arrastrando = true;
+  s.ix = e.clientX - s.x;
+  s.iy = e.clientY - s.y;
+  visor.classList.add("arrastrando");
+  e.preventDefault();
+}
+
+function moverArrastre(e) {
+  if (!visor || !visor.estado.arrastrando) { return; }
+  visor.estado.x = e.clientX - visor.estado.ix;
+  visor.estado.y = e.clientY - visor.estado.iy;
+  aplicarVisor();
+}
+
+function terminarArrastre() {
+  if (!visor) { return; }
+  visor.estado.arrastrando = false;
+  visor.classList.remove("arrastrando");
+}
+
+function teclaVisor(e) {
+  if (e.key === "Escape" && visor && visor.classList.contains("abierto")) { cerrarVisor(); }
+}
+
+function activarVisor() {
+  var diagramas = document.querySelectorAll(".diagrama.tablero");
+  for (var i = 0; i < diagramas.length; i++) {
+    diagramas[i].addEventListener("click", abrirVisor);
+    diagramas[i].title = "Clic para ver el diagrama completo";
+  }
 }

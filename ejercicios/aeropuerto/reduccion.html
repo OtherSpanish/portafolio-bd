@@ -166,7 +166,7 @@
 <ellipse cx="1300.0" cy="1350.0" rx="37.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1300.0" y="1354.0" text-anchor="middle" font-size="12" fill="#000">id_vuelo</text><line x1="1277.6" y1="1357.0" x2="1322.4" y2="1357.0" stroke="#000" stroke-width="1"/>
 <ellipse cx="1460.0" cy="1330.0" rx="34.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1460.0" y="1334.0" text-anchor="middle" font-size="12" fill="#000">asiento</text>
 <ellipse cx="1500.0" cy="1230.0" rx="29.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1500.0" y="1234.0" text-anchor="middle" font-size="12" fill="#000">clase</text>
-</svg></div><a class="abrir" href="img/reduccion.svg" target="_blank">Abrir el diagrama en otra pestaña ↗</a><p class="nota">Cada rectángulo ya es una tabla con todas sus columnas, y los rombos vacíos muestran qué tablas quedan unidas por una llave.</p>
+</svg></div><p class="nota">Cada rectángulo ya es una tabla con todas sus columnas, y los rombos vacíos muestran qué tablas quedan unidas por una llave.</p>
 </section>
 <section class="panel">
 <h2><span class="paso">FASE 1</span>Fase 1 · Simplificar el MER-E</h2>
@@ -205,10 +205,6 @@ con su cardinalidad y sus participaciones:</p>
       y las tres comparten la llave <code>matricula</code>. No se usa “una tabla por subtipo” por que la jerarquía es parcial
       y la Cessna no tendría donde quedar.</li>
 </ul>
-</section>
-<section class="panel">
-<h2>Resultado: 9 tablas</h2>
-<div class="esquema"><b>BASE</b> (<u>codigo_base</u>, nombre, ciudad, pais)<br><b>PERSONA</b> (<u>documento</u>, nombres, apellidos, fecha_nacimiento, tipo_persona, licencia, horas_vuelo, <i>codigo_base</i>, correo, millas)<br><b>PER_TELEFONO</b> (<u><i>documento</i></u>, <u>telefono</u>)<br><b>AVION</b> (<u>matricula</u>, modelo, fabricante, <i>codigo_base</i>)<br><b>AVION_COMERCIAL</b> (<u><i>matricula</i></u>, num_asientos)<br><b>AVION_CARGA</b> (<u><i>matricula</i></u>, capacidad_kg)<br><b>VUELO</b> (<u>id_vuelo</u>, codigo, fecha, hora_salida, destino, <i>matricula</i>, <i>codigo_base_origen</i>)<br><b>TRIPULACION</b> (<u><i>documento</i></u>, <u><i>id_vuelo</i></u>, rol)<br><b>RESERVA</b> (<u><i>documento</i></u>, <u><i>id_vuelo</i></u>, asiento, clase)</div><p class="nota">Notación: TABLA (<u style="color:var(--gold)">llave subrayada</u>, <i style="color:var(--blue);font-style:normal">llave que viene de otra tabla en azul</i>). En el diagrama, como todo va en negro, la llave foránea lleva un subrayado punteado.</p>
 </section>
   </main>
 
