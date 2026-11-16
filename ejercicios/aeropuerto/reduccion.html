@@ -39,8 +39,7 @@
   <li>Los <strong>PASAJEROS</strong> se registran con identificación, nombre (nombres y apellidos), fecha de nacimiento, correo y las millas que lleva acumuladas; su edad se calcula. Un pasajero reserva vuelos y en cada reserva se guarda el <em>asiento</em> y la <em>clase</em>.</li>
   <li>Un piloto también puede viajar como pasajero. Algunos aviones son comerciales (se guarda cuántos asientos tienen) y otros son de carga (se guarda su capacidad en kg); los de entrenamiento no son ni lo uno ni lo otro.</li>
 </ul>
-<p class="nota">Entidades del enunciado: <strong>Piloto</strong>, <strong>Pasajero</strong> y <strong>Base</strong>. Entidades inventadas para completar el problema: <strong>Avión</strong> y <strong>Vuelo</strong>.</p>
-</details></section>
+<p class="nota">Entidades del enunciado: <strong>Piloto</strong>, <strong>Pasajero</strong> y <strong>Base</strong>. Entidades inventadas para completar el problema: <strong>Avión</strong> y <strong>Vuelo</strong>.</p></details></section>
 <section class="panel">
 <h2>Diagrama de la reducción</h2>
 <div class="diagrama tablero"><svg xmlns="http://www.w3.org/2000/svg" viewBox="25 -116 2344 1522" font-family="Arial, Helvetica, sans-serif" role="img">
@@ -166,7 +165,7 @@
 <ellipse cx="1300.0" cy="1350.0" rx="37.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1300.0" y="1354.0" text-anchor="middle" font-size="12" fill="#000">id_vuelo</text><line x1="1277.6" y1="1357.0" x2="1322.4" y2="1357.0" stroke="#000" stroke-width="1"/>
 <ellipse cx="1460.0" cy="1330.0" rx="34.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1460.0" y="1334.0" text-anchor="middle" font-size="12" fill="#000">asiento</text>
 <ellipse cx="1500.0" cy="1230.0" rx="29.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1500.0" y="1234.0" text-anchor="middle" font-size="12" fill="#000">clase</text>
-</svg></div><p class="nota">Cada rectángulo ya es una tabla con todas sus columnas, y los rombos vacíos muestran qué tablas quedan unidas por una llave.</p>
+</svg></div><p class="nota">Cada rectángulo ya es una tabla con todas sus columnas, y los rombos vacíos muestran qué tablas quedan unidas por una llave. La llave primaria va subrayada y la foránea con subrayado punteado.</p>
 </section>
 <section class="panel">
 <h2><span class="paso">FASE 1</span>Fase 1 · Simplificar el MER-E</h2>
@@ -182,17 +181,7 @@
 <h2><span class="paso">FASE 2</span>Fase 2 · Entidades y relaciones</h2>
 
 <p><strong>Regla 3:</strong> toda entidad se convierte en tabla y su llave pasa a ser la llave primaria. Después se revisa cada relación
-con su cardinalidad y sus participaciones:</p>
-<div class="tabla-wrap"><table class="t">
-<thead><tr><th>Relación</th><th>Cardinalidad y participación</th><th>Regla</th><th>Resultado</th></tr></thead>
-<tbody>
-<tr><td>pertenecer</td><td>N:1 · PILOTO (1:1)</td><td>6</td><td>La llave de BASE viaja al lado muchos: <code>codigo_base</code> en PERSONA</td></tr>
-<tr><td>ubicar</td><td>1:N · AVION (1:1)</td><td>6</td><td><code>codigo_base</code> en AVION, obligatoria</td></tr>
-<tr><td>salir</td><td>1:N · VUELO (1:1)</td><td>6</td><td><code>codigo_base_origen</code> en VUELO, obligatoria</td></tr>
-<tr><td>operar</td><td>1:N · VUELO (1:1)</td><td>6</td><td><code>matricula</code> en VUELO, obligatoria</td></tr>
-<tr><td>tripular</td><td>N:M</td><td>8</td><td>Tabla nueva TRIPULACION con las dos llaves y el <code>rol</code></td></tr>
-<tr><td>reservar</td><td>N:M</td><td>8</td><td>Tabla nueva RESERVA con las dos llaves, <code>asiento</code> y <code>clase</code></td></tr>
-</tbody></table></div>
+con su cardinalidad y sus participaciones:</p><div class="tabla-wrap"><table class="t"><thead><tr><th>Relación</th><th>Cardinalidad y participación</th><th>Regla</th><th>Resultado</th></tr></thead><tbody><tr><td>pertenecer</td><td>N:1 · PILOTO (1:1)</td><td>6</td><td>La llave de BASE viaja al lado muchos: <code>codigo_base</code> en PERSONA</td></tr><tr><td>ubicar</td><td>1:N · AVION (1:1)</td><td>6</td><td><code>codigo_base</code> en AVION, obligatoria</td></tr><tr><td>salir</td><td>1:N · VUELO (1:1)</td><td>6</td><td><code>codigo_base_origen</code> en VUELO, obligatoria</td></tr><tr><td>operar</td><td>1:N · VUELO (1:1)</td><td>6</td><td><code>matricula</code> en VUELO, obligatoria</td></tr><tr><td>tripular</td><td>N:M</td><td>8</td><td>Tabla nueva TRIPULACION con las dos llaves y el <code>rol</code></td></tr><tr><td>reservar</td><td>N:M</td><td>8</td><td>Tabla nueva RESERVA con las dos llaves, <code>asiento</code> y <code>clase</code></td></tr></tbody></table></div>
 </section>
 <section class="panel">
 <h2><span class="paso">FASE 2</span>Fase 2 · Jerarquías (regla 11)</h2>
@@ -200,7 +189,7 @@ con su cardinalidad y sus participaciones:</p>
 <ul>
   <li><strong>PERSONA (solapada y total) → una sola tabla.</strong> Es la única estrategia que sirve cuando la jerarquía es solapada:
       PERSONA se queda con los atributos de piloto y de pasajero y se le agrega la columna <code>tipo_persona</code>
-      ('piloto', 'pasajero' o 'ambos'). Las columnas de piloto quedan vacías en los pasajeros y al revés.</li>
+      ('piloto', 'pasajero' o 'ambos'). Las columnas de un tipo quedan vacías en las personas del otro.</li>
   <li><strong>AVION (disjunta y parcial) → supertipo más subtipos.</strong> Se conservan AVION, AVION_COMERCIAL y AVION_CARGA,
       y las tres comparten la llave <code>matricula</code>. No se usa “una tabla por subtipo” por que la jerarquía es parcial
       y la Cessna no tendría donde quedar.</li>

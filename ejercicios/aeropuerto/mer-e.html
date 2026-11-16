@@ -22,7 +22,7 @@
   <header class="interno">
     <div class="eyebrow">Ejercicio · Aeropuerto</div>
     <h1>MER-E</h1>
-    <p class="subtitle">Modelo entidad relación extendido: jerarquías de persona y de avión.</p>
+    <p class="subtitle">Modelo entidad relación extendido: jerarquías de PERSONA y AVION.</p>
   </header>
 
   <div class="ruta" id="ruta"></div>
@@ -44,19 +44,10 @@
   <li>Los <strong>PASAJEROS</strong> se registran con identificación, nombre (nombres y apellidos), fecha de nacimiento, correo y las millas que lleva acumuladas; su edad se calcula. Un pasajero reserva vuelos y en cada reserva se guarda el <em>asiento</em> y la <em>clase</em>.</li>
   <li>Un piloto también puede viajar como pasajero. Algunos aviones son comerciales (se guarda cuántos asientos tienen) y otros son de carga (se guarda su capacidad en kg); los de entrenamiento no son ni lo uno ni lo otro.</li>
 </ul>
-<p class="nota">Entidades del enunciado: <strong>Piloto</strong>, <strong>Pasajero</strong> y <strong>Base</strong>. Entidades inventadas para completar el problema: <strong>Avión</strong> y <strong>Vuelo</strong>.</p>
-</details></section>
+<p class="nota">Entidades del enunciado: <strong>Piloto</strong>, <strong>Pasajero</strong> y <strong>Base</strong>. Entidades inventadas para completar el problema: <strong>Avión</strong> y <strong>Vuelo</strong>.</p></details></section>
 <section class="panel">
 <h2>¿Qué cambia?</h2>
-
-<ul>
-  <li><strong>PERSONA</strong> junta lo que tenían en común el piloto y el pasajero (documento, nombre, fecha de nacimiento,
-      edad y teléfonos). Es <strong>solapada (s)</strong> porque Sofía Herrera es piloto y también viaja como pasajera,
-      y es <strong>total</strong> porque solo se guardan pilotos o pasajeros.</li>
-  <li><strong>AVION</strong> se divide en COMERCIAL y CARGA. Es <strong>disjunta (d)</strong>: un avión no puede ser las dos cosas.
-      Es <strong>parcial</strong> porque hay aviones que no son ninguna, como la Cessna de entrenamiento.</li>
-</ul>
-
+<ul><li><strong>PERSONA</strong> junta lo que tenían en común el piloto y el pasajero (documento, nombre, fecha de nacimiento, edad y teléfonos). Es <strong>solapada (s)</strong> porque Sofía Herrera es piloto y también viaja como pasajera, y es <strong>total</strong> porque solo se guardan pilotos o pasajeros.</li><li><strong>AVION</strong> se divide en COMERCIAL y CARGA. Es <strong>disjunta (d)</strong>: un avión no puede ser las dos cosas. Es <strong>parcial</strong> porque hay aviones que no son ninguna, como la Cessna de entrenamiento.</li></ul>
 </section>
 
 <div class="vista" data-n="chen">

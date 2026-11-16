@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Álgebra relacional · Terminal de transporte — Portafolio de Bases de Datos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../css/estilos.css">
+</head>
+<body>
+<div class="sky"></div>
+<canvas id="stars"></canvas>
+
+<div class="wrap ancho">
+  <nav class="topbar">
+    <a href="../../index.html">← Portafolio</a>
+    <a href="../../seccion.html?s=algebra">Todos los ejercicios de Álgebra relacional</a>
+  </nav>
+
+  <header class="interno">
+    <div class="eyebrow">Ejercicio · Terminal de transporte</div>
+    <h1>Álgebra relacional</h1>
+    <p class="subtitle">Consultas básicas en el formato «expresión: enunciado», con su resultado.</p>
+  </header>
+
+  <div class="ruta" id="ruta"></div>
+
+  <main>
+<section class="panel"><details><summary>Ver enunciado del ejercicio</summary>
+<p>Una empresa de buses intermunicipales que opera desde varias terminales necesita una base de datos para sus viajes.</p>
+<ul>
+  <li>Cada <strong>TERMINAL</strong> tiene un código de tres letras, nombre, ciudad y país.</li>
+  <li>Cada <strong>CONDUCTOR</strong> tiene identificación, nombre, licencia, horas de manejo y uno o varios teléfonos. Está asignado a exactamente una terminal.</li>
+  <li>Cada <strong>BUS</strong> se identifica por su placa y tiene modelo, marca y capacidad. Se estaciona en una terminal.</li>
+  <li>Un <strong>VIAJE</strong> tiene un identificador, un código de ruta (por ejemplo <code>RT101</code>), fecha, hora de salida y destino. Sale de una terminal y lo realiza un solo bus.</li>
+  <li>Cada viaje lo conducen uno o más conductores con un <em>rol</em> (principal o relevo), y un conductor puede conducir muchos viajes.</li>
+  <li>Los <strong>VIAJEROS</strong> se registran con identificación, nombre (nombres y apellidos), fecha de nacimiento, correo y puntos acumulados; la edad se calcula. Un viajero compra tiquetes y en cada uno se guarda la <em>silla</em> y el <em>servicio</em>.</li>
+  <li>Un conductor también puede viajar como pasajero. Algunos buses son de pasajeros (se guarda el número de sillas) y otros de carga (se guarda la capacidad en kg); los de mantenimiento no son ni lo uno ni lo otro.</li>
+</ul>
+<p class="nota">Entidades base: <strong>Conductor</strong>, <strong>Viajero</strong> y <strong>Terminal</strong>. Entidades inventadas para completar el problema: <strong>Bus</strong> y <strong>Viaje</strong>.</p></details></section>
+<section class="panel">
+<h2>Consulta 1</h2>
+
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>nombre, ciudad</sub>(TERMINAL)</span>: Muestra el nombre y la ciudad de todas las terminales.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombre</td><td class="xl-cab">ciudad</td></tr><tr><td class="xl-fila">2</td><td class="">Terminal Bucaramanga</td><td class="">Bucaramanga</td></tr><tr><td class="xl-fila">3</td><td class="">Terminal del Norte</td><td class="">Medellin</td></tr><tr><td class="xl-fila">4</td><td class="">Terminal Salitre</td><td class="">Bogota</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+<section class="panel">
+<h2>Consulta 2</h2>
+
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>codigo, fecha, destino</sub>(<span class="op">σ</span><sub>destino='Tunja'</sub>(VIAJE))</span>: Muestra los viajes que van para Tunja.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo</td><td class="xl-cab">fecha</td><td class="xl-cab">destino</td></tr><tr><td class="xl-fila">2</td><td class="">RT101</td><td class="">2026-12-20</td><td class="">Tunja</td></tr><tr><td class="xl-fila">3</td><td class="">RT310</td><td class="">2026-12-21</td><td class="">Tunja</td></tr><tr><td class="xl-fila">4</td><td class="">RT101</td><td class="">2026-12-22</td><td class="">Tunja</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+<section class="panel">
+<h2>Consulta 3</h2>
+
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>placa, modelo</sub>(<span class="op">σ</span><sub>marca='Volvo'</sub>(BUS))</span>: Obtiene los buses de marca Volvo.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">placa</td><td class="xl-cab">modelo</td></tr><tr><td class="xl-fila">2</td><td class="">WPK-205</td><td class="">Volvo B450</td></tr><tr><td class="xl-fila">3</td><td class="">WPK-601</td><td class="">FH 540</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+<section class="panel">
+<h2>Consulta 4</h2>
+
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>placa</sub>(BUS) <span class="op">−</span> <span class="op">π</span><sub>placa</sub>(VIAJE)</span>: Identifica los buses que no han hecho ningún viaje.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">placa</td></tr><tr><td class="xl-fila">2</td><td class="">TSX-701</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+<section class="panel">
+<h2>Consulta 5</h2>
+
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>documento</sub>(CONDUCCION) <span class="op">∩</span> <span class="op">π</span><sub>documento</sub>(TIQUETE)</span>: Obtiene las personas que han sido conductores y también viajeros.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">documento</td></tr><tr><td class="xl-fila">2</td><td class="">1040</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+<section class="panel">
+<h2>Consulta 6</h2>
+
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>codigo, fecha, modelo</sub>(VIAJE <span class="op">⋈</span> BUS)</span>: Muestra cada viaje con el modelo del bus que lo realiza.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo</td><td class="xl-cab">fecha</td><td class="xl-cab">modelo</td></tr><tr><td class="xl-fila">2</td><td class="">RT101</td><td class="">2026-12-20</td><td class="">Paradiso 1800</td></tr><tr><td class="xl-fila">3</td><td class="">RT205</td><td class="">2026-12-20</td><td class="">Volvo B450</td></tr><tr><td class="xl-fila">4</td><td class="">RT310</td><td class="">2026-12-21</td><td class="">Andare</td></tr><tr><td class="xl-fila">5</td><td class="">CG900</td><td class="">2026-12-22</td><td class="">FH 540</td></tr><tr><td class="xl-fila">6</td><td class="">RT101</td><td class="">2026-12-22</td><td class="">Paradiso 1800</td></tr><tr><td class="xl-fila">7</td><td class="">RT420</td><td class="">2026-12-23</td><td class="">Volvo B450</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+  </main>
+
+  <div class="stage-nav" id="siguiente"></div>
+
+  <footer>Universidad El Bosque · Bogotá D.C</footer>
+</div>
+
+<script src="../../js/estrellas.js"></script>
+<script src="../../js/ejercicios.js"></script>
+<script>iniciarEtapa("algebra");</script>
+</body>
+</html>

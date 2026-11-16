@@ -22,7 +22,7 @@
   <header class="interno">
     <div class="eyebrow">Ejercicio · Aeropuerto</div>
     <h1>Sentencias SQL</h1>
-    <p class="subtitle">Consultas sobre la base del aeropuerto (MySQL) con su resultado.</p>
+    <p class="subtitle">Consultas sobre la base de datos (MySQL) con su resultado · Aeropuerto.</p>
   </header>
 
   <div class="ruta" id="ruta"></div>
@@ -39,8 +39,7 @@
   <li>Los <strong>PASAJEROS</strong> se registran con identificación, nombre (nombres y apellidos), fecha de nacimiento, correo y las millas que lleva acumuladas; su edad se calcula. Un pasajero reserva vuelos y en cada reserva se guarda el <em>asiento</em> y la <em>clase</em>.</li>
   <li>Un piloto también puede viajar como pasajero. Algunos aviones son comerciales (se guarda cuántos asientos tienen) y otros son de carga (se guarda su capacidad en kg); los de entrenamiento no son ni lo uno ni lo otro.</li>
 </ul>
-<p class="nota">Entidades del enunciado: <strong>Piloto</strong>, <strong>Pasajero</strong> y <strong>Base</strong>. Entidades inventadas para completar el problema: <strong>Avión</strong> y <strong>Vuelo</strong>.</p>
-</details></section>
+<p class="nota">Entidades del enunciado: <strong>Piloto</strong>, <strong>Pasajero</strong> y <strong>Base</strong>. Entidades inventadas para completar el problema: <strong>Avión</strong> y <strong>Vuelo</strong>.</p></details></section>
 <section class="panel">
 <h2>Consulta 1</h2>
 <p class="enunciado">Pasajeros del vuelo 1 con su asiento y su clase.</p><pre class="codigo"><span class="kw">SELECT</span> r.asiento, p.nombres, p.apellidos, r.clase

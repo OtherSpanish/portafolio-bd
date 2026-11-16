@@ -22,7 +22,7 @@
   <header class="interno">
     <div class="eyebrow">Ejercicio · Aeropuerto</div>
     <h1>MER</h1>
-    <p class="subtitle">Modelo entidad relación del aeropuerto.</p>
+    <p class="subtitle">Modelo entidad relación · Aeropuerto.</p>
   </header>
 
   <div class="ruta" id="ruta"></div>
@@ -47,7 +47,6 @@
   <li>Un piloto también puede viajar como pasajero. Algunos aviones son comerciales (se guarda cuántos asientos tienen) y otros son de carga (se guarda su capacidad en kg); los de entrenamiento no son ni lo uno ni lo otro.</li>
 </ul>
 <p class="nota">Entidades del enunciado: <strong>Piloto</strong>, <strong>Pasajero</strong> y <strong>Base</strong>. Entidades inventadas para completar el problema: <strong>Avión</strong> y <strong>Vuelo</strong>.</p>
-
 </section>
 
 <div class="vista" data-n="chen">
@@ -228,19 +227,7 @@
 </div>
 <section class="panel">
 <h2>Relaciones</h2>
-
-<div class="tabla-wrap"><table class="t">
-<thead><tr><th>Relación</th><th>Participaciones</th><th>Cardinalidad</th><th>Se lee</th></tr></thead>
-<tbody>
-<tr><td>pertenecer</td><td>PILOTO (1:1) · BASE (0:N)</td><td>N:1</td><td style="white-space:normal">Cada piloto pertenece a una sola base y una base puede tener muchos pilotos.</td></tr>
-<tr><td>ubicar</td><td>BASE (0:N) · AVION (1:1)</td><td>1:N</td><td style="white-space:normal">Cada avión se ubica en una base.</td></tr>
-<tr><td>salir</td><td>BASE (0:N) · VUELO (1:1)</td><td>1:N</td><td style="white-space:normal">Todo vuelo sale de una base.</td></tr>
-<tr><td>operar</td><td>AVION (0:N) · VUELO (1:1)</td><td>1:N</td><td style="white-space:normal">Cada vuelo lo opera un solo avión.</td></tr>
-<tr><td>tripular</td><td>PILOTO (0:N) · VUELO (1:N)</td><td>N:M</td><td style="white-space:normal">Un vuelo lleva por lo menos un piloto; se guarda el rol.</td></tr>
-<tr><td>reservar</td><td>VUELO (0:N) · PASAJERO (1:N)</td><td>N:M</td><td style="white-space:normal">Un pasajero se registra cuando reserva; un vuelo de carga no lleva reservas.</td></tr>
-</tbody></table></div>
-<p class="nota alerta">Aquí PILOTO y PASAJERO repiten los datos de una persona. Eso se arregla en el MER-E.</p>
-
+<div class="tabla-wrap"><table class="t"><thead><tr><th>Relación</th><th>Participaciones</th><th>Cardinalidad</th><th>Se lee</th></tr></thead><tbody><tr><td>pertenecer</td><td>PILOTO (1:1) · BASE (0:N)</td><td>N:1</td><td style="white-space:normal">Cada piloto pertenece a una sola base y una base puede tener muchos pilotos.</td></tr><tr><td>ubicar</td><td>BASE (0:N) · AVION (1:1)</td><td>1:N</td><td style="white-space:normal">Cada avión se ubica en una base.</td></tr><tr><td>salir</td><td>BASE (0:N) · VUELO (1:1)</td><td>1:N</td><td style="white-space:normal">Todo vuelo sale de una base.</td></tr><tr><td>operar</td><td>AVION (0:N) · VUELO (1:1)</td><td>1:N</td><td style="white-space:normal">Cada vuelo lo opera un solo avión.</td></tr><tr><td>tripular</td><td>PILOTO (0:N) · VUELO (1:N)</td><td>N:M</td><td style="white-space:normal">Un vuelo lleva por lo menos un piloto; se guarda el rol.</td></tr><tr><td>reservar</td><td>VUELO (0:N) · PASAJERO (1:N)</td><td>N:M</td><td style="white-space:normal">Un pasajero se registra cuando reserva; un vuelo de carga no lleva reservas.</td></tr></tbody></table></div><p class="nota alerta">Aquí PILOTO y PASAJERO repiten los datos de una persona. Eso se arregla en el MER-E.</p>
 </section>
   </main>
 

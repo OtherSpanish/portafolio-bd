@@ -25,8 +25,16 @@ var ETAPAS = [
 ];
 
 var EJERCICIOS = [
-  { id: "aeropuerto", titulo: "Aeropuerto", carpeta: "ejercicios/aeropuerto/",
-    descripcion: "Pilotos, pasajeros, bases, aviones y vuelos." }
+  { id: "aeropuerto", titulo: "Aeropuerto", icono: "✈", carpeta: "ejercicios/aeropuerto/",
+    descripcion: "Pilotos, pasajeros, bases, aviones y vuelos." },
+  { id: "universidad", titulo: "Universidad", icono: "🎓", carpeta: "ejercicios/universidad/",
+    descripcion: "Profesores, estudiantes, sedes, salones y cursos." },
+  { id: "gimnasio", titulo: "Gimnasio", icono: "🏋", carpeta: "ejercicios/gimnasio/",
+    descripcion: "Entrenadores, socios, sedes, salas y clases grupales." },
+  { id: "terminal", titulo: "Terminal de transporte", icono: "🚌", carpeta: "ejercicios/terminal/",
+    descripcion: "Conductores, viajeros, terminales, buses y viajes." },
+  { id: "teatro", titulo: "Teatro", icono: "🎭", carpeta: "ejercicios/teatro/",
+    descripcion: "Actores, espectadores, teatros, salas y funciones." }
 ];
 
 var NOTACIONES = [
@@ -202,7 +210,7 @@ function iniciarSeccion() {
       a.href = href;
       a.innerHTML =
         '<span class="num">' + String(k + 1).padStart(2, "0") + '</span>' +
-        '<span class="icon">✈</span>' +
+        '<span class="icon">' + ej.icono + '</span>' +
         '<h3>' + ej.titulo + '</h3>' +
         '<p>' + ej.descripcion + '</p>' +
         '<span class="go">Ver ' + etapa.nombre + (etapa.notaciones ? ' · ' + nombreNotacion(n) : '') +

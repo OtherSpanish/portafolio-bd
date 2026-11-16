@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Álgebra relacional · Teatro — Portafolio de Bases de Datos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../css/estilos.css">
+</head>
+<body>
+<div class="sky"></div>
+<canvas id="stars"></canvas>
+
+<div class="wrap ancho">
+  <nav class="topbar">
+    <a href="../../index.html">← Portafolio</a>
+    <a href="../../seccion.html?s=algebra">Todos los ejercicios de Álgebra relacional</a>
+  </nav>
+
+  <header class="interno">
+    <div class="eyebrow">Ejercicio · Teatro</div>
+    <h1>Álgebra relacional</h1>
+    <p class="subtitle">Consultas básicas en el formato «expresión: enunciado», con su resultado.</p>
+  </header>
+
+  <div class="ruta" id="ruta"></div>
+
+  <main>
+<section class="panel"><details><summary>Ver enunciado del ejercicio</summary>
+<p>Una red de teatros con sedes en varias ciudades quiere guardar en una base de datos sus funciones, salas, actores y espectadores.</p>
+<ul>
+  <li>Cada <strong>TEATRO</strong> tiene un código de tres letras, nombre, ciudad y país.</li>
+  <li>Cada <strong>ACTOR</strong> tiene identificación, nombre, número de carnet, años de carrera y uno o varios teléfonos. Pertenece a la compañía de exactamente un teatro.</li>
+  <li>Cada <strong>SALA</strong> tiene un código, nombre, piso y capacidad, y queda en un teatro.</li>
+  <li>Una <strong>FUNCIÓN</strong> tiene un identificador, un código (por ejemplo <code>HAM01</code>), fecha, hora de inicio y obra. La presenta un teatro y se hace en una sola sala.</li>
+  <li>En cada función actúan uno o más actores con un <em>rol</em> (protagonista o reparto), y un actor puede actuar en muchas funciones.</li>
+  <li>Los <strong>ESPECTADORES</strong> se registran con identificación, nombre (nombres y apellidos), fecha de nacimiento, correo y puntos acumulados; la edad se calcula. Un espectador compra boletas y en cada una se guarda la <em>silla</em> y la <em>zona</em>.</li>
+  <li>Un actor también puede ir a ver funciones como espectador. Algunas salas son salas mayores (se guarda el número de sillas) y otras de ensayo (se guarda el área en m²); el foyer no es ni lo uno ni lo otro.</li>
+</ul>
+<p class="nota">Entidades base: <strong>Actor</strong>, <strong>Espectador</strong> y <strong>Teatro</strong>. Entidades inventadas para completar el problema: <strong>Sala</strong> y <strong>Función</strong>.</p></details></section>
+<section class="panel">
+<h2>Consulta 1</h2>
+
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>nombre, ciudad</sub>(TEATRO)</span>: Muestra el nombre y la ciudad de todos los teatros.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombre</td><td class="xl-cab">ciudad</td></tr><tr><td class="xl-fila">2</td><td class="">Teatro Colon</td><td class="">Bogota</td></tr><tr><td class="xl-fila">3</td><td class="">Teatro Municipal</td><td class="">Cali</td></tr><tr><td class="xl-fila">4</td><td class="">Teatro Pablo Tobon</td><td class="">Medellin</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+<section class="panel">
+<h2>Consulta 2</h2>
+
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>codigo, fecha, obra</sub>(<span class="op">σ</span><sub>obra='Hamlet'</sub>(FUNCION))</span>: Muestra las funciones de Hamlet.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo</td><td class="xl-cab">fecha</td><td class="xl-cab">obra</td></tr><tr><td class="xl-fila">2</td><td class="">HAM01</td><td class="">2026-10-02</td><td class="">Hamlet</td></tr><tr><td class="xl-fila">3</td><td class="">HAM03</td><td class="">2026-10-03</td><td class="">Hamlet</td></tr><tr><td class="xl-fila">4</td><td class="">HAM01</td><td class="">2026-10-04</td><td class="">Hamlet</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+<section class="panel">
+<h2>Consulta 3</h2>
+
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>codigo_sala, nombre_sala</sub>(<span class="op">σ</span><sub>piso='Piso 1'</sub>(SALA))</span>: Obtiene las salas que quedan en el piso 1.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo_sala</td><td class="xl-cab">nombre_sala</td></tr><tr><td class="xl-fila">2</td><td class="">SA-01</td><td class="">Sala Principal</td></tr><tr><td class="xl-fila">3</td><td class="">SA-03</td><td class="">Sala Grande</td></tr><tr><td class="xl-fila">4</td><td class="">SA-05</td><td class="">Foyer</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+<section class="panel">
+<h2>Consulta 4</h2>
+
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>codigo_sala</sub>(SALA) <span class="op">−</span> <span class="op">π</span><sub>codigo_sala</sub>(FUNCION)</span>: Identifica las salas donde no se ha presentado ninguna función.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo_sala</td></tr><tr><td class="xl-fila">2</td><td class="">SA-05</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+<section class="panel">
+<h2>Consulta 5</h2>
+
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>documento</sub>(ELENCO) <span class="op">∩</span> <span class="op">π</span><sub>documento</sub>(BOLETA)</span>: Obtiene las personas que han sido actores y también espectadores.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">documento</td></tr><tr><td class="xl-fila">2</td><td class="">1040</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+<section class="panel">
+<h2>Consulta 6</h2>
+
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>codigo, fecha, nombre_sala</sub>(FUNCION <span class="op">⋈</span> SALA)</span>: Muestra cada función con el nombre de la sala donde se hace.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo</td><td class="xl-cab">fecha</td><td class="xl-cab">nombre_sala</td></tr><tr><td class="xl-fila">2</td><td class="">BOD02</td><td class="">2026-10-02</td><td class="">Sala Estudio</td></tr><tr><td class="xl-fila">3</td><td class="">HAM01</td><td class="">2026-10-02</td><td class="">Sala Principal</td></tr><tr><td class="xl-fila">4</td><td class="">HAM03</td><td class="">2026-10-03</td><td class="">Sala Grande</td></tr><tr><td class="xl-fila">5</td><td class="">ENS05</td><td class="">2026-10-04</td><td class="">Sala Estudio</td></tr><tr><td class="xl-fila">6</td><td class="">HAM01</td><td class="">2026-10-04</td><td class="">Sala Principal</td></tr><tr><td class="xl-fila">7</td><td class="">MIS06</td><td class="">2026-10-05</td><td class="">Sala Estudio</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+  </main>
+
+  <div class="stage-nav" id="siguiente"></div>
+
+  <footer>Universidad El Bosque · Bogotá D.C</footer>
+</div>
+
+<script src="../../js/estrellas.js"></script>
+<script src="../../js/ejercicios.js"></script>
+<script>iniciarEtapa("algebra");</script>
+</body>
+</html>
