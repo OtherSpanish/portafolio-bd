@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reducción a tablas · Aeropuerto — Portafolio de Bases de Datos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../css/estilos.css">
+</head>
+<body>
+<div class="sky"></div>
+<canvas id="stars"></canvas>
+
+<div class="wrap ancho">
+  <nav class="topbar">
+    <a href="../../index.html">← Portafolio</a>
+    <a href="../../seccion.html?s=reduccion">Todos los ejercicios de Reducción a tablas</a>
+  </nav>
+
+  <header class="interno">
+    <div class="eyebrow">Ejercicio · Aeropuerto</div>
+    <h1>Reducción a tablas</h1>
+    <p class="subtitle">Del MER-E a un conjunto de tablas, regla por regla.</p>
+  </header>
+
+  <div class="ruta" id="ruta"></div>
+
+  <main>
+<section class="panel"><details><summary>Ver enunciado del ejercicio</summary>
+<p>Una aerolínea que opera en varios aeropuertos de Colombia necesita una base de datos para su operación.</p>
+<ul>
+  <li>Cada <strong>BASE</strong> (aeropuerto donde la aerolínea tiene operación) se identifica con un código IATA de tres letras y tiene nombre, ciudad y país.</li>
+  <li>Cada <strong>PILOTO</strong> tiene identificación, nombre, número de licencia, horas de vuelo acumuladas y uno o varios teléfonos. Está asignado a exactamente una base.</li>
+  <li>Cada <strong>AVIÓN</strong> se identifica por su matrícula y tiene modelo, fabricante y capacidad. Permanece en una base.</li>
+  <li>Un <strong>VUELO</strong> tiene un identificador, un código comercial (por ejemplo <code>AV101</code>), fecha, hora de salida y destino. Sale de una base y lo opera un único avión.</li>
+  <li>En cada vuelo trabajan uno o más pilotos con un <em>rol</em> (capitán o copiloto), y un piloto puede tripular muchos vuelos.</li>
+  <li>Los <strong>PASAJEROS</strong> se registran con identificación, nombre (nombres y apellidos), fecha de nacimiento y correo; su edad se calcula. Un pasajero reserva vuelos y en cada reserva se guarda el <em>asiento</em> y la <em>clase</em>.</li>
+</ul>
+<p class="nota">Entidades del enunciado: <strong>Piloto</strong>, <strong>Pasajero</strong> y <strong>Base</strong>. Entidades inventadas para completar el problema: <strong>Avión</strong> y <strong>Vuelo</strong>.</p>
+</details></section>
+<section class="panel">
+<h2>Punto de partida</h2>
+
+<p>Se reduce el <strong>MER-E</strong> (el modelo más completo). Se aplican las reglas en orden: primero las entidades,
+luego los atributos especiales, después las jerarquías y al final las relaciones según su cardinalidad.</p>
+<p class="nota">Convención: <u style="color:var(--gold)">subrayado</u> = llave primaria · <i style="color:var(--blue);font-style:normal">azul</i> = llave foránea.</p>
+</section>
+<section class="panel">
+<h2><span class="paso">PASO 1</span>Entidades fuertes</h2>
+
+<p>Cada entidad fuerte se convierte en una tabla con sus atributos simples. Su atributo clave pasa a ser la llave primaria.</p>
+<ul>
+  <li>El atributo <strong>compuesto</strong> <code>nombre</code> de PERSONA se descompone en sus partes: <code>nombres</code> y <code>apellidos</code>.</li>
+  <li>El atributo <strong>derivado</strong> <code>edad</code> <em>no se guarda</em>; se calcula en una consulta (ver Sentencias SQL).</li>
+  <li>El atributo <strong>multivaluado</strong> <code>telefono</code> no puede ir en PERSONA; se trata en el paso 2.</li>
+</ul>
+<div class="esquema"><b>BASE</b>(<u>codigo_base</u>, nombre, ciudad, pais)<br><b>PERSONA</b>(<u>documento</u>, nombres, apellidos, fecha_nacimiento)<br><b>AVION</b>(<u>matricula</u>, modelo, fabricante)<br><b>VUELO</b>(<u>id_vuelo</u>, codigo, fecha, hora_salida, destino)</div>
+
+</section>
+<section class="panel">
+<h2><span class="paso">PASO 2</span>Atributos multivaluados</h2>
+
+<p>Un atributo multivaluado se convierte en una tabla nueva con la llave de la entidad dueña (como FK) y el atributo.
+La llave primaria es la combinación de ambos, así una persona puede tener varios teléfonos pero no repetir el mismo.</p>
+<div class="esquema"><b>TELEFONO_PERSONA</b>(<u><i>documento</i></u>, <u>telefono</u>)</div>
+
+</section>
+<section class="panel">
+<h2><span class="paso">PASO 3</span>Generalización / especialización</h2>
+
+<p>Hay varias estrategias para reducir una jerarquía:</p>
+<div class="tabla-wrap"><table class="t">
+<thead><tr><th>Estrategia</th><th>Cómo queda</th><th>Sirve para</th></tr></thead>
+<tbody>
+<tr><td><strong>A.</strong> Superclase + una tabla por subclase</td><td>Tabla de la superclase; cada subclase con la PK de la superclase como PK y FK</td><td>Cualquier caso (total, parcial, disjunta, solapada)</td></tr>
+<tr><td><strong>B.</strong> Solo tablas de subclases</td><td>Cada subclase copia todos los atributos de la superclase</td><td>Solo especialización <em>total</em> y <em>disjunta</em></td></tr>
+<tr><td><strong>C.</strong> Una sola tabla con atributo tipo</td><td>Todos los atributos en una tabla, muchos NULL</td><td>Disjunta, con pocas diferencias entre subclases</td></tr>
+</tbody></table></div>
+<h3>Decisión: estrategia A en las dos jerarquías</h3>
+<ul>
+  <li><strong>PERSONA</strong> es <em>solapada</em>: con la estrategia B, Sofía (piloto y pasajera) quedaría duplicada en dos tablas. Con A sus datos personales están una sola vez.</li>
+  <li><strong>AVION</strong> es <em>parcial</em>: con B la Cessna de entrenamiento no tendría tabla donde guardarse. Con A queda solo en <code>AVION</code>.</li>
+</ul>
+<div class="esquema"><b>PILOTO</b>(<u><i>documento</i></u>, licencia, horas_vuelo)<br><b>PASAJERO</b>(<u><i>documento</i></u>, correo, millas)<br><b>AVION_COMERCIAL</b>(<u><i>matricula</i></u>, num_asientos)<br><b>AVION_CARGA</b>(<u><i>matricula</i></u>, capacidad_kg)</div>
+
+</section>
+<section class="panel">
+<h2><span class="paso">PASO 4</span>Relaciones 1:N</h2>
+
+<p>En una relación 1:N, la llave primaria del lado <strong>1</strong> pasa como llave foránea a la tabla del lado <strong>N</strong>.
+Como la participación del lado N es total, la FK es <code>NOT NULL</code>.</p>
+<div class="tabla-wrap"><table class="t">
+<thead><tr><th>Relación</th><th>Lado N (recibe la FK)</th><th>FK agregada</th></tr></thead>
+<tbody>
+<tr><td>ASIGNADO_A</td><td>PILOTO</td><td><code>codigo_base</code> → BASE</td></tr>
+<tr><td>UBICADO_EN</td><td>AVION</td><td><code>codigo_base</code> → BASE</td></tr>
+<tr><td>OPERA</td><td>VUELO</td><td><code>matricula</code> → AVION</td></tr>
+<tr><td>SALE_DE</td><td>VUELO</td><td><code>codigo_base_origen</code> → BASE</td></tr>
+</tbody></table></div>
+<div class="esquema"><b>PILOTO</b>(<u><i>documento</i></u>, licencia, horas_vuelo, <i>codigo_base</i>)<br><b>AVION</b>(<u>matricula</u>, modelo, fabricante, <i>codigo_base</i>)<br><b>VUELO</b>(<u>id_vuelo</u>, codigo, fecha, hora_salida, destino, <i>matricula</i>, <i>codigo_base_origen</i>)</div>
+
+</section>
+<section class="panel">
+<h2><span class="paso">PASO 5</span>Relaciones M:N</h2>
+
+<p>Una relación M:N se convierte en una tabla propia. Su llave primaria es la unión de las llaves de las dos entidades
+(cada una también es FK) y lleva los atributos de la relación.</p>
+<ul>
+  <li><code>TRIPULA</code> relaciona a la subclase PILOTO (no a PERSONA) con VUELO y guarda <code>rol</code>.</li>
+  <li><code>RESERVA</code> relaciona a la subclase PASAJERO con VUELO y guarda <code>asiento</code> y <code>clase</code>.</li>
+</ul>
+<div class="esquema"><b>TRIPULA</b>(<u><i>documento</i></u>, <u><i>id_vuelo</i></u>, rol)<br><b>RESERVA</b>(<u><i>documento</i></u>, <u><i>id_vuelo</i></u>, asiento, clase)</div>
+
+</section>
+<section class="panel">
+<h2>Resultado: 11 tablas</h2>
+<div class="esquema"><b>BASE</b>(<u>codigo_base</u>, nombre, ciudad, pais)<br><b>PERSONA</b>(<u>documento</u>, nombres, apellidos, fecha_nacimiento)<br><b>TELEFONO_PERSONA</b>(<u><i>documento</i></u>, <u>telefono</u>)<br><b>PILOTO</b>(<u><i>documento</i></u>, licencia, horas_vuelo, <i>codigo_base</i>)<br><b>PASAJERO</b>(<u><i>documento</i></u>, correo, millas)<br><b>AVION</b>(<u>matricula</u>, modelo, fabricante, <i>codigo_base</i>)<br><b>AVION_COMERCIAL</b>(<u><i>matricula</i></u>, num_asientos)<br><b>AVION_CARGA</b>(<u><i>matricula</i></u>, capacidad_kg)<br><b>VUELO</b>(<u>id_vuelo</u>, codigo, fecha, hora_salida, destino, <i>matricula</i>, <i>codigo_base_origen</i>)<br><b>TRIPULA</b>(<u><i>documento</i></u>, <u><i>id_vuelo</i></u>, rol)<br><b>RESERVA</b>(<u><i>documento</i></u>, <u><i>id_vuelo</i></u>, asiento, clase)</div><p class="nota">Convención: <u style="color:var(--gold)">subrayado</u> = llave primaria · <i style="color:var(--blue);font-style:normal">azul</i> = llave foránea.</p>
+</section>
+  </main>
+
+  <div class="stage-nav" id="siguiente"></div>
+
+  <footer>Universidad El Bosque · Bogotá D.C</footer>
+</div>
+
+<script src="../../js/estrellas.js"></script>
+<script src="../../js/ejercicios.js"></script>
+<script>iniciarEtapa("reduccion");</script>
+</body>
+</html>

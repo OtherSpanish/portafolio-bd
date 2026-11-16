@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Normalización · Aeropuerto — Portafolio de Bases de Datos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../css/estilos.css">
+</head>
+<body>
+<div class="sky"></div>
+<canvas id="stars"></canvas>
+
+<div class="wrap ancho">
+  <nav class="topbar">
+    <a href="../../index.html">← Portafolio</a>
+    <a href="../../seccion.html?s=normalizacion">Todos los ejercicios de Normalización</a>
+  </nav>
+
+  <header class="interno">
+    <div class="eyebrow">Ejercicio · Aeropuerto</div>
+    <h1>Normalización</h1>
+    <p class="subtitle">De una planilla con redundancia a tablas en FNBC, usando datos reales del ejercicio.</p>
+  </header>
+
+  <div class="ruta" id="ruta"></div>
+
+  <main>
+<section class="panel"><details><summary>Ver enunciado del ejercicio</summary>
+<p>Una aerolínea que opera en varios aeropuertos de Colombia necesita una base de datos para su operación.</p>
+<ul>
+  <li>Cada <strong>BASE</strong> (aeropuerto donde la aerolínea tiene operación) se identifica con un código IATA de tres letras y tiene nombre, ciudad y país.</li>
+  <li>Cada <strong>PILOTO</strong> tiene identificación, nombre, número de licencia, horas de vuelo acumuladas y uno o varios teléfonos. Está asignado a exactamente una base.</li>
+  <li>Cada <strong>AVIÓN</strong> se identifica por su matrícula y tiene modelo, fabricante y capacidad. Permanece en una base.</li>
+  <li>Un <strong>VUELO</strong> tiene un identificador, un código comercial (por ejemplo <code>AV101</code>), fecha, hora de salida y destino. Sale de una base y lo opera un único avión.</li>
+  <li>En cada vuelo trabajan uno o más pilotos con un <em>rol</em> (capitán o copiloto), y un piloto puede tripular muchos vuelos.</li>
+  <li>Los <strong>PASAJEROS</strong> se registran con identificación, nombre (nombres y apellidos), fecha de nacimiento y correo; su edad se calcula. Un pasajero reserva vuelos y en cada reserva se guarda el <em>asiento</em> y la <em>clase</em>.</li>
+</ul>
+<p class="nota">Entidades del enunciado: <strong>Piloto</strong>, <strong>Pasajero</strong> y <strong>Base</strong>. Entidades inventadas para completar el problema: <strong>Avión</strong> y <strong>Vuelo</strong>.</p>
+</details></section>
+<section class="panel">
+<h2>Punto de partida: la planilla de reservas</h2>
+
+<p>Antes de tener el modelo, la aerolínea manejaba todo en una sola hoja de cálculo: una fila por cada reserva, con los datos
+del vuelo, del avión, de la base y del pasajero. Esta es una muestra (vuelos 1, 2 y 4):</p>
+<div class="tabla-wrap"><table class="t"><caption>RESERVA_PLANILLA — forma no normalizada (0FN)</caption><thead><tr><th><span class="">id_vuelo</span></th><th><span class="">codigo</span></th><th><span class="">fecha</span></th><th><span class="">destino</span></th><th><span class="">matricula</span></th><th><span class="">modelo</span></th><th><span class="">base_origen</span></th><th><span class="">ciudad_origen</span></th><th><span class="">documento</span></th><th><span class="">pasajero</span></th><th><span class="">telefonos</span></th><th><span class="">asiento</span></th><th><span class="">clase</span></th></tr></thead><tbody><tr><td>1</td><td>AV101</td><td>2026-11-20</td><td>Cartagena</td><td>HK-5001</td><td>A320</td><td>BOG</td><td>Bogotá</td><td>2010</td><td>Mateo Sánchez Castro</td><td class="marca">3121234567</td><td>12A</td><td>ECONOMICA</td></tr><tr><td>1</td><td>AV101</td><td>2026-11-20</td><td>Cartagena</td><td>HK-5001</td><td>A320</td><td>BOG</td><td>Bogotá</td><td>2020</td><td>Valeria Ramírez León</td><td class="marca">3189876543</td><td>2A</td><td>EJECUTIVA</td></tr><tr><td>1</td><td>AV101</td><td>2026-11-20</td><td>Cartagena</td><td>HK-5001</td><td>A320</td><td>BOG</td><td>Bogotá</td><td>2050</td><td>Daniel Ortiz Navarro</td><td class="marca">3112223344</td><td>15C</td><td>ECONOMICA</td></tr><tr><td>2</td><td>AV205</td><td>2026-11-20</td><td>Bogotá</td><td>HK-5002</td><td>737-800</td><td>MDE</td><td>Rionegro</td><td>1040</td><td>Sofía Valentina Herrera Mora</td><td class="marca">3019990000, 3156667788</td><td>18C</td><td>ECONOMICA</td></tr><tr><td>2</td><td>AV205</td><td>2026-11-20</td><td>Bogotá</td><td>HK-5002</td><td>737-800</td><td>MDE</td><td>Rionegro</td><td>2020</td><td>Valeria Ramírez León</td><td class="marca">3189876543</td><td>8D</td><td>ECONOMICA</td></tr><tr><td>2</td><td>AV205</td><td>2026-11-20</td><td>Bogotá</td><td>HK-5002</td><td>737-800</td><td>MDE</td><td>Rionegro</td><td>2030</td><td>Santiago López Vargas</td><td class="marca">3001239876, 6047771234</td><td>1A</td><td>EJECUTIVA</td></tr><tr><td>4</td><td>AV101</td><td>2026-11-22</td><td>Cartagena</td><td>HK-5001</td><td>A320</td><td>BOG</td><td>Bogotá</td><td>2010</td><td>Mateo Sánchez Castro</td><td class="marca">3121234567</td><td>14B</td><td>ECONOMICA</td></tr><tr><td>4</td><td>AV101</td><td>2026-11-22</td><td>Cartagena</td><td>HK-5001</td><td>A320</td><td>BOG</td><td>Bogotá</td><td>2050</td><td>Daniel Ortiz Navarro</td><td class="marca">3112223344</td><td>2C</td><td>EJECUTIVA</td></tr></tbody></table></div><p class="filas">8 filas</p>
+<p class="nota alerta">La columna <code>telefonos</code> guarda <strong>varios valores en una misma celda</strong>
+(por ejemplo Santiago tiene <code>3001239876, 6047771234</code>). Eso es un grupo repetitivo: la tabla no está ni en 1FN.</p>
+
+</section>
+<section class="panel">
+<h2>Dependencias funcionales</h2>
+
+<p>Del enunciado y de los datos salen estas dependencias funcionales (X → Y: conociendo X se conoce un único Y):</p>
+<div class="esquema">
+<b>DF1</b>&nbsp; id_vuelo → codigo, fecha, destino, matricula, base_origen<br>
+<b>DF2</b>&nbsp; matricula → modelo<br>
+<b>DF3</b>&nbsp; base_origen → ciudad_origen<br>
+<b>DF4</b>&nbsp; documento → pasajero<br>
+<b>DF5</b>&nbsp; documento →→ telefono &nbsp;<span style="color:var(--text-dim)">(dependencia multivaluada)</span><br>
+<b>DF6</b>&nbsp; {id_vuelo, documento} → asiento, clase<br>
+<b>DF7</b>&nbsp; {id_vuelo, asiento} → documento<br>
+<b>DF8</b>&nbsp; {codigo, fecha} → id_vuelo
+</div>
+<p>Llave candidata de la planilla: <code>{id_vuelo, documento}</code> (se elige como primaria).
+<code>{id_vuelo, asiento}</code> también es llave candidata por la DF7.</p>
+
+</section>
+<section class="panel">
+<h2><span class="paso">1FN</span>Primera forma normal (1FN)</h2>
+
+<p><strong>Regla:</strong> todos los atributos son atómicos y no hay grupos repetitivos.</p>
+<p><strong>Acción:</strong> el grupo repetitivo <code>telefonos</code> sale a su propia tabla con la llave de quien lo tiene (<code>documento</code>).</p>
+<div class="tabla-wrap"><table class="t"><caption>RESERVA_1FN (<u>id_vuelo</u>, <u>documento</u>, …)</caption><thead><tr><th><span class="pk">id_vuelo</span></th><th><span class="">codigo</span></th><th><span class="">fecha</span></th><th><span class="">destino</span></th><th><span class="">matricula</span></th><th><span class="">modelo</span></th><th><span class="">base_origen</span></th><th><span class="">ciudad_origen</span></th><th><span class="pk">documento</span></th><th><span class="">pasajero</span></th><th><span class="">asiento</span></th><th><span class="">clase</span></th></tr></thead><tbody><tr><td>1</td><td class="marca">AV101</td><td class="marca">2026-11-20</td><td class="marca">Cartagena</td><td>HK-5001</td><td class="marca">A320</td><td>BOG</td><td class="marca">Bogotá</td><td>2010</td><td class="marca">Mateo Sánchez Castro</td><td>12A</td><td>ECONOMICA</td></tr><tr><td>1</td><td class="marca">AV101</td><td class="marca">2026-11-20</td><td class="marca">Cartagena</td><td>HK-5001</td><td class="marca">A320</td><td>BOG</td><td class="marca">Bogotá</td><td>2020</td><td class="marca">Valeria Ramírez León</td><td>2A</td><td>EJECUTIVA</td></tr><tr><td>1</td><td class="marca">AV101</td><td class="marca">2026-11-20</td><td class="marca">Cartagena</td><td>HK-5001</td><td class="marca">A320</td><td>BOG</td><td class="marca">Bogotá</td><td>2050</td><td class="marca">Daniel Ortiz Navarro</td><td>15C</td><td>ECONOMICA</td></tr><tr><td>2</td><td class="marca">AV205</td><td class="marca">2026-11-20</td><td class="marca">Bogotá</td><td>HK-5002</td><td class="marca">737-800</td><td>MDE</td><td class="marca">Rionegro</td><td>1040</td><td class="marca">Sofía Valentina Herrera Mora</td><td>18C</td><td>ECONOMICA</td></tr><tr><td>2</td><td class="marca">AV205</td><td class="marca">2026-11-20</td><td class="marca">Bogotá</td><td>HK-5002</td><td class="marca">737-800</td><td>MDE</td><td class="marca">Rionegro</td><td>2020</td><td class="marca">Valeria Ramírez León</td><td>8D</td><td>ECONOMICA</td></tr><tr><td>2</td><td class="marca">AV205</td><td class="marca">2026-11-20</td><td class="marca">Bogotá</td><td>HK-5002</td><td class="marca">737-800</td><td>MDE</td><td class="marca">Rionegro</td><td>2030</td><td class="marca">Santiago López Vargas</td><td>1A</td><td>EJECUTIVA</td></tr><tr><td>4</td><td class="marca">AV101</td><td class="marca">2026-11-22</td><td class="marca">Cartagena</td><td>HK-5001</td><td class="marca">A320</td><td>BOG</td><td class="marca">Bogotá</td><td>2010</td><td class="marca">Mateo Sánchez Castro</td><td>14B</td><td>ECONOMICA</td></tr><tr><td>4</td><td class="marca">AV101</td><td class="marca">2026-11-22</td><td class="marca">Cartagena</td><td>HK-5001</td><td class="marca">A320</td><td>BOG</td><td class="marca">Bogotá</td><td>2050</td><td class="marca">Daniel Ortiz Navarro</td><td>2C</td><td>EJECUTIVA</td></tr></tbody></table></div><p class="filas">8 filas</p>
+<div class="tabla-wrap"><table class="t"><caption>TELEFONO (<u>documento</u>, <u>telefono</u>)</caption><thead><tr><th><span class="pk">documento</span></th><th><span class="pk">telefono</span></th></tr></thead><tbody><tr><td>1040</td><td>3019990000</td></tr><tr><td>1040</td><td>3156667788</td></tr><tr><td>2010</td><td>3121234567</td></tr><tr><td>2020</td><td>3189876543</td></tr><tr><td>2030</td><td>3001239876</td></tr><tr><td>2030</td><td>6047771234</td></tr><tr><td>2050</td><td>3112223344</td></tr></tbody></table></div><p class="filas">7 filas</p>
+<p class="nota alerta">Ya está en 1FN, pero las columnas resaltadas se repiten: los datos del vuelo 1 aparecen tres veces y el nombre
+de Mateo dos veces. Si se cambia el destino del vuelo 1 hay que actualizar varias filas (anomalía de actualización).</p>
+
+</section>
+<section class="panel">
+<h2><span class="paso">2FN</span>Segunda forma normal (2FN)</h2>
+
+<p><strong>Regla:</strong> está en 1FN y ningún atributo no clave depende de <em>solo una parte</em> de la llave compuesta.</p>
+<p><strong>Problema:</strong> la llave es <code>{id_vuelo, documento}</code>, pero los datos del vuelo dependen solo de
+<code>id_vuelo</code> (DF1) y el nombre solo de <code>documento</code> (DF4). Son <strong>dependencias parciales</strong>.</p>
+<p><strong>Acción:</strong> cada grupo sale a una tabla con la parte de la llave de la que depende.</p>
+<div class="tabla-wrap"><table class="t"><caption>VUELO_2FN (<u>id_vuelo</u>, …)</caption><thead><tr><th><span class="pk">id_vuelo</span></th><th><span class="">codigo</span></th><th><span class="">fecha</span></th><th><span class="">destino</span></th><th><span class="">matricula</span></th><th><span class="">modelo</span></th><th><span class="">base_origen</span></th><th><span class="">ciudad_origen</span></th></tr></thead><tbody><tr><td>1</td><td>AV101</td><td>2026-11-20</td><td>Cartagena</td><td>HK-5001</td><td class="marca">A320</td><td>BOG</td><td class="marca">Bogotá</td></tr><tr><td>2</td><td>AV205</td><td>2026-11-20</td><td>Bogotá</td><td>HK-5002</td><td class="marca">737-800</td><td>MDE</td><td class="marca">Rionegro</td></tr><tr><td>4</td><td>AV101</td><td>2026-11-22</td><td>Cartagena</td><td>HK-5001</td><td class="marca">A320</td><td>BOG</td><td class="marca">Bogotá</td></tr></tbody></table></div><p class="filas">3 filas</p>
+<div class="tabla-wrap"><table class="t"><caption>PASAJERO_2FN (<u>documento</u>, pasajero)</caption><thead><tr><th><span class="pk">documento</span></th><th><span class="">pasajero</span></th></tr></thead><tbody><tr><td>1040</td><td>Sofía Valentina Herrera Mora</td></tr><tr><td>2010</td><td>Mateo Sánchez Castro</td></tr><tr><td>2020</td><td>Valeria Ramírez León</td></tr><tr><td>2030</td><td>Santiago López Vargas</td></tr><tr><td>2050</td><td>Daniel Ortiz Navarro</td></tr></tbody></table></div><p class="filas">5 filas</p>
+<div class="tabla-wrap"><table class="t"><caption>RESERVA (<u>id_vuelo</u>, <u>documento</u>, asiento, clase)</caption><thead><tr><th><span class="pk">id_vuelo</span></th><th><span class="pk">documento</span></th><th><span class="">asiento</span></th><th><span class="">clase</span></th></tr></thead><tbody><tr><td>1</td><td>2010</td><td>12A</td><td>ECONOMICA</td></tr><tr><td>1</td><td>2020</td><td>2A</td><td>EJECUTIVA</td></tr><tr><td>1</td><td>2050</td><td>15C</td><td>ECONOMICA</td></tr><tr><td>2</td><td>1040</td><td>18C</td><td>ECONOMICA</td></tr><tr><td>2</td><td>2020</td><td>8D</td><td>ECONOMICA</td></tr><tr><td>2</td><td>2030</td><td>1A</td><td>EJECUTIVA</td></tr><tr><td>4</td><td>2010</td><td>14B</td><td>ECONOMICA</td></tr><tr><td>4</td><td>2050</td><td>2C</td><td>EJECUTIVA</td></tr></tbody></table></div><p class="filas">8 filas</p>
+<p class="nota alerta">En <code>VUELO_2FN</code> todavía se repite que HK-5001 es un A320 y que BOG está en Bogotá.</p>
+
+</section>
+<section class="panel">
+<h2><span class="paso">3FN</span>Tercera forma normal (3FN)</h2>
+
+<p><strong>Regla:</strong> está en 2FN y ningún atributo no clave depende de otro atributo no clave
+(no hay <strong>dependencias transitivas</strong>).</p>
+<p><strong>Problema:</strong> en VUELO_2FN se cumple <code>id_vuelo → matricula → modelo</code> (DF1 + DF2) y
+<code>id_vuelo → base_origen → ciudad_origen</code> (DF1 + DF3).</p>
+<p><strong>Acción:</strong> el determinante intermedio y lo que determina salen a su propia tabla; en VUELO queda solo como FK.</p>
+<div class="tabla-wrap"><table class="t"><caption>VUELO (<u>id_vuelo</u>, codigo, fecha, destino, <i>matricula</i>, <i>base_origen</i>)</caption><thead><tr><th><span class="pk">id_vuelo</span></th><th><span class="">codigo</span></th><th><span class="">fecha</span></th><th><span class="">destino</span></th><th><span class="fk">matricula</span></th><th><span class="fk">base_origen</span></th></tr></thead><tbody><tr><td>1</td><td>AV101</td><td>2026-11-20</td><td>Cartagena</td><td>HK-5001</td><td>BOG</td></tr><tr><td>2</td><td>AV205</td><td>2026-11-20</td><td>Bogotá</td><td>HK-5002</td><td>MDE</td></tr><tr><td>4</td><td>AV101</td><td>2026-11-22</td><td>Cartagena</td><td>HK-5001</td><td>BOG</td></tr></tbody></table></div><p class="filas">3 filas</p>
+<div class="tabla-wrap"><table class="t"><caption>AVION (<u>matricula</u>, modelo)</caption><thead><tr><th><span class="pk">matricula</span></th><th><span class="">modelo</span></th></tr></thead><tbody><tr><td>HK-5001</td><td>A320</td></tr><tr><td>HK-5002</td><td>737-800</td></tr></tbody></table></div><p class="filas">2 filas</p>
+<div class="tabla-wrap"><table class="t"><caption>BASE (<u>codigo_base</u>, ciudad)</caption><thead><tr><th><span class="pk">codigo_base</span></th><th><span class="">ciudad</span></th></tr></thead><tbody><tr><td>BOG</td><td>Bogotá</td></tr><tr><td>MDE</td><td>Rionegro</td></tr></tbody></table></div><p class="filas">2 filas</p>
+
+</section>
+<section class="panel">
+<h2><span class="paso">FNBC</span>Forma normal de Boyce-Codd (FNBC)</h2>
+
+<p><strong>Regla:</strong> en toda dependencia funcional no trivial X → Y, X es superllave.</p>
+<div class="tabla-wrap"><table class="t">
+<thead><tr><th>Tabla</th><th>Determinantes</th><th>¿Son superllave?</th></tr></thead>
+<tbody>
+<tr><td>VUELO</td><td>id_vuelo · {codigo, fecha}</td><td>Sí, ambas son llaves candidatas</td></tr>
+<tr><td>AVION</td><td>matricula</td><td>Sí</td></tr>
+<tr><td>BASE</td><td>codigo_base</td><td>Sí</td></tr>
+<tr><td>PASAJERO</td><td>documento</td><td>Sí</td></tr>
+<tr><td>RESERVA</td><td>{id_vuelo, documento} · {id_vuelo, asiento}</td><td>Sí, ambas son llaves candidatas</td></tr>
+<tr><td>TELEFONO</td><td>— (toda la tabla es la llave)</td><td>Sí; además cumple 4FN porque aísla la DF multivaluada</td></tr>
+</tbody></table></div>
+<p class="nota ok">Todas las tablas están en <strong>FNBC</strong>. El resultado coincide con las tablas obtenidas en la
+<strong>reducción a tablas</strong> (BASE, PERSONA/PASAJERO, TELEFONO_PERSONA, AVION, VUELO, RESERVA): un MER-E bien hecho
+produce tablas ya normalizadas, y la normalización sirve para comprobarlo.</p>
+
+</section>
+  </main>
+
+  <div class="stage-nav" id="siguiente"></div>
+
+  <footer>Universidad El Bosque · Bogotá D.C</footer>
+</div>
+
+<script src="../../js/estrellas.js"></script>
+<script src="../../js/ejercicios.js"></script>
+<script>iniciarEtapa("normalizacion");</script>
+</body>
+</html>

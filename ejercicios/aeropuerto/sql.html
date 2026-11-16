@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sentencias SQL · Aeropuerto — Portafolio de Bases de Datos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../css/estilos.css">
+</head>
+<body>
+<div class="sky"></div>
+<canvas id="stars"></canvas>
+
+<div class="wrap ancho">
+  <nav class="topbar">
+    <a href="../../index.html">← Portafolio</a>
+    <a href="../../seccion.html?s=sql">Todos los ejercicios de Sentencias SQL</a>
+  </nav>
+
+  <header class="interno">
+    <div class="eyebrow">Ejercicio · Aeropuerto</div>
+    <h1>Sentencias SQL</h1>
+    <p class="subtitle">DDL, DML y consultas del aeropuerto, con resultados reales.</p>
+  </header>
+
+  <div class="ruta" id="ruta"></div>
+
+  <main>
+<section class="panel"><details><summary>Ver enunciado del ejercicio</summary>
+<p>Una aerolínea que opera en varios aeropuertos de Colombia necesita una base de datos para su operación.</p>
+<ul>
+  <li>Cada <strong>BASE</strong> (aeropuerto donde la aerolínea tiene operación) se identifica con un código IATA de tres letras y tiene nombre, ciudad y país.</li>
+  <li>Cada <strong>PILOTO</strong> tiene identificación, nombre, número de licencia, horas de vuelo acumuladas y uno o varios teléfonos. Está asignado a exactamente una base.</li>
+  <li>Cada <strong>AVIÓN</strong> se identifica por su matrícula y tiene modelo, fabricante y capacidad. Permanece en una base.</li>
+  <li>Un <strong>VUELO</strong> tiene un identificador, un código comercial (por ejemplo <code>AV101</code>), fecha, hora de salida y destino. Sale de una base y lo opera un único avión.</li>
+  <li>En cada vuelo trabajan uno o más pilotos con un <em>rol</em> (capitán o copiloto), y un piloto puede tripular muchos vuelos.</li>
+  <li>Los <strong>PASAJEROS</strong> se registran con identificación, nombre (nombres y apellidos), fecha de nacimiento y correo; su edad se calcula. Un pasajero reserva vuelos y en cada reserva se guarda el <em>asiento</em> y la <em>clase</em>.</li>
+</ul>
+<p class="nota">Entidades del enunciado: <strong>Piloto</strong>, <strong>Pasajero</strong> y <strong>Base</strong>. Entidades inventadas para completar el problema: <strong>Avión</strong> y <strong>Vuelo</strong>.</p>
+</details></section>
+<section class="panel">
+<h2>Script completo</h2>
+
+<p>Todo el ejercicio está en un solo archivo que crea las tablas e inserta los datos de prueba.
+Se probó en <strong>PostgreSQL 16</strong> y usa SQL estándar (compatible con MySQL 8 salvo donde se indica).</p>
+<a class="abrir" href="aeropuerto.sql" download>⬇ Descargar aeropuerto.sql</a>
+
+</section>
+<section class="panel">
+<h2><span class="paso">DDL</span>DDL · Creación de tablas</h2>
+
+<p>El orden importa: primero las tablas que no dependen de nadie (BASE, PERSONA) y después las que tienen llaves foráneas.
+Los <code>DROP</code> van en orden inverso.</p>
+<details><summary>Ver los DROP TABLE</summary><pre class="codigo"><span class="kw">DROP</span> <span class="kw">TABLE</span> <span class="kw">IF</span> <span class="kw">EXISTS</span> reserva;
+<span class="kw">DROP</span> <span class="kw">TABLE</span> <span class="kw">IF</span> <span class="kw">EXISTS</span> tripula;
+<span class="kw">DROP</span> <span class="kw">TABLE</span> <span class="kw">IF</span> <span class="kw">EXISTS</span> vuelo;
+<span class="kw">DROP</span> <span class="kw">TABLE</span> <span class="kw">IF</span> <span class="kw">EXISTS</span> avion_carga;
+<span class="kw">DROP</span> <span class="kw">TABLE</span> <span class="kw">IF</span> <span class="kw">EXISTS</span> avion_comercial;
+<span class="kw">DROP</span> <span class="kw">TABLE</span> <span class="kw">IF</span> <span class="kw">EXISTS</span> avion;
+<span class="kw">DROP</span> <span class="kw">TABLE</span> <span class="kw">IF</span> <span class="kw">EXISTS</span> pasajero;
+<span class="kw">DROP</span> <span class="kw">TABLE</span> <span class="kw">IF</span> <span class="kw">EXISTS</span> piloto;
+<span class="kw">DROP</span> <span class="kw">TABLE</span> <span class="kw">IF</span> <span class="kw">EXISTS</span> telefono_persona;
+<span class="kw">DROP</span> <span class="kw">TABLE</span> <span class="kw">IF</span> <span class="kw">EXISTS</span> persona;
+<span class="kw">DROP</span> <span class="kw">TABLE</span> <span class="kw">IF</span> <span class="kw">EXISTS</span> base;
+</pre></details>
+<pre class="codigo"><span class="kw">CREATE</span> <span class="kw">TABLE</span> base (
+    codigo_base  <span class="ty">CHAR</span>(<span class="nu">3</span>)      <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,
+    nombre       <span class="ty">VARCHAR</span>(<span class="nu">80</span>)  <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    ciudad       <span class="ty">VARCHAR</span>(<span class="nu">50</span>)  <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    pais         <span class="ty">VARCHAR</span>(<span class="nu">50</span>)  <span class="kw">NOT</span> <span class="kw">NULL</span>
+);
+
+<span class="kw">CREATE</span> <span class="kw">TABLE</span> persona (
+    documento         <span class="ty">VARCHAR</span>(<span class="nu">15</span>)  <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,
+    nombres           <span class="ty">VARCHAR</span>(<span class="nu">50</span>)  <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    apellidos         <span class="ty">VARCHAR</span>(<span class="nu">50</span>)  <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    fecha_nacimiento  <span class="ty">DATE</span>         <span class="kw">NOT</span> <span class="kw">NULL</span>
+);
+
+<span class="co">-- Atributo multivaluado "telefono" de PERSONA</span>
+<span class="kw">CREATE</span> <span class="kw">TABLE</span> telefono_persona (
+    documento  <span class="ty">VARCHAR</span>(<span class="nu">15</span>)  <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    telefono   <span class="ty">VARCHAR</span>(<span class="nu">15</span>)  <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    <span class="kw">PRIMARY</span> <span class="kw">KEY</span> (documento, telefono),
+    <span class="kw">FOREIGN</span> <span class="kw">KEY</span> (documento) <span class="kw">REFERENCES</span> persona(documento) <span class="kw">ON</span> <span class="kw">DELETE</span> <span class="kw">CASCADE</span>
+);
+
+<span class="co">-- Subclase PILOTO (especialización de PERSONA)</span>
+<span class="kw">CREATE</span> <span class="kw">TABLE</span> piloto (
+    documento    <span class="ty">VARCHAR</span>(<span class="nu">15</span>)  <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,
+    licencia     <span class="ty">VARCHAR</span>(<span class="nu">10</span>)  <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">UNIQUE</span>,
+    horas_vuelo  <span class="ty">INT</span>          <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">CHECK</span> (horas_vuelo &gt;= <span class="nu">0</span>),
+    codigo_base  <span class="ty">CHAR</span>(<span class="nu">3</span>)      <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    <span class="kw">FOREIGN</span> <span class="kw">KEY</span> (documento)   <span class="kw">REFERENCES</span> persona(documento) <span class="kw">ON</span> <span class="kw">DELETE</span> <span class="kw">CASCADE</span>,
+    <span class="kw">FOREIGN</span> <span class="kw">KEY</span> (codigo_base) <span class="kw">REFERENCES</span> base(codigo_base)
+);
+
+<span class="co">-- Subclase PASAJERO (especialización de PERSONA)</span>
+<span class="kw">CREATE</span> <span class="kw">TABLE</span> pasajero (
+    documento  <span class="ty">VARCHAR</span>(<span class="nu">15</span>)   <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,
+    correo     <span class="ty">VARCHAR</span>(<span class="nu">80</span>)   <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">UNIQUE</span>,
+    millas     <span class="ty">INT</span>           <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> <span class="nu">0</span> <span class="kw">CHECK</span> (millas &gt;= <span class="nu">0</span>),
+    <span class="kw">FOREIGN</span> <span class="kw">KEY</span> (documento) <span class="kw">REFERENCES</span> persona(documento) <span class="kw">ON</span> <span class="kw">DELETE</span> <span class="kw">CASCADE</span>
+);
+
+<span class="kw">CREATE</span> <span class="kw">TABLE</span> avion (
+    matricula    <span class="ty">VARCHAR</span>(<span class="nu">10</span>)  <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,
+    modelo       <span class="ty">VARCHAR</span>(<span class="nu">40</span>)  <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    fabricante   <span class="ty">VARCHAR</span>(<span class="nu">40</span>)  <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    codigo_base  <span class="ty">CHAR</span>(<span class="nu">3</span>)      <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    <span class="kw">FOREIGN</span> <span class="kw">KEY</span> (codigo_base) <span class="kw">REFERENCES</span> base(codigo_base)
+);
+
+<span class="co">-- Subclases de AVION (especialización disjunta y parcial)</span>
+<span class="kw">CREATE</span> <span class="kw">TABLE</span> avion_comercial (
+    matricula     <span class="ty">VARCHAR</span>(<span class="nu">10</span>)  <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,
+    num_asientos  <span class="ty">INT</span>          <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">CHECK</span> (num_asientos &gt; <span class="nu">0</span>),
+    <span class="kw">FOREIGN</span> <span class="kw">KEY</span> (matricula) <span class="kw">REFERENCES</span> avion(matricula) <span class="kw">ON</span> <span class="kw">DELETE</span> <span class="kw">CASCADE</span>
+);
+
+<span class="kw">CREATE</span> <span class="kw">TABLE</span> avion_carga (
+    matricula     <span class="ty">VARCHAR</span>(<span class="nu">10</span>)    <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,
+    capacidad_kg  <span class="ty">DECIMAL</span>(<span class="nu">10</span>,<span class="nu">2</span>)  <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">CHECK</span> (capacidad_kg &gt; <span class="nu">0</span>),
+    <span class="kw">FOREIGN</span> <span class="kw">KEY</span> (matricula) <span class="kw">REFERENCES</span> avion(matricula) <span class="kw">ON</span> <span class="kw">DELETE</span> <span class="kw">CASCADE</span>
+);
+
+<span class="kw">CREATE</span> <span class="kw">TABLE</span> vuelo (
+    id_vuelo            <span class="ty">INT</span>          <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,
+    codigo              <span class="ty">VARCHAR</span>(<span class="nu">8</span>)   <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    fecha               <span class="ty">DATE</span>         <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    hora_salida         <span class="ty">TIME</span>         <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    destino             <span class="ty">VARCHAR</span>(<span class="nu">50</span>)  <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    matricula           <span class="ty">VARCHAR</span>(<span class="nu">10</span>)  <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    codigo_base_origen  <span class="ty">CHAR</span>(<span class="nu">3</span>)      <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    <span class="kw">UNIQUE</span> (codigo, fecha),
+    <span class="kw">FOREIGN</span> <span class="kw">KEY</span> (matricula)          <span class="kw">REFERENCES</span> avion(matricula),
+    <span class="kw">FOREIGN</span> <span class="kw">KEY</span> (codigo_base_origen) <span class="kw">REFERENCES</span> base(codigo_base)
+);
+
+<span class="co">-- Relación M:N PILOTO —TRIPULA— VUELO</span>
+<span class="kw">CREATE</span> <span class="kw">TABLE</span> tripula (
+    documento  <span class="ty">VARCHAR</span>(<span class="nu">15</span>)  <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    id_vuelo   <span class="ty">INT</span>          <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    rol        <span class="ty">VARCHAR</span>(<span class="nu">10</span>)  <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">CHECK</span> (rol <span class="kw">IN</span> (<span class="st">'CAPITAN'</span>, <span class="st">'COPILOTO'</span>)),
+    <span class="kw">PRIMARY</span> <span class="kw">KEY</span> (documento, id_vuelo),
+    <span class="kw">FOREIGN</span> <span class="kw">KEY</span> (documento) <span class="kw">REFERENCES</span> piloto(documento),
+    <span class="kw">FOREIGN</span> <span class="kw">KEY</span> (id_vuelo)  <span class="kw">REFERENCES</span> vuelo(id_vuelo) <span class="kw">ON</span> <span class="kw">DELETE</span> <span class="kw">CASCADE</span>
+);
+
+<span class="co">-- Relación M:N PASAJERO —RESERVA— VUELO</span>
+<span class="kw">CREATE</span> <span class="kw">TABLE</span> reserva (
+    documento  <span class="ty">VARCHAR</span>(<span class="nu">15</span>)  <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    id_vuelo   <span class="ty">INT</span>          <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    asiento    <span class="ty">VARCHAR</span>(<span class="nu">4</span>)   <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    clase      <span class="ty">VARCHAR</span>(<span class="nu">10</span>)  <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">CHECK</span> (clase <span class="kw">IN</span> (<span class="st">'ECONOMICA'</span>, <span class="st">'EJECUTIVA'</span>)),
+    <span class="kw">PRIMARY</span> <span class="kw">KEY</span> (documento, id_vuelo),
+    <span class="kw">UNIQUE</span> (id_vuelo, asiento),
+    <span class="kw">FOREIGN</span> <span class="kw">KEY</span> (documento) <span class="kw">REFERENCES</span> pasajero(documento),
+    <span class="kw">FOREIGN</span> <span class="kw">KEY</span> (id_vuelo)  <span class="kw">REFERENCES</span> vuelo(id_vuelo) <span class="kw">ON</span> <span class="kw">DELETE</span> <span class="kw">CASCADE</span>
+);
+</pre>
+
+</section>
+<section class="panel">
+<h2><span class="paso">INSERT</span>DML · Inserción de datos</h2>
+
+<p>Datos de prueba: 3 bases, 9 personas (4 pilotos y 6 pasajeros, Sofía es ambos), 5 aviones, 6 vuelos, 12 asignaciones de tripulación y 13 reservas.</p>
+<details><summary>Ver todos los INSERT</summary><pre class="codigo"><span class="kw">INSERT</span> <span class="kw">INTO</span> base (codigo_base, nombre, ciudad, pais) <span class="kw">VALUES</span>
+(<span class="st">'BOG'</span>, <span class="st">'Aeropuerto El Dorado'</span>,              <span class="st">'Bogotá'</span>,   <span class="st">'Colombia'</span>),
+(<span class="st">'MDE'</span>, <span class="st">'Aeropuerto José María Córdova'</span>,     <span class="st">'Rionegro'</span>, <span class="st">'Colombia'</span>),
+(<span class="st">'CLO'</span>, <span class="st">'Aeropuerto Alfonso Bonilla Aragón'</span>, <span class="st">'Palmira'</span>,  <span class="st">'Colombia'</span>);
+
+<span class="kw">INSERT</span> <span class="kw">INTO</span> persona (documento, nombres, apellidos, fecha_nacimiento) <span class="kw">VALUES</span>
+(<span class="st">'1010'</span>, <span class="st">'Carlos Andrés'</span>,    <span class="st">'Rojas Pérez'</span>,    <span class="st">'1980-03-12'</span>),
+(<span class="st">'1020'</span>, <span class="st">'Laura Marcela'</span>,    <span class="st">'Gómez Ruiz'</span>,     <span class="st">'1988-07-25'</span>),
+(<span class="st">'1030'</span>, <span class="st">'Andrés Felipe'</span>,    <span class="st">'Torres Díaz'</span>,    <span class="st">'1975-11-02'</span>),
+(<span class="st">'1040'</span>, <span class="st">'Sofía Valentina'</span>,  <span class="st">'Herrera Mora'</span>,   <span class="st">'1992-01-18'</span>),
+(<span class="st">'2010'</span>, <span class="st">'Mateo'</span>,            <span class="st">'Sánchez Castro'</span>, <span class="st">'2000-05-30'</span>),
+(<span class="st">'2020'</span>, <span class="st">'Valeria'</span>,          <span class="st">'Ramírez León'</span>,   <span class="st">'1997-09-14'</span>),
+(<span class="st">'2030'</span>, <span class="st">'Santiago'</span>,         <span class="st">'López Vargas'</span>,   <span class="st">'1985-12-01'</span>),
+(<span class="st">'2040'</span>, <span class="st">'Isabella'</span>,         <span class="st">'Martínez Gil'</span>,   <span class="st">'2003-04-22'</span>),
+(<span class="st">'2050'</span>, <span class="st">'Daniel'</span>,           <span class="st">'Ortiz Navarro'</span>,  <span class="st">'1979-08-08'</span>);
+
+<span class="kw">INSERT</span> <span class="kw">INTO</span> telefono_persona (documento, telefono) <span class="kw">VALUES</span>
+(<span class="st">'1010'</span>, <span class="st">'3001112233'</span>), (<span class="st">'1010'</span>, <span class="st">'6015550101'</span>),
+(<span class="st">'1020'</span>, <span class="st">'3104445566'</span>),
+(<span class="st">'1030'</span>, <span class="st">'3207778899'</span>),
+(<span class="st">'1040'</span>, <span class="st">'3156667788'</span>), (<span class="st">'1040'</span>, <span class="st">'3019990000'</span>),
+(<span class="st">'2010'</span>, <span class="st">'3121234567'</span>),
+(<span class="st">'2020'</span>, <span class="st">'3189876543'</span>),
+(<span class="st">'2030'</span>, <span class="st">'3001239876'</span>), (<span class="st">'2030'</span>, <span class="st">'6047771234'</span>),
+(<span class="st">'2040'</span>, <span class="st">'3165554433'</span>),
+(<span class="st">'2050'</span>, <span class="st">'3112223344'</span>);
+
+<span class="kw">INSERT</span> <span class="kw">INTO</span> piloto (documento, licencia, horas_vuelo, codigo_base) <span class="kw">VALUES</span>
+(<span class="st">'1010'</span>, <span class="st">'LIC-0451'</span>, <span class="nu">12500</span>, <span class="st">'BOG'</span>),
+(<span class="st">'1020'</span>, <span class="st">'LIC-0782'</span>,  <span class="nu">6800</span>, <span class="st">'MDE'</span>),
+(<span class="st">'1030'</span>, <span class="st">'LIC-0219'</span>, <span class="nu">15200</span>, <span class="st">'BOG'</span>),
+(<span class="st">'1040'</span>, <span class="st">'LIC-1033'</span>,  <span class="nu">2900</span>, <span class="st">'CLO'</span>);
+
+<span class="co">-- 1040 es piloto Y pasajera (especialización solapada)</span>
+<span class="kw">INSERT</span> <span class="kw">INTO</span> pasajero (documento, correo, millas) <span class="kw">VALUES</span>
+(<span class="st">'1040'</span>, <span class="st">'sofia.herrera@correo.co'</span>,  <span class="nu">1200</span>),
+(<span class="st">'2010'</span>, <span class="st">'mateo.sanchez@correo.co'</span>,  <span class="nu">5400</span>),
+(<span class="st">'2020'</span>, <span class="st">'valeria.ramirez@correo.co'</span>, <span class="nu">800</span>),
+(<span class="st">'2030'</span>, <span class="st">'santiago.lopez@correo.co'</span>, <span class="nu">15300</span>),
+(<span class="st">'2040'</span>, <span class="st">'isabella.martinez@correo.co'</span>, <span class="nu">0</span>),
+(<span class="st">'2050'</span>, <span class="st">'daniel.ortiz@correo.co'</span>,   <span class="nu">9100</span>);
+
+<span class="kw">INSERT</span> <span class="kw">INTO</span> avion (matricula, modelo, fabricante, codigo_base) <span class="kw">VALUES</span>
+(<span class="st">'HK-5001'</span>, <span class="st">'A320'</span>,     <span class="st">'Airbus'</span>,  <span class="st">'BOG'</span>),
+(<span class="st">'HK-5002'</span>, <span class="st">'737-800'</span>,  <span class="st">'Boeing'</span>,  <span class="st">'MDE'</span>),
+(<span class="st">'HK-5003'</span>, <span class="st">'ATR 72'</span>,   <span class="st">'ATR'</span>,     <span class="st">'CLO'</span>),
+(<span class="st">'HK-6001'</span>, <span class="st">'767-300F'</span>, <span class="st">'Boeing'</span>,  <span class="st">'BOG'</span>),
+(<span class="st">'HK-7001'</span>, <span class="st">'172'</span>,      <span class="st">'Cessna'</span>,  <span class="st">'BOG'</span>);   <span class="co">-- de entrenamiento: ni comercial ni carga (parcial)</span>
+
+<span class="kw">INSERT</span> <span class="kw">INTO</span> avion_comercial (matricula, num_asientos) <span class="kw">VALUES</span>
+(<span class="st">'HK-5001'</span>, <span class="nu">180</span>),
+(<span class="st">'HK-5002'</span>, <span class="nu">160</span>),
+(<span class="st">'HK-5003'</span>,  <span class="nu">70</span>);
+
+<span class="kw">INSERT</span> <span class="kw">INTO</span> avion_carga (matricula, capacidad_kg) <span class="kw">VALUES</span>
+(<span class="st">'HK-6001'</span>, <span class="nu">52000.00</span>);
+
+<span class="kw">INSERT</span> <span class="kw">INTO</span> vuelo (id_vuelo, codigo, fecha, hora_salida, destino, matricula, codigo_base_origen) <span class="kw">VALUES</span>
+(<span class="nu">1</span>, <span class="st">'AV101'</span>, <span class="st">'2026-11-20'</span>, <span class="st">'06:30'</span>, <span class="st">'Cartagena'</span>,  <span class="st">'HK-5001'</span>, <span class="st">'BOG'</span>),
+(<span class="nu">2</span>, <span class="st">'AV205'</span>, <span class="st">'2026-11-20'</span>, <span class="st">'09:15'</span>, <span class="st">'Bogotá'</span>,     <span class="st">'HK-5002'</span>, <span class="st">'MDE'</span>),
+(<span class="nu">3</span>, <span class="st">'AV310'</span>, <span class="st">'2026-11-21'</span>, <span class="st">'14:00'</span>, <span class="st">'Cartagena'</span>,  <span class="st">'HK-5003'</span>, <span class="st">'CLO'</span>),
+(<span class="nu">4</span>, <span class="st">'AV101'</span>, <span class="st">'2026-11-22'</span>, <span class="st">'06:30'</span>, <span class="st">'Cartagena'</span>,  <span class="st">'HK-5001'</span>, <span class="st">'BOG'</span>),
+(<span class="nu">5</span>, <span class="st">'CG900'</span>, <span class="st">'2026-11-22'</span>, <span class="st">'22:00'</span>, <span class="st">'Miami'</span>,      <span class="st">'HK-6001'</span>, <span class="st">'BOG'</span>),
+(<span class="nu">6</span>, <span class="st">'AV420'</span>, <span class="st">'2026-11-23'</span>, <span class="st">'11:45'</span>, <span class="st">'San Andrés'</span>, <span class="st">'HK-5002'</span>, <span class="st">'MDE'</span>);
+
+<span class="kw">INSERT</span> <span class="kw">INTO</span> tripula (documento, id_vuelo, rol) <span class="kw">VALUES</span>
+(<span class="st">'1010'</span>, <span class="nu">1</span>, <span class="st">'CAPITAN'</span>),  (<span class="st">'1040'</span>, <span class="nu">1</span>, <span class="st">'COPILOTO'</span>),
+(<span class="st">'1020'</span>, <span class="nu">2</span>, <span class="st">'CAPITAN'</span>),  (<span class="st">'1030'</span>, <span class="nu">2</span>, <span class="st">'COPILOTO'</span>),
+(<span class="st">'1040'</span>, <span class="nu">3</span>, <span class="st">'CAPITAN'</span>),  (<span class="st">'1020'</span>, <span class="nu">3</span>, <span class="st">'COPILOTO'</span>),
+(<span class="st">'1030'</span>, <span class="nu">4</span>, <span class="st">'CAPITAN'</span>),  (<span class="st">'1010'</span>, <span class="nu">4</span>, <span class="st">'COPILOTO'</span>),
+(<span class="st">'1030'</span>, <span class="nu">5</span>, <span class="st">'CAPITAN'</span>),  (<span class="st">'1010'</span>, <span class="nu">5</span>, <span class="st">'COPILOTO'</span>),
+(<span class="st">'1020'</span>, <span class="nu">6</span>, <span class="st">'CAPITAN'</span>),  (<span class="st">'1040'</span>, <span class="nu">6</span>, <span class="st">'COPILOTO'</span>);
+
+<span class="kw">INSERT</span> <span class="kw">INTO</span> reserva (documento, id_vuelo, asiento, clase) <span class="kw">VALUES</span>
+(<span class="st">'2010'</span>, <span class="nu">1</span>, <span class="st">'12A'</span>, <span class="st">'ECONOMICA'</span>),
+(<span class="st">'2010'</span>, <span class="nu">3</span>, <span class="st">'5C'</span>,  <span class="st">'ECONOMICA'</span>),
+(<span class="st">'2010'</span>, <span class="nu">4</span>, <span class="st">'14B'</span>, <span class="st">'ECONOMICA'</span>),
+(<span class="st">'2020'</span>, <span class="nu">1</span>, <span class="st">'2A'</span>,  <span class="st">'EJECUTIVA'</span>),
+(<span class="st">'2020'</span>, <span class="nu">2</span>, <span class="st">'8D'</span>,  <span class="st">'ECONOMICA'</span>),
+(<span class="st">'2030'</span>, <span class="nu">2</span>, <span class="st">'1A'</span>,  <span class="st">'EJECUTIVA'</span>),
+(<span class="st">'2030'</span>, <span class="nu">6</span>, <span class="st">'3B'</span>,  <span class="st">'EJECUTIVA'</span>),
+(<span class="st">'2040'</span>, <span class="nu">3</span>, <span class="st">'20F'</span>, <span class="st">'ECONOMICA'</span>),
+(<span class="st">'2040'</span>, <span class="nu">6</span>, <span class="st">'22A'</span>, <span class="st">'ECONOMICA'</span>),
+(<span class="st">'2050'</span>, <span class="nu">1</span>, <span class="st">'15C'</span>, <span class="st">'ECONOMICA'</span>),
+(<span class="st">'2050'</span>, <span class="nu">3</span>, <span class="st">'9A'</span>,  <span class="st">'ECONOMICA'</span>),
+(<span class="st">'2050'</span>, <span class="nu">4</span>, <span class="st">'2C'</span>,  <span class="st">'EJECUTIVA'</span>),
+(<span class="st">'1040'</span>, <span class="nu">2</span>, <span class="st">'18C'</span>, <span class="st">'ECONOMICA'</span>);
+</pre></details>
+
+</section>
+<section class="panel">
+<h2><span class="paso">UPDATE</span>UPDATE</h2>
+
+<p>Bonificación: sumar 500 millas a los pasajeros que tienen al menos una reserva en clase ejecutiva.</p>
+<pre class="codigo"><span class="kw">UPDATE</span> pasajero
+<span class="kw">SET</span> millas = millas + <span class="nu">500</span>
+<span class="kw">WHERE</span> documento <span class="kw">IN</span> (<span class="kw">SELECT</span> documento
+                    <span class="kw">FROM</span> reserva
+                    <span class="kw">WHERE</span> clase = <span class="st">'EJECUTIVA'</span>);</pre>
+<div class="etq-mini">Antes</div><div class="tabla-wrap"><table class="t"><thead><tr><th><span class="">documento</span></th><th><span class="">millas</span></th></tr></thead><tbody><tr><td>1040</td><td>1200</td></tr><tr><td>2010</td><td>5400</td></tr><tr><td>2020</td><td>800</td></tr><tr><td>2030</td><td>15300</td></tr><tr><td>2040</td><td>0</td></tr><tr><td>2050</td><td>9100</td></tr></tbody></table></div><p class="filas">6 filas</p>
+<div class="etq-mini">Después</div><div class="tabla-wrap"><table class="t"><thead><tr><th><span class="">documento</span></th><th><span class="">millas</span></th></tr></thead><tbody><tr><td>1040</td><td>1200</td></tr><tr><td>2010</td><td>5400</td></tr><tr><td>2020</td><td>1300</td></tr><tr><td>2030</td><td>15800</td></tr><tr><td>2040</td><td>0</td></tr><tr><td>2050</td><td>9600</td></tr></tbody></table></div><p class="filas">6 filas</p>
+
+</section>
+<section class="panel">
+<h2><span class="paso">DELETE</span>DELETE</h2>
+
+<p>Cancelar el vuelo AV420 (id 6). Por el <code>ON DELETE CASCADE</code> se borran también sus reservas y su tripulación.</p>
+<pre class="codigo"><span class="kw">DELETE</span> <span class="kw">FROM</span> vuelo
+<span class="kw">WHERE</span> id_vuelo = <span class="nu">6</span>;</pre>
+<div class="etq-mini">Antes</div><div class="tabla-wrap"><table class="t"><thead><tr><th><span class="">id_vuelo</span></th><th><span class="">reservas</span></th></tr></thead><tbody><tr><td>1</td><td>3</td></tr><tr><td>2</td><td>3</td></tr><tr><td>3</td><td>3</td></tr><tr><td>4</td><td>2</td></tr><tr><td>6</td><td>2</td></tr></tbody></table></div><p class="filas">5 filas</p>
+<div class="etq-mini">Después</div><div class="tabla-wrap"><table class="t"><thead><tr><th><span class="">id_vuelo</span></th><th><span class="">reservas</span></th></tr></thead><tbody><tr><td>1</td><td>3</td></tr><tr><td>2</td><td>3</td></tr><tr><td>3</td><td>3</td></tr><tr><td>4</td><td>2</td></tr></tbody></table></div><p class="filas">4 filas</p>
+
+</section>
+<section class="panel">
+<h2><span class="paso">SELECT 1</span>Manifiesto de un vuelo (JOIN)</h2>
+
+<p class="enunciado">Lista de pasajeros del vuelo 1 con su asiento y clase.</p>
+<pre class="codigo"><span class="kw">SELECT</span> r.asiento, pe.nombres, pe.apellidos, r.clase
+<span class="kw">FROM</span> reserva r
+<span class="kw">JOIN</span> persona pe <span class="kw">ON</span> pe.documento = r.documento
+<span class="kw">WHERE</span> r.id_vuelo = <span class="nu">1</span>
+<span class="kw">ORDER</span> <span class="kw">BY</span> r.clase <span class="kw">DESC</span>, pe.apellidos;</pre>
+
+<div class="etq-mini">Resultado</div>
+<div class="tabla-wrap"><table class="t"><thead><tr><th><span class="">asiento</span></th><th><span class="">nombres</span></th><th><span class="">apellidos</span></th><th><span class="">clase</span></th></tr></thead><tbody><tr><td>2A</td><td>Valeria</td><td>Ramírez León</td><td>EJECUTIVA</td></tr><tr><td>15C</td><td>Daniel</td><td>Ortiz Navarro</td><td>ECONOMICA</td></tr><tr><td>12A</td><td>Mateo</td><td>Sánchez Castro</td><td>ECONOMICA</td></tr></tbody></table></div><p class="filas">3 filas</p>
+
+</section>
+<section class="panel">
+<h2><span class="paso">SELECT 2</span>LEFT JOIN + COUNT</h2>
+
+<p class="enunciado">Cuántos vuelos ha operado cada avión, incluidos los que no han volado.</p>
+<pre class="codigo"><span class="kw">SELECT</span> a.matricula, a.fabricante, a.modelo, <span class="kw">COUNT</span>(v.id_vuelo) <span class="kw">AS</span> vuelos
+<span class="kw">FROM</span> avion a
+<span class="kw">LEFT</span> <span class="kw">JOIN</span> vuelo v <span class="kw">ON</span> v.matricula = a.matricula
+<span class="kw">GROUP</span> <span class="kw">BY</span> a.matricula, a.fabricante, a.modelo
+<span class="kw">ORDER</span> <span class="kw">BY</span> vuelos <span class="kw">DESC</span>, a.matricula;</pre>
+<p class="nota">Con <code>JOIN</code> normal la Cessna (HK-7001) desaparecería; <code>LEFT JOIN</code> la conserva con 0.</p>
+<div class="etq-mini">Resultado</div>
+<div class="tabla-wrap"><table class="t"><thead><tr><th><span class="">matricula</span></th><th><span class="">fabricante</span></th><th><span class="">modelo</span></th><th><span class="">vuelos</span></th></tr></thead><tbody><tr><td>HK-5001</td><td>Airbus</td><td>A320</td><td>2</td></tr><tr><td>HK-5002</td><td>Boeing</td><td>737-800</td><td>2</td></tr><tr><td>HK-5003</td><td>ATR</td><td>ATR 72</td><td>1</td></tr><tr><td>HK-6001</td><td>Boeing</td><td>767-300F</td><td>1</td></tr><tr><td>HK-7001</td><td>Cessna</td><td>172</td><td>0</td></tr></tbody></table></div><p class="filas">5 filas</p>
+
+</section>
+<section class="panel">
+<h2><span class="paso">SELECT 3</span>GROUP BY + HAVING</h2>
+
+<p class="enunciado">Pasajeros con más de una reserva.</p>
+<pre class="codigo"><span class="kw">SELECT</span> pe.nombres, pe.apellidos, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> reservas
+<span class="kw">FROM</span> reserva r
+<span class="kw">JOIN</span> persona pe <span class="kw">ON</span> pe.documento = r.documento
+<span class="kw">GROUP</span> <span class="kw">BY</span> pe.documento, pe.nombres, pe.apellidos
+<span class="kw">HAVING</span> <span class="kw">COUNT</span>(*) &gt; <span class="nu">1</span>
+<span class="kw">ORDER</span> <span class="kw">BY</span> reservas <span class="kw">DESC</span>, pe.apellidos;</pre>
+
+<div class="etq-mini">Resultado</div>
+<div class="tabla-wrap"><table class="t"><thead><tr><th><span class="">nombres</span></th><th><span class="">apellidos</span></th><th><span class="">reservas</span></th></tr></thead><tbody><tr><td>Daniel</td><td>Ortiz Navarro</td><td>3</td></tr><tr><td>Mateo</td><td>Sánchez Castro</td><td>3</td></tr><tr><td>Santiago</td><td>López Vargas</td><td>2</td></tr><tr><td>Isabella</td><td>Martínez Gil</td><td>2</td></tr><tr><td>Valeria</td><td>Ramírez León</td><td>2</td></tr></tbody></table></div><p class="filas">5 filas</p>
+
+</section>
+<section class="panel">
+<h2><span class="paso">SELECT 4</span>Subconsulta</h2>
+
+<p class="enunciado">Pilotos con más horas de vuelo que el promedio.</p>
+<pre class="codigo"><span class="kw">SELECT</span> pe.nombres, pe.apellidos, pi.horas_vuelo
+<span class="kw">FROM</span> piloto pi
+<span class="kw">JOIN</span> persona pe <span class="kw">ON</span> pe.documento = pi.documento
+<span class="kw">WHERE</span> pi.horas_vuelo &gt; (<span class="kw">SELECT</span> <span class="kw">AVG</span>(horas_vuelo) <span class="kw">FROM</span> piloto)
+<span class="kw">ORDER</span> <span class="kw">BY</span> pi.horas_vuelo <span class="kw">DESC</span>;</pre>
+<p class="nota">El promedio es (12500 + 6800 + 15200 + 2900) / 4 = 9350 horas.</p>
+<div class="etq-mini">Resultado</div>
+<div class="tabla-wrap"><table class="t"><thead><tr><th><span class="">nombres</span></th><th><span class="">apellidos</span></th><th><span class="">horas_vuelo</span></th></tr></thead><tbody><tr><td>Andrés Felipe</td><td>Torres Díaz</td><td>15200</td></tr><tr><td>Carlos Andrés</td><td>Rojas Pérez</td><td>12500</td></tr></tbody></table></div><p class="filas">2 filas</p>
+
+</section>
+<section class="panel">
+<h2><span class="paso">SELECT 5</span>CASE + LEFT JOIN a subclases</h2>
+
+<p class="enunciado">Tipo de cada avión según la especialización (comercial, carga u otro).</p>
+<pre class="codigo"><span class="kw">SELECT</span> a.matricula, a.fabricante, a.modelo,
+       <span class="kw">CASE</span>
+           <span class="kw">WHEN</span> c.matricula <span class="kw">IS</span> <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">THEN</span> <span class="st">'COMERCIAL'</span>
+           <span class="kw">WHEN</span> g.matricula <span class="kw">IS</span> <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">THEN</span> <span class="st">'CARGA'</span>
+           <span class="kw">ELSE</span> <span class="st">'OTRO'</span>
+       <span class="kw">END</span> <span class="kw">AS</span> tipo,
+       c.num_asientos, g.capacidad_kg
+<span class="kw">FROM</span> avion a
+<span class="kw">LEFT</span> <span class="kw">JOIN</span> avion_comercial c <span class="kw">ON</span> c.matricula = a.matricula
+<span class="kw">LEFT</span> <span class="kw">JOIN</span> avion_carga     g <span class="kw">ON</span> g.matricula = a.matricula
+<span class="kw">ORDER</span> <span class="kw">BY</span> a.matricula;</pre>
+<p class="nota">Así se “reconstruye” la jerarquía AVION del MER-E a partir de las tablas de la estrategia A.</p>
+<div class="etq-mini">Resultado</div>
+<div class="tabla-wrap"><table class="t"><thead><tr><th><span class="">matricula</span></th><th><span class="">fabricante</span></th><th><span class="">modelo</span></th><th><span class="">tipo</span></th><th><span class="">num_asientos</span></th><th><span class="">capacidad_kg</span></th></tr></thead><tbody><tr><td>HK-5001</td><td>Airbus</td><td>A320</td><td>COMERCIAL</td><td>180</td><td class="null">NULL</td></tr><tr><td>HK-5002</td><td>Boeing</td><td>737-800</td><td>COMERCIAL</td><td>160</td><td class="null">NULL</td></tr><tr><td>HK-5003</td><td>ATR</td><td>ATR 72</td><td>COMERCIAL</td><td>70</td><td class="null">NULL</td></tr><tr><td>HK-6001</td><td>Boeing</td><td>767-300F</td><td>CARGA</td><td class="null">NULL</td><td>52000.00</td></tr><tr><td>HK-7001</td><td>Cessna</td><td>172</td><td>OTRO</td><td class="null">NULL</td><td class="null">NULL</td></tr></tbody></table></div><p class="filas">5 filas</p>
+
+</section>
+<section class="panel">
+<h2><span class="paso">SELECT 6</span>Ocupación por vuelo</h2>
+
+<p class="enunciado">Porcentaje de ocupación de los vuelos comerciales.</p>
+<pre class="codigo"><span class="kw">SELECT</span> v.id_vuelo, v.codigo, v.destino, c.num_asientos,
+       <span class="kw">COUNT</span>(r.documento) <span class="kw">AS</span> ocupados,
+       <span class="kw">ROUND</span>(<span class="nu">100.0</span> * <span class="kw">COUNT</span>(r.documento) / c.num_asientos, <span class="nu">2</span>) <span class="kw">AS</span> porcentaje
+<span class="kw">FROM</span> vuelo v
+<span class="kw">JOIN</span> avion_comercial c <span class="kw">ON</span> c.matricula = v.matricula
+<span class="kw">LEFT</span> <span class="kw">JOIN</span> reserva r    <span class="kw">ON</span> r.id_vuelo = v.id_vuelo
+<span class="kw">GROUP</span> <span class="kw">BY</span> v.id_vuelo, v.codigo, v.destino, c.num_asientos
+<span class="kw">ORDER</span> <span class="kw">BY</span> v.id_vuelo;</pre>
+
+<div class="etq-mini">Resultado</div>
+<div class="tabla-wrap"><table class="t"><thead><tr><th><span class="">id_vuelo</span></th><th><span class="">codigo</span></th><th><span class="">destino</span></th><th><span class="">num_asientos</span></th><th><span class="">ocupados</span></th><th><span class="">porcentaje</span></th></tr></thead><tbody><tr><td>1</td><td>AV101</td><td>Cartagena</td><td>180</td><td>3</td><td>1.67</td></tr><tr><td>2</td><td>AV205</td><td>Bogotá</td><td>160</td><td>3</td><td>1.88</td></tr><tr><td>3</td><td>AV310</td><td>Cartagena</td><td>70</td><td>3</td><td>4.29</td></tr><tr><td>4</td><td>AV101</td><td>Cartagena</td><td>180</td><td>2</td><td>1.11</td></tr><tr><td>6</td><td>AV420</td><td>San Andrés</td><td>160</td><td>2</td><td>1.25</td></tr></tbody></table></div><p class="filas">5 filas</p>
+
+</section>
+<section class="panel">
+<h2><span class="paso">VIEW</span>Vista para el atributo derivado edad</h2>
+
+<p>La <code>edad</code> del MER es un atributo <strong>derivado</strong>: no se guarda en la tabla para que nunca quede desactualizada.
+Se calcula con una vista.</p>
+<pre class="codigo"><span class="kw">CREATE</span> <span class="kw">VIEW</span> v_persona_edad <span class="kw">AS</span>
+<span class="kw">SELECT</span> documento, nombres, apellidos, fecha_nacimiento,
+       <span class="kw">EXTRACT</span>(<span class="kw">YEAR</span> <span class="kw">FROM</span> <span class="kw">AGE</span>(<span class="kw">CURRENT_DATE</span>, fecha_nacimiento)) <span class="kw">AS</span> edad
+<span class="kw">FROM</span> persona;
+
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> v_persona_edad <span class="kw">ORDER</span> <span class="kw">BY</span> edad <span class="kw">DESC</span>;</pre>
+<p class="nota">En MySQL la edad se calcula con <code>TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE())</code>.
+El resultado cambia con la fecha; este se generó el 15/11/2026.</p>
+<div class="etq-mini">Resultado</div>
+<div class="tabla-wrap"><table class="t"><thead><tr><th><span class="">documento</span></th><th><span class="">nombres</span></th><th><span class="">apellidos</span></th><th><span class="">fecha_nacimiento</span></th><th><span class="">edad</span></th></tr></thead><tbody><tr><td>1030</td><td>Andrés Felipe</td><td>Torres Díaz</td><td>1975-11-02</td><td>51</td></tr><tr><td>2050</td><td>Daniel</td><td>Ortiz Navarro</td><td>1979-08-08</td><td>47</td></tr><tr><td>1010</td><td>Carlos Andrés</td><td>Rojas Pérez</td><td>1980-03-12</td><td>46</td></tr><tr><td>2030</td><td>Santiago</td><td>López Vargas</td><td>1985-12-01</td><td>40</td></tr><tr><td>1020</td><td>Laura Marcela</td><td>Gómez Ruiz</td><td>1988-07-25</td><td>38</td></tr><tr><td>1040</td><td>Sofía Valentina</td><td>Herrera Mora</td><td>1992-01-18</td><td>34</td></tr><tr><td>2020</td><td>Valeria</td><td>Ramírez León</td><td>1997-09-14</td><td>29</td></tr><tr><td>2010</td><td>Mateo</td><td>Sánchez Castro</td><td>2000-05-30</td><td>26</td></tr><tr><td>2040</td><td>Isabella</td><td>Martínez Gil</td><td>2003-04-22</td><td>23</td></tr></tbody></table></div><p class="filas">9 filas</p>
+
+</section>
+  </main>
+
+  <div class="stage-nav" id="siguiente"></div>
+
+  <footer>Universidad El Bosque · Bogotá D.C</footer>
+</div>
+
+<script src="../../js/estrellas.js"></script>
+<script src="../../js/ejercicios.js"></script>
+<script>iniciarEtapa("sql");</script>
+</body>
+</html>
