@@ -580,3 +580,41 @@ pre.codigo .co{color:#6a6f9e;font-style:italic}
   .card{transition:none}
   #stars{display:none}
 }
+
+/* ── Diagramas tipo tablero (fondo blanco, todo en negro) ── */
+.diagrama.tablero{background:#fff;padding:0;border-color:rgba(187,154,247,.35)}
+.diagrama.tablero svg{display:block}
+
+/* ── Álgebra en formato «expresión: enunciado» ── */
+ol.sentencias{padding-left:30px}
+ol.sentencias li{margin:14px 0;line-height:1.8}
+ol.sentencias li::marker{color:var(--purple);font-family:'Space Grotesk',sans-serif}
+.expr-linea{
+  font-family:'Cambria Math','STIX Two Math','Latin Modern Math',Cambria,serif;
+  font-size:1.05rem;
+  color:#fff;
+  background:rgba(10,8,26,.55);
+  border:1px solid rgba(199,125,255,.25);
+  border-radius:8px;
+  padding:2px 8px;
+  -webkit-box-decoration-break:clone;
+  box-decoration-break:clone;
+}
+.expr-linea .op,.expr-mini .op{color:var(--magenta);font-weight:700}
+.expr-linea sub{font-size:.7em;color:var(--blue);font-family:var(--mono)}
+td.expr-mini{font-family:'Cambria Math',Cambria,serif;font-size:1.02rem;color:#fff}
+td.expr-mini sub{font-size:.7em;color:var(--blue)}
+
+/* ── Esquemas de normalización ── */
+.esquema.envuelto{white-space:normal;line-height:1.9}
+.esquema sup{font-size:.68em;color:var(--blue);margin-left:1px}
+.esquema s{color:var(--text-dim)}
+.antes-despues{display:grid;grid-template-columns:1fr;gap:10px;margin:10px 0}
+.antes-despues .etq-mini{margin:6px 0 2px}
+.flecha-paso{text-align:center;color:var(--purple);font-size:1.3rem;line-height:1}
+
+/* ── Scripts SQL ── */
+.archivo-sql{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.archivo-sql .abrir{margin-top:0}
+.diagrama.tablero{overflow:auto}
+.diagrama.tablero svg{min-width:1150px}

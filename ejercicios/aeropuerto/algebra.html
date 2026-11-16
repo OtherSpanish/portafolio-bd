@@ -22,7 +22,7 @@
   <header class="interno">
     <div class="eyebrow">Ejercicio · Aeropuerto</div>
     <h1>Álgebra relacional</h1>
-    <p class="subtitle">Consultas sobre el aeropuerto con su expresión, su SQL y su resultado.</p>
+    <p class="subtitle">Sentencias sobre el aeropuerto en el formato «expresión: enunciado».</p>
   </header>
 
   <div class="ruta" id="ruta"></div>
@@ -36,185 +36,55 @@
   <li>Cada <strong>AVIÓN</strong> se identifica por su matrícula y tiene modelo, fabricante y capacidad. Permanece en una base.</li>
   <li>Un <strong>VUELO</strong> tiene un identificador, un código comercial (por ejemplo <code>AV101</code>), fecha, hora de salida y destino. Sale de una base y lo opera un único avión.</li>
   <li>En cada vuelo trabajan uno o más pilotos con un <em>rol</em> (capitán o copiloto), y un piloto puede tripular muchos vuelos.</li>
-  <li>Los <strong>PASAJEROS</strong> se registran con identificación, nombre (nombres y apellidos), fecha de nacimiento y correo; su edad se calcula. Un pasajero reserva vuelos y en cada reserva se guarda el <em>asiento</em> y la <em>clase</em>.</li>
+  <li>Los <strong>PASAJEROS</strong> se registran con identificación, nombre (nombres y apellidos), fecha de nacimiento, correo y las millas que lleva acumuladas; su edad se calcula. Un pasajero reserva vuelos y en cada reserva se guarda el <em>asiento</em> y la <em>clase</em>.</li>
+  <li>Un piloto también puede viajar como pasajero. Algunos aviones son comerciales (se guarda cuántos asientos tienen) y otros son de carga (se guarda su capacidad en kg); los de entrenamiento no son ni lo uno ni lo otro.</li>
 </ul>
 <p class="nota">Entidades del enunciado: <strong>Piloto</strong>, <strong>Pasajero</strong> y <strong>Base</strong>. Entidades inventadas para completar el problema: <strong>Avión</strong> y <strong>Vuelo</strong>.</p>
 </details></section>
 <section class="panel">
-<h2>Operadores</h2>
+<h2>Introducción</h2>
 
-<div class="ops">
-  <div><b>σ</b> Selección (filtra filas)</div>
-  <div><b>π</b> Proyección (escoge columnas)</div>
-  <div><b>⋈</b> Reunión / join</div>
-  <div><b>∪</b> Unión</div>
-  <div><b>∩</b> Intersección</div>
-  <div><b>−</b> Diferencia</div>
-  <div><b>÷</b> División (“para todos”)</div>
-  <div><b>ρ</b> Renombre</div>
-  <div><b>γ</b> Agrupación y agregación</div>
-  <div><b>←</b> Asignación</div>
-</div>
-<p class="nota">Las consultas se hacen sobre las tablas del <strong>modelo relacional</strong> con los datos de prueba del script SQL.
-Cada resultado se obtuvo ejecutando la consulta SQL equivalente en PostgreSQL.</p>
-
+<p>Aquí van 26 sentencias de álgebra relacional sobre el modelo relacional del aeropuerto. Responden preguntas que de verdad
+se haría la aerolínea: quién va en cada vuelo, qué aviones no se usan, qué pilotos trabajan juntos. Están agrupadas por el operador
+principal y cada una se escribe en el formato <strong>«expresión: enunciado»</strong>.</p>
+<p>Como PERSONA y AVION comparten la columna <code>codigo_base</code>, cuando se reúnen se proyecta antes o se usa una reunión theta,
+para que la reunión natural no compare columnas que no tienen que ver.</p>
 </section>
 <section class="panel">
-<h2><span class="paso">EJ 1</span>Selección (σ)</h2>
-
-<p class="enunciado">Vuelos con destino a Cartagena.</p>
-<div class="etq-mini">Álgebra relacional</div>
-<div class="expr"><span class="op">σ</span><sub>destino = 'Cartagena'</sub>( VUELO )</div>
-
-<details><summary>Ver SQL equivalente</summary><pre class="codigo"><span class="kw">SELECT</span> *
-<span class="kw">FROM</span> vuelo
-<span class="kw">WHERE</span> destino = <span class="st">'Cartagena'</span>;</pre></details>
-<div class="etq-mini">Resultado</div>
-<div class="tabla-wrap"><table class="t"><thead><tr><th><span class="">id_vuelo</span></th><th><span class="">codigo</span></th><th><span class="">fecha</span></th><th><span class="">hora_salida</span></th><th><span class="">destino</span></th><th><span class="">matricula</span></th><th><span class="">codigo_base_origen</span></th></tr></thead><tbody><tr><td>1</td><td>AV101</td><td>2026-11-20</td><td>06:30:00</td><td>Cartagena</td><td>HK-5001</td><td>BOG</td></tr><tr><td>3</td><td>AV310</td><td>2026-11-21</td><td>14:00:00</td><td>Cartagena</td><td>HK-5003</td><td>CLO</td></tr><tr><td>4</td><td>AV101</td><td>2026-11-22</td><td>06:30:00</td><td>Cartagena</td><td>HK-5001</td><td>BOG</td></tr></tbody></table></div><p class="filas">3 filas</p>
-
+<h2>Notación</h2>
+<div class="tabla-wrap"><table class="t"><thead><tr><th>Notación</th><th>Significado</th></tr></thead><tbody><tr><td class="expr-mini">σ<sub>cond</sub>(R)</td><td>Selección: filas de R que cumplen la condición</td></tr><tr><td class="expr-mini">π<sub>atributos</sub>(R)</td><td>Proyección: las columnas indicadas, sin repetidos</td></tr><tr><td class="expr-mini">ρ<sub>S</sub>(R)</td><td>Renombramiento de la relación</td></tr><tr><td class="expr-mini">R ∪ S, R ∩ S, R − S</td><td>Unión, intersección y diferencia</td></tr><tr><td class="expr-mini">R × S</td><td>Producto cartesiano</td></tr><tr><td class="expr-mini">R ⋈ S</td><td>Reunión natural (por los atributos con el mismo nombre)</td></tr><tr><td class="expr-mini">R ⋈<sub>cond</sub> S</td><td>Reunión theta (por una condición escrita)</td></tr><tr><td class="expr-mini">R ÷ S</td><td>División («para todos»)</td></tr><tr><td class="expr-mini"><sub>grupo</sub>γ<sub>f(a)→b</sub>(R)</td><td>Agrupación y agregación (álgebra extendida)</td></tr><tr><td class="expr-mini">R ⟕ S</td><td>Reunión externa izquierda (álgebra extendida)</td></tr><tr><td class="expr-mini">∧, ∨, ≠, ≥, ≤</td><td>Y, o, distinto, mayor o igual, menor o igual</td></tr><tr><td class="expr-mini">R ← E</td><td>Guarda en R el resultado de la expresión E</td></tr></tbody></table></div>
 </section>
 <section class="panel">
-<h2><span class="paso">EJ 2</span>Proyección (π) + Selección + Reunión natural (⋈)</h2>
-
-<p class="enunciado">Nombres, apellidos y horas de vuelo de los pilotos con más de 10.000 horas.</p>
-<div class="etq-mini">Álgebra relacional</div>
-<div class="expr"><span class="op">π</span><sub>nombres, apellidos, horas_vuelo</sub>( <span class="op">σ</span><sub>horas_vuelo &gt; 10000</sub>( PILOTO <span class="op">⋈</span> PERSONA ) )</div>
-<p class="nota">PILOTO y PERSONA comparten solo <code>documento</code>, así que la reunión natural une por esa columna.</p>
-<details><summary>Ver SQL equivalente</summary><pre class="codigo"><span class="kw">SELECT</span> pe.nombres, pe.apellidos, pi.horas_vuelo
-<span class="kw">FROM</span> piloto pi
-<span class="kw">JOIN</span> persona pe <span class="kw">ON</span> pe.documento = pi.documento
-<span class="kw">WHERE</span> pi.horas_vuelo &gt; <span class="nu">10000</span>;</pre></details>
-<div class="etq-mini">Resultado</div>
-<div class="tabla-wrap"><table class="t"><thead><tr><th><span class="">nombres</span></th><th><span class="">apellidos</span></th><th><span class="">horas_vuelo</span></th></tr></thead><tbody><tr><td>Carlos Andrés</td><td>Rojas Pérez</td><td>12500</td></tr><tr><td>Andrés Felipe</td><td>Torres Díaz</td><td>15200</td></tr></tbody></table></div><p class="filas">2 filas</p>
-
+<h2>Esquema de referencia</h2>
+<div class="tabla-wrap"><table class="t"><thead><tr><th>Relación</th><th>Atributos</th></tr></thead><tbody><tr><td><strong>BASE</strong></td><td style='white-space:normal'>codigo_base, nombre, ciudad, pais</td></tr><tr><td><strong>PERSONA</strong></td><td style='white-space:normal'>documento, nombres, apellidos, fecha_nacimiento, tipo_persona, licencia, horas_vuelo, codigo_base, correo, millas</td></tr><tr><td><strong>PER_TELEFONO</strong></td><td style='white-space:normal'>documento, telefono</td></tr><tr><td><strong>AVION</strong></td><td style='white-space:normal'>matricula, modelo, fabricante, codigo_base</td></tr><tr><td><strong>AVION_COMERCIAL</strong></td><td style='white-space:normal'>matricula, num_asientos</td></tr><tr><td><strong>AVION_CARGA</strong></td><td style='white-space:normal'>matricula, capacidad_kg</td></tr><tr><td><strong>VUELO</strong></td><td style='white-space:normal'>id_vuelo, codigo, fecha, hora_salida, destino, matricula, codigo_base_origen</td></tr><tr><td><strong>TRIPULACION</strong></td><td style='white-space:normal'>documento, id_vuelo, rol</td></tr><tr><td><strong>RESERVA</strong></td><td style='white-space:normal'>documento, id_vuelo, asiento, clase</td></tr></tbody></table></div>
 </section>
 <section class="panel">
-<h2><span class="paso">EJ 3</span>Reunión natural (⋈)</h2>
-
-<p class="enunciado">Matrícula, modelo y código de los vuelos que salen de Bogotá (BOG).</p>
-<div class="etq-mini">Álgebra relacional</div>
-<div class="expr"><span class="op">π</span><sub>id_vuelo, codigo, matricula, modelo</sub>( <span class="op">σ</span><sub>codigo_base_origen = 'BOG'</sub>( VUELO ) <span class="op">⋈</span> AVION )</div>
-<p class="nota">Seleccionar <em>antes</em> de reunir es una optimización clásica: se reúnen menos tuplas.</p>
-<details><summary>Ver SQL equivalente</summary><pre class="codigo"><span class="kw">SELECT</span> v.id_vuelo, v.codigo, a.matricula, a.modelo
-<span class="kw">FROM</span> vuelo v
-<span class="kw">JOIN</span> avion a <span class="kw">ON</span> a.matricula = v.matricula
-<span class="kw">WHERE</span> v.codigo_base_origen = <span class="st">'BOG'</span>
-<span class="kw">ORDER</span> <span class="kw">BY</span> v.id_vuelo;</pre></details>
-<div class="etq-mini">Resultado</div>
-<div class="tabla-wrap"><table class="t"><thead><tr><th><span class="">id_vuelo</span></th><th><span class="">codigo</span></th><th><span class="">matricula</span></th><th><span class="">modelo</span></th></tr></thead><tbody><tr><td>1</td><td>AV101</td><td>HK-5001</td><td>A320</td></tr><tr><td>4</td><td>AV101</td><td>HK-5001</td><td>A320</td></tr><tr><td>5</td><td>CG900</td><td>HK-6001</td><td>767-300F</td></tr></tbody></table></div><p class="filas">3 filas</p>
-
+<h2>1. Selección (σ) y proyección (π)</h2>
+<ol class="sentencias" start="1"><li><span class="expr-linea"><span class="op">π</span><sub>codigo, fecha, hora_salida</sub>(<span class="op">σ</span><sub>destino='Cartagena'</sub>(VUELO))</span>: Muestra el código, la fecha y la hora de salida de los vuelos que van para Cartagena.</li><li><span class="expr-linea"><span class="op">π</span><sub>nombres, apellidos, horas_vuelo</sub>(<span class="op">σ</span><sub>tipo_persona≠'pasajero' ∧ horas_vuelo&gt;10000</sub>(PERSONA))</span>: Lista los pilotos que tienen más de 10.000 horas de vuelo.</li><li><span class="expr-linea"><span class="op">π</span><sub>matricula, modelo</sub>(<span class="op">σ</span><sub>fabricante='Boeing'</sub>(AVION))</span>: Obtiene la matrícula y el modelo de los aviones fabricados por Boeing.</li><li><span class="expr-linea"><span class="op">π</span><sub>documento, asiento</sub>(<span class="op">σ</span><sub>id_vuelo=1 ∧ clase='ejecutiva'</sub>(RESERVA))</span>: Muestra quiénes viajan en clase ejecutiva en el vuelo 1 y en qué asiento.</li><li><span class="expr-linea"><span class="op">π</span><sub>nombres, apellidos, correo</sub>(<span class="op">σ</span><sub>millas≥5000</sub>(PERSONA))</span>: Lista los pasajeros que ya juntaron 5.000 millas o más, para ofrecerles beneficios.</li></ol>
 </section>
 <section class="panel">
-<h2><span class="paso">EJ 4</span>Intersección (∩)</h2>
-
-<p class="enunciado">Documentos de las personas que son piloto y también pasajero.</p>
-<div class="etq-mini">Álgebra relacional</div>
-<div class="expr"><span class="op">π</span><sub>documento</sub>( PILOTO ) <span class="op">∩</span> <span class="op">π</span><sub>documento</sub>( PASAJERO )</div>
-<p class="nota">Comprueba la especialización <strong>solapada</strong> del MER-E.</p>
-<details><summary>Ver SQL equivalente</summary><pre class="codigo"><span class="kw">SELECT</span> documento <span class="kw">FROM</span> piloto
-<span class="kw">INTERSECT</span>
-<span class="kw">SELECT</span> documento <span class="kw">FROM</span> pasajero;</pre></details>
-<div class="etq-mini">Resultado</div>
-<div class="tabla-wrap"><table class="t"><thead><tr><th><span class="">documento</span></th></tr></thead><tbody><tr><td>1040</td></tr></tbody></table></div><p class="filas">1 fila</p>
-
+<h2>2. Operadores de conjuntos (∪, ∩, −)</h2>
+<ol class="sentencias" start="6"><li><span class="expr-linea"><span class="op">π</span><sub>documento</sub>(TRIPULACION) <span class="op">∩</span> <span class="op">π</span><sub>documento</sub>(RESERVA)</span>: Obtiene las personas que han trabajado como tripulantes y que también han viajado como pasajeros.</li><li><span class="expr-linea"><span class="op">π</span><sub>matricula</sub>(AVION) <span class="op">−</span> <span class="op">π</span><sub>matricula</sub>(VUELO)</span>: Identifica los aviones que todavía no han operado ningún vuelo.</li><li><span class="expr-linea"><span class="op">π</span><sub>documento</sub>(<span class="op">σ</span><sub>id_vuelo=1</sub>(TRIPULACION)) <span class="op">∪</span> <span class="op">π</span><sub>documento</sub>(<span class="op">σ</span><sub>id_vuelo=1</sub>(RESERVA))</span>: Obtiene a todas las personas que van a bordo del vuelo 1, sean tripulantes o pasajeros.</li><li><span class="expr-linea"><span class="op">π</span><sub>matricula</sub>(AVION) <span class="op">−</span> <span class="op">π</span><sub>matricula</sub>(AVION_COMERCIAL) <span class="op">−</span> <span class="op">π</span><sub>matricula</sub>(AVION_CARGA)</span>: Lista los aviones que no son ni comerciales ni de carga (la jerarquía es parcial).</li></ol>
 </section>
 <section class="panel">
-<h2><span class="paso">EJ 5</span>Diferencia (−)</h2>
-
-<p class="enunciado">Aviones que no han operado ningún vuelo.</p>
-<div class="etq-mini">Álgebra relacional</div>
-<div class="expr"><span class="op">π</span><sub>matricula</sub>( AVION ) <span class="op">−</span> <span class="op">π</span><sub>matricula</sub>( VUELO )</div>
-<p class="nota">En MySQL 8.0.31+ también existe <code>EXCEPT</code>; en versiones anteriores se usa <code>NOT IN</code> o <code>LEFT JOIN … IS NULL</code>.</p>
-<details><summary>Ver SQL equivalente</summary><pre class="codigo"><span class="kw">SELECT</span> matricula <span class="kw">FROM</span> avion
-<span class="kw">EXCEPT</span>
-<span class="kw">SELECT</span> matricula <span class="kw">FROM</span> vuelo;</pre></details>
-<div class="etq-mini">Resultado</div>
-<div class="tabla-wrap"><table class="t"><thead><tr><th><span class="">matricula</span></th></tr></thead><tbody><tr><td>HK-7001</td></tr></tbody></table></div><p class="filas">1 fila</p>
-
+<h2>3. Producto cartesiano (×) y reuniones (⋈)</h2>
+<ol class="sentencias" start="10"><li><span class="expr-linea"><span class="op">π</span><sub>codigo, fecha, modelo</sub>(<span class="op">σ</span><sub>codigo_base_origen='BOG'</sub>(VUELO) <span class="op">⋈</span> AVION)</span>: Muestra los vuelos que salen de Bogotá con el modelo del avión que los opera (reunión natural por matricula).</li><li><span class="expr-linea"><span class="op">π</span><sub>nombre, ciudad, matricula</sub>(BASE <span class="op">⋈</span> AVION)</span>: Lista cada base con los aviones que tiene estacionados.</li><li><span class="expr-linea"><span class="op">π</span><sub>codigo, fecha, nombres, apellidos</sub>(<span class="op">σ</span><sub>rol='capitan'</sub>(TRIPULACION) <span class="op">⋈</span> VUELO <span class="op">⋈</span> PERSONA)</span>: Muestra el capitán de cada vuelo con el código y la fecha del vuelo.</li><li><span class="expr-linea"><span class="op">π</span><sub>nombres, apellidos, asiento, clase</sub>(<span class="op">σ</span><sub>id_vuelo=1</sub>(RESERVA) <span class="op">⋈</span> PERSONA)</span>: Arma la lista de pasajeros del vuelo 1 con su asiento y su clase.</li><li><span class="expr-linea"><span class="op">π</span><sub>codigo, destino, ciudad</sub>(VUELO <span class="op">⋈</span><sub>VUELO.codigo_base_origen = BASE.codigo_base</sub> BASE)</span>: Muestra de qué ciudad sale cada vuelo. Se usa reunión theta porque los nombres de las columnas no son iguales.</li><li><span class="expr-linea"><span class="op">π</span><sub>documento, matricula</sub>(<span class="op">σ</span><sub>tipo_persona≠'pasajero'</sub>(PERSONA) <span class="op">×</span> AVION_CARGA)</span>: Genera todas las parejas piloto–avión de carga, como base para programar entrenamientos.</li></ol>
 </section>
 <section class="panel">
-<h2><span class="paso">EJ 6</span>Unión (∪)</h2>
-
-<p class="enunciado">Documentos de todas las personas a bordo del vuelo 1 (tripulación y pasajeros).</p>
-<div class="etq-mini">Álgebra relacional</div>
-<div class="expr"><span class="op">π</span><sub>documento</sub>( <span class="op">σ</span><sub>id_vuelo = 1</sub>( TRIPULA ) ) <span class="op">∪</span> <span class="op">π</span><sub>documento</sub>( <span class="op">σ</span><sub>id_vuelo = 1</sub>( RESERVA ) )</div>
-<p class="nota">Las dos relaciones son <strong>compatibles en unión</strong>: una sola columna del mismo dominio.</p>
-<details><summary>Ver SQL equivalente</summary><pre class="codigo"><span class="kw">SELECT</span> documento <span class="kw">FROM</span> tripula <span class="kw">WHERE</span> id_vuelo = <span class="nu">1</span>
-<span class="kw">UNION</span>
-<span class="kw">SELECT</span> documento <span class="kw">FROM</span> reserva <span class="kw">WHERE</span> id_vuelo = <span class="nu">1</span>
-<span class="kw">ORDER</span> <span class="kw">BY</span> documento;</pre></details>
-<div class="etq-mini">Resultado</div>
-<div class="tabla-wrap"><table class="t"><thead><tr><th><span class="">documento</span></th></tr></thead><tbody><tr><td>1010</td></tr><tr><td>1040</td></tr><tr><td>2010</td></tr><tr><td>2020</td></tr><tr><td>2050</td></tr></tbody></table></div><p class="filas">5 filas</p>
-
+<h2>4. Renombramiento (ρ) y autorreuniones</h2>
+<ol class="sentencias" start="16"><li><span class="expr-linea"><span class="op">π</span><sub>P1.documento, P2.documento, P1.codigo_base</sub>(<span class="op">σ</span><sub>P1.codigo_base=P2.codigo_base ∧ P1.documento&lt;P2.documento</sub>(<span class="op">ρ</span><sub>P1</sub>(<span class="op">σ</span><sub>tipo_persona≠'pasajero'</sub>(PERSONA)) <span class="op">×</span> <span class="op">ρ</span><sub>P2</sub>(<span class="op">σ</span><sub>tipo_persona≠'pasajero'</sub>(PERSONA))))</span>: Forma las parejas de pilotos que pertenecen a la misma base, sin repetir parejas.</li><li><span class="expr-linea"><span class="op">π</span><sub>V1.id_vuelo, V2.id_vuelo, V1.destino</sub>(<span class="op">σ</span><sub>V1.destino=V2.destino ∧ V1.id_vuelo&lt;V2.id_vuelo</sub>(<span class="op">ρ</span><sub>V1</sub>(VUELO) <span class="op">×</span> <span class="op">ρ</span><sub>V2</sub>(VUELO)))</span>: Identifica las parejas de vuelos que tienen el mismo destino.</li><li><span class="expr-linea"><span class="op">π</span><sub>documento, fecha_nacimiento</sub>(PERSONA) <span class="op">−</span> <span class="op">π</span><sub>P1.documento, P1.fecha_nacimiento</sub>(<span class="op">σ</span><sub>P1.fecha_nacimiento&gt;P2.fecha_nacimiento</sub>(<span class="op">ρ</span><sub>P1</sub>(PERSONA) <span class="op">×</span> <span class="op">ρ</span><sub>P2</sub>(PERSONA)))</span>: Encuentra a la persona de mayor edad sin usar funciones de agregación: se quitan todas las que tienen a alguien nacido antes.</li></ol>
 </section>
 <section class="panel">
-<h2><span class="paso">EJ 7</span>División (÷)</h2>
-
-<p class="enunciado">Pasajeros que reservaron <strong>todos</strong> los vuelos con destino a Cartagena.</p>
-<div class="etq-mini">Álgebra relacional</div>
-<div class="expr">R ← <span class="op">π</span><sub>documento, id_vuelo</sub>( RESERVA )<br>S ← <span class="op">π</span><sub>id_vuelo</sub>( <span class="op">σ</span><sub>destino = 'Cartagena'</sub>( VUELO ) )<br><span class="op">π</span><sub>documento, nombres, apellidos</sub>( ( R <span class="op">÷</span> S ) <span class="op">⋈</span> PERSONA )</div>
-<p class="nota">S = {1, 3, 4}. SQL no tiene operador de división: se escribe con doble <code>NOT EXISTS</code> (“no existe un vuelo a Cartagena que el pasajero no haya reservado”).</p>
-<details><summary>Ver SQL equivalente</summary><pre class="codigo"><span class="kw">SELECT</span> pe.documento, pe.nombres, pe.apellidos
-<span class="kw">FROM</span> persona pe
-<span class="kw">WHERE</span> pe.documento <span class="kw">IN</span> (<span class="kw">SELECT</span> documento <span class="kw">FROM</span> pasajero)
-  <span class="kw">AND</span> <span class="kw">NOT</span> <span class="kw">EXISTS</span> (
-      <span class="kw">SELECT</span> <span class="nu">1</span> <span class="kw">FROM</span> vuelo v
-      <span class="kw">WHERE</span> v.destino = <span class="st">'Cartagena'</span>
-        <span class="kw">AND</span> <span class="kw">NOT</span> <span class="kw">EXISTS</span> (
-            <span class="kw">SELECT</span> <span class="nu">1</span> <span class="kw">FROM</span> reserva r
-            <span class="kw">WHERE</span> r.documento = pe.documento
-              <span class="kw">AND</span> r.id_vuelo = v.id_vuelo));</pre></details>
-<div class="etq-mini">Resultado</div>
-<div class="tabla-wrap"><table class="t"><thead><tr><th><span class="">documento</span></th><th><span class="">nombres</span></th><th><span class="">apellidos</span></th></tr></thead><tbody><tr><td>2010</td><td>Mateo</td><td>Sánchez Castro</td></tr><tr><td>2050</td><td>Daniel</td><td>Ortiz Navarro</td></tr></tbody></table></div><p class="filas">2 filas</p>
-
+<h2>5. División (÷)</h2>
+<ol class="sentencias" start="19"><li><span class="expr-linea"><span class="op">π</span><sub>documento, id_vuelo</sub>(RESERVA) <span class="op">÷</span> <span class="op">π</span><sub>id_vuelo</sub>(<span class="op">σ</span><sub>destino='Cartagena'</sub>(VUELO))</span>: Obtiene los pasajeros que reservaron todos los vuelos que van para Cartagena.</li><li><span class="expr-linea"><span class="op">π</span><sub>documento, id_vuelo</sub>(TRIPULACION) <span class="op">÷</span> <span class="op">π</span><sub>id_vuelo</sub>(<span class="op">σ</span><sub>codigo_base_origen='BOG'</sub>(VUELO))</span>: Lista los pilotos que han trabajado en todos los vuelos que salen de Bogotá.</li></ol>
 </section>
 <section class="panel">
-<h2><span class="paso">EJ 8</span>Renombre (ρ) y autorreunión</h2>
-
-<p class="enunciado">Parejas de pilotos asignados a la misma base.</p>
-<div class="etq-mini">Álgebra relacional</div>
-<div class="expr"><span class="op">π</span><sub>P1.documento, P2.documento, P1.codigo_base</sub>( <span class="op">ρ</span><sub>P1</sub>( PILOTO ) <span class="op">⋈</span><sub>P1.codigo_base = P2.codigo_base ∧ P1.documento &lt; P2.documento</sub> <span class="op">ρ</span><sub>P2</sub>( PILOTO ) )</div>
-<p class="nota">La condición <code>P1.documento &lt; P2.documento</code> evita parejas repetidas (A,B)/(B,A) y parejas de un piloto consigo mismo.</p>
-<details><summary>Ver SQL equivalente</summary><pre class="codigo"><span class="kw">SELECT</span> p1.documento <span class="kw">AS</span> piloto_1, p2.documento <span class="kw">AS</span> piloto_2, p1.codigo_base
-<span class="kw">FROM</span> piloto p1
-<span class="kw">JOIN</span> piloto p2 <span class="kw">ON</span> p1.codigo_base = p2.codigo_base
-             <span class="kw">AND</span> p1.documento &lt; p2.documento;</pre></details>
-<div class="etq-mini">Resultado</div>
-<div class="tabla-wrap"><table class="t"><thead><tr><th><span class="">piloto_1</span></th><th><span class="">piloto_2</span></th><th><span class="">codigo_base</span></th></tr></thead><tbody><tr><td>1010</td><td>1030</td><td>BOG</td></tr></tbody></table></div><p class="filas">1 fila</p>
-
+<h2>6. Agregación (γ) y reunión externa (⟕) — álgebra relacional extendida</h2>
+<ol class="sentencias" start="21"><li><span class="expr-linea"><sub>id_vuelo</sub><span class="op">γ</span><sub>COUNT(documento)→pasajeros</sub>(RESERVA)</span>: Cuenta cuántos pasajeros tiene reservados cada vuelo.</li><li><span class="expr-linea"><sub>codigo_base</sub><span class="op">γ</span><sub>AVG(horas_vuelo)→promedio</sub>(<span class="op">σ</span><sub>tipo_persona≠'pasajero'</sub>(PERSONA))</span>: Calcula el promedio de horas de vuelo de los pilotos de cada base.</li><li><span class="expr-linea"><span class="op">π</span><sub>matricula, id_vuelo</sub>(AVION <span class="op">⟕</span> VUELO)</span>: Muestra cada avión con sus vuelos, incluyendo los aviones que no tienen ninguno (quedan con id_vuelo = NULL).</li></ol>
 </section>
 <section class="panel">
-<h2><span class="paso">EJ 9</span>Agregación (γ)</h2>
-
-<p class="enunciado">Número de pasajeros por vuelo.</p>
-<div class="etq-mini">Álgebra relacional</div>
-<div class="expr"><sub>id_vuelo</sub><span class="op">γ</span><sub>COUNT(documento) → pasajeros</sub>( RESERVA )</div>
-<p class="nota">El vuelo 5 no aparece: es de carga y no tiene reservas.</p>
-<details><summary>Ver SQL equivalente</summary><pre class="codigo"><span class="kw">SELECT</span> id_vuelo, <span class="kw">COUNT</span>(documento) <span class="kw">AS</span> pasajeros
-<span class="kw">FROM</span> reserva
-<span class="kw">GROUP</span> <span class="kw">BY</span> id_vuelo
-<span class="kw">ORDER</span> <span class="kw">BY</span> id_vuelo;</pre></details>
-<div class="etq-mini">Resultado</div>
-<div class="tabla-wrap"><table class="t"><thead><tr><th><span class="">id_vuelo</span></th><th><span class="">pasajeros</span></th></tr></thead><tbody><tr><td>1</td><td>3</td></tr><tr><td>2</td><td>3</td></tr><tr><td>3</td><td>3</td></tr><tr><td>4</td><td>2</td></tr><tr><td>6</td><td>2</td></tr></tbody></table></div><p class="filas">5 filas</p>
-
-</section>
-<section class="panel">
-<h2><span class="paso">EJ 10</span>Consulta combinada</h2>
-
-<p class="enunciado">Nombre de los capitanes de los vuelos con destino a Cartagena, con el código y la fecha del vuelo.</p>
-<div class="etq-mini">Álgebra relacional</div>
-<div class="expr"><span class="op">π</span><sub>codigo, fecha, nombres, apellidos</sub>( <span class="op">σ</span><sub>rol = 'CAPITAN'</sub>( TRIPULA ) <span class="op">⋈</span> <span class="op">σ</span><sub>destino = 'Cartagena'</sub>( VUELO ) <span class="op">⋈</span> PERSONA )</div>
-
-<details><summary>Ver SQL equivalente</summary><pre class="codigo"><span class="kw">SELECT</span> v.codigo, v.fecha, pe.nombres, pe.apellidos
-<span class="kw">FROM</span> tripula t
-<span class="kw">JOIN</span> vuelo v    <span class="kw">ON</span> v.id_vuelo = t.id_vuelo
-<span class="kw">JOIN</span> persona pe <span class="kw">ON</span> pe.documento = t.documento
-<span class="kw">WHERE</span> t.rol = <span class="st">'CAPITAN'</span>
-  <span class="kw">AND</span> v.destino = <span class="st">'Cartagena'</span>
-<span class="kw">ORDER</span> <span class="kw">BY</span> v.fecha;</pre></details>
-<div class="etq-mini">Resultado</div>
-<div class="tabla-wrap"><table class="t"><thead><tr><th><span class="">codigo</span></th><th><span class="">fecha</span></th><th><span class="">nombres</span></th><th><span class="">apellidos</span></th></tr></thead><tbody><tr><td>AV101</td><td>2026-11-20</td><td>Carlos Andrés</td><td>Rojas Pérez</td></tr><tr><td>AV310</td><td>2026-11-21</td><td>Sofía Valentina</td><td>Herrera Mora</td></tr><tr><td>AV101</td><td>2026-11-22</td><td>Andrés Felipe</td><td>Torres Díaz</td></tr></tbody></table></div><p class="filas">3 filas</p>
-
+<h2>7. Consultas combinadas</h2>
+<ol class="sentencias" start="24"><li><span class="expr-linea"><span class="op">π</span><sub>nombres, apellidos</sub>(PERSONA <span class="op">⋈</span> RESERVA <span class="op">⋈</span> <span class="op">π</span><sub>id_vuelo</sub>(VUELO <span class="op">⋈</span> <span class="op">σ</span><sub>fabricante='Airbus'</sub>(AVION)))</span>: Obtiene los pasajeros que han reservado algún vuelo operado por un avión Airbus.</li><li><span class="expr-linea"><span class="op">π</span><sub>id_vuelo</sub>(RESERVA <span class="op">⋈</span> <span class="op">σ</span><sub>tipo_persona='ambos'</sub>(PERSONA))</span>: Identifica los vuelos en los que viaja como pasajero alguien que también es piloto.</li><li><span class="expr-linea">R ← <span class="op">π</span><sub>id_vuelo</sub>(VUELO) <span class="op">−</span> <span class="op">π</span><sub>id_vuelo</sub>(RESERVA);&nbsp; <span class="op">π</span><sub>codigo, destino, modelo</sub>(R <span class="op">⋈</span> VUELO <span class="op">⋈</span> AVION)</span>: Muestra los vuelos que no tienen ninguna reserva, con el modelo del avión (sale el vuelo de carga).</li></ol>
 </section>
   </main>
 

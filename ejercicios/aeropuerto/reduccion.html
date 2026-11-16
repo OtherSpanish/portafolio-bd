@@ -22,7 +22,7 @@
   <header class="interno">
     <div class="eyebrow">Ejercicio · Aeropuerto</div>
     <h1>Reducción a tablas</h1>
-    <p class="subtitle">Del MER-E a un conjunto de tablas, regla por regla.</p>
+    <p class="subtitle">Del MER-E a tablas, con las reglas de transformación del curso.</p>
   </header>
 
   <div class="ruta" id="ruta"></div>
@@ -36,87 +36,179 @@
   <li>Cada <strong>AVIÓN</strong> se identifica por su matrícula y tiene modelo, fabricante y capacidad. Permanece en una base.</li>
   <li>Un <strong>VUELO</strong> tiene un identificador, un código comercial (por ejemplo <code>AV101</code>), fecha, hora de salida y destino. Sale de una base y lo opera un único avión.</li>
   <li>En cada vuelo trabajan uno o más pilotos con un <em>rol</em> (capitán o copiloto), y un piloto puede tripular muchos vuelos.</li>
-  <li>Los <strong>PASAJEROS</strong> se registran con identificación, nombre (nombres y apellidos), fecha de nacimiento y correo; su edad se calcula. Un pasajero reserva vuelos y en cada reserva se guarda el <em>asiento</em> y la <em>clase</em>.</li>
+  <li>Los <strong>PASAJEROS</strong> se registran con identificación, nombre (nombres y apellidos), fecha de nacimiento, correo y las millas que lleva acumuladas; su edad se calcula. Un pasajero reserva vuelos y en cada reserva se guarda el <em>asiento</em> y la <em>clase</em>.</li>
+  <li>Un piloto también puede viajar como pasajero. Algunos aviones son comerciales (se guarda cuántos asientos tienen) y otros son de carga (se guarda su capacidad en kg); los de entrenamiento no son ni lo uno ni lo otro.</li>
 </ul>
 <p class="nota">Entidades del enunciado: <strong>Piloto</strong>, <strong>Pasajero</strong> y <strong>Base</strong>. Entidades inventadas para completar el problema: <strong>Avión</strong> y <strong>Vuelo</strong>.</p>
 </details></section>
 <section class="panel">
-<h2>Punto de partida</h2>
-
-<p>Se reduce el <strong>MER-E</strong> (el modelo más completo). Se aplican las reglas en orden: primero las entidades,
-luego los atributos especiales, después las jerarquías y al final las relaciones según su cardinalidad.</p>
-<p class="nota">Convención: <u style="color:var(--gold)">subrayado</u> = llave primaria · <i style="color:var(--blue);font-style:normal">azul</i> = llave foránea.</p>
+<h2>Diagrama de la reducción</h2>
+<div class="diagrama tablero"><svg xmlns="http://www.w3.org/2000/svg" viewBox="25 -116 2344 1522" font-family="Arial, Helvetica, sans-serif" role="img">
+<defs><pattern id="reduccion_g1" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e3e6ea" stroke-width="1"/></pattern><pattern id="reduccion_g2" width="100" height="100" patternUnits="userSpaceOnUse"><rect width="100" height="100" fill="url(#reduccion_g1)"/><path d="M 100 0 L 0 0 0 100" fill="none" stroke="#cfd4da" stroke-width="1.2"/></pattern></defs>
+<rect x="25" y="-116" width="2344" height="1522" fill="#ffffff"/>
+<rect x="25" y="-116" width="2344" height="1522" fill="url(#reduccion_g2)"/>
+<text x="1197" y="-82" text-anchor="middle" font-size="20" fill="#000">REDUCCIÓN A TABLAS</text>
+<polyline points="303.0,180.0 415.0,180.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="485.0,180.0 610.0,180.0 610.0,315.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="800.0,350.0 965.0,350.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1035.0,350.0 1235.0,350.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1365.0,350.0 1565.0,350.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1635.0,350.0 1815.0,350.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="700.0,385.0 700.0,585.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="700.0,635.0 700.0,797.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="765.0,820.0 965.0,820.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1035.0,820.0 1170.0,820.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1300.0,373.0 1300.0,555.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1300.0,605.0 1300.0,790.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1870.0,373.0 1870.0,820.0 1635.0,820.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1565.0,820.0 1430.0,820.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1300.0,850.0 1300.0,1005.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1300.0,1055.0 1300.0,1207.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1235.0,1230.0 935.0,1230.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="865.0,1230.0 380.0,1230.0 380.0,370.0 600.0,370.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1850.0,327.0 1850.0,200.0 1765.0,200.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1730.0,175.0 1730.0,93.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1950.0,327.0 1950.0,200.0 2085.0,200.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2120.0,175.0 2120.0,93.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="600.0,330.0 524.7,330.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="655.0,315.0 655.0,256.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="705.0,315.0 705.0,106.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="740.0,315.0 740.0,160.0 808.0,160.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="780.0,315.0 780.0,240.0 850.3,240.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="800.0,328.0 880.0,328.0 880.0,316.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="610.0,385.0 610.0,470.0 555.0,470.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="645.0,385.0 645.0,535.0 592.7,535.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="790.0,385.0 790.0,470.0 828.0,470.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="755.0,385.0 755.0,535.0 819.7,535.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="200.0,157.0 200.0,250.0 154.7,250.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="260.0,157.0 260.0,250.0 263.7,250.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1270.0,327.0 1270.0,250.0 1229.0,250.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1330.0,327.0 1330.0,250.0 1384.7,250.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1260.0,373.0 1260.0,450.0 1202.7,450.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1340.0,373.0 1340.0,450.0 1404.0,450.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1985.0,340.0 2050.7,340.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1950.0,373.0 1950.0,450.0 2015.3,450.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1920.0,373.0 1920.0,520.0 2028.7,520.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1840.0,373.0 1840.0,470.0 1789.0,470.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1616.2,70.0 1539.3,70.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1700.0,47.0 1700.0,-4.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2187.1,70.0 2250.7,70.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2120.0,47.0 2120.0,-4.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="635.0,820.0 564.7,820.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="670.0,843.0 670.0,910.0 597.4,910.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="730.0,843.0 730.0,910.0 798.3,910.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1230.0,790.0 1230.0,700.0 1157.4,700.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1370.0,790.0 1370.0,690.0 1437.3,690.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1220.0,850.0 1220.0,930.0 1129.7,930.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1260.0,850.0 1260.0,990.0 1196.0,990.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1380.0,850.0 1380.0,930.0 1465.7,930.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1340.0,850.0 1340.0,995.0 1440.7,995.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1415.0,790.0 1415.0,730.0 1571.0,730.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1255.0,1253.0 1255.0,1330.0 1194.7,1330.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1300.0,1253.0 1300.0,1334.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1345.0,1253.0 1345.0,1330.0 1425.7,1330.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1365.0,1230.0 1471.0,1230.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<rect x="600.0" y="315.0" width="200.0" height="70.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="700.0" y="355.0" text-anchor="middle" font-size="14" fill="#000">PERSONA</text>
+<rect x="157.0" y="157.0" width="146.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="230.0" y="185.0" text-anchor="middle" font-size="14" fill="#000">PER_TELEFONO</text>
+<rect x="1235.0" y="327.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1300.0" y="355.0" text-anchor="middle" font-size="14" fill="#000">BASE</text>
+<rect x="1815.0" y="327.0" width="170.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1900.0" y="355.0" text-anchor="middle" font-size="14" fill="#000">AVION</text>
+<rect x="1616.2" y="47.0" width="167.6" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1700.0" y="75.0" text-anchor="middle" font-size="14" fill="#000">AVION_COMERCIAL</text>
+<rect x="2052.9" y="47.0" width="134.1" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="2120.0" y="75.0" text-anchor="middle" font-size="14" fill="#000">AVION_CARGA</text>
+<rect x="635.0" y="797.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="700.0" y="825.0" text-anchor="middle" font-size="14" fill="#000">TRIPULACION</text>
+<rect x="1170.0" y="790.0" width="260.0" height="60.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1300.0" y="825.0" text-anchor="middle" font-size="14" fill="#000">VUELO</text>
+<rect x="1235.0" y="1207.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1300.0" y="1235.0" text-anchor="middle" font-size="14" fill="#000">RESERVA</text>
+<polygon points="450,155.0 485.0,180 450,205.0 415.0,180" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="450.0" y="184.5" text-anchor="middle" font-size="13" fill="#000"></text>
+<polygon points="1000,325.0 1035.0,350 1000,375.0 965.0,350" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="354.5" text-anchor="middle" font-size="13" fill="#000"></text>
+<polygon points="1600,325.0 1635.0,350 1600,375.0 1565.0,350" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1600.0" y="354.5" text-anchor="middle" font-size="13" fill="#000"></text>
+<polygon points="700,585.0 735.0,610 700,635.0 665.0,610" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="700.0" y="614.5" text-anchor="middle" font-size="13" fill="#000"></text>
+<polygon points="1000,795.0 1035.0,820 1000,845.0 965.0,820" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="824.5" text-anchor="middle" font-size="13" fill="#000"></text>
+<polygon points="1300,555.0 1335.0,580 1300,605.0 1265.0,580" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1300.0" y="584.5" text-anchor="middle" font-size="13" fill="#000"></text>
+<polygon points="1600,795.0 1635.0,820 1600,845.0 1565.0,820" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1600.0" y="824.5" text-anchor="middle" font-size="13" fill="#000"></text>
+<polygon points="1300,1005.0 1335.0,1030 1300,1055.0 1265.0,1030" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1300.0" y="1034.5" text-anchor="middle" font-size="13" fill="#000"></text>
+<polygon points="900,1205.0 935.0,1230 900,1255.0 865.0,1230" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="900.0" y="1234.5" text-anchor="middle" font-size="13" fill="#000"></text>
+<polygon points="1730,175.0 1765.0,200 1730,225.0 1695.0,200" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1730.0" y="204.5" text-anchor="middle" font-size="13" fill="#000"></text>
+<polygon points="2120,175.0 2155.0,200 2120,225.0 2085.0,200" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="2120.0" y="204.5" text-anchor="middle" font-size="13" fill="#000"></text>
+<ellipse cx="480.0" cy="330.0" rx="44.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="480.0" y="334.0" text-anchor="middle" font-size="12" fill="#000">documento</text><line x1="450.3" y1="337.0" x2="509.7" y2="337.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="655.0" cy="240.0" rx="38.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="655.0" y="244.0" text-anchor="middle" font-size="12" fill="#000">nombres</text>
+<ellipse cx="705.0" cy="90.0" rx="38.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="705.0" y="94.0" text-anchor="middle" font-size="12" fill="#000">apellidos</text>
+<ellipse cx="870.0" cy="160.0" rx="62.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="870.0" y="164.0" text-anchor="middle" font-size="12" fill="#000">fecha_nacimiento</text>
+<ellipse cx="900.0" cy="240.0" rx="49.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="900.0" y="244.0" text-anchor="middle" font-size="12" fill="#000">tipo_persona</text>
+<ellipse cx="880.0" cy="300.0" rx="49.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="880.0" y="304.0" text-anchor="middle" font-size="12" fill="#000">codigo_base</text><line x1="846.0" y1="307.0" x2="914.0" y2="307.0" stroke="#000" stroke-width="1" stroke-dasharray="3 2"/>
+<ellipse cx="520.0" cy="470.0" rx="35.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="520.0" y="474.0" text-anchor="middle" font-size="12" fill="#000">licencia</text>
+<ellipse cx="545.0" cy="535.0" rx="47.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="545.0" y="539.0" text-anchor="middle" font-size="12" fill="#000">horas_vuelo</text>
+<ellipse cx="860.0" cy="470.0" rx="32.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="860.0" y="474.0" text-anchor="middle" font-size="12" fill="#000">correo</text>
+<ellipse cx="850.0" cy="535.0" rx="30.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="850.0" y="539.0" text-anchor="middle" font-size="12" fill="#000">millas</text>
+<ellipse cx="110.0" cy="250.0" rx="44.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="110.0" y="254.0" text-anchor="middle" font-size="12" fill="#000">documento</text><line x1="80.3" y1="257.0" x2="139.7" y2="257.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="300.0" cy="250.0" rx="36.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="300.0" y="254.0" text-anchor="middle" font-size="12" fill="#000">telefono</text><line x1="278.7" y1="257.0" x2="321.3" y2="257.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="1180.0" cy="250.0" rx="49.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1180.0" y="254.0" text-anchor="middle" font-size="12" fill="#000">codigo_base</text><line x1="1146.0" y1="257.0" x2="1214.0" y2="257.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="1420.0" cy="250.0" rx="35.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1420.0" y="254.0" text-anchor="middle" font-size="12" fill="#000">nombre</text>
+<ellipse cx="1170.0" cy="450.0" rx="32.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1170.0" y="454.0" text-anchor="middle" font-size="12" fill="#000">ciudad</text>
+<ellipse cx="1430.0" cy="450.0" rx="26.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1430.0" y="454.0" text-anchor="middle" font-size="12" fill="#000">pais</text>
+<ellipse cx="2090.0" cy="340.0" rx="39.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2090.0" y="344.0" text-anchor="middle" font-size="12" fill="#000">matricula</text><line x1="2065.7" y1="347.0" x2="2114.3" y2="347.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="2050.0" cy="450.0" rx="34.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2050.0" y="454.0" text-anchor="middle" font-size="12" fill="#000">modelo</text>
+<ellipse cx="2070.0" cy="520.0" rx="41.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2070.0" y="524.0" text-anchor="middle" font-size="12" fill="#000">fabricante</text>
+<ellipse cx="1740.0" cy="470.0" rx="49.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1740.0" y="474.0" text-anchor="middle" font-size="12" fill="#000">codigo_base</text><line x1="1706.0" y1="477.0" x2="1774.0" y2="477.0" stroke="#000" stroke-width="1" stroke-dasharray="3 2"/>
+<ellipse cx="1500.0" cy="70.0" rx="39.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1500.0" y="74.0" text-anchor="middle" font-size="12" fill="#000">matricula</text><line x1="1475.7" y1="77.0" x2="1524.3" y2="77.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="1700.0" cy="-20.0" rx="52.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1700.0" y="-16.0" text-anchor="middle" font-size="12" fill="#000">num_asientos</text>
+<ellipse cx="2290.0" cy="70.0" rx="39.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2290.0" y="74.0" text-anchor="middle" font-size="12" fill="#000">matricula</text><line x1="2265.7" y1="77.0" x2="2314.3" y2="77.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="2120.0" cy="-20.0" rx="52.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2120.0" y="-16.0" text-anchor="middle" font-size="12" fill="#000">capacidad_kg</text>
+<ellipse cx="520.0" cy="820.0" rx="44.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="520.0" y="824.0" text-anchor="middle" font-size="12" fill="#000">documento</text><line x1="490.3" y1="827.0" x2="549.7" y2="827.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="560.0" cy="910.0" rx="37.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="560.0" y="914.0" text-anchor="middle" font-size="12" fill="#000">id_vuelo</text><line x1="537.6" y1="917.0" x2="582.4" y2="917.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="820.0" cy="910.0" rx="21.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="820.0" y="914.0" text-anchor="middle" font-size="12" fill="#000">rol</text>
+<ellipse cx="1120.0" cy="700.0" rx="37.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1120.0" y="704.0" text-anchor="middle" font-size="12" fill="#000">id_vuelo</text><line x1="1097.6" y1="707.0" x2="1142.4" y2="707.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="1470.0" cy="690.0" rx="32.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1470.0" y="694.0" text-anchor="middle" font-size="12" fill="#000">codigo</text>
+<ellipse cx="1100.0" cy="930.0" rx="29.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1100.0" y="934.0" text-anchor="middle" font-size="12" fill="#000">fecha</text>
+<ellipse cx="1150.0" cy="990.0" rx="46.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1150.0" y="994.0" text-anchor="middle" font-size="12" fill="#000">hora_salida</text>
+<ellipse cx="1500.0" cy="930.0" rx="34.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1500.0" y="934.0" text-anchor="middle" font-size="12" fill="#000">destino</text>
+<ellipse cx="1480.0" cy="995.0" rx="39.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1480.0" y="999.0" text-anchor="middle" font-size="12" fill="#000">matricula</text><line x1="1455.7" y1="1002.0" x2="1504.3" y2="1002.0" stroke="#000" stroke-width="1" stroke-dasharray="3 2"/>
+<ellipse cx="1640.0" cy="730.0" rx="69.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1640.0" y="734.0" text-anchor="middle" font-size="12" fill="#000">codigo_base_origen</text><line x1="1586.0" y1="737.0" x2="1694.0" y2="737.0" stroke="#000" stroke-width="1" stroke-dasharray="3 2"/>
+<ellipse cx="1150.0" cy="1330.0" rx="44.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1150.0" y="1334.0" text-anchor="middle" font-size="12" fill="#000">documento</text><line x1="1120.3" y1="1337.0" x2="1179.7" y2="1337.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="1300.0" cy="1350.0" rx="37.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1300.0" y="1354.0" text-anchor="middle" font-size="12" fill="#000">id_vuelo</text><line x1="1277.6" y1="1357.0" x2="1322.4" y2="1357.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="1460.0" cy="1330.0" rx="34.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1460.0" y="1334.0" text-anchor="middle" font-size="12" fill="#000">asiento</text>
+<ellipse cx="1500.0" cy="1230.0" rx="29.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1500.0" y="1234.0" text-anchor="middle" font-size="12" fill="#000">clase</text>
+</svg></div><a class="abrir" href="img/reduccion.svg" target="_blank">Abrir el diagrama en otra pestaña ↗</a><p class="nota">Cada rectángulo ya es una tabla con todas sus columnas, y los rombos vacíos muestran qué tablas quedan unidas por una llave.</p>
 </section>
 <section class="panel">
-<h2><span class="paso">PASO 1</span>Entidades fuertes</h2>
+<h2><span class="paso">FASE 1</span>Fase 1 · Simplificar el MER-E</h2>
 
-<p>Cada entidad fuerte se convierte en una tabla con sus atributos simples. Su atributo clave pasa a ser la llave primaria.</p>
 <ul>
-  <li>El atributo <strong>compuesto</strong> <code>nombre</code> de PERSONA se descompone en sus partes: <code>nombres</code> y <code>apellidos</code>.</li>
-  <li>El atributo <strong>derivado</strong> <code>edad</code> <em>no se guarda</em>; se calcula en una consulta (ver Sentencias SQL).</li>
-  <li>El atributo <strong>multivaluado</strong> <code>telefono</code> no puede ir en PERSONA; se trata en el paso 2.</li>
+  <li><strong>Regla 1 · multivaluado.</strong> <code>telefono</code> se vuelve una entidad nueva. Como cada teléfono es de una sola persona,
+      la relación es 1:N y la llave de PERSONA viaja a la tabla nueva: <code>PER_TELEFONO</code>.</li>
+  <li><strong>Regla 2 · compuesto.</strong> <code>nombreCompleto</code> desaparece y quedan sus hojas: <code>nombres</code> y <code>apellidos</code>.</li>
+  <li><strong>Derivado.</strong> <code>edad</code> no se guarda, se calcula cuando se consulta.</li>
 </ul>
-<div class="esquema"><b>BASE</b>(<u>codigo_base</u>, nombre, ciudad, pais)<br><b>PERSONA</b>(<u>documento</u>, nombres, apellidos, fecha_nacimiento)<br><b>AVION</b>(<u>matricula</u>, modelo, fabricante)<br><b>VUELO</b>(<u>id_vuelo</u>, codigo, fecha, hora_salida, destino)</div>
-
 </section>
 <section class="panel">
-<h2><span class="paso">PASO 2</span>Atributos multivaluados</h2>
+<h2><span class="paso">FASE 2</span>Fase 2 · Entidades y relaciones</h2>
 
-<p>Un atributo multivaluado se convierte en una tabla nueva con la llave de la entidad dueña (como FK) y el atributo.
-La llave primaria es la combinación de ambos, así una persona puede tener varios teléfonos pero no repetir el mismo.</p>
-<div class="esquema"><b>TELEFONO_PERSONA</b>(<u><i>documento</i></u>, <u>telefono</u>)</div>
-
-</section>
-<section class="panel">
-<h2><span class="paso">PASO 3</span>Generalización / especialización</h2>
-
-<p>Hay varias estrategias para reducir una jerarquía:</p>
+<p><strong>Regla 3:</strong> toda entidad se convierte en tabla y su llave pasa a ser la llave primaria. Después se revisa cada relación
+con su cardinalidad y sus participaciones:</p>
 <div class="tabla-wrap"><table class="t">
-<thead><tr><th>Estrategia</th><th>Cómo queda</th><th>Sirve para</th></tr></thead>
+<thead><tr><th>Relación</th><th>Cardinalidad y participación</th><th>Regla</th><th>Resultado</th></tr></thead>
 <tbody>
-<tr><td><strong>A.</strong> Superclase + una tabla por subclase</td><td>Tabla de la superclase; cada subclase con la PK de la superclase como PK y FK</td><td>Cualquier caso (total, parcial, disjunta, solapada)</td></tr>
-<tr><td><strong>B.</strong> Solo tablas de subclases</td><td>Cada subclase copia todos los atributos de la superclase</td><td>Solo especialización <em>total</em> y <em>disjunta</em></td></tr>
-<tr><td><strong>C.</strong> Una sola tabla con atributo tipo</td><td>Todos los atributos en una tabla, muchos NULL</td><td>Disjunta, con pocas diferencias entre subclases</td></tr>
+<tr><td>pertenecer</td><td>N:1 · PILOTO (1:1)</td><td>6</td><td>La llave de BASE viaja al lado muchos: <code>codigo_base</code> en PERSONA</td></tr>
+<tr><td>ubicar</td><td>1:N · AVION (1:1)</td><td>6</td><td><code>codigo_base</code> en AVION, obligatoria</td></tr>
+<tr><td>salir</td><td>1:N · VUELO (1:1)</td><td>6</td><td><code>codigo_base_origen</code> en VUELO, obligatoria</td></tr>
+<tr><td>operar</td><td>1:N · VUELO (1:1)</td><td>6</td><td><code>matricula</code> en VUELO, obligatoria</td></tr>
+<tr><td>tripular</td><td>N:M</td><td>8</td><td>Tabla nueva TRIPULACION con las dos llaves y el <code>rol</code></td></tr>
+<tr><td>reservar</td><td>N:M</td><td>8</td><td>Tabla nueva RESERVA con las dos llaves, <code>asiento</code> y <code>clase</code></td></tr>
 </tbody></table></div>
-<h3>Decisión: estrategia A en las dos jerarquías</h3>
+</section>
+<section class="panel">
+<h2><span class="paso">FASE 2</span>Fase 2 · Jerarquías (regla 11)</h2>
+
 <ul>
-  <li><strong>PERSONA</strong> es <em>solapada</em>: con la estrategia B, Sofía (piloto y pasajera) quedaría duplicada en dos tablas. Con A sus datos personales están una sola vez.</li>
-  <li><strong>AVION</strong> es <em>parcial</em>: con B la Cessna de entrenamiento no tendría tabla donde guardarse. Con A queda solo en <code>AVION</code>.</li>
+  <li><strong>PERSONA (solapada y total) → una sola tabla.</strong> Es la única estrategia que sirve cuando la jerarquía es solapada:
+      PERSONA se queda con los atributos de piloto y de pasajero y se le agrega la columna <code>tipo_persona</code>
+      ('piloto', 'pasajero' o 'ambos'). Las columnas de piloto quedan vacías en los pasajeros y al revés.</li>
+  <li><strong>AVION (disjunta y parcial) → supertipo más subtipos.</strong> Se conservan AVION, AVION_COMERCIAL y AVION_CARGA,
+      y las tres comparten la llave <code>matricula</code>. No se usa “una tabla por subtipo” por que la jerarquía es parcial
+      y la Cessna no tendría donde quedar.</li>
 </ul>
-<div class="esquema"><b>PILOTO</b>(<u><i>documento</i></u>, licencia, horas_vuelo)<br><b>PASAJERO</b>(<u><i>documento</i></u>, correo, millas)<br><b>AVION_COMERCIAL</b>(<u><i>matricula</i></u>, num_asientos)<br><b>AVION_CARGA</b>(<u><i>matricula</i></u>, capacidad_kg)</div>
-
 </section>
 <section class="panel">
-<h2><span class="paso">PASO 4</span>Relaciones 1:N</h2>
-
-<p>En una relación 1:N, la llave primaria del lado <strong>1</strong> pasa como llave foránea a la tabla del lado <strong>N</strong>.
-Como la participación del lado N es total, la FK es <code>NOT NULL</code>.</p>
-<div class="tabla-wrap"><table class="t">
-<thead><tr><th>Relación</th><th>Lado N (recibe la FK)</th><th>FK agregada</th></tr></thead>
-<tbody>
-<tr><td>ASIGNADO_A</td><td>PILOTO</td><td><code>codigo_base</code> → BASE</td></tr>
-<tr><td>UBICADO_EN</td><td>AVION</td><td><code>codigo_base</code> → BASE</td></tr>
-<tr><td>OPERA</td><td>VUELO</td><td><code>matricula</code> → AVION</td></tr>
-<tr><td>SALE_DE</td><td>VUELO</td><td><code>codigo_base_origen</code> → BASE</td></tr>
-</tbody></table></div>
-<div class="esquema"><b>PILOTO</b>(<u><i>documento</i></u>, licencia, horas_vuelo, <i>codigo_base</i>)<br><b>AVION</b>(<u>matricula</u>, modelo, fabricante, <i>codigo_base</i>)<br><b>VUELO</b>(<u>id_vuelo</u>, codigo, fecha, hora_salida, destino, <i>matricula</i>, <i>codigo_base_origen</i>)</div>
-
-</section>
-<section class="panel">
-<h2><span class="paso">PASO 5</span>Relaciones M:N</h2>
-
-<p>Una relación M:N se convierte en una tabla propia. Su llave primaria es la unión de las llaves de las dos entidades
-(cada una también es FK) y lleva los atributos de la relación.</p>
-<ul>
-  <li><code>TRIPULA</code> relaciona a la subclase PILOTO (no a PERSONA) con VUELO y guarda <code>rol</code>.</li>
-  <li><code>RESERVA</code> relaciona a la subclase PASAJERO con VUELO y guarda <code>asiento</code> y <code>clase</code>.</li>
-</ul>
-<div class="esquema"><b>TRIPULA</b>(<u><i>documento</i></u>, <u><i>id_vuelo</i></u>, rol)<br><b>RESERVA</b>(<u><i>documento</i></u>, <u><i>id_vuelo</i></u>, asiento, clase)</div>
-
-</section>
-<section class="panel">
-<h2>Resultado: 11 tablas</h2>
-<div class="esquema"><b>BASE</b>(<u>codigo_base</u>, nombre, ciudad, pais)<br><b>PERSONA</b>(<u>documento</u>, nombres, apellidos, fecha_nacimiento)<br><b>TELEFONO_PERSONA</b>(<u><i>documento</i></u>, <u>telefono</u>)<br><b>PILOTO</b>(<u><i>documento</i></u>, licencia, horas_vuelo, <i>codigo_base</i>)<br><b>PASAJERO</b>(<u><i>documento</i></u>, correo, millas)<br><b>AVION</b>(<u>matricula</u>, modelo, fabricante, <i>codigo_base</i>)<br><b>AVION_COMERCIAL</b>(<u><i>matricula</i></u>, num_asientos)<br><b>AVION_CARGA</b>(<u><i>matricula</i></u>, capacidad_kg)<br><b>VUELO</b>(<u>id_vuelo</u>, codigo, fecha, hora_salida, destino, <i>matricula</i>, <i>codigo_base_origen</i>)<br><b>TRIPULA</b>(<u><i>documento</i></u>, <u><i>id_vuelo</i></u>, rol)<br><b>RESERVA</b>(<u><i>documento</i></u>, <u><i>id_vuelo</i></u>, asiento, clase)</div><p class="nota">Convención: <u style="color:var(--gold)">subrayado</u> = llave primaria · <i style="color:var(--blue);font-style:normal">azul</i> = llave foránea.</p>
+<h2>Resultado: 9 tablas</h2>
+<div class="esquema"><b>BASE</b> (<u>codigo_base</u>, nombre, ciudad, pais)<br><b>PERSONA</b> (<u>documento</u>, nombres, apellidos, fecha_nacimiento, tipo_persona, licencia, horas_vuelo, <i>codigo_base</i>, correo, millas)<br><b>PER_TELEFONO</b> (<u><i>documento</i></u>, <u>telefono</u>)<br><b>AVION</b> (<u>matricula</u>, modelo, fabricante, <i>codigo_base</i>)<br><b>AVION_COMERCIAL</b> (<u><i>matricula</i></u>, num_asientos)<br><b>AVION_CARGA</b> (<u><i>matricula</i></u>, capacidad_kg)<br><b>VUELO</b> (<u>id_vuelo</u>, codigo, fecha, hora_salida, destino, <i>matricula</i>, <i>codigo_base_origen</i>)<br><b>TRIPULACION</b> (<u><i>documento</i></u>, <u><i>id_vuelo</i></u>, rol)<br><b>RESERVA</b> (<u><i>documento</i></u>, <u><i>id_vuelo</i></u>, asiento, clase)</div><p class="nota">Notación: TABLA (<u style="color:var(--gold)">llave subrayada</u>, <i style="color:var(--blue);font-style:normal">llave que viene de otra tabla en azul</i>). En el diagrama, como todo va en negro, la llave foránea lleva un subrayado punteado.</p>
 </section>
   </main>
 
