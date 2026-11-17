@@ -1,5 +1,7 @@
 -- Agencia de turismo - Bases de Datos 1
--- 01: creacion de la oficina de datos y de las 9 tablas
+-- 01: creacion de la base de datos y de las 13 tablas
+-- Las tablas van en orden: primero las que no dependen de otras.
+
 SET NAMES utf8mb4;
 
 CREATE DATABASE IF NOT EXISTS turismo
@@ -8,97 +10,130 @@ CREATE DATABASE IF NOT EXISTS turismo
 
 USE turismo;
 
-CREATE TABLE OFICINA (
-  codigo_oficina char(3) NOT NULL,
-  nombre varchar(80) NOT NULL,
-  ciudad varchar(50) NOT NULL,
-  pais varchar(50) NOT NULL,
-  PRIMARY KEY (codigo_oficina)
+-- DESTINO
+CREATE TABLE DESTINO (
+  id_destino int NOT NULL,
+  nombre varchar(60) NOT NULL,
+  pais varchar(40) NOT NULL,
+  clima varchar(20) NOT NULL,
+  PRIMARY KEY (id_destino)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE PERSONA (
+-- TURISTA
+CREATE TABLE TURISTA (
   documento varchar(15) NOT NULL,
   nombres varchar(50) NOT NULL,
   apellidos varchar(50) NOT NULL,
   fecha_nacimiento date NOT NULL,
-  tipo_persona enum('guia','turista','ambos') NOT NULL,
-  registro_rnt varchar(10) DEFAULT NULL,
-  anios_experiencia int DEFAULT NULL,
-  codigo_oficina char(3) DEFAULT NULL,
-  correo varchar(80) DEFAULT NULL,
-  puntos int DEFAULT NULL,
+  correo varchar(80) NOT NULL,
   PRIMARY KEY (documento),
-  UNIQUE KEY uq_persona_registro_rnt (registro_rnt),
-  UNIQUE KEY uq_persona_correo (correo),
-  KEY fk_persona_oficina (codigo_oficina),
-  CONSTRAINT fk_persona_oficina FOREIGN KEY (codigo_oficina) REFERENCES OFICINA (codigo_oficina)
+  UNIQUE KEY uq_turista_correo (correo)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE PER_TELEFONO (
+-- OFICINA
+CREATE TABLE OFICINA (
+  codigo_oficina char(3) NOT NULL,
+  ciudad varchar(50) NOT NULL,
+  direccion varchar(80) NOT NULL,
+  PRIMARY KEY (codigo_oficina)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- TUR_TELEFONO
+CREATE TABLE TUR_TELEFONO (
   documento varchar(15) NOT NULL,
   telefono varchar(15) NOT NULL,
-  PRIMARY KEY (documento,telefono),
-  CONSTRAINT fk_per_telefono_persona FOREIGN KEY (documento) REFERENCES PERSONA (documento)
+  PRIMARY KEY (documento, telefono),
+  CONSTRAINT fk_tur_telefono_documento FOREIGN KEY (documento) REFERENCES TURISTA (documento)
     ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE VEHICULO (
-  placa varchar(10) NOT NULL,
-  modelo varchar(40) NOT NULL,
-  marca varchar(40) NOT NULL,
+-- HOTEL
+CREATE TABLE HOTEL (
+  id_hotel int NOT NULL,
+  nombre varchar(60) NOT NULL,
+  estrellas int NOT NULL,
+  id_destino int NOT NULL,
+  PRIMARY KEY (id_hotel),
+  CONSTRAINT fk_hotel_id_destino FOREIGN KEY (id_destino) REFERENCES DESTINO (id_destino)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- GUIA
+CREATE TABLE GUIA (
+  id_guia varchar(15) NOT NULL,
+  nombres varchar(50) NOT NULL,
+  apellidos varchar(50) NOT NULL,
+  registro_rnt varchar(12) NOT NULL,
   codigo_oficina char(3) NOT NULL,
-  PRIMARY KEY (placa),
-  KEY fk_vehiculo_oficina (codigo_oficina),
-  CONSTRAINT fk_vehiculo_oficina FOREIGN KEY (codigo_oficina) REFERENCES OFICINA (codigo_oficina)
+  PRIMARY KEY (id_guia),
+  UNIQUE KEY uq_guia_registro_rnt (registro_rnt),
+  CONSTRAINT fk_guia_codigo_oficina FOREIGN KEY (codigo_oficina) REFERENCES OFICINA (codigo_oficina)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE BUSETA (
-  placa varchar(10) NOT NULL,
-  num_sillas int NOT NULL,
-  PRIMARY KEY (placa),
-  CONSTRAINT fk_buseta_vehiculo FOREIGN KEY (placa) REFERENCES VEHICULO (placa)
+-- PAQUETE
+CREATE TABLE PAQUETE (
+  codigo_paquete varchar(8) NOT NULL,
+  nombre varchar(80) NOT NULL,
+  dias int NOT NULL,
+  precio decimal(12,2) NOT NULL,
+  codigo_oficina char(3) NOT NULL,
+  PRIMARY KEY (codigo_paquete),
+  CONSTRAINT fk_paquete_codigo_oficina FOREIGN KEY (codigo_oficina) REFERENCES OFICINA (codigo_oficina)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE LANCHA (
-  placa varchar(10) NOT NULL,
-  eslora_m decimal(10,2) NOT NULL,
-  PRIMARY KEY (placa),
-  CONSTRAINT fk_lancha_vehiculo FOREIGN KEY (placa) REFERENCES VEHICULO (placa)
+-- NACIONAL
+CREATE TABLE NACIONAL (
+  codigo_paquete varchar(8) NOT NULL,
+  transporte enum('aereo','terrestre') NOT NULL,
+  PRIMARY KEY (codigo_paquete),
+  CONSTRAINT fk_nacional_codigo_paquete FOREIGN KEY (codigo_paquete) REFERENCES PAQUETE (codigo_paquete)
+    ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE TOUR (
-  id_tour bigint NOT NULL AUTO_INCREMENT,
-  codigo varchar(8) NOT NULL,
-  fecha date NOT NULL,
-  hora_salida time NOT NULL,
-  destino varchar(50) NOT NULL,
-  placa varchar(10) NOT NULL,
-  oficina_tour char(3) NOT NULL,
-  PRIMARY KEY (id_tour),
-  UNIQUE KEY uq_tour_codigo_fecha (codigo,fecha),
-  KEY fk_tour_vehiculo (placa),
-  KEY fk_tour_oficina (oficina_tour),
-  CONSTRAINT fk_tour_vehiculo FOREIGN KEY (placa) REFERENCES VEHICULO (placa),
-  CONSTRAINT fk_tour_oficina FOREIGN KEY (oficina_tour) REFERENCES OFICINA (codigo_oficina)
+-- INTERNACIONAL
+CREATE TABLE INTERNACIONAL (
+  codigo_paquete varchar(8) NOT NULL,
+  pais varchar(40) NOT NULL,
+  requiere_visa enum('si','no') NOT NULL,
+  PRIMARY KEY (codigo_paquete),
+  CONSTRAINT fk_internacional_codigo_paquete FOREIGN KEY (codigo_paquete) REFERENCES PAQUETE (codigo_paquete)
+    ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE GUIANZA (
+-- GUI_IDIOMA
+CREATE TABLE GUI_IDIOMA (
+  id_guia varchar(15) NOT NULL,
+  idioma varchar(20) NOT NULL,
+  PRIMARY KEY (id_guia, idioma),
+  CONSTRAINT fk_gui_idioma_id_guia FOREIGN KEY (id_guia) REFERENCES GUIA (id_guia)
+    ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- GUIA_DESTINO
+CREATE TABLE GUIA_DESTINO (
+  id_guia varchar(15) NOT NULL,
+  id_destino int NOT NULL,
+  PRIMARY KEY (id_guia, id_destino),
+  CONSTRAINT fk_guia_destino_id_guia FOREIGN KEY (id_guia) REFERENCES GUIA (id_guia),
+  CONSTRAINT fk_guia_destino_id_destino FOREIGN KEY (id_destino) REFERENCES DESTINO (id_destino)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ITINERARIO
+CREATE TABLE ITINERARIO (
+  codigo_paquete varchar(8) NOT NULL,
+  id_destino int NOT NULL,
+  noches int NOT NULL,
+  PRIMARY KEY (codigo_paquete, id_destino),
+  CONSTRAINT fk_itinerario_codigo_paquete FOREIGN KEY (codigo_paquete) REFERENCES PAQUETE (codigo_paquete),
+  CONSTRAINT fk_itinerario_id_destino FOREIGN KEY (id_destino) REFERENCES DESTINO (id_destino)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- VENTA
+CREATE TABLE VENTA (
   documento varchar(15) NOT NULL,
-  id_tour bigint NOT NULL,
-  rol enum('principal','apoyo') NOT NULL,
-  PRIMARY KEY (documento,id_tour),
-  KEY fk_guianza_tour (id_tour),
-  CONSTRAINT fk_guianza_persona FOREIGN KEY (documento) REFERENCES PERSONA (documento),
-  CONSTRAINT fk_guianza_tour FOREIGN KEY (id_tour) REFERENCES TOUR (id_tour)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-CREATE TABLE RESERVA (
-  documento varchar(15) NOT NULL,
-  id_tour bigint NOT NULL,
-  silla varchar(4) NOT NULL,
-  plan enum('basico','premium') NOT NULL,
-  PRIMARY KEY (documento,id_tour),
-  UNIQUE KEY uq_reserva_tour_silla (id_tour,silla),
-  CONSTRAINT fk_reserva_persona FOREIGN KEY (documento) REFERENCES PERSONA (documento),
-  CONSTRAINT fk_reserva_tour FOREIGN KEY (id_tour) REFERENCES TOUR (id_tour)
+  codigo_paquete varchar(8) NOT NULL,
+  fecha_salida date NOT NULL,
+  valor_pagado decimal(12,2) NOT NULL,
+  PRIMARY KEY (documento, codigo_paquete, fecha_salida),
+  CONSTRAINT fk_venta_documento FOREIGN KEY (documento) REFERENCES TURISTA (documento),
+  CONSTRAINT fk_venta_codigo_paquete FOREIGN KEY (codigo_paquete) REFERENCES PAQUETE (codigo_paquete)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

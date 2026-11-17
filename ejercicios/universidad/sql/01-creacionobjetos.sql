@@ -1,5 +1,7 @@
 -- Universidad - Bases de Datos 1
--- 01: creacion de la sede de datos y de las 9 tablas
+-- 01: creacion de la base de datos y de las 11 tablas
+-- Las tablas van en orden: primero las que no dependen de otras.
+
 SET NAMES utf8mb4;
 
 CREATE DATABASE IF NOT EXISTS universidad
@@ -8,97 +10,120 @@ CREATE DATABASE IF NOT EXISTS universidad
 
 USE universidad;
 
+-- SEDE
 CREATE TABLE SEDE (
   codigo_sede char(3) NOT NULL,
   nombre varchar(80) NOT NULL,
   ciudad varchar(50) NOT NULL,
-  pais varchar(50) NOT NULL,
+  direccion varchar(80) NOT NULL,
   PRIMARY KEY (codigo_sede)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE PERSONA (
-  documento varchar(15) NOT NULL,
+-- PROFESOR
+CREATE TABLE PROFESOR (
+  id_profesor varchar(15) NOT NULL,
   nombres varchar(50) NOT NULL,
   apellidos varchar(50) NOT NULL,
-  fecha_nacimiento date NOT NULL,
-  tipo_persona enum('profesor','estudiante','ambos') NOT NULL,
-  registro varchar(10) DEFAULT NULL,
-  anios_experiencia int DEFAULT NULL,
-  codigo_sede char(3) DEFAULT NULL,
-  correo varchar(80) DEFAULT NULL,
-  creditos int DEFAULT NULL,
-  PRIMARY KEY (documento),
-  UNIQUE KEY uq_persona_registro (registro),
-  UNIQUE KEY uq_persona_correo (correo),
-  KEY fk_persona_sede (codigo_sede),
-  CONSTRAINT fk_persona_sede FOREIGN KEY (codigo_sede) REFERENCES SEDE (codigo_sede)
+  titulo varchar(60) NOT NULL,
+  fecha_ingreso date NOT NULL,
+  codigo_sede char(3) NOT NULL,
+  PRIMARY KEY (id_profesor),
+  CONSTRAINT fk_profesor_codigo_sede FOREIGN KEY (codigo_sede) REFERENCES SEDE (codigo_sede)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE PER_TELEFONO (
-  documento varchar(15) NOT NULL,
-  telefono varchar(15) NOT NULL,
-  PRIMARY KEY (documento,telefono),
-  CONSTRAINT fk_per_telefono_persona FOREIGN KEY (documento) REFERENCES PERSONA (documento)
+-- PLANTA
+CREATE TABLE PLANTA (
+  id_profesor varchar(15) NOT NULL,
+  salario decimal(12,2) NOT NULL,
+  categoria varchar(20) NOT NULL,
+  PRIMARY KEY (id_profesor),
+  CONSTRAINT fk_planta_id_profesor FOREIGN KEY (id_profesor) REFERENCES PROFESOR (id_profesor)
     ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE SALON (
-  codigo_salon varchar(10) NOT NULL,
-  bloque varchar(40) NOT NULL,
-  piso varchar(40) NOT NULL,
+-- CATEDRA
+CREATE TABLE CATEDRA (
+  id_profesor varchar(15) NOT NULL,
+  valor_hora decimal(10,2) NOT NULL,
+  horas_semana int NOT NULL,
+  PRIMARY KEY (id_profesor),
+  CONSTRAINT fk_catedra_id_profesor FOREIGN KEY (id_profesor) REFERENCES PROFESOR (id_profesor)
+    ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ASIGNATURA
+CREATE TABLE ASIGNATURA (
+  cod_asignatura char(6) NOT NULL,
+  nombre varchar(80) NOT NULL,
+  creditos int NOT NULL,
+  PRIMARY KEY (cod_asignatura)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- PRERREQUISITO
+CREATE TABLE PRERREQUISITO (
+  cod_asignatura char(6) NOT NULL,
+  cod_requisito char(6) NOT NULL,
+  PRIMARY KEY (cod_asignatura, cod_requisito),
+  CONSTRAINT fk_prerrequisito_cod_asignatura FOREIGN KEY (cod_asignatura) REFERENCES ASIGNATURA (cod_asignatura),
+  CONSTRAINT fk_prerrequisito_cod_requisito FOREIGN KEY (cod_requisito) REFERENCES ASIGNATURA (cod_asignatura)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- PROGRAMA
+CREATE TABLE PROGRAMA (
+  id_programa int NOT NULL,
+  nombre varchar(80) NOT NULL,
+  nivel enum('pregrado','posgrado') NOT NULL,
+  creditos int NOT NULL,
   codigo_sede char(3) NOT NULL,
-  PRIMARY KEY (codigo_salon),
-  KEY fk_salon_sede (codigo_sede),
-  CONSTRAINT fk_salon_sede FOREIGN KEY (codigo_sede) REFERENCES SEDE (codigo_sede)
+  id_director varchar(15) NOT NULL,
+  PRIMARY KEY (id_programa),
+  UNIQUE KEY uq_programa_nombre (nombre),
+  UNIQUE KEY uq_programa_id_director (id_director),
+  CONSTRAINT fk_programa_codigo_sede FOREIGN KEY (codigo_sede) REFERENCES SEDE (codigo_sede),
+  CONSTRAINT fk_programa_id_director FOREIGN KEY (id_director) REFERENCES PROFESOR (id_profesor)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE LABORATORIO (
-  codigo_salon varchar(10) NOT NULL,
-  num_equipos int NOT NULL,
-  PRIMARY KEY (codigo_salon),
-  CONSTRAINT fk_laboratorio_salon FOREIGN KEY (codigo_salon) REFERENCES SALON (codigo_salon)
+-- ESTUDIANTE
+CREATE TABLE ESTUDIANTE (
+  id_estudiante varchar(15) NOT NULL,
+  nombres varchar(50) NOT NULL,
+  apellidos varchar(50) NOT NULL,
+  fecha_nacimiento date NOT NULL,
+  correo varchar(80) NOT NULL,
+  id_programa int NOT NULL,
+  PRIMARY KEY (id_estudiante),
+  UNIQUE KEY uq_estudiante_correo (correo),
+  CONSTRAINT fk_estudiante_id_programa FOREIGN KEY (id_programa) REFERENCES PROGRAMA (id_programa)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE AUDITORIO (
-  codigo_salon varchar(10) NOT NULL,
-  area_m2 decimal(10,2) NOT NULL,
-  PRIMARY KEY (codigo_salon),
-  CONSTRAINT fk_auditorio_salon FOREIGN KEY (codigo_salon) REFERENCES SALON (codigo_salon)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
+-- CURSO
 CREATE TABLE CURSO (
-  id_curso bigint NOT NULL AUTO_INCREMENT,
-  codigo varchar(8) NOT NULL,
-  fecha date NOT NULL,
-  hora_inicio time NOT NULL,
-  asignatura varchar(50) NOT NULL,
-  codigo_salon varchar(10) NOT NULL,
-  sede_curso char(3) NOT NULL,
+  id_curso int NOT NULL,
+  grupo char(2) NOT NULL,
+  periodo char(6) NOT NULL,
+  horario varchar(30) NOT NULL,
+  id_profesor varchar(15) NOT NULL,
+  cod_asignatura char(6) NOT NULL,
   PRIMARY KEY (id_curso),
-  UNIQUE KEY uq_curso_codigo_fecha (codigo,fecha),
-  KEY fk_curso_salon (codigo_salon),
-  KEY fk_curso_sede (sede_curso),
-  CONSTRAINT fk_curso_salon FOREIGN KEY (codigo_salon) REFERENCES SALON (codigo_salon),
-  CONSTRAINT fk_curso_sede FOREIGN KEY (sede_curso) REFERENCES SEDE (codigo_sede)
+  CONSTRAINT fk_curso_id_profesor FOREIGN KEY (id_profesor) REFERENCES PROFESOR (id_profesor),
+  CONSTRAINT fk_curso_cod_asignatura FOREIGN KEY (cod_asignatura) REFERENCES ASIGNATURA (cod_asignatura)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE DOCENCIA (
-  documento varchar(15) NOT NULL,
-  id_curso bigint NOT NULL,
-  rol enum('titular','auxiliar') NOT NULL,
-  PRIMARY KEY (documento,id_curso),
-  KEY fk_docencia_curso (id_curso),
-  CONSTRAINT fk_docencia_persona FOREIGN KEY (documento) REFERENCES PERSONA (documento),
-  CONSTRAINT fk_docencia_curso FOREIGN KEY (id_curso) REFERENCES CURSO (id_curso)
+-- EST_TELEFONO
+CREATE TABLE EST_TELEFONO (
+  id_estudiante varchar(15) NOT NULL,
+  telefono varchar(15) NOT NULL,
+  PRIMARY KEY (id_estudiante, telefono),
+  CONSTRAINT fk_est_telefono_id_estudiante FOREIGN KEY (id_estudiante) REFERENCES ESTUDIANTE (id_estudiante)
+    ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE INSCRIPCION (
-  documento varchar(15) NOT NULL,
-  id_curso bigint NOT NULL,
-  puesto varchar(4) NOT NULL,
-  modalidad enum('presencial','virtual') NOT NULL,
-  PRIMARY KEY (documento,id_curso),
-  UNIQUE KEY uq_inscripcion_curso_puesto (id_curso,puesto),
-  CONSTRAINT fk_inscripcion_persona FOREIGN KEY (documento) REFERENCES PERSONA (documento),
-  CONSTRAINT fk_inscripcion_curso FOREIGN KEY (id_curso) REFERENCES CURSO (id_curso)
+-- MATRICULA
+CREATE TABLE MATRICULA (
+  id_estudiante varchar(15) NOT NULL,
+  id_curso int NOT NULL,
+  nota decimal(3,1) DEFAULT NULL,
+  PRIMARY KEY (id_estudiante, id_curso),
+  CONSTRAINT fk_matricula_id_estudiante FOREIGN KEY (id_estudiante) REFERENCES ESTUDIANTE (id_estudiante),
+  CONSTRAINT fk_matricula_id_curso FOREIGN KEY (id_curso) REFERENCES CURSO (id_curso)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

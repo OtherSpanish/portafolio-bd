@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../css/estilos.css?v=20261116c">
+<link rel="stylesheet" href="../../css/estilos.css?v=20261116d">
 </head>
 <body>
 <div class="sky"></div>
@@ -22,7 +22,7 @@
   <header class="interno">
     <div class="eyebrow">Ejercicio · Clínica</div>
     <h1>MER</h1>
-    <p class="subtitle">Modelo entidad relación · Clínica.</p>
+    <p class="subtitle">Modelo entidad relación · Clínica (7 entidades, 7 relaciones).</p>
   </header>
 
   <div class="ruta" id="ruta"></div>
@@ -36,126 +36,137 @@
 <section class="panel">
 <h2>Enunciado</h2>
 
-<p>Una clínica con sedes en varias ciudades organiza jornadas de salud (vacunación, odontología, pediatría…) y quiere guardarlas en una base de datos.</p>
+<p>Una clínica con tres sedes en Bogotá quiere organizar sus citas, médicos y fórmulas.</p>
 <ul>
-  <li>Cada <strong>SEDE</strong> tiene un código de tres letras, nombre, ciudad y país.</li>
-  <li>Cada <strong>MÉDICO</strong> tiene identificación, nombre, registro médico, años de experiencia y uno o varios teléfonos. Pertenece a exactamente una sede.</li>
-  <li>Cada <strong>CONSULTORIO</strong> tiene un código, bloque, piso y capacidad, y queda en una sede.</li>
-  <li>Una <strong>JORNADA</strong> tiene un identificador, un código (por ejemplo <code>VAC01</code>), fecha, hora de inicio y especialidad. La realiza una sede y se hace en un solo consultorio.</li>
-  <li>En cada jornada atienden uno o más médicos con un <em>rol</em> (principal o apoyo), y un médico puede atender muchas jornadas.</li>
-  <li>Los <strong>PACIENTES</strong> se registran con identificación, nombre (nombres y apellidos), fecha de nacimiento, correo y número de visitas; la edad se calcula. Un paciente agenda citas en las jornadas y en cada cita se guarda el <em>turno</em> y el <em>régimen</em> (contributivo o subsidiado).</li>
-  <li>Un médico también puede ser paciente. Algunos consultorios son de observación (se guarda el número de camillas) y otros son laboratorios (se guarda el área en m²); los consultorios generales no son ni lo uno ni lo otro.</li>
+  <li>Cada <strong>PACIENTE</strong> tiene documento, nombre (nombres y apellidos), fecha de nacimiento, tipo de sangre y teléfonos; la edad se calcula. Está afiliado a una <strong>EPS</strong> (NIT y nombre).</li>
+  <li>Cada <strong>MÉDICO</strong> tiene identificación, nombre (nombres y apellidos), registro médico y una <strong>ESPECIALIDAD</strong>. Atiende en varias <strong>SEDES</strong> ciertos días de la semana.</li>
+  <li>Una <strong>CITA</strong> tiene número, fecha, hora y motivo; es de un paciente y la atiende un médico. Las citas presenciales se hacen en una sede y en un consultorio; las virtuales tienen un enlace y una plataforma. Toda cita es de uno de los dos tipos.</li>
+  <li>En una cita se pueden formular varios <strong>MEDICAMENTOS</strong> (código, nombre y presentación), cada uno con su dosis.</li>
 </ul>
-<p class="nota">Entidades base: <strong>Médico</strong>, <strong>Paciente</strong> y <strong>Sede</strong>. Entidades inventadas para completar el problema: <strong>Consultorio</strong> y <strong>Jornada</strong>.</p>
+<p class="nota">Entidades base: <strong>Médico</strong>, <strong>Paciente</strong> y <strong>Sede</strong>. Entidades inventadas para completar el problema: <strong>EPS</strong>, <strong>Especialidad</strong>, <strong>Cita</strong> y <strong>Medicamento</strong>.</p>
 </section>
 
 <div class="vista" data-n="chen">
 <section class="panel">
 <h2>Diagrama · Peter Chen</h2>
-<div class="diagrama tablero"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-9 44 2022 1752" font-family="Arial, Helvetica, sans-serif" role="img">
+<div class="diagrama tablero"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-295 -223 2526 1645" font-family="Arial, Helvetica, sans-serif" role="img">
 <defs><pattern id="mer_chen_g1" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e3e6ea" stroke-width="1"/></pattern><pattern id="mer_chen_g2" width="100" height="100" patternUnits="userSpaceOnUse"><rect width="100" height="100" fill="url(#mer_chen_g1)"/><path d="M 100 0 L 0 0 0 100" fill="none" stroke="#cfd4da" stroke-width="1.2"/></pattern></defs>
-<rect x="-9" y="44" width="2022" height="1752" fill="#ffffff"/>
-<rect x="-9" y="44" width="2022" height="1752" fill="url(#mer_chen_g2)"/>
-<text x="1002" y="78" text-anchor="middle" font-size="20" fill="#000">MODELO ENTIDAD RELACIÓN</text>
-<polyline points="315.0,250.0 563.9,250.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="676.1,250.0 935.0,250.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1065.0,250.0 1325.0,250.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1435.0,250.0 1692.3,250.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="250.0,273.0 250.0,588.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="250.0,652.0 250.0,960.0 910.0,960.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1000.0,273.0 1000.0,588.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1000.0,652.0 1000.0,937.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1760.0,273.0 1760.0,588.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1760.0,652.0 1760.0,960.0 1090.0,960.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1000.0,983.0 1000.0,1218.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1000.0,1282.0 1000.0,1517.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="210.0,227.0 210.0,140.0 149.0,140.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="270.0,227.0 270.0,153.2" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="185.0,240.0 139.4,240.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="185.0,262.0 80.0,262.0 80.0,329.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="210.0,273.0 210.0,420.0 156.3,420.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="970.0,227.0 970.0,140.0 926.7,140.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1030.0,227.0 1030.0,140.0 1084.7,140.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="955.0,273.0 955.0,340.0 892.7,340.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1045.0,273.0 1045.0,340.0 1114.0,340.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1730.0,227.0 1730.0,140.0 1723.0,140.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1790.0,227.0 1790.0,140.0 1827.0,140.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1827.7,250.0 1914.0,250.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1800.0,273.0 1800.0,350.0 1887.6,350.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="945.0,937.0 945.0,870.0 871.4,870.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1055.0,937.0 1055.0,870.0 1140.3,870.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="910.0,975.0 800.0,975.0 800.0,1034.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1090.0,975.0 1230.0,975.0 1230.0,1029.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1055.0,983.0 1055.0,1110.0 1131.6,1110.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="195.0,620.0 121.7,620.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="945.0,1250.0 848.7,1250.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1055.0,1250.0 1143.3,1250.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="935.0,1540.0 863.0,1540.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1065.0,1540.0 1148.0,1540.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1045.0,1517.0 1045.0,1475.0 1128.3,1475.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="950.0,1563.0 950.0,1640.0 859.7,1640.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1000.0,1563.0 1000.0,1644.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1050.0,1563.0 1050.0,1640.0 1129.0,1640.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1160.0,1653.9 1160.0,1740.0 1148.3,1740.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1220.0,1653.9 1220.0,1740.0 1251.3,1740.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<rect x="185.0" y="227.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="250.0" y="255.0" text-anchor="middle" font-size="14" fill="#000">MEDICO</text>
-<rect x="935.0" y="227.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="255.0" text-anchor="middle" font-size="14" fill="#000">SEDE</text>
-<rect x="1692.3" y="227.0" width="135.4" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1760.0" y="255.0" text-anchor="middle" font-size="14" fill="#000">CONSULTORIO</text>
-<rect x="910.0" y="937.0" width="180.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="965.0" text-anchor="middle" font-size="14" fill="#000">JORNADA</text>
-<rect x="935.0" y="1517.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="1545.0" text-anchor="middle" font-size="14" fill="#000">PACIENTE</text>
-<polygon points="620,218.0 676.0859375,250 620,282.0 563.9140625,250" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="620.0" y="254.5" text-anchor="middle" font-size="13" fill="#000">pertenecer</text>
-<polygon points="1380,218.0 1435.0,250 1380,282.0 1325.0,250" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1380.0" y="254.5" text-anchor="middle" font-size="13" fill="#000">ubicar</text>
-<polygon points="250,588.0 305.0,620 250,652.0 195.0,620" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="250.0" y="624.5" text-anchor="middle" font-size="13" fill="#000">atender</text>
-<polygon points="1000,588.0 1055.0,620 1000,652.0 945.0,620" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="624.5" text-anchor="middle" font-size="13" fill="#000">realizar</text>
-<polygon points="1760,588.0 1815.0,620 1760,652.0 1705.0,620" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1760.0" y="624.5" text-anchor="middle" font-size="13" fill="#000">albergar</text>
-<polygon points="1000,1218.0 1055.0,1250 1000,1282.0 945.0,1250" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="1254.5" text-anchor="middle" font-size="13" fill="#000">agendar</text>
-<ellipse cx="110.0" cy="140.0" rx="39.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="110.0" y="144.0" text-anchor="middle" font-size="12" fill="#000">idMedico</text><line x1="86.0" y1="147.0" x2="134.0" y2="147.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="290.0" cy="140.0" rx="35.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="290.0" y="144.0" text-anchor="middle" font-size="12" fill="#000">nombre</text>
-<ellipse cx="85.0" cy="240.0" rx="54.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="85.0" y="244.0" text-anchor="middle" font-size="12" fill="#000">registroMedico</text>
-<ellipse cx="80.0" cy="345.0" rx="39.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="80.0" y="349.0" text-anchor="middle" font-size="12" fill="#000">aniosExp</text>
-<ellipse cx="120.0" cy="420.0" rx="36.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><ellipse cx="120.0" cy="420.0" rx="32.3" ry="12.0" fill="none" stroke="#000" stroke-width="1.1"/><text x="120.0" y="424.0" text-anchor="middle" font-size="12" fill="#000">telefono</text>
-<ellipse cx="880.0" cy="140.0" rx="46.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="880.0" y="144.0" text-anchor="middle" font-size="12" fill="#000">codigoSede</text><line x1="848.3" y1="147.0" x2="911.7" y2="147.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="1120.0" cy="140.0" rx="35.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1120.0" y="144.0" text-anchor="middle" font-size="12" fill="#000">nombre</text>
-<ellipse cx="860.0" cy="340.0" rx="32.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="860.0" y="344.0" text-anchor="middle" font-size="12" fill="#000">ciudad</text>
-<ellipse cx="1140.0" cy="340.0" rx="26.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1140.0" y="344.0" text-anchor="middle" font-size="12" fill="#000">pais</text>
-<ellipse cx="1660.0" cy="140.0" rx="63.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1660.0" y="144.0" text-anchor="middle" font-size="12" fill="#000">codigoConsultorio</text><line x1="1612.0" y1="147.0" x2="1708.0" y2="147.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="1860.0" cy="140.0" rx="33.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1860.0" y="144.0" text-anchor="middle" font-size="12" fill="#000">bloque</text>
-<ellipse cx="1940.0" cy="250.0" rx="26.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1940.0" y="254.0" text-anchor="middle" font-size="12" fill="#000">piso</text>
-<ellipse cx="1930.0" cy="350.0" rx="42.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1930.0" y="354.0" text-anchor="middle" font-size="12" fill="#000">capacidad</text>
-<ellipse cx="830.0" cy="870.0" rx="41.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="830.0" y="874.0" text-anchor="middle" font-size="12" fill="#000">idJornada</text><line x1="803.6" y1="877.0" x2="856.4" y2="877.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="1170.0" cy="870.0" rx="29.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1170.0" y="874.0" text-anchor="middle" font-size="12" fill="#000">fecha</text>
-<ellipse cx="800.0" cy="1050.0" rx="32.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="800.0" y="1054.0" text-anchor="middle" font-size="12" fill="#000">codigo</text>
-<ellipse cx="1230.0" cy="1045.0" rx="41.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1230.0" y="1049.0" text-anchor="middle" font-size="12" fill="#000">horaInicio</text>
-<ellipse cx="1180.0" cy="1110.0" rx="48.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1180.0" y="1114.0" text-anchor="middle" font-size="12" fill="#000">especialidad</text>
-<ellipse cx="100.0" cy="620.0" rx="21.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="100.0" y="624.0" text-anchor="middle" font-size="12" fill="#000">rol</text>
-<ellipse cx="820.0" cy="1250.0" rx="28.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="820.0" y="1254.0" text-anchor="middle" font-size="12" fill="#000">turno</text>
-<ellipse cx="1180.0" cy="1250.0" rx="36.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1180.0" y="1254.0" text-anchor="middle" font-size="12" fill="#000">regimen</text>
-<ellipse cx="820.0" cy="1540.0" rx="43.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="820.0" y="1544.0" text-anchor="middle" font-size="12" fill="#000">idPaciente</text><line x1="792.0" y1="1547.0" x2="848.0" y2="1547.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="1180.0" cy="1540.0" rx="32.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1180.0" y="1544.0" text-anchor="middle" font-size="12" fill="#000">correo</text>
-<ellipse cx="1160.0" cy="1475.0" rx="31.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1160.0" y="1479.0" text-anchor="middle" font-size="12" fill="#000">visitas</text>
-<ellipse cx="800.0" cy="1640.0" rx="59.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="800.0" y="1644.0" text-anchor="middle" font-size="12" fill="#000">fechaNacimiento</text>
-<ellipse cx="1000.0" cy="1660.0" rx="28.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2" stroke-dasharray="5 3"/><text x="1000.0" y="1664.0" text-anchor="middle" font-size="12" fill="#000">edad</text>
-<ellipse cx="1190.0" cy="1640.0" rx="61.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1190.0" y="1644.0" text-anchor="middle" font-size="12" fill="#000">nombreCompleto</text>
-<ellipse cx="1110.0" cy="1740.0" rx="38.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1110.0" y="1744.0" text-anchor="middle" font-size="12" fill="#000">nombres</text>
-<ellipse cx="1290.0" cy="1740.0" rx="38.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1290.0" y="1744.0" text-anchor="middle" font-size="12" fill="#000">apellidos</text>
-<text x="438.0" y="240.0" text-anchor="middle" font-size="12" fill="#000">(1:1)</text>
-<text x="808.0" y="240.0" text-anchor="middle" font-size="12" fill="#000">(0:N)</text>
-<text x="620.0" y="206.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">N:1</text>
-<text x="1188.0" y="240.0" text-anchor="middle" font-size="12" fill="#000">(0:N)</text>
-<text x="1570.0" y="240.0" text-anchor="middle" font-size="12" fill="#000">(1:1)</text>
-<text x="1380.0" y="206.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">1:N</text>
-<text x="262.0" y="440.0" text-anchor="start" font-size="12" fill="#000">(0:N)</text>
-<text x="820.0" y="950.0" text-anchor="middle" font-size="12" fill="#000">(1:N)</text>
-<text x="318.0" y="626.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:M</text>
-<text x="1012.0" y="440.0" text-anchor="start" font-size="12" fill="#000">(0:N)</text>
-<text x="1012.0" y="800.0" text-anchor="start" font-size="12" fill="#000">(1:1)</text>
-<text x="1070.0" y="626.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">1:N</text>
-<text x="1772.0" y="440.0" text-anchor="start" font-size="12" fill="#000">(0:N)</text>
-<text x="1220.0" y="950.0" text-anchor="middle" font-size="12" fill="#000">(1:1)</text>
-<text x="1830.0" y="626.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">1:N</text>
-<text x="1012.0" y="1110.0" text-anchor="start" font-size="12" fill="#000">(0:N)</text>
-<text x="1012.0" y="1405.0" text-anchor="start" font-size="12" fill="#000">(1:N)</text>
-<text x="940.0" y="1212.0" text-anchor="end" font-size="13" font-weight="bold" fill="#000">N:M</text>
+<rect x="-295" y="-223" width="2526" height="1645" fill="#ffffff"/>
+<rect x="-295" y="-223" width="2526" height="1645" fill="url(#mer_chen_g2)"/>
+<text x="968" y="-189" text-anchor="middle" font-size="20" fill="#000">MODELO ENTIDAD RELACIÓN</text>
+<polyline points="2000.0,593.0 2000.0,340.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2000.0,23.0 2000.0,276.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1000.0,593.0 1000.0,340.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1000.0,23.0 1000.0,276.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1000.0,1253.0 1000.0,1000.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1000.0,639.0 1000.0,936.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="935.0,0.0 555.0,0.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="65.0,0.0 445.0,0.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1073.5,616.0 1445.0,616.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1935.0,616.0 1555.0,616.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="926.5,616.0 555.0,616.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="69.4,616.0 445.0,616.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2000.0,639.0 2000.0,1244.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1065.0,1276.0 1945.0,1276.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1045.0,593.0 1045.0,535.0 1069.7,535.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1045.0,639.0 1045.0,697.0 1070.3,697.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="926.5,634.0 851.5,634.0 851.5,660.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="955.0,593.0 955.0,535.0 932.7,535.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1073.5,634.0 1192.5,634.0 1192.5,660.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="955.0,639.0 955.0,724.0 932.7,724.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="926.5,598.0 808.2,598.0 808.2,572.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1065.0,0.0 1113.0,0.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1045.0,-23.0 1045.0,-81.0 1059.0,-81.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1120.0,-97.0 1120.0,-111.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1181.0,-81.0 1201.0,-81.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="935.0,18.0 827.3,18.0 827.3,44.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="955.0,-23.0 955.0,-81.0 928.3,-81.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1045.0,23.0 1045.0,81.0 1063.7,81.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="955.0,23.0 955.0,108.0 924.0,108.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-69.4,616.0 -117.4,616.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="45.0,593.0 45.0,535.0 64.7,535.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="45.0,639.0 45.0,697.0 70.6,697.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2065.0,616.0 2113.0,616.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1935.0,634.0 1826.0,634.0 1826.0,660.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1826.0,692.0 1826.0,706.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1765.0,676.0 1745.0,676.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2045.0,593.0 2045.0,535.0 2065.6,535.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="935.0,1276.0 887.0,1276.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1045.0,1299.0 1045.0,1357.0 1064.7,1357.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1045.0,1253.0 1045.0,1195.0 1061.0,1195.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-65.0,0.0 -113.0,0.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="45.0,-23.0 45.0,-81.0 64.7,-81.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1932.0,0.0 1884.0,0.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2068.0,0.0 2116.0,0.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2000.0,1308.0 2000.0,1350.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="500.0,584.0 500.0,542.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<rect x="-65.0" y="-23.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="0.0" y="5.0" text-anchor="middle" font-size="14" fill="#000">EPS</text>
+<rect x="935.0" y="-23.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="5.0" text-anchor="middle" font-size="14" fill="#000">PACIENTE</text>
+<rect x="1932.0" y="-23.0" width="136.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="2000.0" y="5.0" text-anchor="middle" font-size="14" fill="#000">ESPECIALIDAD</text>
+<rect x="-69.4" y="593.0" width="138.8" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="0.0" y="621.0" text-anchor="middle" font-size="14" fill="#000">MEDICAMENTO</text>
+<rect x="926.5" y="593.0" width="147.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="621.0" text-anchor="middle" font-size="14" fill="#000">CITA</text>
+<rect x="1935.0" y="593.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="2000.0" y="621.0" text-anchor="middle" font-size="14" fill="#000">MEDICO</text>
+<rect x="935.0" y="1253.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="1281.0" text-anchor="middle" font-size="14" fill="#000">SEDE</text>
+<polygon points="500,-32.0 555.0,0 500,32.0 445.0,0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="500.0" y="4.5" text-anchor="middle" font-size="13" fill="#000">afiliar</text>
+<polygon points="2000,276.0 2055.0,308.0 2000,340.0 1945.0,308.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="2000.0" y="312.5" text-anchor="middle" font-size="13" fill="#000">tener</text>
+<polygon points="2000,1244.0 2055.0,1276.0 2000,1308.0 1945.0,1276.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="2000.0" y="1280.5" text-anchor="middle" font-size="13" fill="#000">laborar</text>
+<polygon points="1000,276.0 1055.0,308.0 1000,340.0 945.0,308.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="312.5" text-anchor="middle" font-size="13" fill="#000">solicitar</text>
+<polygon points="1500,584.0 1555.0,616 1500,648.0 1445.0,616" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1500.0" y="620.5" text-anchor="middle" font-size="13" fill="#000">atender</text>
+<polygon points="500,584.0 555.0,616 500,648.0 445.0,616" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="500.0" y="620.5" text-anchor="middle" font-size="13" fill="#000">recetar</text>
+<polygon points="1000,936.0 1055.0,968 1000,1000.0 945.0,968" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="972.5" text-anchor="middle" font-size="13" fill="#000">realizar</text>
+<ellipse cx="1100.0" cy="535.0" rx="30.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1100.0" y="539.0" text-anchor="middle" font-size="12" fill="#000">idCita</text><line x1="1084.7" y1="542.0" x2="1115.3" y2="542.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="1100.0" cy="697.0" rx="29.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1100.0" y="701.0" text-anchor="middle" font-size="12" fill="#000">fecha</text>
+<ellipse cx="851.5" cy="676.0" rx="27.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="851.5" y="680.0" text-anchor="middle" font-size="12" fill="#000">hora</text>
+<ellipse cx="900.0" cy="535.0" rx="32.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="900.0" y="539.0" text-anchor="middle" font-size="12" fill="#000">motivo</text>
+<ellipse cx="1192.5" cy="676.0" rx="44.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1192.5" y="680.0" text-anchor="middle" font-size="12" fill="#000">consultorio</text>
+<ellipse cx="900.0" cy="724.0" rx="32.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="900.0" y="728.0" text-anchor="middle" font-size="12" fill="#000">enlace</text>
+<ellipse cx="808.2" cy="556.0" rx="43.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="808.2" y="560.0" text-anchor="middle" font-size="12" fill="#000">plataforma</text>
+<ellipse cx="1157.7" cy="0.0" rx="44.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1157.7" y="4.0" text-anchor="middle" font-size="12" fill="#000">documento</text><line x1="1128.0" y1="7.0" x2="1187.4" y2="7.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="1120.0" cy="-81.0" rx="61.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1120.0" y="-77.0" text-anchor="middle" font-size="12" fill="#000">nombreCompleto</text>
+<ellipse cx="1120.0" cy="-127.0" rx="38.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1120.0" y="-123.0" text-anchor="middle" font-size="12" fill="#000">nombres</text>
+<ellipse cx="1239.7" cy="-81.0" rx="38.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1239.7" y="-77.0" text-anchor="middle" font-size="12" fill="#000">apellidos</text>
+<ellipse cx="827.3" cy="60.0" rx="59.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="827.3" y="64.0" text-anchor="middle" font-size="12" fill="#000">fechaNacimiento</text>
+<ellipse cx="900.0" cy="-81.0" rx="28.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2" stroke-dasharray="5 3"/><text x="900.0" y="-77.0" text-anchor="middle" font-size="12" fill="#000">edad</text>
+<ellipse cx="1100.0" cy="81.0" rx="36.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><ellipse cx="1100.0" cy="81.0" rx="32.3" ry="12.0" fill="none" stroke="#000" stroke-width="1.1"/><text x="1100.0" y="85.0" text-anchor="middle" font-size="12" fill="#000">telefono</text>
+<ellipse cx="880.0" cy="108.0" rx="44.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="880.0" y="112.0" text-anchor="middle" font-size="12" fill="#000">tipoSangre</text>
+<ellipse cx="-186.1" cy="616.0" rx="68.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="-186.1" y="620.0" text-anchor="middle" font-size="12" fill="#000">codigoMedicamento</text><line x1="-239.8" y1="623.0" x2="-132.4" y2="623.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="100.0" cy="535.0" rx="35.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="100.0" y="539.0" text-anchor="middle" font-size="12" fill="#000">nombre</text>
+<ellipse cx="120.0" cy="697.0" rx="49.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="120.0" y="701.0" text-anchor="middle" font-size="12" fill="#000">presentacion</text>
+<ellipse cx="2152.0" cy="616.0" rx="39.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2152.0" y="620.0" text-anchor="middle" font-size="12" fill="#000">idMedico</text><line x1="2128.0" y1="623.0" x2="2176.0" y2="623.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="1826.0" cy="676.0" rx="61.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1826.0" y="680.0" text-anchor="middle" font-size="12" fill="#000">nombreCompleto</text>
+<ellipse cx="1826.0" cy="722.0" rx="38.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1826.0" y="726.0" text-anchor="middle" font-size="12" fill="#000">nombres</text>
+<ellipse cx="1706.3" cy="676.0" rx="38.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1706.3" y="680.0" text-anchor="middle" font-size="12" fill="#000">apellidos</text>
+<ellipse cx="2120.0" cy="535.0" rx="54.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2120.0" y="539.0" text-anchor="middle" font-size="12" fill="#000">registroMedico</text>
+<ellipse cx="840.3" cy="1276.0" rx="46.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="840.3" y="1280.0" text-anchor="middle" font-size="12" fill="#000">codigoSede</text><line x1="808.6" y1="1283.0" x2="872.0" y2="1283.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="1100.0" cy="1357.0" rx="35.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1100.0" y="1361.0" text-anchor="middle" font-size="12" fill="#000">nombre</text>
+<ellipse cx="1100.0" cy="1195.0" rx="39.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1100.0" y="1199.0" text-anchor="middle" font-size="12" fill="#000">direccion</text>
+<ellipse cx="-144.7" cy="0.0" rx="31.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="-144.7" y="4.0" text-anchor="middle" font-size="12" fill="#000">nitEps</text><line x1="-161.3" y1="7.0" x2="-128.0" y2="7.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="100.0" cy="-81.0" rx="35.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="100.0" y="-77.0" text-anchor="middle" font-size="12" fill="#000">nombre</text>
+<ellipse cx="1830.3" cy="0.0" rx="53.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1830.3" y="4.0" text-anchor="middle" font-size="12" fill="#000">idEspecialidad</text><line x1="1791.6" y1="7.0" x2="1869.0" y2="7.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="2151.3" cy="0.0" rx="35.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2151.3" y="4.0" text-anchor="middle" font-size="12" fill="#000">nombre</text>
+<ellipse cx="2000.0" cy="1366.0" rx="23.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2000.0" y="1370.0" text-anchor="middle" font-size="12" fill="#000">dia</text><line x1="1992.0" y1="1373.0" x2="2008.0" y2="1373.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="500.0" cy="526.0" rx="29.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="500.0" y="530.0" text-anchor="middle" font-size="12" fill="#000">dosis</text>
+<text x="2007.0" y="581.0" text-anchor="start" font-size="12" fill="#000">(1:1)</text>
+<text x="2007.0" y="43.0" text-anchor="start" font-size="12" fill="#000">(0:N)</text>
+<text x="1007.0" y="581.0" text-anchor="start" font-size="12" fill="#000">(1:1)</text>
+<text x="1007.0" y="43.0" text-anchor="start" font-size="12" fill="#000">(0:N)</text>
+<text x="1007.0" y="1241.0" text-anchor="start" font-size="12" fill="#000">(0:N)</text>
+<text x="1007.0" y="659.0" text-anchor="start" font-size="12" fill="#000">(0:1)</text>
+<text x="906.7" y="-7.0" text-anchor="middle" font-size="12" fill="#000">(1:1)</text>
+<text x="94.3" y="-7.0" text-anchor="middle" font-size="12" fill="#000">(0:N)</text>
+<text x="1101.8" y="609.0" text-anchor="middle" font-size="12" fill="#000">(1:1)</text>
+<text x="1905.7" y="609.0" text-anchor="middle" font-size="12" fill="#000">(0:N)</text>
+<text x="897.2" y="609.0" text-anchor="middle" font-size="12" fill="#000">(0:N)</text>
+<text x="98.7" y="609.0" text-anchor="middle" font-size="12" fill="#000">(0:N)</text>
+<text x="2007.0" y="659.0" text-anchor="start" font-size="12" fill="#000">(1:N)</text>
+<text x="1094.3" y="1269.0" text-anchor="middle" font-size="12" fill="#000">(1:N)</text>
+<text x="536.2" y="-38.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:1</text>
+<text x="2036.2" y="270.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:1</text>
+<text x="2036.2" y="1238.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:M</text>
+<text x="1036.2" y="270.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:1</text>
+<text x="1536.2" y="578.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:1</text>
+<text x="536.2" y="578.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:M</text>
+<text x="1036.2" y="930.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:1</text>
 </svg></div>
 </section>
 
@@ -163,71 +174,84 @@
 <div class="vista" data-n="crowsfoot" hidden>
 <section class="panel">
 <h2>Diagrama · Crow's Foot</h2>
-<div class="diagrama tablero"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-20 -40 1542 925" font-family="Arial, Helvetica, sans-serif" role="img">
+<div class="diagrama tablero"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-40 -80 1446 1045" font-family="Arial, Helvetica, sans-serif" role="img">
 <defs><pattern id="mer_crowsfoot_g1" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e3e6ea" stroke-width="1"/></pattern><pattern id="mer_crowsfoot_g2" width="100" height="100" patternUnits="userSpaceOnUse"><rect width="100" height="100" fill="url(#mer_crowsfoot_g1)"/><path d="M 100 0 L 0 0 0 100" fill="none" stroke="#cfd4da" stroke-width="1.2"/></pattern></defs>
-<rect x="-20" y="-40" width="1542" height="925" fill="#ffffff"/>
-<rect x="-20" y="-40" width="1542" height="925" fill="url(#mer_crowsfoot_g2)"/>
-<text x="751" y="-6" text-anchor="middle" font-size="20" fill="#000">MODELO ENTIDAD RELACIÓN · CROW&#x27;S FOOT</text>
-<polyline points="393.7,97.5 260.3,97.5" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="646.3,107.5 811.9,107.5" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1195.8,107.5 1028.1,107.5" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="920.0,330.0 920.0,175.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1044.6,416.0 1320.0,416.0 1320.0,195.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="520.0,380.0 520.0,195.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="629.5,437.5 795.4,437.5" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="920.0,690.0 920.0,542.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1026.9,757.5 1238.4,757.5" fill="none" stroke="#000" stroke-width="1.3"/>
-<rect x="19.7" y="60.0" width="240.5" height="95.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="140.0" y="79.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">MED_TELEFONO</text><line x1="19.7" y1="88.0" x2="260.3" y2="88.0" stroke="#000" stroke-width="1.1"/><text x="27.7" y="104.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="57.7" y="104.0" font-size="12" fill="#000" text-decoration="underline">id_medico</text><text x="124.4" y="104.0" font-size="11" fill="#000">INTEGER</text><text x="27.7" y="124.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="57.7" y="124.0" font-size="12" fill="#000" text-decoration="underline">telefono</text><text x="124.4" y="124.0" font-size="11" fill="#000">VARCHAR (15)</text><line x1="19.7" y1="134.0" x2="260.3" y2="134.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="29.7" y="148.0" font-size="11" fill="#000">MED_TELEFONO_PK (id_medico, telefono)</text>
-<rect x="393.7" y="40.0" width="252.5" height="155.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="520.0" y="59.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">MEDICO</text><line x1="393.7" y1="68.0" x2="646.3" y2="68.0" stroke="#000" stroke-width="1.1"/><text x="401.7" y="84.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="428.4" y="84.0" font-size="12" fill="#000" text-decoration="underline">id_medico</text><text x="537.1" y="84.0" font-size="11" fill="#000">INTEGER</text><text x="401.7" y="104.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="428.4" y="104.0" font-size="12" fill="#000">nombre</text><text x="537.1" y="104.0" font-size="11" fill="#000">VARCHAR (100)</text><text x="401.7" y="124.0" font-size="11" font-weight="bold" fill="#000">U *</text><text x="428.4" y="124.0" font-size="12" fill="#000">registro_medico</text><text x="537.1" y="124.0" font-size="11" fill="#000">VARCHAR (10)</text><text x="401.7" y="144.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="428.4" y="144.0" font-size="12" fill="#000">anios_experiencia</text><text x="537.1" y="144.0" font-size="11" fill="#000">INTEGER</text><text x="401.7" y="164.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="428.4" y="164.0" font-size="12" fill="#000">codigo_sede</text><text x="537.1" y="164.0" font-size="11" fill="#000">CHAR (3)</text><line x1="393.7" y1="174.0" x2="646.3" y2="174.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="403.7" y="188.0" font-size="11" fill="#000">MEDICO_PK (id_medico)</text>
-<rect x="811.9" y="40.0" width="216.3" height="135.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="920.0" y="59.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">SEDE</text><line x1="811.9" y1="68.0" x2="1028.1" y2="68.0" stroke="#000" stroke-width="1.1"/><text x="819.9" y="84.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="845.6" y="84.0" font-size="12" fill="#000" text-decoration="underline">codigo_sede</text><text x="925.7" y="84.0" font-size="11" fill="#000">CHAR (3)</text><text x="819.9" y="104.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="845.6" y="104.0" font-size="12" fill="#000">nombre</text><text x="925.7" y="104.0" font-size="11" fill="#000">VARCHAR (80)</text><text x="819.9" y="124.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="845.6" y="124.0" font-size="12" fill="#000">ciudad</text><text x="925.7" y="124.0" font-size="11" fill="#000">VARCHAR (50)</text><text x="819.9" y="144.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="845.6" y="144.0" font-size="12" fill="#000">pais</text><text x="925.7" y="144.0" font-size="11" fill="#000">VARCHAR (50)</text><line x1="811.9" y1="154.0" x2="1028.1" y2="154.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="821.9" y="168.0" font-size="11" fill="#000">SEDE_PK (codigo_sede)</text>
-<rect x="1195.8" y="40.0" width="248.3" height="155.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1320.0" y="59.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">CONSULTORIO</text><line x1="1195.8" y1="68.0" x2="1444.2" y2="68.0" stroke="#000" stroke-width="1.1"/><text x="1203.8" y="84.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="1229.6" y="84.0" font-size="12" fill="#000" text-decoration="underline">codigo_consultorio</text><text x="1341.7" y="84.0" font-size="11" fill="#000">VARCHAR (10)</text><text x="1203.8" y="104.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1229.6" y="104.0" font-size="12" fill="#000">bloque</text><text x="1341.7" y="104.0" font-size="11" fill="#000">VARCHAR (40)</text><text x="1203.8" y="124.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1229.6" y="124.0" font-size="12" fill="#000">piso</text><text x="1341.7" y="124.0" font-size="11" fill="#000">VARCHAR (40)</text><text x="1203.8" y="144.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1229.6" y="144.0" font-size="12" fill="#000">capacidad</text><text x="1341.7" y="144.0" font-size="11" fill="#000">INTEGER</text><text x="1203.8" y="164.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="1229.6" y="164.0" font-size="12" fill="#000">codigo_sede</text><text x="1341.7" y="164.0" font-size="11" fill="#000">CHAR (3)</text><line x1="1195.8" y1="174.0" x2="1444.2" y2="174.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="1205.8" y="188.0" font-size="11" fill="#000">CONSULTORIO_PK (codigo_consultorio)</text>
-<rect x="410.5" y="380.0" width="218.9" height="115.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="520.0" y="399.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">ATENCION</text><line x1="410.5" y1="408.0" x2="629.5" y2="408.0" stroke="#000" stroke-width="1.1"/><text x="418.5" y="424.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="448.5" y="424.0" font-size="12" fill="#000" text-decoration="underline">id_medico</text><text x="516.6" y="424.0" font-size="11" fill="#000">INTEGER</text><text x="418.5" y="444.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="448.5" y="444.0" font-size="12" fill="#000" text-decoration="underline">id_jornada</text><text x="516.6" y="444.0" font-size="11" fill="#000">INTEGER</text><text x="418.5" y="464.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="448.5" y="464.0" font-size="12" fill="#000">rol</text><text x="516.6" y="464.0" font-size="11" fill="#000">VARCHAR (10)</text><line x1="410.5" y1="474.0" x2="629.5" y2="474.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="420.5" y="488.0" font-size="11" fill="#000">ATENCION_PK (id_medico, id_jornada)</text>
-<rect x="795.4" y="330.0" width="249.2" height="212.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="920.0" y="349.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">JORNADA</text><line x1="795.4" y1="358.0" x2="1044.6" y2="358.0" stroke="#000" stroke-width="1.1"/><text x="803.4" y="374.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="830.1" y="374.0" font-size="12" fill="#000" text-decoration="underline">id_jornada</text><text x="942.1" y="374.0" font-size="11" fill="#000">INTEGER</text><text x="803.4" y="394.0" font-size="11" font-weight="bold" fill="#000">U *</text><text x="830.1" y="394.0" font-size="12" fill="#000">codigo</text><text x="942.1" y="394.0" font-size="11" fill="#000">VARCHAR (8)</text><text x="803.4" y="414.0" font-size="11" font-weight="bold" fill="#000">U *</text><text x="830.1" y="414.0" font-size="12" fill="#000">fecha</text><text x="942.1" y="414.0" font-size="11" fill="#000">DATE</text><text x="803.4" y="434.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="830.1" y="434.0" font-size="12" fill="#000">hora_inicio</text><text x="942.1" y="434.0" font-size="11" fill="#000">TIME</text><text x="803.4" y="454.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="830.1" y="454.0" font-size="12" fill="#000">especialidad</text><text x="942.1" y="454.0" font-size="11" fill="#000">VARCHAR (50)</text><text x="803.4" y="474.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="830.1" y="474.0" font-size="12" fill="#000">codigo_consultorio</text><text x="942.1" y="474.0" font-size="11" fill="#000">VARCHAR (10)</text><text x="803.4" y="494.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="830.1" y="494.0" font-size="12" fill="#000">sede_jornada</text><text x="942.1" y="494.0" font-size="11" fill="#000">CHAR (3)</text><line x1="795.4" y1="504.0" x2="1044.6" y2="504.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="805.4" y="518.0" font-size="11" fill="#000">JORNADA_PK (id_jornada)</text><text x="805.4" y="535.0" font-size="11" fill="#000">JORNADA_UK (codigo, fecha)</text>
-<rect x="813.1" y="690.0" width="213.8" height="135.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="920.0" y="709.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">CITA</text><line x1="813.1" y1="718.0" x2="1026.9" y2="718.0" stroke="#000" stroke-width="1.1"/><text x="821.1" y="734.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="851.1" y="734.0" font-size="12" fill="#000" text-decoration="underline">id_paciente</text><text x="924.5" y="734.0" font-size="11" fill="#000">INTEGER</text><text x="821.1" y="754.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="851.1" y="754.0" font-size="12" fill="#000" text-decoration="underline">id_jornada</text><text x="924.5" y="754.0" font-size="11" fill="#000">INTEGER</text><text x="821.1" y="774.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="851.1" y="774.0" font-size="12" fill="#000">turno</text><text x="924.5" y="774.0" font-size="11" fill="#000">VARCHAR (4)</text><text x="821.1" y="794.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="851.1" y="794.0" font-size="12" fill="#000">regimen</text><text x="924.5" y="794.0" font-size="11" fill="#000">VARCHAR (10)</text><line x1="813.1" y1="804.0" x2="1026.9" y2="804.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="823.1" y="818.0" font-size="11" fill="#000">CITA_PK (id_paciente, id_jornada)</text>
-<rect x="1238.4" y="650.0" width="243.2" height="195.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1360.0" y="669.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">PACIENTE</text><line x1="1238.4" y1="678.0" x2="1481.6" y2="678.0" stroke="#000" stroke-width="1.1"/><text x="1246.4" y="694.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="1273.1" y="694.0" font-size="12" fill="#000" text-decoration="underline">id_paciente</text><text x="1379.1" y="694.0" font-size="11" fill="#000">INTEGER</text><text x="1246.4" y="714.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1273.1" y="714.0" font-size="12" fill="#000">nombres</text><text x="1379.1" y="714.0" font-size="11" fill="#000">VARCHAR (50)</text><text x="1246.4" y="734.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1273.1" y="734.0" font-size="12" fill="#000">apellidos</text><text x="1379.1" y="734.0" font-size="11" fill="#000">VARCHAR (50)</text><text x="1246.4" y="754.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1273.1" y="754.0" font-size="12" fill="#000">fecha_nacimiento</text><text x="1379.1" y="754.0" font-size="11" fill="#000">DATE</text><text x="1246.4" y="774.0" font-size="11" font-weight="bold" fill="#000">/</text><text x="1273.1" y="774.0" font-size="12" fill="#000">edad</text><text x="1379.1" y="774.0" font-size="11" fill="#000">INTEGER</text><text x="1246.4" y="794.0" font-size="11" font-weight="bold" fill="#000">U *</text><text x="1273.1" y="794.0" font-size="12" fill="#000">correo</text><text x="1379.1" y="794.0" font-size="11" fill="#000">VARCHAR (80)</text><text x="1246.4" y="814.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1273.1" y="814.0" font-size="12" fill="#000">visitas</text><text x="1379.1" y="814.0" font-size="11" fill="#000">INTEGER</text><line x1="1238.4" y1="824.0" x2="1481.6" y2="824.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="1248.4" y="838.0" font-size="11" fill="#000">PACIENTE_PK (id_paciente)</text>
-<line x1="386.7" y1="105.5" x2="386.7" y2="89.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="380.7" y1="105.5" x2="380.7" y2="89.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<polyline points="260.3,88.5 273.3,97.5 260.3,106.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="277.3" y1="89.5" x2="277.3" y2="105.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<polyline points="646.3,98.5 659.3,107.5 646.3,116.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<circle cx="665.3" cy="107.5" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
-<line x1="804.9" y1="115.5" x2="804.9" y2="99.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="798.9" y1="115.5" x2="798.9" y2="99.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<polyline points="1195.8,116.5 1182.8,107.5 1195.8,98.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<circle cx="1176.8" cy="107.5" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
-<line x1="1035.1" y1="99.5" x2="1035.1" y2="115.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="1041.1" y1="99.5" x2="1041.1" y2="115.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<polyline points="911.0,330.0 920.0,317.0 929.0,330.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<circle cx="920.0" cy="311.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
-<line x1="928.0" y1="182.0" x2="912.0" y2="182.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="928.0" y1="188.0" x2="912.0" y2="188.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<polyline points="1044.6,407.0 1057.6,416.0 1044.6,425.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<circle cx="1063.6" cy="416.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
-<line x1="1328.0" y1="202.0" x2="1312.0" y2="202.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="1328.0" y1="208.0" x2="1312.0" y2="208.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<polyline points="511.0,380.0 520.0,367.0 529.0,380.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<circle cx="520.0" cy="361.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
-<line x1="528.0" y1="202.0" x2="512.0" y2="202.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="528.0" y1="208.0" x2="512.0" y2="208.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<polyline points="629.5,428.5 642.5,437.5 629.5,446.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="646.5" y1="429.5" x2="646.5" y2="445.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="788.4" y1="445.5" x2="788.4" y2="429.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="782.4" y1="445.5" x2="782.4" y2="429.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<polyline points="911.0,690.0 920.0,677.0 929.0,690.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<circle cx="920.0" cy="671.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
-<line x1="928.0" y1="549.0" x2="912.0" y2="549.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="928.0" y1="555.0" x2="912.0" y2="555.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<polyline points="1026.9,748.5 1039.9,757.5 1026.9,766.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="1043.9" y1="749.5" x2="1043.9" y2="765.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="1231.4" y1="765.5" x2="1231.4" y2="749.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="1225.4" y1="765.5" x2="1225.4" y2="749.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<rect x="-40" y="-80" width="1446" height="1045" fill="#ffffff"/>
+<rect x="-40" y="-80" width="1446" height="1045" fill="url(#mer_crowsfoot_g2)"/>
+<text x="683" y="-46" text-anchor="middle" font-size="20" fill="#000">MODELO ENTIDAD RELACIÓN · CROW&#x27;S FOOT</text>
+<polyline points="890.0,715.0 890.0,810.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="890.0,620.0 890.0,525.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="890.0,290.0 890.0,195.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1248.4,290.0 1248.4,95.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1131.5,867.5 998.1,867.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="382.3,347.5 262.3,347.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="997.1,407.5 1131.1,407.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="636.7,47.5 702.8,47.5 702.8,57.5 768.8,57.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="648.8,347.5 782.9,347.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1248.4,810.0 1248.4,445.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="768.8,137.5 191.2,137.5 191.2,95.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<rect x="36.2" y="0.0" width="189.8" height="95.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="131.2" y="19.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">EPS</text><line x1="36.2" y1="28.0" x2="226.1" y2="28.0" stroke="#000" stroke-width="1.1"/><text x="44.2" y="44.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="70.9" y="44.0" font-size="12" fill="#000" text-decoration="underline">nit_eps</text><text x="123.6" y="44.0" font-size="11" fill="#000">VARCHAR (12)</text><text x="44.2" y="64.0" font-size="11" font-weight="bold" fill="#000">U *</text><text x="70.9" y="64.0" font-size="12" fill="#000">nombre</text><text x="123.6" y="64.0" font-size="11" fill="#000">VARCHAR (60)</text><line x1="36.2" y1="74.0" x2="226.1" y2="74.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="46.2" y="88.0" font-size="11" fill="#000">EPS_PK (nit_eps)</text>
+<rect x="768.8" y="0.0" width="242.3" height="195.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="890.0" y="19.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">PACIENTE</text><line x1="768.8" y1="28.0" x2="1011.1" y2="28.0" stroke="#000" stroke-width="1.1"/><text x="776.8" y="44.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="802.6" y="44.0" font-size="12" fill="#000" text-decoration="underline">documento</text><text x="908.7" y="44.0" font-size="11" fill="#000">VARCHAR (15)</text><text x="776.8" y="64.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="802.6" y="64.0" font-size="12" fill="#000">nombres</text><text x="908.7" y="64.0" font-size="11" fill="#000">VARCHAR (50)</text><text x="776.8" y="84.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="802.6" y="84.0" font-size="12" fill="#000">apellidos</text><text x="908.7" y="84.0" font-size="11" fill="#000">VARCHAR (50)</text><text x="776.8" y="104.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="802.6" y="104.0" font-size="12" fill="#000">fecha_nacimiento</text><text x="908.7" y="104.0" font-size="11" fill="#000">DATE</text><text x="776.8" y="124.0" font-size="11" font-weight="bold" fill="#000">/</text><text x="802.6" y="124.0" font-size="12" fill="#000">edad</text><text x="908.7" y="124.0" font-size="11" fill="#000">INTEGER</text><text x="776.8" y="144.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="802.6" y="144.0" font-size="12" fill="#000">tipo_sangre</text><text x="908.7" y="144.0" font-size="11" fill="#000">VARCHAR (3)</text><text x="776.8" y="164.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="802.6" y="164.0" font-size="12" fill="#000">nit_eps</text><text x="908.7" y="164.0" font-size="11" fill="#000">VARCHAR (12)</text><line x1="768.8" y1="174.0" x2="1011.1" y2="174.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="778.8" y="188.0" font-size="11" fill="#000">PACIENTE_PK (documento)</text>
+<rect x="1132.5" y="0.0" width="231.9" height="95.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1248.4" y="19.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">ESPECIALIDAD</text><line x1="1132.5" y1="28.0" x2="1364.3" y2="28.0" stroke="#000" stroke-width="1.1"/><text x="1140.5" y="44.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="1167.1" y="44.0" font-size="12" fill="#000" text-decoration="underline">id_especialidad</text><text x="1261.9" y="44.0" font-size="11" fill="#000">INTEGER</text><text x="1140.5" y="64.0" font-size="11" font-weight="bold" fill="#000">U *</text><text x="1167.1" y="64.0" font-size="12" fill="#000">nombre</text><text x="1261.9" y="64.0" font-size="11" fill="#000">VARCHAR (50)</text><line x1="1132.5" y1="74.0" x2="1364.3" y2="74.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="1142.5" y="88.0" font-size="11" fill="#000">ESPECIALIDAD_PK (id_especialidad)</text>
+<rect x="0.0" y="290.0" width="262.3" height="115.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="131.2" y="309.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">MEDICAMENTO</text><line x1="0.0" y1="318.0" x2="262.3" y2="318.0" stroke="#000" stroke-width="1.1"/><text x="8.0" y="334.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="33.8" y="334.0" font-size="12" fill="#000" text-decoration="underline">codigo_medicamento</text><text x="159.8" y="334.0" font-size="11" fill="#000">VARCHAR (10)</text><text x="8.0" y="354.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="33.8" y="354.0" font-size="12" fill="#000">nombre</text><text x="159.8" y="354.0" font-size="11" fill="#000">VARCHAR (60)</text><text x="8.0" y="374.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="33.8" y="374.0" font-size="12" fill="#000">presentacion</text><text x="159.8" y="374.0" font-size="11" fill="#000">VARCHAR (40)</text><line x1="0.0" y1="384.0" x2="262.3" y2="384.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="10.0" y="398.0" font-size="11" fill="#000">MEDICAMENTO_PK (codigo_medicamento)</text>
+<rect x="782.9" y="290.0" width="214.3" height="235.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="890.0" y="309.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">CITA</text><line x1="782.9" y1="318.0" x2="997.1" y2="318.0" stroke="#000" stroke-width="1.1"/><text x="790.9" y="334.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="816.6" y="334.0" font-size="12" fill="#000" text-decoration="underline">id_cita</text><text x="888.0" y="334.0" font-size="11" fill="#000">INTEGER</text><text x="790.9" y="354.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="816.6" y="354.0" font-size="12" fill="#000">fecha</text><text x="888.0" y="354.0" font-size="11" fill="#000">DATE</text><text x="790.9" y="374.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="816.6" y="374.0" font-size="12" fill="#000">hora</text><text x="888.0" y="374.0" font-size="11" fill="#000">TIME</text><text x="790.9" y="394.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="816.6" y="394.0" font-size="12" fill="#000">motivo</text><text x="888.0" y="394.0" font-size="11" fill="#000">VARCHAR (80)</text><text x="790.9" y="414.0" font-size="11" font-weight="bold" fill="#000"></text><text x="816.6" y="414.0" font-size="12" fill="#000">consultorio</text><text x="888.0" y="414.0" font-size="11" fill="#000">VARCHAR (10)</text><text x="790.9" y="434.0" font-size="11" font-weight="bold" fill="#000"></text><text x="816.6" y="434.0" font-size="12" fill="#000">enlace</text><text x="888.0" y="434.0" font-size="11" fill="#000">VARCHAR (120)</text><text x="790.9" y="454.0" font-size="11" font-weight="bold" fill="#000"></text><text x="816.6" y="454.0" font-size="12" fill="#000">plataforma</text><text x="888.0" y="454.0" font-size="11" fill="#000">VARCHAR (20)</text><text x="790.9" y="474.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="816.6" y="474.0" font-size="12" fill="#000">documento</text><text x="888.0" y="474.0" font-size="11" fill="#000">VARCHAR (15)</text><text x="790.9" y="494.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="816.6" y="494.0" font-size="12" fill="#000">id_medico</text><text x="888.0" y="494.0" font-size="11" fill="#000">VARCHAR (15)</text><line x1="782.9" y1="504.0" x2="997.1" y2="504.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="792.9" y="518.0" font-size="11" fill="#000">CITA_PK (id_cita)</text>
+<rect x="1131.1" y="290.0" width="234.5" height="155.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1248.4" y="309.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">MEDICO</text><line x1="1131.1" y1="318.0" x2="1365.7" y2="318.0" stroke="#000" stroke-width="1.1"/><text x="1139.1" y="334.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="1165.8" y="334.0" font-size="12" fill="#000" text-decoration="underline">id_medico</text><text x="1263.2" y="334.0" font-size="11" fill="#000">VARCHAR (15)</text><text x="1139.1" y="354.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1165.8" y="354.0" font-size="12" fill="#000">nombres</text><text x="1263.2" y="354.0" font-size="11" fill="#000">VARCHAR (50)</text><text x="1139.1" y="374.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1165.8" y="374.0" font-size="12" fill="#000">apellidos</text><text x="1263.2" y="374.0" font-size="11" fill="#000">VARCHAR (50)</text><text x="1139.1" y="394.0" font-size="11" font-weight="bold" fill="#000">U *</text><text x="1165.8" y="394.0" font-size="12" fill="#000">registro_medico</text><text x="1263.2" y="394.0" font-size="11" fill="#000">VARCHAR (12)</text><text x="1139.1" y="414.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="1165.8" y="414.0" font-size="12" fill="#000">id_especialidad</text><text x="1263.2" y="414.0" font-size="11" fill="#000">INTEGER</text><line x1="1131.1" y1="424.0" x2="1365.7" y2="424.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="1141.1" y="438.0" font-size="11" fill="#000">MEDICO_PK (id_medico)</text>
+<rect x="781.8" y="810.0" width="216.3" height="115.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="890.0" y="829.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">SEDE</text><line x1="781.8" y1="838.0" x2="998.1" y2="838.0" stroke="#000" stroke-width="1.1"/><text x="789.8" y="854.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="815.6" y="854.0" font-size="12" fill="#000" text-decoration="underline">codigo_sede</text><text x="895.7" y="854.0" font-size="11" fill="#000">CHAR (3)</text><text x="789.8" y="874.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="815.6" y="874.0" font-size="12" fill="#000">nombre</text><text x="895.7" y="874.0" font-size="11" fill="#000">VARCHAR (60)</text><text x="789.8" y="894.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="815.6" y="894.0" font-size="12" fill="#000">direccion</text><text x="895.7" y="894.0" font-size="11" fill="#000">VARCHAR (80)</text><line x1="781.8" y1="904.0" x2="998.1" y2="904.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="791.8" y="918.0" font-size="11" fill="#000">SEDE_PK (codigo_sede)</text>
+<rect x="394.5" y="0.0" width="242.2" height="95.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="515.6" y="19.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">PAC_TELEFONO</text><line x1="394.5" y1="28.0" x2="636.7" y2="28.0" stroke="#000" stroke-width="1.1"/><text x="402.5" y="44.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="432.5" y="44.0" font-size="12" fill="#000" text-decoration="underline">documento</text><text x="503.8" y="44.0" font-size="11" fill="#000">VARCHAR (15)</text><text x="402.5" y="64.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="432.5" y="64.0" font-size="12" fill="#000" text-decoration="underline">telefono</text><text x="503.8" y="64.0" font-size="11" fill="#000">VARCHAR (15)</text><line x1="394.5" y1="74.0" x2="636.7" y2="74.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="404.5" y="88.0" font-size="11" fill="#000">PAC_TELEFONO_PK (documento, telefono)</text>
+<rect x="1131.5" y="810.0" width="233.8" height="115.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1248.4" y="829.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">TURNO</text><line x1="1131.5" y1="838.0" x2="1365.3" y2="838.0" stroke="#000" stroke-width="1.1"/><text x="1139.5" y="854.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="1169.5" y="854.0" font-size="12" fill="#000" text-decoration="underline">id_medico</text><text x="1249.5" y="854.0" font-size="11" fill="#000">VARCHAR (15)</text><text x="1139.5" y="874.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="1169.5" y="874.0" font-size="12" fill="#000" text-decoration="underline">codigo_sede</text><text x="1249.5" y="874.0" font-size="11" fill="#000">CHAR (3)</text><text x="1139.5" y="894.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="1169.5" y="894.0" font-size="12" fill="#000" text-decoration="underline">dia</text><text x="1249.5" y="894.0" font-size="11" fill="#000">VARCHAR (10)</text><line x1="1131.5" y1="904.0" x2="1365.3" y2="904.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="1141.5" y="918.0" font-size="11" fill="#000">TURNO_PK (id_medico, codigo_sede, dia)</text>
+<rect x="382.3" y="290.0" width="266.5" height="115.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="515.6" y="309.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">FORMULA</text><line x1="382.3" y1="318.0" x2="648.8" y2="318.0" stroke="#000" stroke-width="1.1"/><text x="390.3" y="334.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="420.3" y="334.0" font-size="12" fill="#000" text-decoration="underline">id_cita</text><text x="546.4" y="334.0" font-size="11" fill="#000">INTEGER</text><text x="390.3" y="354.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="420.3" y="354.0" font-size="12" fill="#000" text-decoration="underline">codigo_medicamento</text><text x="546.4" y="354.0" font-size="11" fill="#000">VARCHAR (10)</text><text x="390.3" y="374.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="420.3" y="374.0" font-size="12" fill="#000">dosis</text><text x="546.4" y="374.0" font-size="11" fill="#000">VARCHAR (60)</text><line x1="382.3" y1="384.0" x2="648.8" y2="384.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="392.3" y="398.0" font-size="11" fill="#000">FORMULA_PK (id_cita, codigo_medicamento)</text>
+<rect x="794.3" y="620.0" width="191.4" height="95.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="890.0" y="639.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">CITA_SEDE</text><line x1="794.3" y1="648.0" x2="985.7" y2="648.0" stroke="#000" stroke-width="1.1"/><text x="802.3" y="664.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="832.3" y="664.0" font-size="12" fill="#000" text-decoration="underline">id_cita</text><text x="912.4" y="664.0" font-size="11" fill="#000">INTEGER</text><text x="802.3" y="684.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="832.3" y="684.0" font-size="12" fill="#000">codigo_sede</text><text x="912.4" y="684.0" font-size="11" fill="#000">CHAR (3)</text><line x1="794.3" y1="694.0" x2="985.7" y2="694.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="804.3" y="708.0" font-size="11" fill="#000">CITA_SEDE_PK (id_cita)</text>
+<polyline points="899.0,715.0 890.0,728.0 881.0,715.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="890.0" cy="734.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="882.0" y1="803.0" x2="898.0" y2="803.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="882.0" y1="797.0" x2="898.0" y2="797.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="882.0" y1="613.0" x2="898.0" y2="613.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="890.0" cy="602.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="898.0" y1="532.0" x2="882.0" y2="532.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="898.0" y1="538.0" x2="882.0" y2="538.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="881.0,290.0 890.0,277.0 899.0,290.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="890.0" cy="271.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="898.0" y1="202.0" x2="882.0" y2="202.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="898.0" y1="208.0" x2="882.0" y2="208.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1239.4,290.0 1248.4,277.0 1257.4,290.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="1248.4" cy="271.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="1256.4" y1="102.0" x2="1240.4" y2="102.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1256.4" y1="108.0" x2="1240.4" y2="108.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1131.5,876.5 1118.5,867.5 1131.5,858.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1114.5" y1="875.5" x2="1114.5" y2="859.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1005.1" y1="859.5" x2="1005.1" y2="875.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1011.1" y1="859.5" x2="1011.1" y2="875.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="382.3,356.5 369.3,347.5 382.3,338.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="363.3" cy="347.5" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="269.3" y1="339.5" x2="269.3" y2="355.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="275.3" y1="339.5" x2="275.3" y2="355.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="997.1,398.5 1010.1,407.5 997.1,416.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="1016.1" cy="407.5" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="1124.1" y1="415.5" x2="1124.1" y2="399.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1118.1" y1="415.5" x2="1118.1" y2="399.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="636.7,38.5 649.7,47.5 636.7,56.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="653.7" y1="39.5" x2="653.7" y2="55.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="761.8" y1="65.5" x2="761.8" y2="49.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="755.8" y1="65.5" x2="755.8" y2="49.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="648.8,338.5 661.8,347.5 648.8,356.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="667.8" cy="347.5" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="775.9" y1="355.5" x2="775.9" y2="339.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="769.9" y1="355.5" x2="769.9" y2="339.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1239.4,810.0 1248.4,797.0 1257.4,810.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1240.4" y1="793.0" x2="1256.4" y2="793.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1256.4" y1="452.0" x2="1240.4" y2="452.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1256.4" y1="458.0" x2="1240.4" y2="458.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="768.8,146.5 755.8,137.5 768.8,128.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="749.8" cy="137.5" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="199.2" y1="102.0" x2="183.2" y2="102.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="199.2" y1="108.0" x2="183.2" y2="108.0" stroke="#000" stroke-width="1.4" fill="none"/>
 </svg></div>
 </section>
 
 </div>
 <section class="panel">
 <h2>Relaciones</h2>
-<div class="tabla-wrap"><table class="t"><thead><tr><th>Relación</th><th>Participaciones</th><th>Cardinalidad</th><th>Se lee</th></tr></thead><tbody><tr><td>pertenecer</td><td>MEDICO (1:1) · SEDE (0:N)</td><td>N:1</td><td style="white-space:normal">Cada médico pertenece a una sola sede y una sede tiene muchos médicos.</td></tr><tr><td>ubicar</td><td>SEDE (0:N) · CONSULTORIO (1:1)</td><td>1:N</td><td style="white-space:normal">Cada consultorio se ubica en una sede.</td></tr><tr><td>realizar</td><td>SEDE (0:N) · JORNADA (1:1)</td><td>1:N</td><td style="white-space:normal">Toda jornada la realiza una sede.</td></tr><tr><td>albergar</td><td>CONSULTORIO (0:N) · JORNADA (1:1)</td><td>1:N</td><td style="white-space:normal">Cada jornada se hace en un solo consultorio.</td></tr><tr><td>atender</td><td>MEDICO (0:N) · JORNADA (1:N)</td><td>N:M</td><td style="white-space:normal">En una jornada atiende por lo menos un médico; se guarda el rol.</td></tr><tr><td>agendar</td><td>JORNADA (0:N) · PACIENTE (1:N)</td><td>N:M</td><td style="white-space:normal">Un paciente se registra cuando agenda; una jornada interna puede no tener citas.</td></tr></tbody></table></div><p class="nota alerta">Aquí MEDICO y PACIENTE repiten los datos de una persona. Eso se arregla en el MER-E.</p>
+<div class="tabla-wrap"><table class="t"><thead><tr><th>Relación</th><th>Participaciones</th><th>Cardinalidad</th><th>Se lee</th></tr></thead><tbody><tr><td>afiliar</td><td>PACIENTE (1:1) · EPS (0:N)</td><td>N:1</td><td style="white-space:normal">Cada paciente está afiliado a una EPS.</td></tr><tr><td>tener</td><td>MEDICO (1:1) · ESPECIALIDAD (0:N)</td><td>N:1</td><td style="white-space:normal">Cada médico tiene una especialidad.</td></tr><tr><td>laborar</td><td>MEDICO (1:N) · SEDE (1:N)</td><td>N:M</td><td style="white-space:normal">Un médico atiende en varias sedes, ciertos días; en cada sede atienden varios médicos.</td></tr><tr><td>solicitar</td><td>CITA (1:1) · PACIENTE (0:N)</td><td>N:1</td><td style="white-space:normal">Cada cita es de un paciente.</td></tr><tr><td>atender</td><td>CITA (1:1) · MEDICO (0:N)</td><td>N:1</td><td style="white-space:normal">Cada cita la atiende un médico.</td></tr><tr><td>recetar</td><td>CITA (0:N) · MEDICAMENTO (0:N)</td><td>N:M</td><td style="white-space:normal">En una cita se pueden formular varios medicamentos, cada uno con su dosis.</td></tr><tr><td>realizar</td><td>CITA (0:1) · SEDE (0:N)</td><td>N:1</td><td style="white-space:normal">Una cita puede ser en una sede o no (las virtuales no tienen sede). Los dos lados son opcionales.</td></tr></tbody></table></div><p class="nota alerta">En el MER, CITA lleva consultorio, enlace y plataforma, y su relación con SEDE tiene que ser opcional por culpa de las citas virtuales. Eso se arregla en el MER-E.</p>
 </section>
   </main>
 
@@ -236,8 +260,8 @@
   <footer>Universidad El Bosque · Bogotá D.C</footer>
 </div>
 
-<script src="../../js/estrellas.js?v=20261116c"></script>
-<script src="../../js/ejercicios.js?v=20261116c"></script>
+<script src="../../js/estrellas.js?v=20261116d"></script>
+<script src="../../js/ejercicios.js?v=20261116d"></script>
 <script>iniciarEtapa("mer");</script>
 </body>
 </html>

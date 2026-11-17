@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../css/estilos.css?v=20261116c">
+<link rel="stylesheet" href="../../css/estilos.css?v=20261116d">
 </head>
 <body>
 <div class="sky"></div>
@@ -29,52 +29,51 @@
 
   <main>
 <section class="panel"><details><summary>Ver enunciado del ejercicio</summary>
-<p>Una red de teatros con sedes en varias ciudades quiere guardar en una base de datos sus funciones, salas, actores y espectadores.</p>
+<p>Una red de teatros de Bogotá quiere manejar su cartelera, sus actores y la venta de boletas.</p>
 <ul>
-  <li>Cada <strong>TEATRO</strong> tiene un código de tres letras, nombre, ciudad y país.</li>
-  <li>Cada <strong>ACTOR</strong> tiene identificación, nombre, número de carnet, años de carrera y uno o varios teléfonos. Pertenece a la compañía de exactamente un teatro.</li>
-  <li>Cada <strong>SALA</strong> tiene un código, nombre, piso y capacidad, y queda en un teatro.</li>
-  <li>Una <strong>FUNCIÓN</strong> tiene un identificador, un código (por ejemplo <code>HAM01</code>), fecha, hora de inicio y obra. La presenta un teatro y se hace en una sola sala.</li>
-  <li>En cada función actúan uno o más actores con un <em>rol</em> (protagonista o reparto), y un actor puede actuar en muchas funciones.</li>
-  <li>Los <strong>ESPECTADORES</strong> se registran con identificación, nombre (nombres y apellidos), fecha de nacimiento, correo y puntos acumulados; la edad se calcula. Un espectador compra boletas y en cada una se guarda la <em>silla</em> y la <em>zona</em>.</li>
-  <li>Un actor también puede ir a ver funciones como espectador. Algunas salas son salas mayores (se guarda el número de sillas) y otras de ensayo (se guarda el área en m²); el foyer no es ni lo uno ni lo otro.</li>
+  <li>Cada <strong>TEATRO</strong> tiene un código, nombre, dirección y aforo.</li>
+  <li>Cada <strong>OBRA</strong> tiene un número, título, autor, duración y uno o varios géneros (drama, comedia, musical…).</li>
+  <li>Una <strong>FUNCIÓN</strong> es una presentación de una obra en un teatro, con fecha, hora y precio.</li>
+  <li>Cada <strong>ACTOR</strong> tiene identificación, nombre artístico y nombre real (nombres y apellidos). Un actor actúa en varias obras y en cada una hace un personaje. Algunos son cantantes (se guarda su registro vocal), otros bailarines (se guarda su estilo), hay quienes hacen las dos cosas y hay quienes no hacen ninguna.</li>
+  <li>Un actor puede ser el suplente de otro actor. Cada suplente cubre a un solo titular, pero un titular puede tener varios suplentes.</li>
+  <li>Cada <strong>ESPECTADOR</strong> tiene identificación, nombre (nombres y apellidos), fecha de nacimiento, correo y teléfonos; la edad se calcula. Un espectador compra boletas para varias funciones y en cada boleta va la fila y la silla.</li>
 </ul>
-<p class="nota">Entidades base: <strong>Actor</strong>, <strong>Espectador</strong> y <strong>Teatro</strong>. Entidades inventadas para completar el problema: <strong>Sala</strong> y <strong>Función</strong>.</p></details></section>
+<p class="nota">Entidades base: <strong>Actor</strong>, <strong>Espectador</strong> y <strong>Teatro</strong>. Entidades inventadas para completar el problema: <strong>Obra</strong> y <strong>Función</strong>.</p></details></section>
 <section class="panel">
 <h2>Consulta 1</h2>
 
-<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>nombre, ciudad</sub>(TEATRO)</span>: Muestra el nombre y la ciudad de todos los teatros.</p>
-<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombre</td><td class="xl-cab">ciudad</td></tr><tr><td class="xl-fila">2</td><td class="">Teatro Colon</td><td class="">Bogota</td></tr><tr><td class="xl-fila">3</td><td class="">Teatro Municipal</td><td class="">Cali</td></tr><tr><td class="xl-fila">4</td><td class="">Teatro Pablo Tobon</td><td class="">Medellin</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>titulo, autor</sub>(OBRA)</span>: Muestra el título y el autor de cada obra.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">titulo</td><td class="xl-cab">autor</td></tr><tr><td class="xl-fila">2</td><td class="">Cats</td><td class="">Andrew Lloyd Webber</td></tr><tr><td class="xl-fila">3</td><td class="">Chicago</td><td class="">John Kander</td></tr><tr><td class="xl-fila">4</td><td class="">El Avaro</td><td class="">Moliere</td></tr><tr><td class="xl-fila">5</td><td class="">Esperando a Godot</td><td class="">Samuel Beckett</td></tr><tr><td class="xl-fila">6</td><td class="">La Casa de Bernarda Alba</td><td class="">Federico Garcia Lorca</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 2</h2>
 
-<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>codigo, fecha, obra</sub>(<span class="op">σ</span><sub>obra='Hamlet'</sub>(FUNCION))</span>: Muestra las funciones de Hamlet.</p>
-<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo</td><td class="xl-cab">fecha</td><td class="xl-cab">obra</td></tr><tr><td class="xl-fila">2</td><td class="">HAM01</td><td class="">2026-10-02</td><td class="">Hamlet</td></tr><tr><td class="xl-fila">3</td><td class="">HAM03</td><td class="">2026-10-03</td><td class="">Hamlet</td></tr><tr><td class="xl-fila">4</td><td class="">HAM01</td><td class="">2026-10-04</td><td class="">Hamlet</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>fecha, hora, precio</sub>(<span class="op">σ</span><sub>codigo_teatro='COL'</sub>(FUNCION))</span>: Muestra las funciones del Teatro Colón.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">fecha</td><td class="xl-cab">hora</td><td class="xl-cab">precio</td></tr><tr><td class="xl-fila">2</td><td class="">2026-12-04</td><td class="">20:00:00</td><td class="xl-num">85000.00</td></tr><tr><td class="xl-fila">3</td><td class="">2026-12-05</td><td class="">20:00:00</td><td class="xl-num">85000.00</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 3</h2>
 
-<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>codigo_sala, nombre_sala</sub>(<span class="op">σ</span><sub>piso='Piso 1'</sub>(SALA))</span>: Obtiene las salas que quedan en el piso 1.</p>
-<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo_sala</td><td class="xl-cab">nombre_sala</td></tr><tr><td class="xl-fila">2</td><td class="">SA-01</td><td class="">Sala Principal</td></tr><tr><td class="xl-fila">3</td><td class="">SA-03</td><td class="">Sala Grande</td></tr><tr><td class="xl-fila">4</td><td class="">SA-05</td><td class="">Foyer</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>nombre_artistico</sub>(<span class="op">σ</span><sub>tipo_actor='ambos'</sub>(ACTOR))</span>: Obtiene los actores que cantan y bailan.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombre_artistico</td></tr><tr><td class="xl-fila">2</td><td class="">Cami Luz</td></tr><tr><td class="xl-fila">3</td><td class="">Sara Vega</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 4</h2>
 
-<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>codigo_sala</sub>(SALA) <span class="op">−</span> <span class="op">π</span><sub>codigo_sala</sub>(FUNCION)</span>: Identifica las salas donde no se ha presentado ninguna función.</p>
-<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo_sala</td></tr><tr><td class="xl-fila">2</td><td class="">SA-05</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>id_obra</sub>(OBRA) <span class="op">−</span> <span class="op">π</span><sub>id_obra</sub>(FUNCION)</span>: Identifica las obras que no tienen funciones programadas.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">id_obra</td></tr><tr><td class="xl-fila">2</td><td class="xl-num">5</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 5</h2>
 
-<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>documento</sub>(ELENCO) <span class="op">∩</span> <span class="op">π</span><sub>documento</sub>(BOLETA)</span>: Obtiene las personas que han sido actores y también espectadores.</p>
-<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">documento</td></tr><tr><td class="xl-fila">2</td><td class="">1040</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>nombre_artistico, personaje</sub>(ACTOR <span class="op">⋈</span> <span class="op">σ</span><sub>id_obra=4</sub>(REPARTO))</span>: Muestra el reparto de la obra 4 (Chicago).</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombre_artistico</td><td class="xl-cab">personaje</td></tr><tr><td class="xl-fila">2</td><td class="">Cami Luz</td><td class="">Roxie Hart</td></tr><tr><td class="xl-fila">3</td><td class="">Diego Ruiz</td><td class="">Billy Flynn</td></tr><tr><td class="xl-fila">4</td><td class="">Sara Vega</td><td class="">Velma Kelly</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 6</h2>
 
-<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>codigo, fecha, nombre_sala</sub>(FUNCION <span class="op">⋈</span> SALA)</span>: Muestra cada función con el nombre de la sala donde se hace.</p>
-<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo</td><td class="xl-cab">fecha</td><td class="xl-cab">nombre_sala</td></tr><tr><td class="xl-fila">2</td><td class="">BOD02</td><td class="">2026-10-02</td><td class="">Sala Estudio</td></tr><tr><td class="xl-fila">3</td><td class="">HAM01</td><td class="">2026-10-02</td><td class="">Sala Principal</td></tr><tr><td class="xl-fila">4</td><td class="">HAM03</td><td class="">2026-10-03</td><td class="">Sala Grande</td></tr><tr><td class="xl-fila">5</td><td class="">ENS05</td><td class="">2026-10-04</td><td class="">Sala Estudio</td></tr><tr><td class="xl-fila">6</td><td class="">HAM01</td><td class="">2026-10-04</td><td class="">Sala Principal</td></tr><tr><td class="xl-fila">7</td><td class="">MIS06</td><td class="">2026-10-05</td><td class="">Sala Estudio</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>id_obra</sub>(<span class="op">σ</span><sub>genero='comedia'</sub>(OBR_GENERO)) <span class="op">∩</span> <span class="op">π</span><sub>id_obra</sub>(<span class="op">σ</span><sub>genero='musical'</sub>(OBR_GENERO))</span>: Obtiene las obras que son comedia y musical a la vez.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">id_obra</td></tr><tr><td class="xl-fila">2</td><td class="xl-num">4</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
   </main>
 
@@ -83,8 +82,8 @@
   <footer>Universidad El Bosque · Bogotá D.C</footer>
 </div>
 
-<script src="../../js/estrellas.js?v=20261116c"></script>
-<script src="../../js/ejercicios.js?v=20261116c"></script>
+<script src="../../js/estrellas.js?v=20261116d"></script>
+<script src="../../js/ejercicios.js?v=20261116d"></script>
 <script>iniciarEtapa("algebra");</script>
 </body>
 </html>

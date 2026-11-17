@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../css/estilos.css?v=20261116c">
+<link rel="stylesheet" href="../../css/estilos.css?v=20261116d">
 </head>
 <body>
 <div class="sky"></div>
@@ -29,65 +29,66 @@
 
   <main>
 <section class="panel"><details><summary>Ver enunciado del ejercicio</summary>
-<p>Una cadena de gimnasios con sedes en varias ciudades quiere manejar sus clases grupales en una base de datos.</p>
+<p>Una cadena de gimnasios con varias sedes en Bogotá y alrededores quiere controlar a sus socios y sus máquinas.</p>
 <ul>
-  <li>Cada <strong>SEDE</strong> tiene un código de tres letras, nombre, ciudad y país.</li>
-  <li>Cada <strong>ENTRENADOR</strong> tiene identificación, nombre, número de certificación, años de experiencia y uno o varios teléfonos. Trabaja en exactamente una sede.</li>
-  <li>Cada <strong>SALA</strong> tiene un código, ambiente, piso y capacidad, y queda en una sede.</li>
-  <li>Una <strong>CLASE</strong> grupal tiene un identificador, un código (por ejemplo <code>SPN01</code>), fecha, hora de inicio y actividad. La programa una sede y se realiza en una sola sala.</li>
-  <li>Cada clase la dirigen uno o más entrenadores con un <em>rol</em> (principal o apoyo), y un entrenador puede dirigir muchas clases.</li>
-  <li>Los <strong>SOCIOS</strong> se registran con identificación, nombre (nombres y apellidos), fecha de nacimiento, correo y puntos acumulados; la edad se calcula. Un socio se inscribe en clases y en cada inscripción se guarda su <em>puesto</em> (bicicleta o colchoneta) y su <em>plan</em>.</li>
-  <li>Un entrenador también puede ser socio. Algunas salas son de cardio (se guarda el número de máquinas) y otras son piscinas (se guarda el volumen en m³); las salas de estiramiento no son ni lo uno ni lo otro.</li>
+  <li>Cada <strong>SEDE</strong> tiene un código, nombre, dirección y horario de atención.</li>
+  <li>Hay varios <strong>PLANES</strong> (básico, trimestral, anual…) con nombre, precio por mes y duración en meses. Cada socio tiene un solo plan.</li>
+  <li>Cada <strong>SOCIO</strong> tiene identificación, nombre (nombres y apellidos), fecha de nacimiento, correo y uno o varios teléfonos; la edad se calcula. El socio puede entrenar en cualquier sede y cada vez que entra se registra la fecha y la hora de entrada. Si va dos veces a la misma sede en días distintos, son dos registros.</li>
+  <li>Cada <strong>ENTRENADOR</strong> tiene identificación, nombre (nombres y apellidos), especialidad y certificación, y trabaja en una sede. Un socio puede pedir un entrenador asesor desde cierta fecha; no es obligatorio.</li>
+  <li>Cada <strong>MÁQUINA</strong> tiene serial, marca y año; los años de uso se calculan. Todas son de cardio (se guarda la velocidad máxima) o de fuerza (se guarda el peso máximo en kg), nunca las dos.</li>
 </ul>
-<p class="nota">Entidades base: <strong>Entrenador</strong>, <strong>Socio</strong> y <strong>Sede</strong>. Entidades inventadas para completar el problema: <strong>Sala</strong> y <strong>Clase</strong>.</p></details></section>
+<p class="nota">Entidades base: <strong>Entrenador</strong>, <strong>Socio</strong> y <strong>Sede</strong>. Entidades inventadas para completar el problema: <strong>Plan</strong> y <strong>Máquina</strong>.</p></details></section>
 <section class="panel">
 <h2>Consulta 1</h2>
-<p class="enunciado">Socios de la clase 1 con su puesto y su plan.</p><pre class="codigo"><span class="kw">SELECT</span> r.puesto, p.nombres, p.apellidos, r.plan
-<span class="kw">FROM</span> CUPO r
-<span class="kw">JOIN</span> PERSONA p <span class="kw">ON</span> p.documento = r.documento
-<span class="kw">WHERE</span> r.id_clase = <span class="nu">1</span>
-<span class="kw">ORDER</span> <span class="kw">BY</span> r.plan <span class="kw">DESC</span>, p.apellidos;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th><th class="xl-col">D</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">puesto</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">plan</td></tr><tr><td class="xl-fila">2</td><td class="">B02</td><td class="">Laura</td><td class="">Gutierrez Sol</td><td class="">premium</td></tr><tr><td class="xl-fila">3</td><td class="">B15</td><td class="">Ricardo</td><td class="">Herrera Paz</td><td class="">basico</td></tr><tr><td class="xl-fila">4</td><td class="">B12</td><td class="">Luis Miguel</td><td class="">Torres Pena</td><td class="">basico</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado">Cuántas entradas tuvo cada sede en noviembre (incluyendo las que no tuvieron).</p><pre class="codigo"><span class="kw">SELECT</span> s.nombre, <span class="kw">COUNT</span>(a.id_socio) <span class="kw">AS</span> entradas
+<span class="kw">FROM</span> SEDE s
+<span class="kw">LEFT</span> <span class="kw">JOIN</span> ASISTENCIA a <span class="kw">ON</span> a.codigo_sede = s.codigo_sede
+                      <span class="kw">AND</span> a.fecha <span class="kw">BETWEEN</span> <span class="st">'2026-11-01'</span> <span class="kw">AND</span> <span class="st">'2026-11-30'</span>
+<span class="kw">GROUP</span> <span class="kw">BY</span> s.codigo_sede, s.nombre
+<span class="kw">ORDER</span> <span class="kw">BY</span> entradas <span class="kw">DESC</span>;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombre</td><td class="xl-cab">entradas</td></tr><tr><td class="xl-fila">2</td><td class="">Sede Chapinero</td><td class="xl-num">6</td></tr><tr><td class="xl-fila">3</td><td class="">Sede Suba</td><td class="xl-num">5</td></tr><tr><td class="xl-fila">4</td><td class="">Sede Soacha</td><td class="xl-num">1</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 2</h2>
-<p class="enunciado">Cuántas clases hay de cada actividad.</p><pre class="codigo"><span class="kw">SELECT</span> actividad, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> vuelos
-<span class="kw">FROM</span> CLASE
-<span class="kw">GROUP</span> <span class="kw">BY</span> actividad
-<span class="kw">ORDER</span> <span class="kw">BY</span> vuelos <span class="kw">DESC</span>, actividad;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">actividad</td><td class="xl-cab">vuelos</td></tr><tr><td class="xl-fila">2</td><td class="">Spinning</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">3</td><td class="">Funcional</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">4</td><td class="">Natacion</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">5</td><td class="">Yoga</td><td class="xl-num">1</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado">Cada socio con su entrenador asesor, o 'sin asesor'.</p><pre class="codigo"><span class="kw">SELECT</span> s.nombres, s.apellidos,
+       <span class="kw">COALESCE</span>(CONCAT(e.nombres, <span class="st">' '</span>, e.apellidos), <span class="st">'sin asesor'</span>) <span class="kw">AS</span> asesor
+<span class="kw">FROM</span> SOCIO s
+<span class="kw">LEFT</span> <span class="kw">JOIN</span> ASESORIA a <span class="kw">ON</span> a.id_socio = s.id_socio
+<span class="kw">LEFT</span> <span class="kw">JOIN</span> ENTRENADOR e <span class="kw">ON</span> e.id_entrenador = a.id_entrenador
+<span class="kw">ORDER</span> <span class="kw">BY</span> s.apellidos;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">asesor</td></tr><tr><td class="xl-fila">2</td><td class="">Felipe</td><td class="">Arango Diaz</td><td class="">sin asesor</td></tr><tr><td class="xl-fila">3</td><td class="">Lorena</td><td class="">Castro Vela</td><td class="">Sara Gomez Luna</td></tr><tr><td class="xl-fila">4</td><td class="">Mauricio</td><td class="">Leal Soto</td><td class="">sin asesor</td></tr><tr><td class="xl-fila">5</td><td class="">Daniela</td><td class="">Mejia Rojas</td><td class="">Carlos Benitez Paz</td></tr><tr><td class="xl-fila">6</td><td class="">Tatiana</td><td class="">Mora Gil</td><td class="">Angela Torres Lima</td></tr><tr><td class="xl-fila">7</td><td class="">Juliana</td><td class="">Pena Ortiz</td><td class="">Angela Torres Lima</td></tr><tr><td class="xl-fila">8</td><td class="">Oscar</td><td class="">Pineda Ruiz</td><td class="">Carlos Benitez Paz</td></tr><tr><td class="xl-fila">9</td><td class="">Esteban</td><td class="">Rios Lara</td><td class="">sin asesor</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 3</h2>
-<p class="enunciado">Entrenadores con la ciudad de su sede.</p><pre class="codigo"><span class="kw">SELECT</span> p.nombres, p.apellidos, p.certificacion, b.ciudad
-<span class="kw">FROM</span> PERSONA p
-<span class="kw">JOIN</span> SEDE b <span class="kw">ON</span> b.codigo_sede = p.codigo_sede
-<span class="kw">WHERE</span> p.tipo_persona <span class="kw">IN</span> (<span class="st">'entrenador'</span>, <span class="st">'ambos'</span>)
-<span class="kw">ORDER</span> <span class="kw">BY</span> b.ciudad, p.apellidos;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th><th class="xl-col">D</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">certificacion</td><td class="xl-cab">ciudad</td></tr><tr><td class="xl-fila">2</td><td class="">Natalia Sofia</td><td class="">Pineda Gil</td><td class="">CER-402</td><td class="">Barranquilla</td></tr><tr><td class="xl-fila">3</td><td class="">Sebastian</td><td class="">Mora Ortiz</td><td class="">CER-118</td><td class="">Bogota</td></tr><tr><td class="xl-fila">4</td><td class="">Andres Camilo</td><td class="">Rueda Lara</td><td class="">CER-210</td><td class="">Bogota</td></tr><tr><td class="xl-fila">5</td><td class="">Paola Andrea</td><td class="">Vargas Cruz</td><td class="">CER-344</td><td class="">Medellin</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado">Cuántas máquinas tiene cada sede, juntando cardio y fuerza.</p><pre class="codigo"><span class="kw">SELECT</span> m.codigo_sede, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> maquinas
+<span class="kw">FROM</span> (<span class="kw">SELECT</span> codigo_sede <span class="kw">FROM</span> CARDIO
+      <span class="kw">UNION</span> ALL
+      <span class="kw">SELECT</span> codigo_sede <span class="kw">FROM</span> FUERZA) m
+<span class="kw">GROUP</span> <span class="kw">BY</span> m.codigo_sede
+<span class="kw">ORDER</span> <span class="kw">BY</span> maquinas <span class="kw">DESC</span>;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo_sede</td><td class="xl-cab">maquinas</td></tr><tr><td class="xl-fila">2</td><td class="">CHA</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">3</td><td class="">SUB</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">4</td><td class="">SOA</td><td class="xl-num">1</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 4</h2>
-<p class="enunciado">Cuántas clases tiene cada sala, incluyendo las que no tienen.</p><pre class="codigo"><span class="kw">SELECT</span> a.codigo_sala, a.ambiente, <span class="kw">COUNT</span>(v.id_clase) <span class="kw">AS</span> vuelos
-<span class="kw">FROM</span> SALA a
-<span class="kw">LEFT</span> <span class="kw">JOIN</span> CLASE v <span class="kw">ON</span> v.codigo_sala = a.codigo_sala
-<span class="kw">GROUP</span> <span class="kw">BY</span> a.codigo_sala, a.ambiente
-<span class="kw">ORDER</span> <span class="kw">BY</span> vuelos <span class="kw">DESC</span>, a.codigo_sala;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo_sala</td><td class="xl-cab">ambiente</td><td class="xl-cab">vuelos</td></tr><tr><td class="xl-fila">2</td><td class="">SL-01</td><td class="">Cardio 1</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">3</td><td class="">SL-02</td><td class="">Funcional</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">4</td><td class="">SL-03</td><td class="">Cardio 2</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">5</td><td class="">SL-04</td><td class="">Funcional</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">6</td><td class="">SL-05</td><td class="">Estiramiento</td><td class="xl-num">0</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado">Los tres socios que más han ido al gimnasio.</p><pre class="codigo"><span class="kw">SELECT</span> s.nombres, s.apellidos, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> visitas
+<span class="kw">FROM</span> ASISTENCIA a
+<span class="kw">JOIN</span> SOCIO s <span class="kw">ON</span> s.id_socio = a.id_socio
+<span class="kw">GROUP</span> <span class="kw">BY</span> s.id_socio, s.nombres, s.apellidos
+<span class="kw">ORDER</span> <span class="kw">BY</span> visitas <span class="kw">DESC</span>, s.apellidos
+<span class="kw">LIMIT</span> <span class="nu">3</span>;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">visitas</td></tr><tr><td class="xl-fila">2</td><td class="">Daniela</td><td class="">Mejia Rojas</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">3</td><td class="">Tatiana</td><td class="">Mora Gil</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">4</td><td class="">Oscar</td><td class="">Pineda Ruiz</td><td class="xl-num">2</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 5</h2>
-<p class="enunciado">Socios inscritos en más de una clase.</p><pre class="codigo"><span class="kw">SELECT</span> p.nombres, p.apellidos, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> reservas
-<span class="kw">FROM</span> CUPO r
-<span class="kw">JOIN</span> PERSONA p <span class="kw">ON</span> p.documento = r.documento
-<span class="kw">GROUP</span> <span class="kw">BY</span> p.documento, p.nombres, p.apellidos
-<span class="kw">HAVING</span> <span class="kw">COUNT</span>(*) &gt; <span class="nu">1</span>
-<span class="kw">ORDER</span> <span class="kw">BY</span> reservas <span class="kw">DESC</span>, p.apellidos;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">reservas</td></tr><tr><td class="xl-fila">2</td><td class="">Ricardo</td><td class="">Herrera Paz</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">3</td><td class="">Luis Miguel</td><td class="">Torres Pena</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">4</td><td class="">Manuela</td><td class="">Cortes Lima</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">5</td><td class="">Laura</td><td class="">Gutierrez Sol</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">6</td><td class="">Esteban</td><td class="">Rojas Prieto</td><td class="xl-num">2</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado">Lo que entra al mes por cada plan.</p><pre class="codigo"><span class="kw">SELECT</span> p.nombre, <span class="kw">COUNT</span>(s.id_socio) <span class="kw">AS</span> socios, <span class="kw">COUNT</span>(s.id_socio) * p.precio_mes <span class="kw">AS</span> ingreso_mes
+<span class="kw">FROM</span> PLAN p
+<span class="kw">LEFT</span> <span class="kw">JOIN</span> SOCIO s <span class="kw">ON</span> s.id_plan = p.id_plan
+<span class="kw">GROUP</span> <span class="kw">BY</span> p.id_plan, p.nombre, p.precio_mes
+<span class="kw">ORDER</span> <span class="kw">BY</span> ingreso_mes <span class="kw">DESC</span>;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombre</td><td class="xl-cab">socios</td><td class="xl-cab">ingreso_mes</td></tr><tr><td class="xl-fila">2</td><td class="">Anual</td><td class="xl-num">2</td><td class="xl-num">1700000.00</td></tr><tr><td class="xl-fila">3</td><td class="">Trimestral</td><td class="xl-num">2</td><td class="xl-num">480000.00</td></tr><tr><td class="xl-fila">4</td><td class="">Basico</td><td class="xl-num">2</td><td class="xl-num">178000.00</td></tr><tr><td class="xl-fila">5</td><td class="">Estudiante</td><td class="xl-num">2</td><td class="xl-num">138000.00</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 6</h2>
-<p class="enunciado">Entrenador principal de cada clase.</p><pre class="codigo"><span class="kw">SELECT</span> v.codigo, v.fecha, p.nombres, p.apellidos
-<span class="kw">FROM</span> INSTRUCCION t
-<span class="kw">JOIN</span> CLASE v <span class="kw">ON</span> v.id_clase = t.id_clase
-<span class="kw">JOIN</span> PERSONA p <span class="kw">ON</span> p.documento = t.documento
-<span class="kw">WHERE</span> t.rol = <span class="st">'principal'</span>
-<span class="kw">ORDER</span> <span class="kw">BY</span> v.fecha, v.codigo;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th><th class="xl-col">D</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo</td><td class="xl-cab">fecha</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td></tr><tr><td class="xl-fila">2</td><td class="">FUN02</td><td class="">2026-03-02</td><td class="">Paola Andrea</td><td class="">Vargas Cruz</td></tr><tr><td class="xl-fila">3</td><td class="">SPN01</td><td class="">2026-03-02</td><td class="">Andres Camilo</td><td class="">Rueda Lara</td></tr><tr><td class="xl-fila">4</td><td class="">SPN03</td><td class="">2026-03-03</td><td class="">Natalia Sofia</td><td class="">Pineda Gil</td></tr><tr><td class="xl-fila">5</td><td class="">NAT05</td><td class="">2026-03-04</td><td class="">Sebastian</td><td class="">Mora Ortiz</td></tr><tr><td class="xl-fila">6</td><td class="">SPN01</td><td class="">2026-03-04</td><td class="">Sebastian</td><td class="">Mora Ortiz</td></tr><tr><td class="xl-fila">7</td><td class="">YOG06</td><td class="">2026-03-05</td><td class="">Paola Andrea</td><td class="">Vargas Cruz</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado">Entrenadores que asesoran a más de un socio.</p><pre class="codigo"><span class="kw">SELECT</span> e.nombres, e.apellidos, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> socios
+<span class="kw">FROM</span> ASESORIA a
+<span class="kw">JOIN</span> ENTRENADOR e <span class="kw">ON</span> e.id_entrenador = a.id_entrenador
+<span class="kw">GROUP</span> <span class="kw">BY</span> e.id_entrenador, e.nombres, e.apellidos
+<span class="kw">HAVING</span> <span class="kw">COUNT</span>(*) &gt; <span class="nu">1</span>;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">socios</td></tr><tr><td class="xl-fila">2</td><td class="">Carlos</td><td class="">Benitez Paz</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">3</td><td class="">Angela</td><td class="">Torres Lima</td><td class="xl-num">2</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
   </main>
 
@@ -96,8 +97,8 @@
   <footer>Universidad El Bosque · Bogotá D.C</footer>
 </div>
 
-<script src="../../js/estrellas.js?v=20261116c"></script>
-<script src="../../js/ejercicios.js?v=20261116c"></script>
+<script src="../../js/estrellas.js?v=20261116d"></script>
+<script src="../../js/ejercicios.js?v=20261116d"></script>
 <script>iniciarEtapa("sql");</script>
 </body>
 </html>

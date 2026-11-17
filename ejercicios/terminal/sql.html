@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../css/estilos.css?v=20261116c">
+<link rel="stylesheet" href="../../css/estilos.css?v=20261116d">
 </head>
 <body>
 <div class="sky"></div>
@@ -29,65 +29,65 @@
 
   <main>
 <section class="panel"><details><summary>Ver enunciado del ejercicio</summary>
-<p>Una empresa de buses intermunicipales que opera desde varias terminales necesita una base de datos para sus viajes.</p>
+<p>La asociación de terminales de transporte quiere una base de datos con las rutas intermunicipales y la venta de tiquetes.</p>
 <ul>
-  <li>Cada <strong>TERMINAL</strong> tiene un código de tres letras, nombre, ciudad y país.</li>
-  <li>Cada <strong>CONDUCTOR</strong> tiene identificación, nombre, licencia, horas de manejo y uno o varios teléfonos. Está asignado a exactamente una terminal.</li>
-  <li>Cada <strong>BUS</strong> se identifica por su placa y tiene modelo, marca y capacidad. Se estaciona en una terminal.</li>
-  <li>Un <strong>VIAJE</strong> tiene un identificador, un código de ruta (por ejemplo <code>RT101</code>), fecha, hora de salida y destino. Sale de una terminal y lo realiza un solo bus.</li>
-  <li>Cada viaje lo conducen uno o más conductores con un <em>rol</em> (principal o relevo), y un conductor puede conducir muchos viajes.</li>
-  <li>Los <strong>VIAJEROS</strong> se registran con identificación, nombre (nombres y apellidos), fecha de nacimiento, correo y puntos acumulados; la edad se calcula. Un viajero compra tiquetes y en cada uno se guarda la <em>silla</em> y el <em>servicio</em>.</li>
-  <li>Un conductor también puede viajar como pasajero. Algunos buses son de pasajeros (se guarda el número de sillas) y otros de carga (se guarda la capacidad en kg); los de mantenimiento no son ni lo uno ni lo otro.</li>
+  <li>Cada <strong>TERMINAL</strong> tiene un código de tres letras, nombre y ciudad.</li>
+  <li>Cada <strong>EMPRESA</strong> de transporte tiene NIT, razón social y la ciudad de su sede. Una empresa tiene taquillas en varias terminales y en cada terminal hay taquillas de varias empresas; se guarda el número de la taquilla.</li>
+  <li>Cada <strong>BUS</strong> tiene placa, marca y capacidad, y es de una empresa.</li>
+  <li>Cada <strong>RUTA</strong> tiene un código, duración en minutos y valor. La cubre una empresa, sale de una terminal de origen y llega a una terminal de destino.</li>
+  <li>Los <strong>CONDUCTORES</strong> tienen identificación, nombre (nombres y apellidos), fecha de nacimiento, teléfonos, número de licencia y categoría; trabajan para una empresa.</li>
+  <li>Los <strong>VIAJEROS</strong> tienen los mismos datos personales y un correo. Un viajero compra tiquetes: en cada uno se guarda la ruta, la fecha del viaje y la silla.</li>
+  <li>Un conductor también puede comprar tiquetes y viajar como pasajero. La edad se calcula.</li>
 </ul>
-<p class="nota">Entidades base: <strong>Conductor</strong>, <strong>Viajero</strong> y <strong>Terminal</strong>. Entidades inventadas para completar el problema: <strong>Bus</strong> y <strong>Viaje</strong>.</p></details></section>
+<p class="nota">Entidades base: <strong>Conductor</strong>, <strong>Viajero</strong> y <strong>Terminal</strong>. Entidades inventadas para completar el problema: <strong>Empresa</strong>, <strong>Bus</strong> y <strong>Ruta</strong>.</p></details></section>
 <section class="panel">
 <h2>Consulta 1</h2>
-<p class="enunciado">Viajeros del viaje 1 con su silla y su servicio.</p><pre class="codigo"><span class="kw">SELECT</span> r.silla, p.nombres, p.apellidos, r.servicio
-<span class="kw">FROM</span> TIQUETE r
-<span class="kw">JOIN</span> PERSONA p <span class="kw">ON</span> p.documento = r.documento
-<span class="kw">WHERE</span> r.id_viaje = <span class="nu">1</span>
-<span class="kw">ORDER</span> <span class="kw">BY</span> r.servicio <span class="kw">DESC</span>, p.apellidos;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th><th class="xl-col">D</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">silla</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">servicio</td></tr><tr><td class="xl-fila">2</td><td class="xl-num">2</td><td class="">Daniela</td><td class="">Rivas Ochoa</td><td class="">preferencial</td></tr><tr><td class="xl-fila">3</td><td class="xl-num">15</td><td class="">Camilo</td><td class="">Cifuentes Mar</td><td class="">basico</td></tr><tr><td class="xl-fila">4</td><td class="xl-num">12</td><td class="">Nicolas</td><td class="">Pena Franco</td><td class="">basico</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado">Cada ruta con la ciudad de origen y la de destino.</p><pre class="codigo"><span class="kw">SELECT</span> r.codigo_ruta, o.ciudad <span class="kw">AS</span> origen, d.ciudad <span class="kw">AS</span> destino, r.valor
+<span class="kw">FROM</span> RUTA r
+<span class="kw">JOIN</span> TERMINAL o <span class="kw">ON</span> o.codigo_terminal = r.terminal_origen
+<span class="kw">JOIN</span> TERMINAL d <span class="kw">ON</span> d.codigo_terminal = r.terminal_destino
+<span class="kw">ORDER</span> <span class="kw">BY</span> origen, destino;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th><th class="xl-col">D</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo_ruta</td><td class="xl-cab">origen</td><td class="xl-cab">destino</td><td class="xl-cab">valor</td></tr><tr><td class="xl-fila">2</td><td class="">BC-01</td><td class="">Bogota</td><td class="">Cali</td><td class="xl-num">110000.00</td></tr><tr><td class="xl-fila">3</td><td class="">BM-01</td><td class="">Bogota</td><td class="">Medellin</td><td class="xl-num">95000.00</td></tr><tr><td class="xl-fila">4</td><td class="">BT-01</td><td class="">Bogota</td><td class="">Tunja</td><td class="xl-num">38000.00</td></tr><tr><td class="xl-fila">5</td><td class="">CB-01</td><td class="">Cali</td><td class="">Bogota</td><td class="xl-num">105000.00</td></tr><tr><td class="xl-fila">6</td><td class="">MB-01</td><td class="">Medellin</td><td class="">Bogota</td><td class="xl-num">95000.00</td></tr><tr><td class="xl-fila">7</td><td class="">TB-01</td><td class="">Tunja</td><td class="">Bogota</td><td class="xl-num">38000.00</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 2</h2>
-<p class="enunciado">Cuántos viajes van a cada destino.</p><pre class="codigo"><span class="kw">SELECT</span> destino, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> vuelos
-<span class="kw">FROM</span> VIAJE
-<span class="kw">GROUP</span> <span class="kw">BY</span> destino
-<span class="kw">ORDER</span> <span class="kw">BY</span> vuelos <span class="kw">DESC</span>, destino;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">destino</td><td class="xl-cab">vuelos</td></tr><tr><td class="xl-fila">2</td><td class="">Tunja</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">3</td><td class="">Bogota</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">4</td><td class="">Cartagena</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">5</td><td class="">Manizales</td><td class="xl-num">1</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado">Tiquetes vendidos por ruta y fecha.</p><pre class="codigo"><span class="kw">SELECT</span> codigo_ruta, fecha_viaje, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> vendidos
+<span class="kw">FROM</span> TIQUETE
+<span class="kw">GROUP</span> <span class="kw">BY</span> codigo_ruta, fecha_viaje
+<span class="kw">ORDER</span> <span class="kw">BY</span> fecha_viaje, codigo_ruta;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo_ruta</td><td class="xl-cab">fecha_viaje</td><td class="xl-cab">vendidos</td></tr><tr><td class="xl-fila">2</td><td class="">BT-01</td><td class="">2026-12-18</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">3</td><td class="">BM-01</td><td class="">2026-12-19</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">4</td><td class="">BC-01</td><td class="">2026-12-20</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">5</td><td class="">TB-01</td><td class="">2026-12-22</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">6</td><td class="">MB-01</td><td class="">2027-01-02</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">7</td><td class="">BM-01</td><td class="">2027-01-03</td><td class="xl-num">1</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 3</h2>
-<p class="enunciado">Conductores con la ciudad de su terminal.</p><pre class="codigo"><span class="kw">SELECT</span> p.nombres, p.apellidos, p.licencia, b.ciudad
+<p class="enunciado">Conductores con la empresa donde trabajan.</p><pre class="codigo"><span class="kw">SELECT</span> p.nombres, p.apellidos, p.categoria_licencia, e.razon_social
 <span class="kw">FROM</span> PERSONA p
-<span class="kw">JOIN</span> TERMINAL b <span class="kw">ON</span> b.codigo_terminal = p.codigo_terminal
+<span class="kw">JOIN</span> EMPRESA e <span class="kw">ON</span> e.nit = p.nit
 <span class="kw">WHERE</span> p.tipo_persona <span class="kw">IN</span> (<span class="st">'conductor'</span>, <span class="st">'ambos'</span>)
-<span class="kw">ORDER</span> <span class="kw">BY</span> b.ciudad, p.apellidos;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th><th class="xl-col">D</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">licencia</td><td class="xl-cab">ciudad</td></tr><tr><td class="xl-fila">2</td><td class="">Oscar</td><td class="">Guzman Rey</td><td class="">C3-2190</td><td class="">Bogota</td></tr><tr><td class="xl-fila">3</td><td class="">Hector Fabio</td><td class="">Rincon Leal</td><td class="">C2-4410</td><td class="">Bogota</td></tr><tr><td class="xl-fila">4</td><td class="">Gloria Ines</td><td class="">Becerra Sol</td><td class="">C2-9033</td><td class="">Bucaramanga</td></tr><tr><td class="xl-fila">5</td><td class="">Martha Lucia</td><td class="">Acosta Vera</td><td class="">C2-7821</td><td class="">Medellin</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<span class="kw">ORDER</span> <span class="kw">BY</span> e.razon_social, p.apellidos;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th><th class="xl-col">D</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">categoria_licencia</td><td class="xl-cab">razon_social</td></tr><tr><td class="xl-fila">2</td><td class="">Wilson</td><td class="">Pena Mora</td><td class="">C2</td><td class="">Coomotor</td></tr><tr><td class="xl-fila">3</td><td class="">Luis Alberto</td><td class="">Gomez Pardo</td><td class="">C2</td><td class="">Expreso Bolivariano</td></tr><tr><td class="xl-fila">4</td><td class="">Gloria Ines</td><td class="">Ramirez Toro</td><td class="">C2</td><td class="">Expreso Bolivariano</td></tr><tr><td class="xl-fila">5</td><td class="">Ramiro</td><td class="">Castano Ruiz</td><td class="">C3</td><td class="">Rapido Ochoa</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 4</h2>
-<p class="enunciado">Cuántos viajes ha hecho cada bus, incluyendo los que no han salido.</p><pre class="codigo"><span class="kw">SELECT</span> a.placa, a.modelo, <span class="kw">COUNT</span>(v.id_viaje) <span class="kw">AS</span> vuelos
-<span class="kw">FROM</span> BUS a
-<span class="kw">LEFT</span> <span class="kw">JOIN</span> VIAJE v <span class="kw">ON</span> v.placa = a.placa
-<span class="kw">GROUP</span> <span class="kw">BY</span> a.placa, a.modelo
-<span class="kw">ORDER</span> <span class="kw">BY</span> vuelos <span class="kw">DESC</span>, a.placa;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">placa</td><td class="xl-cab">modelo</td><td class="xl-cab">vuelos</td></tr><tr><td class="xl-fila">2</td><td class="">TSX-101</td><td class="">Paradiso 1800</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">3</td><td class="">WPK-205</td><td class="">Volvo B450</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">4</td><td class="">ESR-310</td><td class="">Andare</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">5</td><td class="">WPK-601</td><td class="">FH 540</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">6</td><td class="">TSX-701</td><td class="">Sprinter</td><td class="xl-num">0</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado">Buses y sillas totales de cada empresa.</p><pre class="codigo"><span class="kw">SELECT</span> e.razon_social, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> buses, <span class="kw">SUM</span>(b.capacidad) <span class="kw">AS</span> sillas
+<span class="kw">FROM</span> EMPRESA e
+<span class="kw">JOIN</span> BUS b <span class="kw">ON</span> b.nit = e.nit
+<span class="kw">GROUP</span> <span class="kw">BY</span> e.nit, e.razon_social
+<span class="kw">ORDER</span> <span class="kw">BY</span> sillas <span class="kw">DESC</span>;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">razon_social</td><td class="xl-cab">buses</td><td class="xl-cab">sillas</td></tr><tr><td class="xl-fila">2</td><td class="">Rapido Ochoa</td><td class="xl-num">2</td><td class="xl-num">86</td></tr><tr><td class="xl-fila">3</td><td class="">Expreso Bolivariano</td><td class="xl-num">2</td><td class="xl-num">80</td></tr><tr><td class="xl-fila">4</td><td class="">Coomotor</td><td class="xl-num">1</td><td class="xl-num">30</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 5</h2>
-<p class="enunciado">Viajeros con más de un tiquete.</p><pre class="codigo"><span class="kw">SELECT</span> p.nombres, p.apellidos, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> reservas
-<span class="kw">FROM</span> TIQUETE r
-<span class="kw">JOIN</span> PERSONA p <span class="kw">ON</span> p.documento = r.documento
+<p class="enunciado">Viajeros que han salido de Bogotá más de una vez.</p><pre class="codigo"><span class="kw">SELECT</span> p.nombres, p.apellidos, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> viajes
+<span class="kw">FROM</span> TIQUETE t
+<span class="kw">JOIN</span> RUTA r <span class="kw">ON</span> r.codigo_ruta = t.codigo_ruta
+<span class="kw">JOIN</span> PERSONA p <span class="kw">ON</span> p.documento = t.documento
+<span class="kw">WHERE</span> r.terminal_origen = <span class="st">'BOG'</span>
 <span class="kw">GROUP</span> <span class="kw">BY</span> p.documento, p.nombres, p.apellidos
-<span class="kw">HAVING</span> <span class="kw">COUNT</span>(*) &gt; <span class="nu">1</span>
-<span class="kw">ORDER</span> <span class="kw">BY</span> reservas <span class="kw">DESC</span>, p.apellidos;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">reservas</td></tr><tr><td class="xl-fila">2</td><td class="">Camilo</td><td class="">Cifuentes Mar</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">3</td><td class="">Nicolas</td><td class="">Pena Franco</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">4</td><td class="">Sofia</td><td class="">Lozano Vega</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">5</td><td class="">Julian</td><td class="">Montoya Ariza</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">6</td><td class="">Daniela</td><td class="">Rivas Ochoa</td><td class="xl-num">2</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<span class="kw">HAVING</span> <span class="kw">COUNT</span>(*) &gt; <span class="nu">1</span>;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">viajes</td></tr><tr><td class="xl-fila">2</td><td class="">Andrea</td><td class="">Lozano Diaz</td><td class="xl-num">2</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 6</h2>
-<p class="enunciado">Conductor principal de cada viaje.</p><pre class="codigo"><span class="kw">SELECT</span> v.codigo, v.fecha, p.nombres, p.apellidos
-<span class="kw">FROM</span> CONDUCCION t
-<span class="kw">JOIN</span> VIAJE v <span class="kw">ON</span> v.id_viaje = t.id_viaje
-<span class="kw">JOIN</span> PERSONA p <span class="kw">ON</span> p.documento = t.documento
-<span class="kw">WHERE</span> t.rol = <span class="st">'principal'</span>
-<span class="kw">ORDER</span> <span class="kw">BY</span> v.fecha, v.codigo;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th><th class="xl-col">D</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo</td><td class="xl-cab">fecha</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td></tr><tr><td class="xl-fila">2</td><td class="">RT101</td><td class="">2026-12-20</td><td class="">Hector Fabio</td><td class="">Rincon Leal</td></tr><tr><td class="xl-fila">3</td><td class="">RT205</td><td class="">2026-12-20</td><td class="">Martha Lucia</td><td class="">Acosta Vera</td></tr><tr><td class="xl-fila">4</td><td class="">RT310</td><td class="">2026-12-21</td><td class="">Gloria Ines</td><td class="">Becerra Sol</td></tr><tr><td class="xl-fila">5</td><td class="">CG900</td><td class="">2026-12-22</td><td class="">Oscar</td><td class="">Guzman Rey</td></tr><tr><td class="xl-fila">6</td><td class="">RT101</td><td class="">2026-12-22</td><td class="">Oscar</td><td class="">Guzman Rey</td></tr><tr><td class="xl-fila">7</td><td class="">RT420</td><td class="">2026-12-23</td><td class="">Martha Lucia</td><td class="">Acosta Vera</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado">Cuántas empresas tienen taquilla en cada terminal.</p><pre class="codigo"><span class="kw">SELECT</span> t.nombre, <span class="kw">COUNT</span>(q.nit) <span class="kw">AS</span> empresas
+<span class="kw">FROM</span> TERMINAL t
+<span class="kw">LEFT</span> <span class="kw">JOIN</span> TAQUILLA q <span class="kw">ON</span> q.codigo_terminal = t.codigo_terminal
+<span class="kw">GROUP</span> <span class="kw">BY</span> t.codigo_terminal, t.nombre
+<span class="kw">ORDER</span> <span class="kw">BY</span> empresas <span class="kw">DESC</span>, t.nombre;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombre</td><td class="xl-cab">empresas</td></tr><tr><td class="xl-fila">2</td><td class="">Terminal Salitre</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">3</td><td class="">Terminal de Cali</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">4</td><td class="">Terminal de Tunja</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">5</td><td class="">Terminal del Norte</td><td class="xl-num">1</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
   </main>
 
@@ -96,8 +96,8 @@
   <footer>Universidad El Bosque · Bogotá D.C</footer>
 </div>
 
-<script src="../../js/estrellas.js?v=20261116c"></script>
-<script src="../../js/ejercicios.js?v=20261116c"></script>
+<script src="../../js/estrellas.js?v=20261116d"></script>
+<script src="../../js/ejercicios.js?v=20261116d"></script>
 <script>iniciarEtapa("sql");</script>
 </body>
 </html>

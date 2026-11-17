@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../css/estilos.css?v=20261116c">
+<link rel="stylesheet" href="../../css/estilos.css?v=20261116d">
 </head>
 <body>
 <div class="sky"></div>
@@ -22,7 +22,7 @@
   <header class="interno">
     <div class="eyebrow">Ejercicio · Escuela de conducción</div>
     <h1>MER</h1>
-    <p class="subtitle">Modelo entidad relación · Escuela de conducción.</p>
+    <p class="subtitle">Modelo entidad relación · Escuela de conducción (5 entidades, 5 relaciones).</p>
   </header>
 
   <div class="ruta" id="ruta"></div>
@@ -36,126 +36,126 @@
 <section class="panel">
 <h2>Enunciado</h2>
 
-<p>Una escuela de conducción con sedes en varias ciudades quiere organizar sus prácticas en una base de datos.</p>
+<p>Una escuela de conducción con tres sedes quiere registrar sus cursos y las prácticas de los alumnos.</p>
 <ul>
-  <li>Cada <strong>SEDE</strong> tiene un código de tres letras, nombre, ciudad y país.</li>
-  <li>Cada <strong>INSTRUCTOR</strong> tiene identificación, nombre, número de licencia, horas de instrucción y uno o varios teléfonos. Trabaja en exactamente una sede.</li>
-  <li>Cada <strong>VEHÍCULO</strong> se identifica por su placa y tiene modelo, marca y capacidad. Está en una sede.</li>
-  <li>Una <strong>PRÁCTICA</strong> tiene un identificador, un código (por ejemplo <code>URB01</code>), fecha, hora de inicio y recorrido. La programa una sede y usa un solo vehículo.</li>
-  <li>Cada práctica la dirigen uno o más instructores con un <em>rol</em> (principal o apoyo), y un instructor puede dirigir muchas prácticas.</li>
-  <li>Los <strong>ALUMNOS</strong> se registran con identificación, nombre (nombres y apellidos), fecha de nacimiento, correo y horas de práctica acumuladas; la edad se calcula. Un alumno se inscribe en prácticas y en cada inscripción se guarda su <em>turno</em> y su <em>nivel</em>.</li>
-  <li>Un instructor también puede ser alumno (por ejemplo para sacar otra categoría). Algunos vehículos son carros (se guarda el número de puertas) y otros motos (se guarda el cilindraje); el camión de práctica no es ni lo uno ni lo otro.</li>
+  <li>Cada <strong>SEDE</strong> tiene código, nombre y dirección. En cada sede trabajan varios instructores y se ofrecen varios cursos, cada uno con su precio en esa sede.</li>
+  <li>Cada <strong>CURSO</strong> corresponde a una categoría de licencia (A1, A2, B1, C2) y tiene nombre, horas de teoría y horas de práctica.</li>
+  <li>Los <strong>ALUMNOS</strong> y los <strong>INSTRUCTORES</strong> tienen documento, nombre (nombres y apellidos) y fecha de nacimiento; la edad se calcula. El alumno además tiene correo y teléfonos y está matriculado en un curso. El instructor tiene un número de licencia de instructor. Un instructor no puede ser alumno de la misma escuela.</li>
+  <li>Cada <strong>VEHÍCULO</strong> tiene placa, marca y año, y un instructor responsable (cada instructor responde como mucho por uno). Los carros guardan el número de puertas, las motos el cilindraje y los camiones la capacidad en toneladas; el bus escolar no es ninguno de esos.</li>
+  <li>En cada <strong>PRÁCTICA</strong> participan un alumno, un instructor y un vehículo, y se guarda la fecha, la hora y los kilómetros recorridos.</li>
 </ul>
-<p class="nota">Entidades base: <strong>Instructor</strong>, <strong>Alumno</strong> y <strong>Sede</strong>. Entidades inventadas para completar el problema: <strong>Vehículo</strong> y <strong>Práctica</strong>.</p>
+<p class="nota">Entidades base: <strong>Instructor</strong>, <strong>Alumno</strong> y <strong>Sede</strong>. Entidades inventadas para completar el problema: <strong>Curso</strong> y <strong>Vehículo</strong>.</p>
 </section>
 
 <div class="vista" data-n="chen">
 <section class="panel">
 <h2>Diagrama · Peter Chen</h2>
-<div class="diagrama tablero"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 44 2014 1752" font-family="Arial, Helvetica, sans-serif" role="img">
+<div class="diagrama tablero"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-250 217 2497 1328" font-family="Arial, Helvetica, sans-serif" role="img">
 <defs><pattern id="mer_chen_g1" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e3e6ea" stroke-width="1"/></pattern><pattern id="mer_chen_g2" width="100" height="100" patternUnits="userSpaceOnUse"><rect width="100" height="100" fill="url(#mer_chen_g1)"/><path d="M 100 0 L 0 0 0 100" fill="none" stroke="#cfd4da" stroke-width="1.2"/></pattern></defs>
-<rect x="-2" y="44" width="2014" height="1752" fill="#ffffff"/>
-<rect x="-2" y="44" width="2014" height="1752" fill="url(#mer_chen_g2)"/>
-<text x="1005" y="78" text-anchor="middle" font-size="20" fill="#000">MODELO ENTIDAD RELACIÓN</text>
-<polyline points="315.0,250.0 563.9,250.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="676.1,250.0 935.0,250.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1065.0,250.0 1325.0,250.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1435.0,250.0 1695.0,250.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="250.0,273.0 250.0,588.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="250.0,652.0 250.0,960.0 910.0,960.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1000.0,273.0 1000.0,588.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1000.0,652.0 1000.0,937.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1760.0,273.0 1760.0,588.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1760.0,652.0 1760.0,960.0 1090.0,960.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1000.0,983.0 1000.0,1218.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1000.0,1282.0 1000.0,1517.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="210.0,227.0 210.0,140.0 154.7,140.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="270.0,227.0 270.0,153.2" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="185.0,240.0 120.0,240.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="185.0,262.0 80.0,262.0 80.0,329.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="210.0,273.0 210.0,420.0 156.3,420.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="970.0,227.0 970.0,140.0 926.7,140.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1030.0,227.0 1030.0,140.0 1084.7,140.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="955.0,273.0 955.0,340.0 892.7,340.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1045.0,273.0 1045.0,340.0 1114.0,340.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1730.0,227.0 1730.0,140.0 1689.3,140.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1790.0,227.0 1790.0,140.0 1825.3,140.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1825.0,250.0 1908.3,250.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1800.0,273.0 1800.0,350.0 1887.6,350.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="945.0,937.0 945.0,870.0 871.3,870.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1055.0,937.0 1055.0,870.0 1140.3,870.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="910.0,975.0 800.0,975.0 800.0,1034.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1090.0,975.0 1230.0,975.0 1230.0,1029.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1055.0,983.0 1055.0,1110.0 1141.3,1110.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="195.0,620.0 121.7,620.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="945.0,1250.0 848.7,1250.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1055.0,1250.0 1152.7,1250.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="935.0,1540.0 860.0,1540.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1065.0,1540.0 1148.0,1540.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1045.0,1517.0 1045.0,1475.0 1108.3,1475.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="950.0,1563.0 950.0,1640.0 859.7,1640.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1000.0,1563.0 1000.0,1644.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1050.0,1563.0 1050.0,1640.0 1129.0,1640.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1160.0,1653.9 1160.0,1740.0 1148.3,1740.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1220.0,1653.9 1220.0,1740.0 1251.3,1740.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<rect x="185.0" y="227.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="250.0" y="255.0" text-anchor="middle" font-size="14" fill="#000">INSTRUCTOR</text>
-<rect x="935.0" y="227.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="255.0" text-anchor="middle" font-size="14" fill="#000">SEDE</text>
-<rect x="1695.0" y="227.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1760.0" y="255.0" text-anchor="middle" font-size="14" fill="#000">VEHICULO</text>
-<rect x="910.0" y="937.0" width="180.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="965.0" text-anchor="middle" font-size="14" fill="#000">PRACTICA</text>
-<rect x="935.0" y="1517.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="1545.0" text-anchor="middle" font-size="14" fill="#000">ALUMNO</text>
-<polygon points="620,218.0 676.0859375,250 620,282.0 563.9140625,250" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="620.0" y="254.5" text-anchor="middle" font-size="13" fill="#000">pertenecer</text>
-<polygon points="1380,218.0 1435.0,250 1380,282.0 1325.0,250" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1380.0" y="254.5" text-anchor="middle" font-size="13" fill="#000">ubicar</text>
-<polygon points="250,588.0 305.0,620 250,652.0 195.0,620" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="250.0" y="624.5" text-anchor="middle" font-size="13" fill="#000">dirigir</text>
-<polygon points="1000,588.0 1055.0,620 1000,652.0 945.0,620" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="624.5" text-anchor="middle" font-size="13" fill="#000">programar</text>
-<polygon points="1760,588.0 1815.0,620 1760,652.0 1705.0,620" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1760.0" y="624.5" text-anchor="middle" font-size="13" fill="#000">usar</text>
-<polygon points="1000,1218.0 1055.0,1250 1000,1282.0 945.0,1250" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="1254.5" text-anchor="middle" font-size="13" fill="#000">inscribir</text>
-<ellipse cx="110.0" cy="140.0" rx="44.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="110.0" y="144.0" text-anchor="middle" font-size="12" fill="#000">idInstructor</text><line x1="80.3" y1="147.0" x2="139.7" y2="147.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="290.0" cy="140.0" rx="35.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="290.0" y="144.0" text-anchor="middle" font-size="12" fill="#000">nombre</text>
-<ellipse cx="85.0" cy="240.0" rx="35.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="85.0" y="244.0" text-anchor="middle" font-size="12" fill="#000">licencia</text>
-<ellipse cx="80.0" cy="345.0" rx="41.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="80.0" y="349.0" text-anchor="middle" font-size="12" fill="#000">horasInstr</text>
-<ellipse cx="120.0" cy="420.0" rx="36.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><ellipse cx="120.0" cy="420.0" rx="32.3" ry="12.0" fill="none" stroke="#000" stroke-width="1.1"/><text x="120.0" y="424.0" text-anchor="middle" font-size="12" fill="#000">telefono</text>
-<ellipse cx="880.0" cy="140.0" rx="46.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="880.0" y="144.0" text-anchor="middle" font-size="12" fill="#000">codigoSede</text><line x1="848.3" y1="147.0" x2="911.7" y2="147.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="1120.0" cy="140.0" rx="35.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1120.0" y="144.0" text-anchor="middle" font-size="12" fill="#000">nombre</text>
-<ellipse cx="860.0" cy="340.0" rx="32.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="860.0" y="344.0" text-anchor="middle" font-size="12" fill="#000">ciudad</text>
-<ellipse cx="1140.0" cy="340.0" rx="26.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1140.0" y="344.0" text-anchor="middle" font-size="12" fill="#000">pais</text>
-<ellipse cx="1660.0" cy="140.0" rx="29.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1660.0" y="144.0" text-anchor="middle" font-size="12" fill="#000">placa</text><line x1="1645.7" y1="147.0" x2="1674.3" y2="147.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="1860.0" cy="140.0" rx="34.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1860.0" y="144.0" text-anchor="middle" font-size="12" fill="#000">modelo</text>
-<ellipse cx="1940.0" cy="250.0" rx="31.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1940.0" y="254.0" text-anchor="middle" font-size="12" fill="#000">marca</text>
-<ellipse cx="1930.0" cy="350.0" rx="42.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1930.0" y="354.0" text-anchor="middle" font-size="12" fill="#000">capacidad</text>
-<ellipse cx="830.0" cy="870.0" rx="41.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="830.0" y="874.0" text-anchor="middle" font-size="12" fill="#000">idPractica</text><line x1="803.7" y1="877.0" x2="856.3" y2="877.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="1170.0" cy="870.0" rx="29.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1170.0" y="874.0" text-anchor="middle" font-size="12" fill="#000">fecha</text>
-<ellipse cx="800.0" cy="1050.0" rx="32.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="800.0" y="1054.0" text-anchor="middle" font-size="12" fill="#000">codigo</text>
-<ellipse cx="1230.0" cy="1045.0" rx="41.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1230.0" y="1049.0" text-anchor="middle" font-size="12" fill="#000">horaInicio</text>
-<ellipse cx="1180.0" cy="1110.0" rx="38.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1180.0" y="1114.0" text-anchor="middle" font-size="12" fill="#000">recorrido</text>
-<ellipse cx="100.0" cy="620.0" rx="21.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="100.0" y="624.0" text-anchor="middle" font-size="12" fill="#000">rol</text>
-<ellipse cx="820.0" cy="1250.0" rx="28.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="820.0" y="1254.0" text-anchor="middle" font-size="12" fill="#000">turno</text>
-<ellipse cx="1180.0" cy="1250.0" rx="27.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1180.0" y="1254.0" text-anchor="middle" font-size="12" fill="#000">nivel</text>
-<ellipse cx="820.0" cy="1540.0" rx="40.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="820.0" y="1544.0" text-anchor="middle" font-size="12" fill="#000">idAlumno</text><line x1="795.0" y1="1547.0" x2="845.0" y2="1547.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="1180.0" cy="1540.0" rx="32.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1180.0" y="1544.0" text-anchor="middle" font-size="12" fill="#000">correo</text>
-<ellipse cx="1160.0" cy="1475.0" rx="51.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1160.0" y="1479.0" text-anchor="middle" font-size="12" fill="#000">horasPractica</text>
-<ellipse cx="800.0" cy="1640.0" rx="59.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="800.0" y="1644.0" text-anchor="middle" font-size="12" fill="#000">fechaNacimiento</text>
-<ellipse cx="1000.0" cy="1660.0" rx="28.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2" stroke-dasharray="5 3"/><text x="1000.0" y="1664.0" text-anchor="middle" font-size="12" fill="#000">edad</text>
-<ellipse cx="1190.0" cy="1640.0" rx="61.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1190.0" y="1644.0" text-anchor="middle" font-size="12" fill="#000">nombreCompleto</text>
-<ellipse cx="1110.0" cy="1740.0" rx="38.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1110.0" y="1744.0" text-anchor="middle" font-size="12" fill="#000">nombres</text>
-<ellipse cx="1290.0" cy="1740.0" rx="38.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1290.0" y="1744.0" text-anchor="middle" font-size="12" fill="#000">apellidos</text>
-<text x="438.0" y="240.0" text-anchor="middle" font-size="12" fill="#000">(1:1)</text>
-<text x="808.0" y="240.0" text-anchor="middle" font-size="12" fill="#000">(0:N)</text>
-<text x="620.0" y="206.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">N:1</text>
-<text x="1188.0" y="240.0" text-anchor="middle" font-size="12" fill="#000">(0:N)</text>
-<text x="1570.0" y="240.0" text-anchor="middle" font-size="12" fill="#000">(1:1)</text>
-<text x="1380.0" y="206.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">1:N</text>
-<text x="262.0" y="440.0" text-anchor="start" font-size="12" fill="#000">(0:N)</text>
-<text x="820.0" y="950.0" text-anchor="middle" font-size="12" fill="#000">(1:N)</text>
-<text x="318.0" y="626.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:M</text>
-<text x="1012.0" y="440.0" text-anchor="start" font-size="12" fill="#000">(0:N)</text>
-<text x="1012.0" y="800.0" text-anchor="start" font-size="12" fill="#000">(1:1)</text>
-<text x="1070.0" y="626.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">1:N</text>
-<text x="1772.0" y="440.0" text-anchor="start" font-size="12" fill="#000">(0:N)</text>
-<text x="1220.0" y="950.0" text-anchor="middle" font-size="12" fill="#000">(1:1)</text>
-<text x="1830.0" y="626.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">1:N</text>
-<text x="1012.0" y="1110.0" text-anchor="start" font-size="12" fill="#000">(0:N)</text>
-<text x="1012.0" y="1405.0" text-anchor="start" font-size="12" fill="#000">(1:N)</text>
-<text x="940.0" y="1212.0" text-anchor="end" font-size="13" font-weight="bold" fill="#000">N:M</text>
+<rect x="-250" y="217" width="2497" height="1328" fill="#ffffff"/>
+<rect x="-250" y="217" width="2497" height="1328" fill="url(#mer_chen_g2)"/>
+<text x="998" y="251" text-anchor="middle" font-size="20" fill="#000">MODELO ENTIDAD RELACIÓN</text>
+<polyline points="1000.0,463.0 1000.0,716.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="500.0,725.0 500.0,472.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="0.0,463.0 0.0,892.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="0.0,1385.0 0.0,956.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1065.0,440.0 1445.0,440.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1935.0,440.0 1555.0,440.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="565.0,748.0 945.0,748.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="65.0,440.0 445.0,440.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="935.0,440.0 555.0,440.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="65.0,1408.0 1195.0,1408.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1955.0,463.0 1955.0,1408.0 1305.0,1408.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-65.0,440.0 -113.0,440.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="45.0,417.0 45.0,359.0 59.0,359.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="120.0,343.0 120.0,329.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="181.0,359.0 201.0,359.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="65.0,458.0 172.7,458.0 172.7,484.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-45.0,417.0 -45.0,359.0 -71.7,359.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-45.0,463.0 -45.0,521.0 -63.7,521.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="45.0,463.0 45.0,548.0 68.0,548.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="435.0,748.0 387.0,748.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="545.0,771.0 545.0,829.0 568.3,829.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="545.0,725.0 545.0,667.0 573.7,667.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="455.0,771.0 455.0,829.0 427.3,829.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="455.0,725.0 455.0,667.0 426.0,667.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="565.0,730.0 692.0,730.0 692.0,704.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1045.0,417.0 1045.0,359.0 1075.3,359.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="935.0,458.0 826.0,458.0 826.0,484.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="826.0,516.0 826.0,530.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="765.0,500.0 745.0,500.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1065.0,458.0 1172.7,458.0 1172.7,484.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="955.0,417.0 955.0,359.0 928.3,359.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1045.0,463.0 1045.0,548.0 1060.0,548.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-65.0,1408.0 -113.0,1408.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="45.0,1431.0 45.0,1489.0 64.7,1489.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="45.0,1385.0 45.0,1327.0 73.6,1327.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-45.0,1431.0 -45.0,1489.0 -68.3,1489.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2065.0,440.0 2113.0,440.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2045.0,417.0 2045.0,359.0 2064.7,359.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1955.0,417.0 1955.0,359.0 1939.0,359.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1250.0,1376.0 1250.0,1334.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="500.0,408.0 500.0,366.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="466.0,452.2 466.0,514.4" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="534.0,452.2 534.0,517.4" fill="none" stroke="#000" stroke-width="1.3"/>
+<rect x="-65.0" y="417.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="0.0" y="445.0" text-anchor="middle" font-size="14" fill="#000">ALUMNO</text>
+<rect x="935.0" y="417.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="445.0" text-anchor="middle" font-size="14" fill="#000">INSTRUCTOR</text>
+<rect x="1935.0" y="417.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="2000.0" y="445.0" text-anchor="middle" font-size="14" fill="#000">SEDE</text>
+<rect x="435.0" y="725.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="500.0" y="753.0" text-anchor="middle" font-size="14" fill="#000">VEHICULO</text>
+<rect x="-65.0" y="1385.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="0.0" y="1413.0" text-anchor="middle" font-size="14" fill="#000">CURSO</text>
+<polygon points="0,892.0 55.0,924.0 0,956.0 -55.0,924.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="0.0" y="928.5" text-anchor="middle" font-size="13" fill="#000">matricular</text>
+<polygon points="1250,1376.0 1305.0,1408 1250,1440.0 1195.0,1408" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1250.0" y="1412.5" text-anchor="middle" font-size="13" fill="#000">ofrecer</text>
+<polygon points="1500,408.0 1555.0,440 1500,472.0 1445.0,440" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1500.0" y="444.5" text-anchor="middle" font-size="13" fill="#000">trabajar</text>
+<polygon points="1000,716.0 1055.0,748.0 1000,780.0 945.0,748.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="752.5" text-anchor="middle" font-size="13" fill="#000">responder</text>
+<polygon points="500,408.0 555.0,440 500,472.0 445.0,440" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="500.0" y="444.5" text-anchor="middle" font-size="13" fill="#000">practicar</text>
+<ellipse cx="-157.7" cy="440.0" rx="44.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="-157.7" y="444.0" text-anchor="middle" font-size="12" fill="#000">documento</text><line x1="-187.4" y1="447.0" x2="-128.0" y2="447.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="120.0" cy="359.0" rx="61.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="120.0" y="363.0" text-anchor="middle" font-size="12" fill="#000">nombreCompleto</text>
+<ellipse cx="120.0" cy="313.0" rx="38.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="120.0" y="317.0" text-anchor="middle" font-size="12" fill="#000">nombres</text>
+<ellipse cx="239.7" cy="359.0" rx="38.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="239.7" y="363.0" text-anchor="middle" font-size="12" fill="#000">apellidos</text>
+<ellipse cx="172.7" cy="500.0" rx="59.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="172.7" y="504.0" text-anchor="middle" font-size="12" fill="#000">fechaNacimiento</text>
+<ellipse cx="-100.0" cy="359.0" rx="28.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2" stroke-dasharray="5 3"/><text x="-100.0" y="363.0" text-anchor="middle" font-size="12" fill="#000">edad</text>
+<ellipse cx="-100.0" cy="521.0" rx="36.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><ellipse cx="-100.0" cy="521.0" rx="32.3" ry="12.0" fill="none" stroke="#000" stroke-width="1.1"/><text x="-100.0" y="525.0" text-anchor="middle" font-size="12" fill="#000">telefono</text>
+<ellipse cx="100.0" cy="548.0" rx="32.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="100.0" y="552.0" text-anchor="middle" font-size="12" fill="#000">correo</text>
+<ellipse cx="357.7" cy="748.0" rx="29.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="357.7" y="752.0" text-anchor="middle" font-size="12" fill="#000">placa</text><line x1="343.3" y1="755.0" x2="372.0" y2="755.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="600.0" cy="829.0" rx="31.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="600.0" y="833.0" text-anchor="middle" font-size="12" fill="#000">marca</text>
+<ellipse cx="600.0" cy="667.0" rx="26.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="600.0" y="671.0" text-anchor="middle" font-size="12" fill="#000">anio</text>
+<ellipse cx="380.0" cy="829.0" rx="47.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="380.0" y="833.0" text-anchor="middle" font-size="12" fill="#000">numPuertas</text>
+<ellipse cx="380.0" cy="667.0" rx="46.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="380.0" y="671.0" text-anchor="middle" font-size="12" fill="#000">cilindrajeCc</text>
+<ellipse cx="692.0" cy="688.0" rx="52.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="692.0" y="692.0" text-anchor="middle" font-size="12" fill="#000">capacidadTon</text>
+<ellipse cx="1120.0" cy="359.0" rx="44.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1120.0" y="363.0" text-anchor="middle" font-size="12" fill="#000">documento</text><line x1="1090.3" y1="366.0" x2="1149.7" y2="366.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="826.0" cy="500.0" rx="61.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="826.0" y="504.0" text-anchor="middle" font-size="12" fill="#000">nombreCompleto</text>
+<ellipse cx="826.0" cy="546.0" rx="38.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="826.0" y="550.0" text-anchor="middle" font-size="12" fill="#000">nombres</text>
+<ellipse cx="706.3" cy="500.0" rx="38.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="706.3" y="504.0" text-anchor="middle" font-size="12" fill="#000">apellidos</text>
+<ellipse cx="1172.7" cy="500.0" rx="59.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1172.7" y="504.0" text-anchor="middle" font-size="12" fill="#000">fechaNacimiento</text>
+<ellipse cx="900.0" cy="359.0" rx="28.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2" stroke-dasharray="5 3"/><text x="900.0" y="363.0" text-anchor="middle" font-size="12" fill="#000">edad</text>
+<ellipse cx="1120.0" cy="548.0" rx="60.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1120.0" y="552.0" text-anchor="middle" font-size="12" fill="#000">licenciaInstructor</text>
+<ellipse cx="-161.7" cy="1408.0" rx="48.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="-161.7" y="1412.0" text-anchor="middle" font-size="12" fill="#000">codigoCurso</text><line x1="-195.4" y1="1415.0" x2="-128.0" y2="1415.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="100.0" cy="1489.0" rx="35.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="100.0" y="1493.0" text-anchor="middle" font-size="12" fill="#000">nombre</text>
+<ellipse cx="120.0" cy="1327.0" rx="46.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="120.0" y="1331.0" text-anchor="middle" font-size="12" fill="#000">horasTeoria</text>
+<ellipse cx="-120.0" cy="1489.0" rx="51.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="-120.0" y="1493.0" text-anchor="middle" font-size="12" fill="#000">horasPractica</text>
+<ellipse cx="2159.7" cy="440.0" rx="46.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2159.7" y="444.0" text-anchor="middle" font-size="12" fill="#000">codigoSede</text><line x1="2128.0" y1="447.0" x2="2191.4" y2="447.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="2100.0" cy="359.0" rx="35.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2100.0" y="363.0" text-anchor="middle" font-size="12" fill="#000">nombre</text>
+<ellipse cx="1900.0" cy="359.0" rx="39.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1900.0" y="363.0" text-anchor="middle" font-size="12" fill="#000">direccion</text>
+<ellipse cx="1250.0" cy="1318.0" rx="31.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1250.0" y="1322.0" text-anchor="middle" font-size="12" fill="#000">precio</text>
+<ellipse cx="500.0" cy="350.0" rx="29.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="500.0" y="354.0" text-anchor="middle" font-size="12" fill="#000">fecha</text><line x1="485.3" y1="357.0" x2="514.7" y2="357.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="460.0" cy="530.0" rx="27.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="460.0" y="534.0" text-anchor="middle" font-size="12" fill="#000">hora</text>
+<ellipse cx="560.0" cy="530.0" rx="42.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="560.0" y="534.0" text-anchor="middle" font-size="12" fill="#000">kilometros</text>
+<text x="1007.0" y="483.0" text-anchor="start" font-size="12" fill="#000">(0:1)</text>
+<text x="507.0" y="713.0" text-anchor="start" font-size="12" fill="#000">(0:N)</text>
+<text x="7.0" y="483.0" text-anchor="start" font-size="12" fill="#000">(1:1)</text>
+<text x="7.0" y="1373.0" text-anchor="start" font-size="12" fill="#000">(0:N)</text>
+<text x="1093.3" y="433.0" text-anchor="middle" font-size="12" fill="#000">(1:1)</text>
+<text x="1905.7" y="433.0" text-anchor="middle" font-size="12" fill="#000">(1:N)</text>
+<text x="593.3" y="741.0" text-anchor="middle" font-size="12" fill="#000">(1:1)</text>
+<text x="94.3" y="433.0" text-anchor="middle" font-size="12" fill="#000">(0:N)</text>
+<text x="905.7" y="433.0" text-anchor="middle" font-size="12" fill="#000">(0:N)</text>
+<text x="94.3" y="1401.0" text-anchor="middle" font-size="12" fill="#000">(1:N)</text>
+<text x="1962.0" y="483.0" text-anchor="start" font-size="12" fill="#000">(1:N)</text>
+<text x="36.2" y="886.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:1</text>
+<text x="1286.2" y="1370.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:M</text>
+<text x="1536.2" y="402.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:1</text>
+<text x="1036.2" y="710.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">1:1</text>
+<text x="536.2" y="402.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:M:P</text>
 </svg></div>
 </section>
 
@@ -163,71 +163,71 @@
 <div class="vista" data-n="crowsfoot" hidden>
 <section class="panel">
 <h2>Diagrama · Crow's Foot</h2>
-<div class="diagrama tablero"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-22 -40 1543 925" font-family="Arial, Helvetica, sans-serif" role="img">
+<div class="diagrama tablero"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-40 -80 2170 835" font-family="Arial, Helvetica, sans-serif" role="img">
 <defs><pattern id="mer_crowsfoot_g1" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e3e6ea" stroke-width="1"/></pattern><pattern id="mer_crowsfoot_g2" width="100" height="100" patternUnits="userSpaceOnUse"><rect width="100" height="100" fill="url(#mer_crowsfoot_g1)"/><path d="M 100 0 L 0 0 0 100" fill="none" stroke="#cfd4da" stroke-width="1.2"/></pattern></defs>
-<rect x="-22" y="-40" width="1543" height="925" fill="#ffffff"/>
-<rect x="-22" y="-40" width="1543" height="925" fill="url(#mer_crowsfoot_g2)"/>
-<text x="750" y="-6" text-anchor="middle" font-size="20" fill="#000">MODELO ENTIDAD RELACIÓN · CROW&#x27;S FOOT</text>
-<polyline points="395.1,97.5 261.8,97.5" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="644.9,107.5 811.9,107.5" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1211.9,107.5 1028.1,107.5" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="920.0,330.0 920.0,175.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1031.9,416.0 1320.0,416.0 1320.0,195.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="520.0,380.0 520.0,195.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="645.1,437.5 808.1,437.5" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="920.0,690.0 920.0,542.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1038.7,757.5 1238.4,757.5" fill="none" stroke="#000" stroke-width="1.3"/>
-<rect x="18.2" y="60.0" width="243.6" height="95.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="140.0" y="79.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">INS_TELEFONO</text><line x1="18.2" y1="88.0" x2="261.8" y2="88.0" stroke="#000" stroke-width="1.1"/><text x="26.2" y="104.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="56.2" y="104.0" font-size="12" fill="#000" text-decoration="underline">id_instructor</text><text x="133.6" y="104.0" font-size="11" fill="#000">INTEGER</text><text x="26.2" y="124.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="56.2" y="124.0" font-size="12" fill="#000" text-decoration="underline">telefono</text><text x="133.6" y="124.0" font-size="11" fill="#000">VARCHAR (15)</text><line x1="18.2" y1="134.0" x2="261.8" y2="134.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="28.2" y="148.0" font-size="11" fill="#000">INS_TELEFONO_PK (id_instructor, telefono)</text>
-<rect x="395.1" y="40.0" width="249.9" height="155.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="520.0" y="59.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">INSTRUCTOR</text><line x1="395.1" y1="68.0" x2="644.9" y2="68.0" stroke="#000" stroke-width="1.1"/><text x="403.1" y="84.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="429.7" y="84.0" font-size="12" fill="#000" text-decoration="underline">id_instructor</text><text x="535.8" y="84.0" font-size="11" fill="#000">INTEGER</text><text x="403.1" y="104.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="429.7" y="104.0" font-size="12" fill="#000">nombre</text><text x="535.8" y="104.0" font-size="11" fill="#000">VARCHAR (100)</text><text x="403.1" y="124.0" font-size="11" font-weight="bold" fill="#000">U *</text><text x="429.7" y="124.0" font-size="12" fill="#000">licencia</text><text x="535.8" y="124.0" font-size="11" fill="#000">VARCHAR (10)</text><text x="403.1" y="144.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="429.7" y="144.0" font-size="12" fill="#000">horas_instruccion</text><text x="535.8" y="144.0" font-size="11" fill="#000">INTEGER</text><text x="403.1" y="164.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="429.7" y="164.0" font-size="12" fill="#000">codigo_sede</text><text x="535.8" y="164.0" font-size="11" fill="#000">CHAR (3)</text><line x1="395.1" y1="174.0" x2="644.9" y2="174.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="405.1" y="188.0" font-size="11" fill="#000">INSTRUCTOR_PK (id_instructor)</text>
-<rect x="811.9" y="40.0" width="216.3" height="135.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="920.0" y="59.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">SEDE</text><line x1="811.9" y1="68.0" x2="1028.1" y2="68.0" stroke="#000" stroke-width="1.1"/><text x="819.9" y="84.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="845.6" y="84.0" font-size="12" fill="#000" text-decoration="underline">codigo_sede</text><text x="925.7" y="84.0" font-size="11" fill="#000">CHAR (3)</text><text x="819.9" y="104.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="845.6" y="104.0" font-size="12" fill="#000">nombre</text><text x="925.7" y="104.0" font-size="11" fill="#000">VARCHAR (80)</text><text x="819.9" y="124.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="845.6" y="124.0" font-size="12" fill="#000">ciudad</text><text x="925.7" y="124.0" font-size="11" fill="#000">VARCHAR (50)</text><text x="819.9" y="144.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="845.6" y="144.0" font-size="12" fill="#000">pais</text><text x="925.7" y="144.0" font-size="11" fill="#000">VARCHAR (50)</text><line x1="811.9" y1="154.0" x2="1028.1" y2="154.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="821.9" y="168.0" font-size="11" fill="#000">SEDE_PK (codigo_sede)</text>
-<rect x="1211.9" y="40.0" width="216.3" height="155.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1320.0" y="59.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">VEHICULO</text><line x1="1211.9" y1="68.0" x2="1428.1" y2="68.0" stroke="#000" stroke-width="1.1"/><text x="1219.9" y="84.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="1245.6" y="84.0" font-size="12" fill="#000" text-decoration="underline">placa</text><text x="1325.7" y="84.0" font-size="11" fill="#000">VARCHAR (10)</text><text x="1219.9" y="104.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1245.6" y="104.0" font-size="12" fill="#000">modelo</text><text x="1325.7" y="104.0" font-size="11" fill="#000">VARCHAR (40)</text><text x="1219.9" y="124.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1245.6" y="124.0" font-size="12" fill="#000">marca</text><text x="1325.7" y="124.0" font-size="11" fill="#000">VARCHAR (40)</text><text x="1219.9" y="144.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1245.6" y="144.0" font-size="12" fill="#000">capacidad</text><text x="1325.7" y="144.0" font-size="11" fill="#000">INTEGER</text><text x="1219.9" y="164.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="1245.6" y="164.0" font-size="12" fill="#000">codigo_sede</text><text x="1325.7" y="164.0" font-size="11" fill="#000">CHAR (3)</text><line x1="1211.9" y1="174.0" x2="1428.1" y2="174.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="1221.9" y="188.0" font-size="11" fill="#000">VEHICULO_PK (placa)</text>
-<rect x="394.9" y="380.0" width="250.2" height="115.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="520.0" y="399.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">INSTRUCCION</text><line x1="394.9" y1="408.0" x2="645.1" y2="408.0" stroke="#000" stroke-width="1.1"/><text x="402.9" y="424.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="432.9" y="424.0" font-size="12" fill="#000" text-decoration="underline">id_instructor</text><text x="510.2" y="424.0" font-size="11" fill="#000">INTEGER</text><text x="402.9" y="444.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="432.9" y="444.0" font-size="12" fill="#000" text-decoration="underline">id_practica</text><text x="510.2" y="444.0" font-size="11" fill="#000">INTEGER</text><text x="402.9" y="464.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="432.9" y="464.0" font-size="12" fill="#000">rol</text><text x="510.2" y="464.0" font-size="11" fill="#000">VARCHAR (10)</text><line x1="394.9" y1="474.0" x2="645.1" y2="474.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="404.9" y="488.0" font-size="11" fill="#000">INSTRUCCION_PK (id_instructor, id_practica)</text>
-<rect x="808.1" y="330.0" width="223.8" height="212.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="920.0" y="349.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">PRACTICA</text><line x1="808.1" y1="358.0" x2="1031.9" y2="358.0" stroke="#000" stroke-width="1.1"/><text x="816.1" y="374.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="842.8" y="374.0" font-size="12" fill="#000" text-decoration="underline">id_practica</text><text x="929.5" y="374.0" font-size="11" fill="#000">INTEGER</text><text x="816.1" y="394.0" font-size="11" font-weight="bold" fill="#000">U *</text><text x="842.8" y="394.0" font-size="12" fill="#000">codigo</text><text x="929.5" y="394.0" font-size="11" fill="#000">VARCHAR (8)</text><text x="816.1" y="414.0" font-size="11" font-weight="bold" fill="#000">U *</text><text x="842.8" y="414.0" font-size="12" fill="#000">fecha</text><text x="929.5" y="414.0" font-size="11" fill="#000">DATE</text><text x="816.1" y="434.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="842.8" y="434.0" font-size="12" fill="#000">hora_inicio</text><text x="929.5" y="434.0" font-size="11" fill="#000">TIME</text><text x="816.1" y="454.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="842.8" y="454.0" font-size="12" fill="#000">recorrido</text><text x="929.5" y="454.0" font-size="11" fill="#000">VARCHAR (50)</text><text x="816.1" y="474.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="842.8" y="474.0" font-size="12" fill="#000">placa</text><text x="929.5" y="474.0" font-size="11" fill="#000">VARCHAR (10)</text><text x="816.1" y="494.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="842.8" y="494.0" font-size="12" fill="#000">sede_practica</text><text x="929.5" y="494.0" font-size="11" fill="#000">CHAR (3)</text><line x1="808.1" y1="504.0" x2="1031.9" y2="504.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="818.1" y="518.0" font-size="11" fill="#000">PRACTICA_PK (id_practica)</text><text x="818.1" y="535.0" font-size="11" fill="#000">PRACTICA_UK (codigo, fecha)</text>
-<rect x="801.3" y="690.0" width="237.4" height="135.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="920.0" y="709.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">INSCRIPCION</text><line x1="801.3" y1="718.0" x2="1038.7" y2="718.0" stroke="#000" stroke-width="1.1"/><text x="809.3" y="734.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="839.3" y="734.0" font-size="12" fill="#000" text-decoration="underline">id_alumno</text><text x="909.3" y="734.0" font-size="11" fill="#000">INTEGER</text><text x="809.3" y="754.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="839.3" y="754.0" font-size="12" fill="#000" text-decoration="underline">id_practica</text><text x="909.3" y="754.0" font-size="11" fill="#000">INTEGER</text><text x="809.3" y="774.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="839.3" y="774.0" font-size="12" fill="#000">turno</text><text x="909.3" y="774.0" font-size="11" fill="#000">VARCHAR (4)</text><text x="809.3" y="794.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="839.3" y="794.0" font-size="12" fill="#000">nivel</text><text x="909.3" y="794.0" font-size="11" fill="#000">VARCHAR (10)</text><line x1="801.3" y1="804.0" x2="1038.7" y2="804.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="811.3" y="818.0" font-size="11" fill="#000">INSCRIPCION_PK (id_alumno, id_practica)</text>
-<rect x="1238.4" y="650.0" width="243.2" height="195.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1360.0" y="669.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">ALUMNO</text><line x1="1238.4" y1="678.0" x2="1481.6" y2="678.0" stroke="#000" stroke-width="1.1"/><text x="1246.4" y="694.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="1273.1" y="694.0" font-size="12" fill="#000" text-decoration="underline">id_alumno</text><text x="1379.1" y="694.0" font-size="11" fill="#000">INTEGER</text><text x="1246.4" y="714.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1273.1" y="714.0" font-size="12" fill="#000">nombres</text><text x="1379.1" y="714.0" font-size="11" fill="#000">VARCHAR (50)</text><text x="1246.4" y="734.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1273.1" y="734.0" font-size="12" fill="#000">apellidos</text><text x="1379.1" y="734.0" font-size="11" fill="#000">VARCHAR (50)</text><text x="1246.4" y="754.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1273.1" y="754.0" font-size="12" fill="#000">fecha_nacimiento</text><text x="1379.1" y="754.0" font-size="11" fill="#000">DATE</text><text x="1246.4" y="774.0" font-size="11" font-weight="bold" fill="#000">/</text><text x="1273.1" y="774.0" font-size="12" fill="#000">edad</text><text x="1379.1" y="774.0" font-size="11" fill="#000">INTEGER</text><text x="1246.4" y="794.0" font-size="11" font-weight="bold" fill="#000">U *</text><text x="1273.1" y="794.0" font-size="12" fill="#000">correo</text><text x="1379.1" y="794.0" font-size="11" fill="#000">VARCHAR (80)</text><text x="1246.4" y="814.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1273.1" y="814.0" font-size="12" fill="#000">horas_practica</text><text x="1379.1" y="814.0" font-size="11" fill="#000">INTEGER</text><line x1="1238.4" y1="824.0" x2="1481.6" y2="824.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="1248.4" y="838.0" font-size="11" fill="#000">ALUMNO_PK (id_alumno)</text>
-<line x1="388.1" y1="105.5" x2="388.1" y2="89.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="382.1" y1="105.5" x2="382.1" y2="89.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<polyline points="261.8,88.5 274.8,97.5 261.8,106.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="278.8" y1="89.5" x2="278.8" y2="105.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<polyline points="644.9,98.5 657.9,107.5 644.9,116.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<circle cx="663.9" cy="107.5" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
-<line x1="804.9" y1="115.5" x2="804.9" y2="99.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="798.9" y1="115.5" x2="798.9" y2="99.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<polyline points="1211.9,116.5 1198.9,107.5 1211.9,98.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<circle cx="1192.9" cy="107.5" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
-<line x1="1035.1" y1="99.5" x2="1035.1" y2="115.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="1041.1" y1="99.5" x2="1041.1" y2="115.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<polyline points="911.0,330.0 920.0,317.0 929.0,330.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<circle cx="920.0" cy="311.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
-<line x1="928.0" y1="182.0" x2="912.0" y2="182.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="928.0" y1="188.0" x2="912.0" y2="188.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<polyline points="1031.9,407.0 1044.9,416.0 1031.9,425.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<circle cx="1050.9" cy="416.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
-<line x1="1328.0" y1="202.0" x2="1312.0" y2="202.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="1328.0" y1="208.0" x2="1312.0" y2="208.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<polyline points="511.0,380.0 520.0,367.0 529.0,380.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<circle cx="520.0" cy="361.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
-<line x1="528.0" y1="202.0" x2="512.0" y2="202.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="528.0" y1="208.0" x2="512.0" y2="208.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<polyline points="645.1,428.5 658.1,437.5 645.1,446.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="662.1" y1="429.5" x2="662.1" y2="445.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="801.1" y1="445.5" x2="801.1" y2="429.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="795.1" y1="445.5" x2="795.1" y2="429.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<polyline points="911.0,690.0 920.0,677.0 929.0,690.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<circle cx="920.0" cy="671.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
-<line x1="928.0" y1="549.0" x2="912.0" y2="549.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="928.0" y1="555.0" x2="912.0" y2="555.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<polyline points="1038.7,748.5 1051.7,757.5 1038.7,766.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="1055.7" y1="749.5" x2="1055.7" y2="765.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="1231.4" y1="765.5" x2="1231.4" y2="749.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="1225.4" y1="765.5" x2="1225.4" y2="749.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<rect x="-40" y="-80" width="2170" height="835" fill="#ffffff"/>
+<rect x="-40" y="-80" width="2170" height="835" fill="url(#mer_crowsfoot_g2)"/>
+<text x="1045" y="-46" text-anchor="middle" font-size="20" fill="#000">MODELO ENTIDAD RELACIÓN · CROW&#x27;S FOOT</text>
+<polyline points="880.5,175.0 880.5,290.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="725.0,87.5 665.0,87.5 665.0,97.5 605.0,97.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1035.9,87.5 1095.9,87.5 1095.9,97.5 1155.9,97.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="241.8,47.5 301.8,47.5 301.8,57.5 361.8,57.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="483.4,195.0 483.4,580.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1002.7,327.5 1178.5,327.5 1178.5,195.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1401.1,77.5 1873.9,77.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1753.9,617.5 1902.1,617.5 1902.1,115.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1521.1,637.5 1059.0,637.5 1059.0,647.5 596.9,647.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<rect x="361.8" y="0.0" width="243.2" height="195.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="483.4" y="19.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">ALUMNO</text><line x1="361.8" y1="28.0" x2="605.0" y2="28.0" stroke="#000" stroke-width="1.1"/><text x="369.8" y="44.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="396.5" y="44.0" font-size="12" fill="#000" text-decoration="underline">documento</text><text x="502.5" y="44.0" font-size="11" fill="#000">VARCHAR (15)</text><text x="369.8" y="64.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="396.5" y="64.0" font-size="12" fill="#000">nombres</text><text x="502.5" y="64.0" font-size="11" fill="#000">VARCHAR (50)</text><text x="369.8" y="84.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="396.5" y="84.0" font-size="12" fill="#000">apellidos</text><text x="502.5" y="84.0" font-size="11" fill="#000">VARCHAR (50)</text><text x="369.8" y="104.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="396.5" y="104.0" font-size="12" fill="#000">fecha_nacimiento</text><text x="502.5" y="104.0" font-size="11" fill="#000">DATE</text><text x="369.8" y="124.0" font-size="11" font-weight="bold" fill="#000">/</text><text x="396.5" y="124.0" font-size="12" fill="#000">edad</text><text x="502.5" y="124.0" font-size="11" fill="#000">INTEGER</text><text x="369.8" y="144.0" font-size="11" font-weight="bold" fill="#000">U *</text><text x="396.5" y="144.0" font-size="12" fill="#000">correo</text><text x="502.5" y="144.0" font-size="11" fill="#000">VARCHAR (80)</text><text x="369.8" y="164.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="396.5" y="164.0" font-size="12" fill="#000">codigo_curso</text><text x="502.5" y="164.0" font-size="11" fill="#000">CHAR (2)</text><line x1="361.8" y1="174.0" x2="605.0" y2="174.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="371.8" y="188.0" font-size="11" fill="#000">ALUMNO_PK (documento)</text>
+<rect x="1155.9" y="0.0" width="245.2" height="195.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1278.5" y="19.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">INSTRUCTOR</text><line x1="1155.9" y1="28.0" x2="1401.1" y2="28.0" stroke="#000" stroke-width="1.1"/><text x="1163.9" y="44.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="1190.6" y="44.0" font-size="12" fill="#000" text-decoration="underline">documento</text><text x="1298.6" y="44.0" font-size="11" fill="#000">VARCHAR (15)</text><text x="1163.9" y="64.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1190.6" y="64.0" font-size="12" fill="#000">nombres</text><text x="1298.6" y="64.0" font-size="11" fill="#000">VARCHAR (50)</text><text x="1163.9" y="84.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1190.6" y="84.0" font-size="12" fill="#000">apellidos</text><text x="1298.6" y="84.0" font-size="11" fill="#000">VARCHAR (50)</text><text x="1163.9" y="104.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1190.6" y="104.0" font-size="12" fill="#000">fecha_nacimiento</text><text x="1298.6" y="104.0" font-size="11" fill="#000">DATE</text><text x="1163.9" y="124.0" font-size="11" font-weight="bold" fill="#000">/</text><text x="1190.6" y="124.0" font-size="12" fill="#000">edad</text><text x="1298.6" y="124.0" font-size="11" fill="#000">INTEGER</text><text x="1163.9" y="144.0" font-size="11" font-weight="bold" fill="#000">U *</text><text x="1190.6" y="144.0" font-size="12" fill="#000">licencia_instructor</text><text x="1298.6" y="144.0" font-size="11" fill="#000">VARCHAR (12)</text><text x="1163.9" y="164.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="1190.6" y="164.0" font-size="12" fill="#000">codigo_sede</text><text x="1298.6" y="164.0" font-size="11" fill="#000">CHAR (3)</text><line x1="1155.9" y1="174.0" x2="1401.1" y2="174.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="1165.9" y="188.0" font-size="11" fill="#000">INSTRUCTOR_PK (documento)</text>
+<rect x="1873.9" y="0.0" width="216.3" height="115.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1982.1" y="19.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">SEDE</text><line x1="1873.9" y1="28.0" x2="2090.2" y2="28.0" stroke="#000" stroke-width="1.1"/><text x="1881.9" y="44.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="1907.7" y="44.0" font-size="12" fill="#000" text-decoration="underline">codigo_sede</text><text x="1987.8" y="44.0" font-size="11" fill="#000">CHAR (3)</text><text x="1881.9" y="64.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1907.7" y="64.0" font-size="12" fill="#000">nombre</text><text x="1987.8" y="64.0" font-size="11" fill="#000">VARCHAR (60)</text><text x="1881.9" y="84.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1907.7" y="84.0" font-size="12" fill="#000">direccion</text><text x="1987.8" y="84.0" font-size="11" fill="#000">VARCHAR (80)</text><line x1="1873.9" y1="94.0" x2="2090.2" y2="94.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="1883.9" y="108.0" font-size="11" fill="#000">SEDE_PK (codigo_sede)</text>
+<rect x="758.2" y="290.0" width="244.5" height="195.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="880.5" y="309.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">VEHICULO</text><line x1="758.2" y1="318.0" x2="1002.7" y2="318.0" stroke="#000" stroke-width="1.1"/><text x="766.2" y="334.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="796.9" y="334.0" font-size="12" fill="#000" text-decoration="underline">placa</text><text x="900.3" y="334.0" font-size="11" fill="#000">CHAR (6)</text><text x="766.2" y="354.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="796.9" y="354.0" font-size="12" fill="#000">marca</text><text x="900.3" y="354.0" font-size="11" fill="#000">VARCHAR (30)</text><text x="766.2" y="374.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="796.9" y="374.0" font-size="12" fill="#000">anio</text><text x="900.3" y="374.0" font-size="11" fill="#000">INTEGER</text><text x="766.2" y="394.0" font-size="11" font-weight="bold" fill="#000"></text><text x="796.9" y="394.0" font-size="12" fill="#000">num_puertas</text><text x="900.3" y="394.0" font-size="11" fill="#000">INTEGER</text><text x="766.2" y="414.0" font-size="11" font-weight="bold" fill="#000"></text><text x="796.9" y="414.0" font-size="12" fill="#000">cilindraje_cc</text><text x="900.3" y="414.0" font-size="11" fill="#000">INTEGER</text><text x="766.2" y="434.0" font-size="11" font-weight="bold" fill="#000"></text><text x="796.9" y="434.0" font-size="12" fill="#000">capacidad_ton</text><text x="900.3" y="434.0" font-size="11" fill="#000">DECIMAL (4,1)</text><text x="766.2" y="454.0" font-size="11" font-weight="bold" fill="#000">FU*</text><text x="796.9" y="454.0" font-size="12" fill="#000">doc_responsable</text><text x="900.3" y="454.0" font-size="11" fill="#000">VARCHAR (15)</text><line x1="758.2" y1="464.0" x2="1002.7" y2="464.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="768.2" y="478.0" font-size="11" fill="#000">VEHICULO_PK (placa)</text>
+<rect x="369.9" y="580.0" width="227.0" height="135.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="483.4" y="599.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">CURSO</text><line x1="369.9" y1="608.0" x2="596.9" y2="608.0" stroke="#000" stroke-width="1.1"/><text x="377.9" y="624.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="403.7" y="624.0" font-size="12" fill="#000" text-decoration="underline">codigo_curso</text><text x="494.4" y="624.0" font-size="11" fill="#000">CHAR (2)</text><text x="377.9" y="644.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="403.7" y="644.0" font-size="12" fill="#000">nombre</text><text x="494.4" y="644.0" font-size="11" fill="#000">VARCHAR (60)</text><text x="377.9" y="664.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="403.7" y="664.0" font-size="12" fill="#000">horas_teoria</text><text x="494.4" y="664.0" font-size="11" fill="#000">INTEGER</text><text x="377.9" y="684.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="403.7" y="684.0" font-size="12" fill="#000">horas_practica</text><text x="494.4" y="684.0" font-size="11" fill="#000">INTEGER</text><line x1="369.9" y1="694.0" x2="596.9" y2="694.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="379.9" y="708.0" font-size="11" fill="#000">CURSO_PK (codigo_curso)</text>
+<rect x="0.0" y="0.0" width="241.8" height="95.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="120.9" y="19.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">ALU_TELEFONO</text><line x1="0.0" y1="28.0" x2="241.8" y2="28.0" stroke="#000" stroke-width="1.1"/><text x="8.0" y="44.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="38.0" y="44.0" font-size="12" fill="#000" text-decoration="underline">documento</text><text x="109.4" y="44.0" font-size="11" fill="#000">VARCHAR (15)</text><text x="8.0" y="64.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="38.0" y="64.0" font-size="12" fill="#000" text-decoration="underline">telefono</text><text x="109.4" y="64.0" font-size="11" fill="#000">VARCHAR (15)</text><line x1="0.0" y1="74.0" x2="241.8" y2="74.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="10.0" y="88.0" font-size="11" fill="#000">ALU_TELEFONO_PK (documento, telefono)</text>
+<rect x="1521.1" y="580.0" width="232.8" height="115.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1637.5" y="599.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">OFERTA</text><line x1="1521.1" y1="608.0" x2="1753.9" y2="608.0" stroke="#000" stroke-width="1.1"/><text x="1529.1" y="624.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="1559.1" y="624.0" font-size="12" fill="#000" text-decoration="underline">codigo_sede</text><text x="1642.5" y="624.0" font-size="11" fill="#000">CHAR (3)</text><text x="1529.1" y="644.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="1559.1" y="644.0" font-size="12" fill="#000" text-decoration="underline">codigo_curso</text><text x="1642.5" y="644.0" font-size="11" fill="#000">CHAR (2)</text><text x="1529.1" y="664.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1559.1" y="664.0" font-size="12" fill="#000">precio</text><text x="1642.5" y="664.0" font-size="11" fill="#000">DECIMAL (10,2)</text><line x1="1521.1" y1="674.0" x2="1753.9" y2="674.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="1531.1" y="688.0" font-size="11" fill="#000">OFERTA_PK (codigo_sede, codigo_curso)</text>
+<rect x="725.0" y="0.0" width="310.9" height="175.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="880.5" y="19.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">PRACTICA</text><line x1="725.0" y1="28.0" x2="1035.9" y2="28.0" stroke="#000" stroke-width="1.1"/><text x="733.0" y="44.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="763.0" y="44.0" font-size="12" fill="#000" text-decoration="underline">doc_alumno</text><text x="850.4" y="44.0" font-size="11" fill="#000">VARCHAR (15)</text><text x="733.0" y="64.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="763.0" y="64.0" font-size="12" fill="#000" text-decoration="underline">doc_instructor</text><text x="850.4" y="64.0" font-size="11" fill="#000">VARCHAR (15)</text><text x="733.0" y="84.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="763.0" y="84.0" font-size="12" fill="#000" text-decoration="underline">placa</text><text x="850.4" y="84.0" font-size="11" fill="#000">CHAR (6)</text><text x="733.0" y="104.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="763.0" y="104.0" font-size="12" fill="#000" text-decoration="underline">fecha</text><text x="850.4" y="104.0" font-size="11" fill="#000">DATE</text><text x="733.0" y="124.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="763.0" y="124.0" font-size="12" fill="#000">hora</text><text x="850.4" y="124.0" font-size="11" fill="#000">TIME</text><text x="733.0" y="144.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="763.0" y="144.0" font-size="12" fill="#000">kilometros</text><text x="850.4" y="144.0" font-size="11" fill="#000">INTEGER</text><line x1="725.0" y1="154.0" x2="1035.9" y2="154.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="735.0" y="168.0" font-size="11" fill="#000">PRACTICA_PK (doc_alumno, doc_instructor, placa, fecha)</text>
+<polyline points="889.5,175.0 880.5,188.0 871.5,175.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="880.5" cy="194.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="872.5" y1="283.0" x2="888.5" y2="283.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="872.5" y1="277.0" x2="888.5" y2="277.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="725.0,96.5 712.0,87.5 725.0,78.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="706.0" cy="87.5" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="612.0" y1="89.5" x2="612.0" y2="105.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="618.0" y1="89.5" x2="618.0" y2="105.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1035.9,78.5 1048.9,87.5 1035.9,96.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="1054.9" cy="87.5" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="1148.9" y1="105.5" x2="1148.9" y2="89.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1142.9" y1="105.5" x2="1142.9" y2="89.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="241.8,38.5 254.8,47.5 241.8,56.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="258.8" y1="39.5" x2="258.8" y2="55.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="354.8" y1="65.5" x2="354.8" y2="49.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="348.8" y1="65.5" x2="348.8" y2="49.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="492.4,195.0 483.4,208.0 474.4,195.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="483.4" cy="214.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="475.4" y1="573.0" x2="491.4" y2="573.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="475.4" y1="567.0" x2="491.4" y2="567.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1009.7" y1="319.5" x2="1009.7" y2="335.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="1020.7" cy="327.5" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="1186.5" y1="202.0" x2="1170.5" y2="202.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1186.5" y1="208.0" x2="1170.5" y2="208.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1401.1,68.5 1414.1,77.5 1401.1,86.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1418.1" y1="69.5" x2="1418.1" y2="85.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1866.9" y1="85.5" x2="1866.9" y2="69.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1860.9" y1="85.5" x2="1860.9" y2="69.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1753.9,608.5 1766.9,617.5 1753.9,626.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1770.9" y1="609.5" x2="1770.9" y2="625.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1910.1" y1="122.0" x2="1894.1" y2="122.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1910.1" y1="128.0" x2="1894.1" y2="128.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1521.1,646.5 1508.1,637.5 1521.1,628.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1504.1" y1="645.5" x2="1504.1" y2="629.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="603.9" y1="639.5" x2="603.9" y2="655.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="609.9" y1="639.5" x2="609.9" y2="655.5" stroke="#000" stroke-width="1.4" fill="none"/>
 </svg></div>
 </section>
 
 </div>
 <section class="panel">
 <h2>Relaciones</h2>
-<div class="tabla-wrap"><table class="t"><thead><tr><th>Relación</th><th>Participaciones</th><th>Cardinalidad</th><th>Se lee</th></tr></thead><tbody><tr><td>pertenecer</td><td>INSTRUCTOR (1:1) · SEDE (0:N)</td><td>N:1</td><td style="white-space:normal">Cada instructor pertenece a una sola sede y una sede tiene muchos instructores.</td></tr><tr><td>ubicar</td><td>SEDE (0:N) · VEHICULO (1:1)</td><td>1:N</td><td style="white-space:normal">Cada vehículo se ubica en una sede.</td></tr><tr><td>programar</td><td>SEDE (0:N) · PRACTICA (1:1)</td><td>1:N</td><td style="white-space:normal">Toda práctica la programa una sede.</td></tr><tr><td>usar</td><td>VEHICULO (0:N) · PRACTICA (1:1)</td><td>1:N</td><td style="white-space:normal">Cada práctica usa un solo vehículo.</td></tr><tr><td>dirigir</td><td>INSTRUCTOR (0:N) · PRACTICA (1:N)</td><td>N:M</td><td style="white-space:normal">Una práctica la dirige por lo menos un instructor; se guarda el rol.</td></tr><tr><td>inscribir</td><td>PRACTICA (0:N) · ALUMNO (1:N)</td><td>N:M</td><td style="white-space:normal">Un alumno se registra cuando se inscribe; una práctica de prueba puede no tener inscritos.</td></tr></tbody></table></div><p class="nota alerta">Aquí INSTRUCTOR y ALUMNO repiten los datos de una persona. Eso se arregla en el MER-E.</p>
+<div class="tabla-wrap"><table class="t"><thead><tr><th>Relación</th><th>Participaciones</th><th>Cardinalidad</th><th>Se lee</th></tr></thead><tbody><tr><td>matricular</td><td>ALUMNO (1:1) · CURSO (0:N)</td><td>N:1</td><td style="white-space:normal">Cada alumno está matriculado en un curso (una categoría de licencia).</td></tr><tr><td>ofrecer</td><td>SEDE (1:N) · CURSO (1:N)</td><td>N:M</td><td style="white-space:normal">Una sede ofrece varios cursos y un curso se ofrece en varias sedes, cada una con su precio.</td></tr><tr><td>trabajar</td><td>INSTRUCTOR (1:1) · SEDE (1:N)</td><td>N:1</td><td style="white-space:normal">Cada instructor trabaja en una sede.</td></tr><tr><td>responder</td><td>VEHICULO (1:1) · INSTRUCTOR (0:1)</td><td>1:1</td><td style="white-space:normal">Cada vehículo tiene un instructor responsable y un instructor responde como mucho por un vehículo (1:1).</td></tr><tr><td>practicar</td><td>ALUMNO (0:N) · INSTRUCTOR (0:N) · VEHICULO (0:N)</td><td>N:M:P · ternaria</td><td style="white-space:normal">Relación ternaria: en cada práctica hay un alumno, un instructor y un vehículo, con fecha, hora y kilómetros recorridos.</td></tr></tbody></table></div><p class="nota alerta">En el MER, ALUMNO e INSTRUCTOR repiten los datos de persona, y VEHICULO guarda puertas, cilindraje y toneladas aunque cada vehículo usa uno solo. Las dos cosas se arreglan en el MER-E.</p>
 </section>
   </main>
 
@@ -236,8 +236,8 @@
   <footer>Universidad El Bosque · Bogotá D.C</footer>
 </div>
 
-<script src="../../js/estrellas.js?v=20261116c"></script>
-<script src="../../js/ejercicios.js?v=20261116c"></script>
+<script src="../../js/estrellas.js?v=20261116d"></script>
+<script src="../../js/ejercicios.js?v=20261116d"></script>
 <script>iniciarEtapa("mer");</script>
 </body>
 </html>

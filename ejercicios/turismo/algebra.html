@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../css/estilos.css?v=20261116c">
+<link rel="stylesheet" href="../../css/estilos.css?v=20261116d">
 </head>
 <body>
 <div class="sky"></div>
@@ -29,52 +29,50 @@
 
   <main>
 <section class="panel"><details><summary>Ver enunciado del ejercicio</summary>
-<p>Una agencia de turismo con oficinas en varias ciudades de Colombia quiere llevar sus tours en una base de datos.</p>
+<p>Una agencia de turismo con oficinas en tres ciudades vende paquetes dentro y fuera del país.</p>
 <ul>
-  <li>Cada <strong>OFICINA</strong> tiene un código de tres letras, nombre, ciudad y país.</li>
-  <li>Cada <strong>GUÍA</strong> tiene identificación, nombre, número de registro (RNT), años de experiencia y uno o varios teléfonos. Trabaja en exactamente una oficina.</li>
-  <li>Cada <strong>VEHÍCULO</strong> se identifica por su placa y tiene modelo, marca y capacidad. Está asignado a una oficina.</li>
-  <li>Un <strong>TOUR</strong> tiene un identificador, un código (por ejemplo <code>TAY01</code>), fecha, hora de salida y destino. Lo organiza una oficina y usa un solo vehículo.</li>
-  <li>Cada tour lo guían uno o más guías con un <em>rol</em> (principal o apoyo), y un guía puede guiar muchos tours.</li>
-  <li>Los <strong>TURISTAS</strong> se registran con identificación, nombre (nombres y apellidos), fecha de nacimiento, correo y puntos acumulados; la edad se calcula. Un turista reserva tours y en cada reserva se guarda la <em>silla</em> y el <em>plan</em>.</li>
-  <li>Un guía también puede ir de turista. Algunos vehículos son busetas (se guarda el número de sillas) y otros son lanchas (se guarda la eslora en metros); el carro de apoyo no es ni lo uno ni lo otro.</li>
+  <li>Cada <strong>OFICINA</strong> tiene un código, ciudad y dirección. Ahí trabajan los guías y desde ahí se arman y venden los paquetes.</li>
+  <li>Cada <strong>GUÍA</strong> tiene identificación, nombre (nombres y apellidos), número de RNT y los idiomas que habla (uno o varios). Un guía conoce varios destinos.</li>
+  <li>Cada <strong>DESTINO</strong> tiene número, nombre, país y clima, y tiene uno o varios <strong>HOTELES</strong> (nombre y estrellas).</li>
+  <li>Un <strong>PAQUETE</strong> tiene código, nombre, días y precio, e incluye uno o varios destinos con las noches en cada uno. Los paquetes nacionales guardan el tipo de transporte; los internacionales guardan el país y si piden visa. Todo paquete es de uno de los dos tipos.</li>
+  <li>Cada <strong>TURISTA</strong> tiene documento, nombre (nombres y apellidos), fecha de nacimiento, correo y teléfonos; la edad se calcula. En cada compra se guarda la fecha de salida y lo que pagó.</li>
 </ul>
-<p class="nota">Entidades base: <strong>Guía</strong>, <strong>Turista</strong> y <strong>Oficina</strong>. Entidades inventadas para completar el problema: <strong>Vehículo</strong> y <strong>Tour</strong>.</p></details></section>
+<p class="nota">Entidades base: <strong>Guía</strong>, <strong>Turista</strong> y <strong>Oficina</strong>. Entidades inventadas para completar el problema: <strong>Destino</strong>, <strong>Hotel</strong> y <strong>Paquete</strong>.</p></details></section>
 <section class="panel">
 <h2>Consulta 1</h2>
 
-<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>nombre, ciudad</sub>(OFICINA)</span>: Muestra el nombre y la ciudad de todas las oficinas.</p>
-<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombre</td><td class="xl-cab">ciudad</td></tr><tr><td class="xl-fila">2</td><td class="">Oficina Bocagrande</td><td class="">Cartagena</td></tr><tr><td class="xl-fila">3</td><td class="">Oficina Centro</td><td class="">Bogota</td></tr><tr><td class="xl-fila">4</td><td class="">Oficina Rodadero</td><td class="">Santa Marta</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>nombre, pais</sub>(DESTINO)</span>: Muestra cada destino con su país.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombre</td><td class="xl-cab">pais</td></tr><tr><td class="xl-fila">2</td><td class="">Cartagena</td><td class="">Colombia</td></tr><tr><td class="xl-fila">3</td><td class="">Eje Cafetero</td><td class="">Colombia</td></tr><tr><td class="xl-fila">4</td><td class="">Leticia</td><td class="">Colombia</td></tr><tr><td class="xl-fila">5</td><td class="">San Andres</td><td class="">Colombia</td></tr><tr><td class="xl-fila">6</td><td class="">Cancun</td><td class="">Mexico</td></tr><tr><td class="xl-fila">7</td><td class="">Cusco</td><td class="">Peru</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 2</h2>
 
-<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>codigo, fecha, destino</sub>(<span class="op">σ</span><sub>destino='Tayrona'</sub>(TOUR))</span>: Muestra los tours que van para el Tayrona.</p>
-<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo</td><td class="xl-cab">fecha</td><td class="xl-cab">destino</td></tr><tr><td class="xl-fila">2</td><td class="">TAY01</td><td class="">2026-12-10</td><td class="">Tayrona</td></tr><tr><td class="xl-fila">3</td><td class="">TAY03</td><td class="">2026-12-11</td><td class="">Tayrona</td></tr><tr><td class="xl-fila">4</td><td class="">TAY01</td><td class="">2026-12-12</td><td class="">Tayrona</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>nombre, id_destino</sub>(<span class="op">σ</span><sub>estrellas=5</sub>(HOTEL))</span>: Muestra los hoteles de cinco estrellas y su destino.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombre</td><td class="xl-cab">id_destino</td></tr><tr><td class="xl-fila">2</td><td class="">Grand Oasis</td><td class="xl-num">5</td></tr><tr><td class="xl-fila">3</td><td class="">Hotel Caribe</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">4</td><td class="">Hotel Charleston</td><td class="xl-num">1</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 3</h2>
 
-<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>placa, modelo</sub>(<span class="op">σ</span><sub>marca='Mercedes'</sub>(VEHICULO))</span>: Obtiene los vehículos de marca Mercedes.</p>
-<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">placa</td><td class="xl-cab">modelo</td></tr><tr><td class="xl-fila">2</td><td class="">TUR-101</td><td class="">Sprinter</td></tr><tr><td class="xl-fila">3</td><td class="">TUR-701</td><td class="">Vito</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>codigo_paquete</sub>(<span class="op">σ</span><sub>transporte='aereo'</sub>(NACIONAL))</span>: Obtiene los paquetes nacionales que van en avión.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo_paquete</td></tr><tr><td class="xl-fila">2</td><td class="">AMA-06</td></tr><tr><td class="xl-fila">3</td><td class="">CAR-01</td></tr><tr><td class="xl-fila">4</td><td class="">SAI-03</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 4</h2>
 
-<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>placa</sub>(VEHICULO) <span class="op">−</span> <span class="op">π</span><sub>placa</sub>(TOUR)</span>: Identifica los vehículos que no se han usado en ningún tour.</p>
-<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">placa</td></tr><tr><td class="xl-fila">2</td><td class="">TUR-701</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>id_destino</sub>(DESTINO) <span class="op">−</span> <span class="op">π</span><sub>id_destino</sub>(GUIA_DESTINO)</span>: Identifica los destinos que ningún guía conoce.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">id_destino</td></tr><tr><td class="xl-fila">2</td><td class="xl-num">6</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 5</h2>
 
-<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>documento</sub>(GUIANZA) <span class="op">∩</span> <span class="op">π</span><sub>documento</sub>(RESERVA)</span>: Obtiene las personas que han sido guías y también turistas.</p>
-<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">documento</td></tr><tr><td class="xl-fila">2</td><td class="">1040</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>codigo_paquete, nombre, pais</sub>(PAQUETE <span class="op">⋈</span> INTERNACIONAL)</span>: Muestra los paquetes internacionales con su país.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo_paquete</td><td class="xl-cab">nombre</td><td class="xl-cab">pais</td></tr><tr><td class="xl-fila">2</td><td class="">CAN-05</td><td class="">Cancun Caribe</td><td class="">Mexico</td></tr><tr><td class="xl-fila">3</td><td class="">CUS-04</td><td class="">Cusco y Machu Picchu</td><td class="">Peru</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 6</h2>
 
-<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>codigo, fecha, modelo</sub>(TOUR <span class="op">⋈</span> VEHICULO)</span>: Muestra cada tour con el modelo del vehículo que usa.</p>
-<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo</td><td class="xl-cab">fecha</td><td class="xl-cab">modelo</td></tr><tr><td class="xl-fila">2</td><td class="">TAY01</td><td class="">2026-12-10</td><td class="">Sprinter</td></tr><tr><td class="xl-fila">3</td><td class="">ZIP02</td><td class="">2026-12-10</td><td class="">H350</td></tr><tr><td class="xl-fila">4</td><td class="">TAY03</td><td class="">2026-12-11</td><td class="">Urvan</td></tr><tr><td class="xl-fila">5</td><td class="">BAH05</td><td class="">2026-12-12</td><td class="">Bravo 34</td></tr><tr><td class="xl-fila">6</td><td class="">TAY01</td><td class="">2026-12-12</td><td class="">Sprinter</td></tr><tr><td class="xl-fila">7</td><td class="">GUA06</td><td class="">2026-12-13</td><td class="">H350</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>id_guia</sub>(<span class="op">σ</span><sub>idioma='ingles'</sub>(GUI_IDIOMA)) <span class="op">∩</span> <span class="op">π</span><sub>id_guia</sub>(<span class="op">σ</span><sub>id_destino=4</sub>(GUIA_DESTINO))</span>: Obtiene los guías que hablan inglés y conocen Cusco.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">id_guia</td></tr><tr><td class="xl-fila">2</td><td class="">G01</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
   </main>
 
@@ -83,8 +81,8 @@
   <footer>Universidad El Bosque · Bogotá D.C</footer>
 </div>
 
-<script src="../../js/estrellas.js?v=20261116c"></script>
-<script src="../../js/ejercicios.js?v=20261116c"></script>
+<script src="../../js/estrellas.js?v=20261116d"></script>
+<script src="../../js/ejercicios.js?v=20261116d"></script>
 <script>iniciarEtapa("algebra");</script>
 </body>
 </html>

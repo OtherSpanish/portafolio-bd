@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../css/estilos.css?v=20261116c">
+<link rel="stylesheet" href="../../css/estilos.css?v=20261116d">
 </head>
 <body>
 <div class="sky"></div>
@@ -29,52 +29,50 @@
 
   <main>
 <section class="panel"><details><summary>Ver enunciado del ejercicio</summary>
-<p>Una red de bibliotecas públicas organiza talleres (clubes de lectura, escritura, investigación…) y quiere manejarlos en una base de datos.</p>
+<p>La red de bibliotecas públicas de Bogotá quiere controlar su colección y los préstamos.</p>
 <ul>
-  <li>Cada <strong>SEDE</strong> tiene un código de tres letras, nombre, ciudad y país.</li>
-  <li>Cada <strong>BIBLIOTECARIO</strong> tiene identificación, nombre, número de registro, años de experiencia y uno o varios teléfonos. Trabaja en exactamente una sede.</li>
-  <li>Cada <strong>SALA</strong> tiene un código, nombre, piso y capacidad, y queda en una sede.</li>
-  <li>Un <strong>TALLER</strong> tiene un identificador, un código (por ejemplo <code>LEC01</code>), fecha, hora de inicio y tema. Lo organiza una sede y se hace en una sola sala.</li>
-  <li>Cada taller lo orientan uno o más bibliotecarios con un <em>rol</em> (principal o apoyo), y un bibliotecario puede orientar muchos talleres.</li>
-  <li>Los <strong>LECTORES</strong> se registran con identificación, nombre (nombres y apellidos), fecha de nacimiento, correo y número de préstamos; la edad se calcula. Un lector se inscribe en talleres y en cada inscripción se guarda su <em>puesto</em> y la <em>modalidad</em>.</li>
-  <li>Un bibliotecario también puede ser lector. Algunas salas son de cómputo (se guarda el número de equipos) y otras infantiles (se guarda el área en m²); la hemeroteca no es ni lo uno ni lo otro.</li>
+  <li>Cada <strong>LIBRO</strong> tiene ISBN, título y año. Lo publica una <strong>EDITORIAL</strong> (nombre y país) y lo escriben uno o varios <strong>AUTORES</strong> (nombre y nacionalidad).</li>
+  <li>De cada libro hay uno o varios <strong>EJEMPLARES</strong>, con código de barras y estado (bueno, regular o dañado). Cada ejemplar está en una <strong>SEDE</strong> (código, nombre y localidad).</li>
+  <li>Cada <strong>BIBLIOTECARIO</strong> tiene identificación, nombre (nombres y apellidos) y turno, y trabaja en una sede.</li>
+  <li>Cada <strong>LECTOR</strong> tiene carné, nombre (nombres y apellidos), fecha de nacimiento, teléfonos y correo (los niños pueden no tener). La edad se calcula. Los lectores son infantiles (se guarda el nombre del acudiente) o adultos (se guarda la ocupación).</li>
+  <li>En cada <strong>PRÉSTAMO</strong> se guarda qué lector se llevó qué ejemplar, qué bibliotecario lo registró, la fecha del préstamo y la fecha de devolución.</li>
 </ul>
-<p class="nota">Entidades base: <strong>Bibliotecario</strong>, <strong>Lector</strong> y <strong>Sede</strong>. Entidades inventadas para completar el problema: <strong>Sala</strong> y <strong>Taller</strong>.</p></details></section>
+<p class="nota">Entidades base: <strong>Bibliotecario</strong>, <strong>Lector</strong> y <strong>Sede</strong>. Entidades inventadas para completar el problema: <strong>Libro</strong>, <strong>Ejemplar</strong>, <strong>Autor</strong> y <strong>Editorial</strong>.</p></details></section>
 <section class="panel">
 <h2>Consulta 1</h2>
 
-<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>nombre, ciudad</sub>(SEDE)</span>: Muestra el nombre y la ciudad de todas las sedes.</p>
-<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombre</td><td class="xl-cab">ciudad</td></tr><tr><td class="xl-fila">2</td><td class="">Biblioteca Departamental</td><td class="">Cali</td></tr><tr><td class="xl-fila">3</td><td class="">Biblioteca EPM</td><td class="">Medellin</td></tr><tr><td class="xl-fila">4</td><td class="">Biblioteca Virgilio Barco</td><td class="">Bogota</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>titulo, anio</sub>(LIBRO)</span>: Muestra el título y el año de cada libro.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">titulo</td><td class="xl-cab">anio</td></tr><tr><td class="xl-fila">2</td><td class="">Cuentos pintados</td><td class="xl-num">1867</td></tr><tr><td class="xl-fila">3</td><td class="">Rayuela</td><td class="xl-num">1963</td></tr><tr><td class="xl-fila">4</td><td class="">Cien anos de soledad</td><td class="xl-num">1967</td></tr><tr><td class="xl-fila">5</td><td class="">Cronica de una muerte anunciada</td><td class="xl-num">1981</td></tr><tr><td class="xl-fila">6</td><td class="">La casa de los espiritus</td><td class="xl-num">1982</td></tr><tr><td class="xl-fila">7</td><td class="">Delirio</td><td class="xl-num">2004</td></tr><tr><td class="xl-fila">8</td><td class="">Cuentos de America</td><td class="xl-num">2010</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 2</h2>
 
-<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>codigo, fecha, tema</sub>(<span class="op">σ</span><sub>tema='Club de lectura'</sub>(TALLER))</span>: Muestra los talleres del club de lectura.</p>
-<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo</td><td class="xl-cab">fecha</td><td class="xl-cab">tema</td></tr><tr><td class="xl-fila">2</td><td class="">LEC01</td><td class="">2026-09-05</td><td class="">Club de lectura</td></tr><tr><td class="xl-fila">3</td><td class="">LEC03</td><td class="">2026-09-06</td><td class="">Club de lectura</td></tr><tr><td class="xl-fila">4</td><td class="">LEC01</td><td class="">2026-09-07</td><td class="">Club de lectura</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>codigo_barras, isbn</sub>(<span class="op">σ</span><sub>estado='bueno' ∧ codigo_sede='VBA'</sub>(EJEMPLAR))</span>: Muestra los ejemplares en buen estado de la Virgilio Barco.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo_barras</td><td class="xl-cab">isbn</td></tr><tr><td class="xl-fila">2</td><td class="">EJ-001</td><td class="xl-num">9789584279</td></tr><tr><td class="xl-fila">3</td><td class="">EJ-003</td><td class="xl-num">9789584280</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 3</h2>
 
-<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>codigo_sala, nombre_sala</sub>(<span class="op">σ</span><sub>piso='Piso 1'</sub>(SALA))</span>: Obtiene las salas que quedan en el piso 1.</p>
-<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo_sala</td><td class="xl-cab">nombre_sala</td></tr><tr><td class="xl-fila">2</td><td class="">SL-02</td><td class="">Sala Multimedia</td></tr><tr><td class="xl-fila">3</td><td class="">SL-04</td><td class="">Sala Infantil</td></tr><tr><td class="xl-fila">4</td><td class="">SL-05</td><td class="">Hemeroteca</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>carne, codigo_barras, fecha_prestamo</sub>(<span class="op">σ</span><sub>fecha_devolucion=NULL</sub>(PRESTAMO))</span>: Obtiene los préstamos que no se han devuelto.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">carne</td><td class="xl-cab">codigo_barras</td><td class="xl-cab">fecha_prestamo</td></tr><tr><td class="xl-fila">2</td><td class="">L-1004</td><td class="">EJ-007</td><td class="">2026-11-03</td></tr><tr><td class="xl-fila">3</td><td class="">L-1002</td><td class="">EJ-008</td><td class="">2026-11-05</td></tr><tr><td class="xl-fila">4</td><td class="">L-1005</td><td class="">EJ-001</td><td class="">2026-11-10</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 4</h2>
 
-<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>codigo_sala</sub>(SALA) <span class="op">−</span> <span class="op">π</span><sub>codigo_sala</sub>(TALLER)</span>: Identifica las salas donde no se ha hecho ningún taller.</p>
-<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo_sala</td></tr><tr><td class="xl-fila">2</td><td class="">SL-05</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>codigo_barras</sub>(EJEMPLAR) <span class="op">−</span> <span class="op">π</span><sub>codigo_barras</sub>(PRESTAMO)</span>: Identifica los ejemplares que nunca se han prestado.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo_barras</td></tr><tr><td class="xl-fila">2</td><td class="">EJ-009</td></tr><tr><td class="xl-fila">3</td><td class="">EJ-004</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 5</h2>
 
-<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>documento</sub>(ORIENTACION) <span class="op">∩</span> <span class="op">π</span><sub>documento</sub>(INSCRIPCION)</span>: Obtiene las personas que han sido bibliotecarios y también lectores.</p>
-<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">documento</td></tr><tr><td class="xl-fila">2</td><td class="">1040</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>titulo, nombre</sub>(LIBRO <span class="op">⋈</span> AUTORIA <span class="op">⋈</span> AUTOR)</span>: Muestra cada libro con sus autores.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">titulo</td><td class="xl-cab">nombre</td></tr><tr><td class="xl-fila">2</td><td class="">Cien anos de soledad</td><td class="">Gabriel Garcia Marquez</td></tr><tr><td class="xl-fila">3</td><td class="">Cronica de una muerte anunciada</td><td class="">Gabriel Garcia Marquez</td></tr><tr><td class="xl-fila">4</td><td class="">Cuentos de America</td><td class="">Gabriel Garcia Marquez</td></tr><tr><td class="xl-fila">5</td><td class="">Cuentos de America</td><td class="">Julio Cortazar</td></tr><tr><td class="xl-fila">6</td><td class="">Cuentos pintados</td><td class="">Rafael Pombo</td></tr><tr><td class="xl-fila">7</td><td class="">Delirio</td><td class="">Laura Restrepo</td></tr><tr><td class="xl-fila">8</td><td class="">La casa de los espiritus</td><td class="">Isabel Allende</td></tr><tr><td class="xl-fila">9</td><td class="">Rayuela</td><td class="">Julio Cortazar</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 6</h2>
 
-<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>codigo, fecha, nombre_sala</sub>(TALLER <span class="op">⋈</span> SALA)</span>: Muestra cada taller con el nombre de la sala donde se hace.</p>
-<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo</td><td class="xl-cab">fecha</td><td class="xl-cab">nombre_sala</td></tr><tr><td class="xl-fila">2</td><td class="">ESC02</td><td class="">2026-09-05</td><td class="">Sala Multimedia</td></tr><tr><td class="xl-fila">3</td><td class="">LEC01</td><td class="">2026-09-05</td><td class="">Sala Digital</td></tr><tr><td class="xl-fila">4</td><td class="">LEC03</td><td class="">2026-09-06</td><td class="">Sala Digital</td></tr><tr><td class="xl-fila">5</td><td class="">CUE05</td><td class="">2026-09-07</td><td class="">Sala Infantil</td></tr><tr><td class="xl-fila">6</td><td class="">LEC01</td><td class="">2026-09-07</td><td class="">Sala Digital</td></tr><tr><td class="xl-fila">7</td><td class="">INV06</td><td class="">2026-09-08</td><td class="">Sala Multimedia</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>isbn</sub>(<span class="op">σ</span><sub>id_autor=1</sub>(AUTORIA)) <span class="op">∩</span> <span class="op">π</span><sub>isbn</sub>(<span class="op">σ</span><sub>id_autor=3</sub>(AUTORIA))</span>: Obtiene los libros que escribieron juntos García Márquez y Cortázar.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">isbn</td></tr><tr><td class="xl-fila">2</td><td class="xl-num">9789584285</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
   </main>
 
@@ -83,8 +81,8 @@
   <footer>Universidad El Bosque · Bogotá D.C</footer>
 </div>
 
-<script src="../../js/estrellas.js?v=20261116c"></script>
-<script src="../../js/ejercicios.js?v=20261116c"></script>
+<script src="../../js/estrellas.js?v=20261116d"></script>
+<script src="../../js/ejercicios.js?v=20261116d"></script>
 <script>iniciarEtapa("algebra");</script>
 </body>
 </html>

@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../css/estilos.css?v=20261116c">
+<link rel="stylesheet" href="../../css/estilos.css?v=20261116d">
 </head>
 <body>
 <div class="sky"></div>
@@ -29,65 +29,66 @@
 
   <main>
 <section class="panel"><details><summary>Ver enunciado del ejercicio</summary>
-<p>Una red de teatros con sedes en varias ciudades quiere guardar en una base de datos sus funciones, salas, actores y espectadores.</p>
+<p>Una red de teatros de Bogotá quiere manejar su cartelera, sus actores y la venta de boletas.</p>
 <ul>
-  <li>Cada <strong>TEATRO</strong> tiene un código de tres letras, nombre, ciudad y país.</li>
-  <li>Cada <strong>ACTOR</strong> tiene identificación, nombre, número de carnet, años de carrera y uno o varios teléfonos. Pertenece a la compañía de exactamente un teatro.</li>
-  <li>Cada <strong>SALA</strong> tiene un código, nombre, piso y capacidad, y queda en un teatro.</li>
-  <li>Una <strong>FUNCIÓN</strong> tiene un identificador, un código (por ejemplo <code>HAM01</code>), fecha, hora de inicio y obra. La presenta un teatro y se hace en una sola sala.</li>
-  <li>En cada función actúan uno o más actores con un <em>rol</em> (protagonista o reparto), y un actor puede actuar en muchas funciones.</li>
-  <li>Los <strong>ESPECTADORES</strong> se registran con identificación, nombre (nombres y apellidos), fecha de nacimiento, correo y puntos acumulados; la edad se calcula. Un espectador compra boletas y en cada una se guarda la <em>silla</em> y la <em>zona</em>.</li>
-  <li>Un actor también puede ir a ver funciones como espectador. Algunas salas son salas mayores (se guarda el número de sillas) y otras de ensayo (se guarda el área en m²); el foyer no es ni lo uno ni lo otro.</li>
+  <li>Cada <strong>TEATRO</strong> tiene un código, nombre, dirección y aforo.</li>
+  <li>Cada <strong>OBRA</strong> tiene un número, título, autor, duración y uno o varios géneros (drama, comedia, musical…).</li>
+  <li>Una <strong>FUNCIÓN</strong> es una presentación de una obra en un teatro, con fecha, hora y precio.</li>
+  <li>Cada <strong>ACTOR</strong> tiene identificación, nombre artístico y nombre real (nombres y apellidos). Un actor actúa en varias obras y en cada una hace un personaje. Algunos son cantantes (se guarda su registro vocal), otros bailarines (se guarda su estilo), hay quienes hacen las dos cosas y hay quienes no hacen ninguna.</li>
+  <li>Un actor puede ser el suplente de otro actor. Cada suplente cubre a un solo titular, pero un titular puede tener varios suplentes.</li>
+  <li>Cada <strong>ESPECTADOR</strong> tiene identificación, nombre (nombres y apellidos), fecha de nacimiento, correo y teléfonos; la edad se calcula. Un espectador compra boletas para varias funciones y en cada boleta va la fila y la silla.</li>
 </ul>
-<p class="nota">Entidades base: <strong>Actor</strong>, <strong>Espectador</strong> y <strong>Teatro</strong>. Entidades inventadas para completar el problema: <strong>Sala</strong> y <strong>Función</strong>.</p></details></section>
+<p class="nota">Entidades base: <strong>Actor</strong>, <strong>Espectador</strong> y <strong>Teatro</strong>. Entidades inventadas para completar el problema: <strong>Obra</strong> y <strong>Función</strong>.</p></details></section>
 <section class="panel">
 <h2>Consulta 1</h2>
-<p class="enunciado">Espectadores de la función 1 con su silla y su zona.</p><pre class="codigo"><span class="kw">SELECT</span> r.silla, p.nombres, p.apellidos, r.zona
-<span class="kw">FROM</span> BOLETA r
-<span class="kw">JOIN</span> PERSONA p <span class="kw">ON</span> p.documento = r.documento
-<span class="kw">WHERE</span> r.id_funcion = <span class="nu">1</span>
-<span class="kw">ORDER</span> <span class="kw">BY</span> r.zona <span class="kw">DESC</span>, p.apellidos;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th><th class="xl-col">D</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">silla</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">zona</td></tr><tr><td class="xl-fila">2</td><td class="">P02</td><td class="">Juliana</td><td class="">Velez Mora</td><td class="">palco</td></tr><tr><td class="xl-fila">3</td><td class="">F15</td><td class="">Simon</td><td class="">Castano Leon</td><td class="">general</td></tr><tr><td class="xl-fila">4</td><td class="">F12</td><td class="">Pablo</td><td class="">Sierra Cano</td><td class="">general</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado">Cartelera: cada función con su teatro, su obra y las boletas vendidas.</p><pre class="codigo"><span class="kw">SELECT</span> f.fecha, f.hora, t.nombre <span class="kw">AS</span> teatro, o.titulo, <span class="kw">COUNT</span>(b.documento) <span class="kw">AS</span> vendidas
+<span class="kw">FROM</span> FUNCION f
+<span class="kw">JOIN</span> TEATRO t <span class="kw">ON</span> t.codigo_teatro = f.codigo_teatro
+<span class="kw">JOIN</span> OBRA o <span class="kw">ON</span> o.id_obra = f.id_obra
+<span class="kw">LEFT</span> <span class="kw">JOIN</span> BOLETA b <span class="kw">ON</span> b.id_funcion = f.id_funcion
+<span class="kw">GROUP</span> <span class="kw">BY</span> f.id_funcion, f.fecha, f.hora, t.nombre, o.titulo
+<span class="kw">ORDER</span> <span class="kw">BY</span> f.fecha, f.hora;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th><th class="xl-col">D</th><th class="xl-col">E</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">fecha</td><td class="xl-cab">hora</td><td class="xl-cab">teatro</td><td class="xl-cab">titulo</td><td class="xl-cab">vendidas</td></tr><tr><td class="xl-fila">2</td><td class="">2026-12-04</td><td class="">20:00:00</td><td class="">Teatro Colon</td><td class="">La Casa de Bernarda Alba</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">3</td><td class="">2026-12-05</td><td class="">19:30:00</td><td class="">Teatro Mayor</td><td class="">Cats</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">4</td><td class="">2026-12-05</td><td class="">20:00:00</td><td class="">Teatro Colon</td><td class="">La Casa de Bernarda Alba</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">5</td><td class="">2026-12-06</td><td class="">16:00:00</td><td class="">Teatro Mayor</td><td class="">Chicago</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">6</td><td class="">2026-12-06</td><td class="">20:00:00</td><td class="">Teatro Libre</td><td class="">El Avaro</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">7</td><td class="">2026-12-07</td><td class="">18:00:00</td><td class="">Teatro Libre</td><td class="">El Avaro</td><td class="xl-num">1</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 2</h2>
-<p class="enunciado">Cuántas funciones hay de cada obra.</p><pre class="codigo"><span class="kw">SELECT</span> obra, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> vuelos
-<span class="kw">FROM</span> FUNCION
-<span class="kw">GROUP</span> <span class="kw">BY</span> obra
-<span class="kw">ORDER</span> <span class="kw">BY</span> vuelos <span class="kw">DESC</span>, obra;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">obra</td><td class="xl-cab">vuelos</td></tr><tr><td class="xl-fila">2</td><td class="">Hamlet</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">3</td><td class="">Bodas de Sangre</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">4</td><td class="">Ensayo General</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">5</td><td class="">La Miseria</td><td class="xl-num">1</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado">Cada actor con el actor al que suple.</p><pre class="codigo"><span class="kw">SELECT</span> s.nombre_artistico <span class="kw">AS</span> suplente, t.nombre_artistico <span class="kw">AS</span> titular
+<span class="kw">FROM</span> SUPLENCIA x
+<span class="kw">JOIN</span> ACTOR s <span class="kw">ON</span> s.id_actor = x.id_suplente
+<span class="kw">JOIN</span> ACTOR t <span class="kw">ON</span> t.id_actor = x.id_titular
+<span class="kw">ORDER</span> <span class="kw">BY</span> titular;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">suplente</td><td class="xl-cab">titular</td></tr><tr><td class="xl-fila">2</td><td class="">Sara Vega</td><td class="">Cami Luz</td></tr><tr><td class="xl-fila">3</td><td class="">Pedro Sol</td><td class="">Lucho Ramos</td></tr><tr><td class="xl-fila">4</td><td class="">Diego Ruiz</td><td class="">Vicky Mar</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 3</h2>
-<p class="enunciado">Actores con la ciudad de su teatro.</p><pre class="codigo"><span class="kw">SELECT</span> p.nombres, p.apellidos, p.carnet, b.ciudad
-<span class="kw">FROM</span> PERSONA p
-<span class="kw">JOIN</span> TEATRO b <span class="kw">ON</span> b.codigo_teatro = p.codigo_teatro
-<span class="kw">WHERE</span> p.tipo_persona <span class="kw">IN</span> (<span class="st">'actor'</span>, <span class="st">'ambos'</span>)
-<span class="kw">ORDER</span> <span class="kw">BY</span> b.ciudad, p.apellidos;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th><th class="xl-col">D</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">carnet</td><td class="xl-cab">ciudad</td></tr><tr><td class="xl-fila">2</td><td class="">Gustavo</td><td class="">Arenas Polo</td><td class="">ACT-118</td><td class="">Bogota</td></tr><tr><td class="xl-fila">3</td><td class="">Alejandro</td><td class="">Buitrago Diaz</td><td class="">ACT-301</td><td class="">Bogota</td></tr><tr><td class="xl-fila">4</td><td class="">Elena Maria</td><td class="">Montes Ruiz</td><td class="">ACT-602</td><td class="">Cali</td></tr><tr><td class="xl-fila">5</td><td class="">Carolina</td><td class="">Restrepo Gil</td><td class="">ACT-455</td><td class="">Medellin</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado">Los géneros de cada obra en una sola columna.</p><pre class="codigo"><span class="kw">SELECT</span> o.titulo, GROUP_CONCAT(g.genero <span class="kw">ORDER</span> <span class="kw">BY</span> g.genero SEPARATOR <span class="st">', '</span>) <span class="kw">AS</span> generos
+<span class="kw">FROM</span> OBRA o
+<span class="kw">JOIN</span> OBR_GENERO g <span class="kw">ON</span> g.id_obra = o.id_obra
+<span class="kw">GROUP</span> <span class="kw">BY</span> o.id_obra, o.titulo
+<span class="kw">ORDER</span> <span class="kw">BY</span> o.titulo;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">titulo</td><td class="xl-cab">generos</td></tr><tr><td class="xl-fila">2</td><td class="">Cats</td><td class="">infantil, musical</td></tr><tr><td class="xl-fila">3</td><td class="">Chicago</td><td class="">comedia, musical</td></tr><tr><td class="xl-fila">4</td><td class="">El Avaro</td><td class="">comedia</td></tr><tr><td class="xl-fila">5</td><td class="">Esperando a Godot</td><td class="">absurdo, drama</td></tr><tr><td class="xl-fila">6</td><td class="">La Casa de Bernarda Alba</td><td class="">drama</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 4</h2>
-<p class="enunciado">Cuántas funciones tiene cada sala, incluyendo las que no tienen.</p><pre class="codigo"><span class="kw">SELECT</span> a.codigo_sala, a.nombre_sala, <span class="kw">COUNT</span>(v.id_funcion) <span class="kw">AS</span> vuelos
-<span class="kw">FROM</span> SALA a
-<span class="kw">LEFT</span> <span class="kw">JOIN</span> FUNCION v <span class="kw">ON</span> v.codigo_sala = a.codigo_sala
-<span class="kw">GROUP</span> <span class="kw">BY</span> a.codigo_sala, a.nombre_sala
-<span class="kw">ORDER</span> <span class="kw">BY</span> vuelos <span class="kw">DESC</span>, a.codigo_sala;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo_sala</td><td class="xl-cab">nombre_sala</td><td class="xl-cab">vuelos</td></tr><tr><td class="xl-fila">2</td><td class="">SA-01</td><td class="">Sala Principal</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">3</td><td class="">SA-02</td><td class="">Sala Estudio</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">4</td><td class="">SA-03</td><td class="">Sala Grande</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">5</td><td class="">SA-04</td><td class="">Sala Estudio</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">6</td><td class="">SA-05</td><td class="">Foyer</td><td class="xl-num">0</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado">Lo recaudado por cada obra con las boletas vendidas.</p><pre class="codigo"><span class="kw">SELECT</span> o.titulo, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> boletas, <span class="kw">SUM</span>(f.precio) <span class="kw">AS</span> recaudo
+<span class="kw">FROM</span> BOLETA b
+<span class="kw">JOIN</span> FUNCION f <span class="kw">ON</span> f.id_funcion = b.id_funcion
+<span class="kw">JOIN</span> OBRA o <span class="kw">ON</span> o.id_obra = f.id_obra
+<span class="kw">GROUP</span> <span class="kw">BY</span> o.id_obra, o.titulo
+<span class="kw">ORDER</span> <span class="kw">BY</span> recaudo <span class="kw">DESC</span>;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">titulo</td><td class="xl-cab">boletas</td><td class="xl-cab">recaudo</td></tr><tr><td class="xl-fila">2</td><td class="">La Casa de Bernarda Alba</td><td class="xl-num">4</td><td class="xl-num">340000.00</td></tr><tr><td class="xl-fila">3</td><td class="">Cats</td><td class="xl-num">2</td><td class="xl-num">240000.00</td></tr><tr><td class="xl-fila">4</td><td class="">Chicago</td><td class="xl-num">2</td><td class="xl-num">190000.00</td></tr><tr><td class="xl-fila">5</td><td class="">El Avaro</td><td class="xl-num">2</td><td class="xl-num">90000.00</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 5</h2>
-<p class="enunciado">Espectadores con más de una boleta.</p><pre class="codigo"><span class="kw">SELECT</span> p.nombres, p.apellidos, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> reservas
-<span class="kw">FROM</span> BOLETA r
-<span class="kw">JOIN</span> PERSONA p <span class="kw">ON</span> p.documento = r.documento
-<span class="kw">GROUP</span> <span class="kw">BY</span> p.documento, p.nombres, p.apellidos
+<p class="enunciado">Espectadores que han ido a más de una función.</p><pre class="codigo"><span class="kw">SELECT</span> e.nombres, e.apellidos, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> funciones
+<span class="kw">FROM</span> BOLETA b
+<span class="kw">JOIN</span> ESPECTADOR e <span class="kw">ON</span> e.documento = b.documento
+<span class="kw">GROUP</span> <span class="kw">BY</span> e.documento, e.nombres, e.apellidos
 <span class="kw">HAVING</span> <span class="kw">COUNT</span>(*) &gt; <span class="nu">1</span>
-<span class="kw">ORDER</span> <span class="kw">BY</span> reservas <span class="kw">DESC</span>, p.apellidos;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">reservas</td></tr><tr><td class="xl-fila">2</td><td class="">Simon</td><td class="">Castano Leon</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">3</td><td class="">Pablo</td><td class="">Sierra Cano</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">4</td><td class="">Martin</td><td class="">Ochoa Prada</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">5</td><td class="">Antonia</td><td class="">Rey Salas</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">6</td><td class="">Juliana</td><td class="">Velez Mora</td><td class="xl-num">2</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<span class="kw">ORDER</span> <span class="kw">BY</span> funciones <span class="kw">DESC</span>;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">funciones</td></tr><tr><td class="xl-fila">2</td><td class="">Mariana</td><td class="">Acosta Rey</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">3</td><td class="">Julian</td><td class="">Bravo Diaz</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">4</td><td class="">Natalia</td><td class="">Cortes Gil</td><td class="xl-num">2</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 6</h2>
-<p class="enunciado">Protagonista de cada función.</p><pre class="codigo"><span class="kw">SELECT</span> v.codigo, v.fecha, p.nombres, p.apellidos
-<span class="kw">FROM</span> ELENCO t
-<span class="kw">JOIN</span> FUNCION v <span class="kw">ON</span> v.id_funcion = t.id_funcion
-<span class="kw">JOIN</span> PERSONA p <span class="kw">ON</span> p.documento = t.documento
-<span class="kw">WHERE</span> t.rol = <span class="st">'protagonista'</span>
-<span class="kw">ORDER</span> <span class="kw">BY</span> v.fecha, v.codigo;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th><th class="xl-col">D</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo</td><td class="xl-cab">fecha</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td></tr><tr><td class="xl-fila">2</td><td class="">BOD02</td><td class="">2026-10-02</td><td class="">Carolina</td><td class="">Restrepo Gil</td></tr><tr><td class="xl-fila">3</td><td class="">HAM01</td><td class="">2026-10-02</td><td class="">Alejandro</td><td class="">Buitrago Diaz</td></tr><tr><td class="xl-fila">4</td><td class="">HAM03</td><td class="">2026-10-03</td><td class="">Elena Maria</td><td class="">Montes Ruiz</td></tr><tr><td class="xl-fila">5</td><td class="">ENS05</td><td class="">2026-10-04</td><td class="">Gustavo</td><td class="">Arenas Polo</td></tr><tr><td class="xl-fila">6</td><td class="">HAM01</td><td class="">2026-10-04</td><td class="">Gustavo</td><td class="">Arenas Polo</td></tr><tr><td class="xl-fila">7</td><td class="">MIS06</td><td class="">2026-10-05</td><td class="">Carolina</td><td class="">Restrepo Gil</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado">Actores que no cantan ni bailan.</p><pre class="codigo"><span class="kw">SELECT</span> nombre_artistico, nombres, apellidos
+<span class="kw">FROM</span> ACTOR
+<span class="kw">WHERE</span> tipo_actor <span class="kw">IS</span> <span class="kw">NULL</span>
+<span class="kw">ORDER</span> <span class="kw">BY</span> nombre_artistico;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombre_artistico</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td></tr><tr><td class="xl-fila">2</td><td class="">Lucho Ramos</td><td class="">Luis Fernando</td><td class="">Ramos Pardo</td></tr><tr><td class="xl-fila">3</td><td class="">Pedro Sol</td><td class="">Pedro</td><td class="">Soler Mesa</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
   </main>
 
@@ -96,8 +97,8 @@
   <footer>Universidad El Bosque · Bogotá D.C</footer>
 </div>
 
-<script src="../../js/estrellas.js?v=20261116c"></script>
-<script src="../../js/ejercicios.js?v=20261116c"></script>
+<script src="../../js/estrellas.js?v=20261116d"></script>
+<script src="../../js/ejercicios.js?v=20261116d"></script>
 <script>iniciarEtapa("sql");</script>
 </body>
 </html>

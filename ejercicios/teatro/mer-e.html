@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../css/estilos.css?v=20261116c">
+<link rel="stylesheet" href="../../css/estilos.css?v=20261116d">
 </head>
 <body>
 <div class="sky"></div>
@@ -22,7 +22,7 @@
   <header class="interno">
     <div class="eyebrow">Ejercicio · Teatro</div>
     <h1>MER-E</h1>
-    <p class="subtitle">Modelo entidad relación extendido: jerarquías de PERSONA y SALA.</p>
+    <p class="subtitle">Modelo entidad relación extendido: jerarquía de ACTOR.</p>
   </header>
 
   <div class="ruta" id="ruta"></div>
@@ -34,140 +34,135 @@
 
   <main>
 <section class="panel"><details><summary>Ver enunciado del ejercicio</summary>
-<p>Una red de teatros con sedes en varias ciudades quiere guardar en una base de datos sus funciones, salas, actores y espectadores.</p>
+<p>Una red de teatros de Bogotá quiere manejar su cartelera, sus actores y la venta de boletas.</p>
 <ul>
-  <li>Cada <strong>TEATRO</strong> tiene un código de tres letras, nombre, ciudad y país.</li>
-  <li>Cada <strong>ACTOR</strong> tiene identificación, nombre, número de carnet, años de carrera y uno o varios teléfonos. Pertenece a la compañía de exactamente un teatro.</li>
-  <li>Cada <strong>SALA</strong> tiene un código, nombre, piso y capacidad, y queda en un teatro.</li>
-  <li>Una <strong>FUNCIÓN</strong> tiene un identificador, un código (por ejemplo <code>HAM01</code>), fecha, hora de inicio y obra. La presenta un teatro y se hace en una sola sala.</li>
-  <li>En cada función actúan uno o más actores con un <em>rol</em> (protagonista o reparto), y un actor puede actuar en muchas funciones.</li>
-  <li>Los <strong>ESPECTADORES</strong> se registran con identificación, nombre (nombres y apellidos), fecha de nacimiento, correo y puntos acumulados; la edad se calcula. Un espectador compra boletas y en cada una se guarda la <em>silla</em> y la <em>zona</em>.</li>
-  <li>Un actor también puede ir a ver funciones como espectador. Algunas salas son salas mayores (se guarda el número de sillas) y otras de ensayo (se guarda el área en m²); el foyer no es ni lo uno ni lo otro.</li>
+  <li>Cada <strong>TEATRO</strong> tiene un código, nombre, dirección y aforo.</li>
+  <li>Cada <strong>OBRA</strong> tiene un número, título, autor, duración y uno o varios géneros (drama, comedia, musical…).</li>
+  <li>Una <strong>FUNCIÓN</strong> es una presentación de una obra en un teatro, con fecha, hora y precio.</li>
+  <li>Cada <strong>ACTOR</strong> tiene identificación, nombre artístico y nombre real (nombres y apellidos). Un actor actúa en varias obras y en cada una hace un personaje. Algunos son cantantes (se guarda su registro vocal), otros bailarines (se guarda su estilo), hay quienes hacen las dos cosas y hay quienes no hacen ninguna.</li>
+  <li>Un actor puede ser el suplente de otro actor. Cada suplente cubre a un solo titular, pero un titular puede tener varios suplentes.</li>
+  <li>Cada <strong>ESPECTADOR</strong> tiene identificación, nombre (nombres y apellidos), fecha de nacimiento, correo y teléfonos; la edad se calcula. Un espectador compra boletas para varias funciones y en cada boleta va la fila y la silla.</li>
 </ul>
-<p class="nota">Entidades base: <strong>Actor</strong>, <strong>Espectador</strong> y <strong>Teatro</strong>. Entidades inventadas para completar el problema: <strong>Sala</strong> y <strong>Función</strong>.</p></details></section>
+<p class="nota">Entidades base: <strong>Actor</strong>, <strong>Espectador</strong> y <strong>Teatro</strong>. Entidades inventadas para completar el problema: <strong>Obra</strong> y <strong>Función</strong>.</p></details></section>
 <section class="panel">
 <h2>¿Qué cambia?</h2>
-<ul><li><strong>PERSONA</strong> junta lo que tenían en común el actor y el espectador (documento, nombre, fecha de nacimiento, edad y teléfonos). Es <strong>solapada (s)</strong> porque Elena Montes es actriz y también compra boletas, y es <strong>total</strong> porque solo se guardan actores o espectadores.</li><li><strong>SALA</strong> se divide en SALA_MAYOR y SALA_ENSAYO. Es <strong>disjunta (d)</strong>: una sala no puede ser las dos cosas. Es <strong>parcial</strong> porque hay espacios, como el foyer, que no son ninguna.</li></ul>
+<ul><li><strong>ACTOR</strong> se especializa en <strong>CANTANTE</strong> (registro vocal) y <strong>BAILARIN</strong> (estilo).</li><li>Es <strong>solapada (s)</strong>: Camila Luz canta y baila, así que no hay carita feliz.</li><li>Es <strong>parcial</strong> (con circulito): Lucho Ramos y Pedro Sol no cantan ni bailan.</li><li>La relación reflexiva <em>reemplazar</em> se queda en ACTOR: cualquier actor puede ser suplente.</li></ul>
 </section>
 
 <div class="vista" data-n="chen">
 <section class="panel">
 <h2>Diagrama · Peter Chen</h2>
-<div class="diagrama tablero"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-69 -56 1996 1728" font-family="Arial, Helvetica, sans-serif" role="img">
+<div class="diagrama tablero"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-410 -223 2662 1342" font-family="Arial, Helvetica, sans-serif" role="img">
 <defs><pattern id="mere_chen_g1" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e3e6ea" stroke-width="1"/></pattern><pattern id="mere_chen_g2" width="100" height="100" patternUnits="userSpaceOnUse"><rect width="100" height="100" fill="url(#mere_chen_g1)"/><path d="M 100 0 L 0 0 0 100" fill="none" stroke="#cfd4da" stroke-width="1.2"/></pattern></defs>
-<rect x="-69" y="-56" width="1996" height="1728" fill="#ffffff"/>
-<rect x="-69" y="-56" width="1996" height="1728" fill="url(#mere_chen_g2)"/>
-<text x="929" y="-22" text-anchor="middle" font-size="20" fill="#000">MODELO ENTIDAD RELACIÓN EXTENDIDO</text>
-<polyline points="700.0,273.0 700.0,394.4" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="684.0,420.0 400.0,420.0 400.0,577.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="716.0,420.0 1000.0,420.0 1000.0,577.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1450.0,1123.0 1450.0,1244.4" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1434.0,1270.0 1250.0,1270.0 1250.0,1427.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1466.0,1270.0 1650.0,1270.0 1650.0,1427.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="335.0,600.0 150.0,600.0 150.0,818.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="150.0,882.0 150.0,1327.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="400.0,623.0 400.0,818.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="400.0,882.0 400.0,1100.0 610.0,1100.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1000.0,623.0 1000.0,818.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1000.0,882.0 1000.0,1030.0 740.0,1030.0 740.0,1077.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="790.0,1100.0 1025.0,1100.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1135.0,1100.0 1385.0,1100.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="700.0,1123.0 700.0,1350.0 485.0,1350.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="375.0,1350.0 215.0,1350.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="150.0,1373.0 150.0,1600.0 745.0,1600.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="855.0,1600.0 1850.0,1600.0 1850.0,1110.0 1515.0,1110.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="635.0,250.0 564.7,250.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="765.0,250.0 840.3,250.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="700.0,227.0 700.0,136.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="670.0,106.1 670.0,40.0 638.3,40.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="730.0,106.1 730.0,40.0 761.3,40.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="655.0,227.0 655.0,185.0 566.3,185.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="745.0,227.0 745.0,185.0 841.7,185.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="360.0,577.0 360.0,520.0 281.7,520.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="360.0,623.0 360.0,700.0 309.7,700.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1065.0,590.0 1138.0,590.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1040.0,623.0 1040.0,690.0 1117.0,690.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="650.0,1077.0 650.0,1010.0 581.0,1010.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="610.0,1115.0 530.0,1115.0 530.0,1169.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="650.0,1123.0 650.0,1260.0 589.7,1260.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="790.0,1115.0 910.0,1115.0 910.0,1164.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="750.0,1123.0 750.0,1260.0 853.0,1260.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="345.0,850.0 290.0,850.0 290.0,806.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1055.0,850.0 1144.7,850.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="945.0,850.0 868.0,850.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1410.0,1077.0 1410.0,1020.0 1384.7,1020.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1450.0,1077.0 1450.0,1001.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1490.0,1077.0 1490.0,1020.0 1544.0,1020.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1250.0,1473.0 1250.0,1524.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1650.0,1473.0 1650.0,1524.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="85.0,1350.0 69.4,1350.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="110.0,1373.0 110.0,1460.0 75.3,1460.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="190.0,1373.0 190.0,1460.0 257.3,1460.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="110.0,1327.0 110.0,1250.0 46.0,1250.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<rect x="635.0" y="227.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="700.0" y="255.0" text-anchor="middle" font-size="14" fill="#000">PERSONA</text>
-<polygon points="668.0,394.4 732.0,394.4 700,445.6" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="700.0" y="416.4" text-anchor="middle" font-size="17" font-weight="bold" fill="#000">s</text>
-<rect x="335.0" y="577.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="400.0" y="605.0" text-anchor="middle" font-size="14" fill="#000">ACTOR</text>
-<rect x="935.0" y="577.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="605.0" text-anchor="middle" font-size="14" fill="#000">ESPECTADOR</text>
-<rect x="610.0" y="1077.0" width="180.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="700.0" y="1105.0" text-anchor="middle" font-size="14" fill="#000">FUNCION</text>
-<rect x="85.0" y="1327.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="150.0" y="1355.0" text-anchor="middle" font-size="14" fill="#000">TEATRO</text>
-<rect x="1385.0" y="1077.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1450.0" y="1105.0" text-anchor="middle" font-size="14" fill="#000">SALA</text>
-<polygon points="1418.0,1244.4 1482.0,1244.4 1450,1295.6" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1450.0" y="1266.4" text-anchor="middle" font-size="17" font-weight="bold" fill="#000">d</text>
-<rect x="1185.0" y="1427.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1250.0" y="1455.0" text-anchor="middle" font-size="14" fill="#000">SALA_MAYOR</text>
-<rect x="1582.5" y="1427.0" width="134.9" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1650.0" y="1455.0" text-anchor="middle" font-size="14" fill="#000">SALA_ENSAYO</text>
-<polygon points="150,818.0 206.0859375,850 150,882.0 93.9140625,850" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="150.0" y="854.5" text-anchor="middle" font-size="13" fill="#000">pertenecer</text>
-<polygon points="400,818.0 455.0,850 400,882.0 345.0,850" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="400.0" y="854.5" text-anchor="middle" font-size="13" fill="#000">actuar</text>
-<polygon points="1000,818.0 1055.0,850 1000,882.0 945.0,850" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="854.5" text-anchor="middle" font-size="13" fill="#000">comprar</text>
-<polygon points="1080,1068.0 1135.0,1100 1080,1132.0 1025.0,1100" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1080.0" y="1104.5" text-anchor="middle" font-size="13" fill="#000">albergar</text>
-<polygon points="430,1318.0 485.0,1350 430,1382.0 375.0,1350" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="430.0" y="1354.5" text-anchor="middle" font-size="13" fill="#000">presentar</text>
-<polygon points="800,1568.0 855.0,1600 800,1632.0 745.0,1600" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="800.0" y="1604.5" text-anchor="middle" font-size="13" fill="#000">ubicar</text>
-<ellipse cx="520.0" cy="250.0" rx="44.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="520.0" y="254.0" text-anchor="middle" font-size="12" fill="#000">documento</text><line x1="490.3" y1="257.0" x2="549.7" y2="257.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="900.0" cy="250.0" rx="59.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="900.0" y="254.0" text-anchor="middle" font-size="12" fill="#000">fechaNacimiento</text>
-<ellipse cx="700.0" cy="120.0" rx="61.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="700.0" y="124.0" text-anchor="middle" font-size="12" fill="#000">nombreCompleto</text>
-<ellipse cx="600.0" cy="40.0" rx="38.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="600.0" y="44.0" text-anchor="middle" font-size="12" fill="#000">nombres</text>
-<ellipse cx="800.0" cy="40.0" rx="38.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="800.0" y="44.0" text-anchor="middle" font-size="12" fill="#000">apellidos</text>
-<ellipse cx="530.0" cy="185.0" rx="36.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><ellipse cx="530.0" cy="185.0" rx="32.3" ry="12.0" fill="none" stroke="#000" stroke-width="1.1"/><text x="530.0" y="189.0" text-anchor="middle" font-size="12" fill="#000">telefono</text>
-<ellipse cx="870.0" cy="185.0" rx="28.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2" stroke-dasharray="5 3"/><text x="870.0" y="189.0" text-anchor="middle" font-size="12" fill="#000">edad</text>
-<ellipse cx="250.0" cy="520.0" rx="31.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="250.0" y="524.0" text-anchor="middle" font-size="12" fill="#000">carnet</text>
-<ellipse cx="260.0" cy="700.0" rx="49.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="260.0" y="704.0" text-anchor="middle" font-size="12" fill="#000">aniosCarrera</text>
-<ellipse cx="1170.0" cy="590.0" rx="32.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1170.0" y="594.0" text-anchor="middle" font-size="12" fill="#000">correo</text>
-<ellipse cx="1150.0" cy="690.0" rx="33.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1150.0" y="694.0" text-anchor="middle" font-size="12" fill="#000">puntos</text>
-<ellipse cx="540.0" cy="1010.0" rx="41.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="540.0" y="1014.0" text-anchor="middle" font-size="12" fill="#000">idFuncion</text><line x1="514.0" y1="1017.0" x2="566.0" y2="1017.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="530.0" cy="1185.0" rx="32.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="530.0" y="1189.0" text-anchor="middle" font-size="12" fill="#000">codigo</text>
-<ellipse cx="560.0" cy="1260.0" rx="29.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="560.0" y="1264.0" text-anchor="middle" font-size="12" fill="#000">fecha</text>
-<ellipse cx="910.0" cy="1180.0" rx="41.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="910.0" y="1184.0" text-anchor="middle" font-size="12" fill="#000">horaInicio</text>
-<ellipse cx="880.0" cy="1260.0" rx="27.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="880.0" y="1264.0" text-anchor="middle" font-size="12" fill="#000">obra</text>
-<ellipse cx="290.0" cy="790.0" rx="21.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="290.0" y="794.0" text-anchor="middle" font-size="12" fill="#000">rol</text>
-<ellipse cx="1170.0" cy="850.0" rx="25.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1170.0" y="854.0" text-anchor="middle" font-size="12" fill="#000">silla</text>
-<ellipse cx="840.0" cy="850.0" rx="28.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="840.0" y="854.0" text-anchor="middle" font-size="12" fill="#000">zona</text>
-<ellipse cx="1340.0" cy="1020.0" rx="44.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1340.0" y="1024.0" text-anchor="middle" font-size="12" fill="#000">codigoSala</text><line x1="1310.3" y1="1027.0" x2="1369.7" y2="1027.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="1450.0" cy="985.0" rx="47.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1450.0" y="989.0" text-anchor="middle" font-size="12" fill="#000">nombreSala</text>
-<ellipse cx="1570.0" cy="1020.0" rx="26.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1570.0" y="1024.0" text-anchor="middle" font-size="12" fill="#000">piso</text>
-<ellipse cx="1250.0" cy="1540.0" rx="41.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1250.0" y="1544.0" text-anchor="middle" font-size="12" fill="#000">numSillas</text>
-<ellipse cx="1650.0" cy="1540.0" rx="35.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1650.0" y="1544.0" text-anchor="middle" font-size="12" fill="#000">areaM2</text>
-<ellipse cx="20.0" cy="1350.0" rx="49.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="20.0" y="1354.0" text-anchor="middle" font-size="12" fill="#000">codigoTeatro</text><line x1="-14.4" y1="1357.0" x2="54.4" y2="1357.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="40.0" cy="1460.0" rx="35.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="40.0" y="1464.0" text-anchor="middle" font-size="12" fill="#000">nombre</text>
-<ellipse cx="290.0" cy="1460.0" rx="32.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="290.0" y="1464.0" text-anchor="middle" font-size="12" fill="#000">ciudad</text>
-<ellipse cx="20.0" cy="1250.0" rx="26.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="20.0" y="1254.0" text-anchor="middle" font-size="12" fill="#000">pais</text>
-<path d="M 1392.4 1250.4 Q 1450.0 1329.6 1507.6 1250.4" fill="none" stroke="#000" stroke-width="1.4"/>
-<circle cx="1450.0" cy="1166.0" r="6" fill="#fff" stroke="#000" stroke-width="1.3"/>
-<text x="162.0" y="720.0" text-anchor="start" font-size="12" fill="#000">(1:1)</text>
-<text x="162.0" y="1100.0" text-anchor="start" font-size="12" fill="#000">(0:N)</text>
-<text x="222.0" y="856.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:1</text>
-<text x="412.0" y="740.0" text-anchor="start" font-size="12" fill="#000">(0:N)</text>
-<text x="520.0" y="1090.0" text-anchor="middle" font-size="12" fill="#000">(1:N)</text>
-<text x="462.0" y="856.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:M</text>
-<text x="1012.0" y="740.0" text-anchor="start" font-size="12" fill="#000">(1:N)</text>
-<text x="1012.0" y="965.0" text-anchor="start" font-size="12" fill="#000">(0:N)</text>
-<text x="1060.0" y="812.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:M</text>
-<text x="935.0" y="1090.0" text-anchor="middle" font-size="12" fill="#000">(1:1)</text>
-<text x="1270.0" y="1090.0" text-anchor="middle" font-size="12" fill="#000">(0:N)</text>
-<text x="1080.0" y="1058.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">1:N</text>
-<text x="712.0" y="1300.0" text-anchor="start" font-size="12" fill="#000">(1:1)</text>
-<text x="300.0" y="1340.0" text-anchor="middle" font-size="12" fill="#000">(0:N)</text>
-<text x="430.0" y="1308.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">1:N</text>
-<text x="1862.0" y="1400.0" text-anchor="start" font-size="12" fill="#000">(1:1)</text>
-<text x="450.0" y="1590.0" text-anchor="middle" font-size="12" fill="#000">(0:N)</text>
-<text x="800.0" y="1560.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">1:N</text>
+<rect x="-410" y="-223" width="2662" height="1342" fill="#ffffff"/>
+<rect x="-410" y="-223" width="2662" height="1342" fill="url(#mere_chen_g2)"/>
+<text x="921" y="-189" text-anchor="middle" font-size="20" fill="#000">MODELO ENTIDAD RELACIÓN EXTENDIDO</text>
+<polyline points="250.0,639.0 250.0,801.6" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="234.0,827.2 -62.5,827.2 -62.5,1033.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="266.0,827.2 562.5,827.2 562.5,1033.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1000.0,23.0 1000.0,276.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1000.0,593.0 1000.0,340.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="315.0,616.0 570.0,616.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="935.0,616.0 680.0,616.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="65.0,0.0 445.0,0.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="935.0,0.0 555.0,0.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1065.0,0.0 1445.0,0.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1935.0,0.0 1555.0,0.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="185.0,616.0 -255.0,616.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="205.0,593.0 205.0,549.0 -312.5,549.0 -312.5,584.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-65.0,0.0 -113.0,0.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="45.0,-23.0 45.0,-81.0 59.0,-81.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="120.0,-97.0 120.0,-111.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="181.0,-81.0 201.0,-81.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="45.0,23.0 45.0,81.0 60.3,81.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-45.0,-23.0 -45.0,-81.0 -71.7,-81.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-45.0,23.0 -45.0,81.0 -63.7,81.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="0.0,-23.0 0.0,-65.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1065.0,616.0 1113.0,616.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1045.0,639.0 1045.0,697.0 1072.3,697.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1045.0,593.0 1045.0,535.0 1071.3,535.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="955.0,639.0 955.0,697.0 927.7,697.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="935.0,598.0 853.3,598.0 853.3,572.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1045.0,-23.0 1045.0,-81.0 1059.0,-81.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="955.0,-23.0 955.0,-81.0 929.7,-81.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1045.0,23.0 1045.0,81.0 1073.0,81.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="935.0,18.0 855.7,18.0 855.7,44.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2065.0,0.0 2113.0,0.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2045.0,-23.0 2045.0,-81.0 2064.7,-81.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2045.0,23.0 2045.0,81.0 2061.0,81.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1955.0,-23.0 1955.0,-81.0 1928.7,-81.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="295.0,593.0 295.0,535.0 316.3,535.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="185.0,634.0 76.0,634.0 76.0,660.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="76.0,692.0 76.0,706.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="15.0,676.0 -5.0,676.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="295.0,639.0 295.0,697.0 313.3,697.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-127.5,1056.0 -175.5,1056.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="497.5,1056.0 449.5,1056.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="500.0,-32.0 500.0,-74.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="500.0,32.0 500.0,74.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="625.0,584.0 625.0,542.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<rect x="-65.0" y="-23.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="0.0" y="5.0" text-anchor="middle" font-size="14" fill="#000">ESPECTADOR</text>
+<rect x="935.0" y="-23.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="5.0" text-anchor="middle" font-size="14" fill="#000">FUNCION</text>
+<rect x="1935.0" y="-23.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="2000.0" y="5.0" text-anchor="middle" font-size="14" fill="#000">TEATRO</text>
+<rect x="935.0" y="593.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="621.0" text-anchor="middle" font-size="14" fill="#000">OBRA</text>
+<rect x="185.0" y="593.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="250.0" y="621.0" text-anchor="middle" font-size="14" fill="#000">ACTOR</text>
+<rect x="-127.5" y="1033.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="-62.5" y="1061.0" text-anchor="middle" font-size="14" fill="#000">CANTANTE</text>
+<rect x="497.5" y="1033.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="562.5" y="1061.0" text-anchor="middle" font-size="14" fill="#000">BAILARIN</text>
+<polygon points="500,-32.0 555.0,0 500,32.0 445.0,0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="500.0" y="4.5" text-anchor="middle" font-size="13" fill="#000">comprar</text>
+<polygon points="1500,-32.0 1555.0,0 1500,32.0 1445.0,0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1500.0" y="4.5" text-anchor="middle" font-size="13" fill="#000">presentar</text>
+<polygon points="1000,276.0 1055.0,308.0 1000,340.0 945.0,308.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="312.5" text-anchor="middle" font-size="13" fill="#000">programar</text>
+<polygon points="625,584.0 680.0,616 625,648.0 570.0,616" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="625.0" y="620.5" text-anchor="middle" font-size="13" fill="#000">actuar</text>
+<polygon points="-312.5,584.0 -254.9765625,616 -312.5,648.0 -370.0234375,616" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="-312.5" y="620.5" text-anchor="middle" font-size="13" fill="#000">reemplazar</text>
+<polygon points="218.0,801.6 282.0,801.6 250,852.8000000000001" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="250.0" y="823.6" text-anchor="middle" font-size="17" font-weight="bold" fill="#000">s</text>
+<ellipse cx="-157.7" cy="0.0" rx="44.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="-157.7" y="4.0" text-anchor="middle" font-size="12" fill="#000">documento</text><line x1="-187.4" y1="7.0" x2="-128.0" y2="7.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="120.0" cy="-81.0" rx="61.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="120.0" y="-77.0" text-anchor="middle" font-size="12" fill="#000">nombreCompleto</text>
+<ellipse cx="120.0" cy="-127.0" rx="38.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="120.0" y="-123.0" text-anchor="middle" font-size="12" fill="#000">nombres</text>
+<ellipse cx="239.7" cy="-81.0" rx="38.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="239.7" y="-77.0" text-anchor="middle" font-size="12" fill="#000">apellidos</text>
+<ellipse cx="120.0" cy="81.0" rx="59.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="120.0" y="85.0" text-anchor="middle" font-size="12" fill="#000">fechaNacimiento</text>
+<ellipse cx="-100.0" cy="-81.0" rx="28.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2" stroke-dasharray="5 3"/><text x="-100.0" y="-77.0" text-anchor="middle" font-size="12" fill="#000">edad</text>
+<ellipse cx="-100.0" cy="81.0" rx="36.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><ellipse cx="-100.0" cy="81.0" rx="32.3" ry="12.0" fill="none" stroke="#000" stroke-width="1.1"/><text x="-100.0" y="85.0" text-anchor="middle" font-size="12" fill="#000">telefono</text>
+<ellipse cx="0.0" cy="-81.0" rx="32.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="0.0" y="-77.0" text-anchor="middle" font-size="12" fill="#000">correo</text>
+<ellipse cx="1146.0" cy="616.0" rx="33.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1146.0" y="620.0" text-anchor="middle" font-size="12" fill="#000">idObra</text><line x1="1128.0" y1="623.0" x2="1164.0" y2="623.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="1100.0" cy="697.0" rx="27.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1100.0" y="701.0" text-anchor="middle" font-size="12" fill="#000">titulo</text>
+<ellipse cx="1100.0" cy="535.0" rx="28.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1100.0" y="539.0" text-anchor="middle" font-size="12" fill="#000">autor</text>
+<ellipse cx="880.0" cy="697.0" rx="47.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="880.0" y="701.0" text-anchor="middle" font-size="12" fill="#000">duracionMin</text>
+<ellipse cx="853.3" cy="556.0" rx="33.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><ellipse cx="853.3" cy="556.0" rx="29.7" ry="12.0" fill="none" stroke="#000" stroke-width="1.1"/><text x="853.3" y="560.0" text-anchor="middle" font-size="12" fill="#000">genero</text>
+<ellipse cx="1100.0" cy="-81.0" rx="41.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1100.0" y="-77.0" text-anchor="middle" font-size="12" fill="#000">idFuncion</text><line x1="1074.0" y1="-74.0" x2="1126.0" y2="-74.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="900.0" cy="-81.0" rx="29.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="900.0" y="-77.0" text-anchor="middle" font-size="12" fill="#000">fecha</text>
+<ellipse cx="1100.0" cy="81.0" rx="27.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1100.0" y="85.0" text-anchor="middle" font-size="12" fill="#000">hora</text>
+<ellipse cx="855.7" cy="60.0" rx="31.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="855.7" y="64.0" text-anchor="middle" font-size="12" fill="#000">precio</text>
+<ellipse cx="2162.4" cy="0.0" rx="49.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2162.4" y="4.0" text-anchor="middle" font-size="12" fill="#000">codigoTeatro</text><line x1="2128.0" y1="7.0" x2="2196.7" y2="7.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="2100.0" cy="-81.0" rx="35.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2100.0" y="-77.0" text-anchor="middle" font-size="12" fill="#000">nombre</text>
+<ellipse cx="2100.0" cy="81.0" rx="39.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2100.0" y="85.0" text-anchor="middle" font-size="12" fill="#000">direccion</text>
+<ellipse cx="1900.0" cy="-81.0" rx="28.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1900.0" y="-77.0" text-anchor="middle" font-size="12" fill="#000">aforo</text>
+<ellipse cx="350.0" cy="535.0" rx="33.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="350.0" y="539.0" text-anchor="middle" font-size="12" fill="#000">idActor</text><line x1="331.3" y1="542.0" x2="368.7" y2="542.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="76.0" cy="676.0" rx="61.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="76.0" y="680.0" text-anchor="middle" font-size="12" fill="#000">nombreCompleto</text>
+<ellipse cx="76.0" cy="722.0" rx="38.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="76.0" y="726.0" text-anchor="middle" font-size="12" fill="#000">nombres</text>
+<ellipse cx="-43.7" cy="676.0" rx="38.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="-43.7" y="680.0" text-anchor="middle" font-size="12" fill="#000">apellidos</text>
+<ellipse cx="370.0" cy="697.0" rx="56.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="370.0" y="701.0" text-anchor="middle" font-size="12" fill="#000">nombreArtistico</text>
+<ellipse cx="-225.2" cy="1056.0" rx="49.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="-225.2" y="1060.0" text-anchor="middle" font-size="12" fill="#000">registroVocal</text>
+<ellipse cx="407.1" cy="1056.0" rx="42.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="407.1" y="1060.0" text-anchor="middle" font-size="12" fill="#000">estiloBaile</text>
+<ellipse cx="500.0" cy="-90.0" rx="22.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="500.0" y="-86.0" text-anchor="middle" font-size="12" fill="#000">fila</text>
+<ellipse cx="500.0" cy="90.0" rx="25.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="500.0" y="94.0" text-anchor="middle" font-size="12" fill="#000">silla</text>
+<ellipse cx="625.0" cy="526.0" rx="41.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="625.0" y="530.0" text-anchor="middle" font-size="12" fill="#000">personaje</text>
+<circle cx="250.0" cy="720.3" r="6" fill="#fff" stroke="#000" stroke-width="1.3"/>
+<text x="1007.0" y="43.0" text-anchor="start" font-size="12" fill="#000">(1:1)</text>
+<text x="1007.0" y="581.0" text-anchor="start" font-size="12" fill="#000">(0:N)</text>
+<text x="344.3" y="609.0" text-anchor="middle" font-size="12" fill="#000">(1:N)</text>
+<text x="905.7" y="609.0" text-anchor="middle" font-size="12" fill="#000">(1:N)</text>
+<text x="94.3" y="-7.0" text-anchor="middle" font-size="12" fill="#000">(1:N)</text>
+<text x="905.7" y="-7.0" text-anchor="middle" font-size="12" fill="#000">(0:N)</text>
+<text x="1093.3" y="-7.0" text-anchor="middle" font-size="12" fill="#000">(1:1)</text>
+<text x="1905.7" y="-7.0" text-anchor="middle" font-size="12" fill="#000">(0:N)</text>
+<text x="156.7" y="609.0" text-anchor="middle" font-size="12" fill="#000">(0:1)</text>
+<text x="212.0" y="581.0" text-anchor="start" font-size="12" fill="#000">(0:N)</text>
+<text x="536.2" y="-38.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:M</text>
+<text x="1536.2" y="-38.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:1</text>
+<text x="1036.2" y="270.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:1</text>
+<text x="661.2" y="578.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:M</text>
+<text x="-274.9" y="578.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:1</text>
+<text x="-220.2" y="609.0" text-anchor="middle" font-size="11" fill="#000">suplente</text>
+<text x="-319.5" y="574.0" text-anchor="end" font-size="11" fill="#000">titular</text>
 </svg></div>
 </section>
 
@@ -175,67 +170,73 @@
 <div class="vista" data-n="crowsfoot" hidden>
 <section class="panel">
 <h2>Diagrama · Crow's Foot</h2>
-<div class="diagrama tablero"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-12 -40 1932 1095" font-family="Arial, Helvetica, sans-serif" role="img">
+<div class="diagrama tablero"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-40 -80 2679 641" font-family="Arial, Helvetica, sans-serif" role="img">
 <defs><pattern id="mere_crowsfoot_g1" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e3e6ea" stroke-width="1"/></pattern><pattern id="mere_crowsfoot_g2" width="100" height="100" patternUnits="userSpaceOnUse"><rect width="100" height="100" fill="url(#mere_crowsfoot_g1)"/><path d="M 100 0 L 0 0 0 100" fill="none" stroke="#cfd4da" stroke-width="1.2"/></pattern></defs>
-<rect x="-12" y="-40" width="1932" height="1095" fill="#ffffff"/>
-<rect x="-12" y="-40" width="1932" height="1095" fill="url(#mere_crowsfoot_g2)"/>
-<text x="954" y="-6" text-anchor="middle" font-size="20" fill="#000">MODELO ENTIDAD RELACIÓN EXTENDIDO · CROW&#x27;S FOOT</text>
-<polyline points="380.0,127.5 271.5,127.5" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="881.3,297.0 1000.0,297.0 1000.0,127.5 1069.5,127.5" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1400.0,127.5 1290.5,127.5" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1180.0,600.0 1180.0,195.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1292.6,676.0 1480.0,676.0 1480.0,319.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="770.0,640.0 770.0,335.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="875.9,697.5 1067.4,697.5" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="520.0,880.0 520.0,315.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="625.9,947.5 1140.0,947.5 1140.0,812.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<rect x="380.0" y="40.0" width="520.0" height="319.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="640.0" y="59.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">PERSONA</text><text x="640.0" y="77.0" text-anchor="middle" font-size="10" fill="#000">jerarquía s (solapada), total</text><line x1="380.0" y1="82.0" x2="900.0" y2="82.0" stroke="#000" stroke-width="1.1"/><text x="388.0" y="98.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="413.8" y="98.0" font-size="12" fill="#000" text-decoration="underline">documento</text><text x="519.8" y="98.0" font-size="11" fill="#000">VARCHAR (15)</text><text x="388.0" y="118.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="413.8" y="118.0" font-size="12" fill="#000">nombres</text><text x="519.8" y="118.0" font-size="11" fill="#000">VARCHAR (50)</text><text x="388.0" y="138.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="413.8" y="138.0" font-size="12" fill="#000">apellidos</text><text x="519.8" y="138.0" font-size="11" fill="#000">VARCHAR (50)</text><text x="388.0" y="158.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="413.8" y="158.0" font-size="12" fill="#000">fecha_nacimiento</text><text x="519.8" y="158.0" font-size="11" fill="#000">DATE</text><text x="388.0" y="178.0" font-size="11" font-weight="bold" fill="#000">/</text><text x="413.8" y="178.0" font-size="12" fill="#000">edad</text><text x="519.8" y="178.0" font-size="11" fill="#000">INTEGER</text><line x1="380.0" y1="188.0" x2="900.0" y2="188.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="390.0" y="202.0" font-size="11" fill="#000">PERSONA_PK (documento)</text>
-<rect x="658.7" y="239.0" width="222.5" height="96.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="770.0" y="258.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">ACTOR</text><line x1="658.7" y1="267.0" x2="881.3" y2="267.0" stroke="#000" stroke-width="1.1"/><text x="666.7" y="283.0" font-size="11" font-weight="bold" fill="#000">U *</text><text x="693.4" y="283.0" font-size="12" fill="#000">carnet</text><text x="778.8" y="283.0" font-size="11" fill="#000">VARCHAR (10)</text><text x="666.7" y="303.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="693.4" y="303.0" font-size="12" fill="#000">anios_carrera</text><text x="778.8" y="303.0" font-size="11" fill="#000">INTEGER</text><text x="666.7" y="323.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="693.4" y="323.0" font-size="12" fill="#000">codigo_teatro</text><text x="778.8" y="323.0" font-size="11" fill="#000">CHAR (3)</text>
-<rect x="427.4" y="239.0" width="185.2" height="76.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="520.0" y="258.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">ESPECTADOR</text><line x1="427.4" y1="267.0" x2="612.6" y2="267.0" stroke="#000" stroke-width="1.1"/><text x="435.4" y="283.0" font-size="11" font-weight="bold" fill="#000">U *</text><text x="462.1" y="283.0" font-size="12" fill="#000">correo</text><text x="510.1" y="283.0" font-size="11" fill="#000">VARCHAR (80)</text><text x="435.4" y="303.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="462.1" y="303.0" font-size="12" fill="#000">puntos</text><text x="510.1" y="303.0" font-size="11" fill="#000">INTEGER</text>
-<rect x="28.5" y="80.0" width="243.0" height="95.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="150.0" y="99.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">PER_TELEFONO</text><line x1="28.5" y1="108.0" x2="271.5" y2="108.0" stroke="#000" stroke-width="1.1"/><text x="36.5" y="124.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="66.5" y="124.0" font-size="12" fill="#000" text-decoration="underline">documento</text><text x="137.8" y="124.0" font-size="11" fill="#000">VARCHAR (15)</text><text x="36.5" y="144.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="66.5" y="144.0" font-size="12" fill="#000" text-decoration="underline">telefono</text><text x="137.8" y="144.0" font-size="11" fill="#000">VARCHAR (15)</text><line x1="28.5" y1="154.0" x2="271.5" y2="154.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="38.5" y="168.0" font-size="11" fill="#000">PER_TELEFONO_PK (documento, telefono)</text>
-<rect x="1069.5" y="60.0" width="221.0" height="135.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1180.0" y="79.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">TEATRO</text><line x1="1069.5" y1="88.0" x2="1290.5" y2="88.0" stroke="#000" stroke-width="1.1"/><text x="1077.5" y="104.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="1103.3" y="104.0" font-size="12" fill="#000" text-decoration="underline">codigo_teatro</text><text x="1188.0" y="104.0" font-size="11" fill="#000">CHAR (3)</text><text x="1077.5" y="124.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1103.3" y="124.0" font-size="12" fill="#000">nombre</text><text x="1188.0" y="124.0" font-size="11" fill="#000">VARCHAR (80)</text><text x="1077.5" y="144.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1103.3" y="144.0" font-size="12" fill="#000">ciudad</text><text x="1188.0" y="144.0" font-size="11" fill="#000">VARCHAR (50)</text><text x="1077.5" y="164.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1103.3" y="164.0" font-size="12" fill="#000">pais</text><text x="1188.0" y="164.0" font-size="11" fill="#000">VARCHAR (50)</text><line x1="1069.5" y1="174.0" x2="1290.5" y2="174.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="1079.5" y="188.0" font-size="11" fill="#000">TEATRO_PK (codigo_teatro)</text>
-<rect x="1400.0" y="40.0" width="480.0" height="279.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1640.0" y="59.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">SALA</text><text x="1640.0" y="77.0" text-anchor="middle" font-size="10" fill="#000">jerarquía d (disjunta), parcial</text><line x1="1400.0" y1="82.0" x2="1880.0" y2="82.0" stroke="#000" stroke-width="1.1"/><text x="1408.0" y="98.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="1433.8" y="98.0" font-size="12" fill="#000" text-decoration="underline">codigo_sala</text><text x="1518.5" y="98.0" font-size="11" fill="#000">VARCHAR (10)</text><text x="1408.0" y="118.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1433.8" y="118.0" font-size="12" fill="#000">nombre_sala</text><text x="1518.5" y="118.0" font-size="11" fill="#000">VARCHAR (40)</text><text x="1408.0" y="138.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1433.8" y="138.0" font-size="12" fill="#000">piso</text><text x="1518.5" y="138.0" font-size="11" fill="#000">VARCHAR (40)</text><text x="1408.0" y="158.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="1433.8" y="158.0" font-size="12" fill="#000">codigo_teatro</text><text x="1518.5" y="158.0" font-size="11" fill="#000">CHAR (3)</text><line x1="1400.0" y1="168.0" x2="1880.0" y2="168.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="1410.0" y="182.0" font-size="11" fill="#000">SALA_PK (codigo_sala)</text>
-<rect x="1437.6" y="214.0" width="164.7" height="56.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1520.0" y="233.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">SALA_MAYOR</text><line x1="1437.6" y1="242.0" x2="1602.4" y2="242.0" stroke="#000" stroke-width="1.1"/><text x="1445.6" y="258.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1460.3" y="258.0" font-size="12" fill="#000">num_sillas</text><text x="1529.0" y="258.0" font-size="11" fill="#000">INTEGER</text>
-<rect x="1668.6" y="214.0" width="192.7" height="56.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1765.0" y="233.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">SALA_ENSAYO</text><line x1="1668.6" y1="242.0" x2="1861.4" y2="242.0" stroke="#000" stroke-width="1.1"/><text x="1676.6" y="258.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1691.3" y="258.0" font-size="12" fill="#000">area_m2</text><text x="1750.7" y="258.0" font-size="11" fill="#000">NUMERIC (10,2)</text>
-<rect x="664.1" y="640.0" width="211.8" height="115.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="770.0" y="659.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">ELENCO</text><line x1="664.1" y1="668.0" x2="875.9" y2="668.0" stroke="#000" stroke-width="1.1"/><text x="672.1" y="684.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="702.1" y="684.0" font-size="12" fill="#000" text-decoration="underline">documento</text><text x="773.4" y="684.0" font-size="11" fill="#000">VARCHAR (15)</text><text x="672.1" y="704.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="702.1" y="704.0" font-size="12" fill="#000" text-decoration="underline">id_funcion</text><text x="773.4" y="704.0" font-size="11" fill="#000">INTEGER</text><text x="672.1" y="724.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="702.1" y="724.0" font-size="12" fill="#000">rol</text><text x="773.4" y="724.0" font-size="11" fill="#000">VARCHAR (10)</text><line x1="664.1" y1="734.0" x2="875.9" y2="734.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="674.1" y="748.0" font-size="11" fill="#000">ELENCO_PK (documento, id_funcion)</text>
-<rect x="1067.4" y="600.0" width="225.2" height="212.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1180.0" y="619.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">FUNCION</text><line x1="1067.4" y1="628.0" x2="1292.6" y2="628.0" stroke="#000" stroke-width="1.1"/><text x="1075.4" y="644.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="1102.1" y="644.0" font-size="12" fill="#000" text-decoration="underline">id_funcion</text><text x="1190.1" y="644.0" font-size="11" fill="#000">INTEGER</text><text x="1075.4" y="664.0" font-size="11" font-weight="bold" fill="#000">U *</text><text x="1102.1" y="664.0" font-size="12" fill="#000">codigo</text><text x="1190.1" y="664.0" font-size="11" fill="#000">VARCHAR (8)</text><text x="1075.4" y="684.0" font-size="11" font-weight="bold" fill="#000">U *</text><text x="1102.1" y="684.0" font-size="12" fill="#000">fecha</text><text x="1190.1" y="684.0" font-size="11" fill="#000">DATE</text><text x="1075.4" y="704.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1102.1" y="704.0" font-size="12" fill="#000">hora_inicio</text><text x="1190.1" y="704.0" font-size="11" fill="#000">TIME</text><text x="1075.4" y="724.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1102.1" y="724.0" font-size="12" fill="#000">obra</text><text x="1190.1" y="724.0" font-size="11" fill="#000">VARCHAR (50)</text><text x="1075.4" y="744.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="1102.1" y="744.0" font-size="12" fill="#000">codigo_sala</text><text x="1190.1" y="744.0" font-size="11" fill="#000">VARCHAR (10)</text><text x="1075.4" y="764.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="1102.1" y="764.0" font-size="12" fill="#000">teatro_funcion</text><text x="1190.1" y="764.0" font-size="11" fill="#000">CHAR (3)</text><line x1="1067.4" y1="774.0" x2="1292.6" y2="774.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="1077.4" y="788.0" font-size="11" fill="#000">FUNCION_PK (id_funcion)</text><text x="1077.4" y="805.0" font-size="11" fill="#000">FUNCION_UK (codigo, fecha)</text>
-<rect x="414.1" y="880.0" width="211.8" height="135.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="520.0" y="899.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">BOLETA</text><line x1="414.1" y1="908.0" x2="625.9" y2="908.0" stroke="#000" stroke-width="1.1"/><text x="422.1" y="924.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="452.1" y="924.0" font-size="12" fill="#000" text-decoration="underline">documento</text><text x="523.4" y="924.0" font-size="11" fill="#000">VARCHAR (15)</text><text x="422.1" y="944.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="452.1" y="944.0" font-size="12" fill="#000" text-decoration="underline">id_funcion</text><text x="523.4" y="944.0" font-size="11" fill="#000">INTEGER</text><text x="422.1" y="964.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="452.1" y="964.0" font-size="12" fill="#000">silla</text><text x="523.4" y="964.0" font-size="11" fill="#000">VARCHAR (4)</text><text x="422.1" y="984.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="452.1" y="984.0" font-size="12" fill="#000">zona</text><text x="523.4" y="984.0" font-size="11" fill="#000">VARCHAR (10)</text><line x1="414.1" y1="994.0" x2="625.9" y2="994.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="424.1" y="1008.0" font-size="11" fill="#000">BOLETA_PK (documento, id_funcion)</text>
-<line x1="373.0" y1="135.5" x2="373.0" y2="119.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="367.0" y1="135.5" x2="367.0" y2="119.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<polyline points="271.5,118.5 284.5,127.5 271.5,136.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="288.5" y1="119.5" x2="288.5" y2="135.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<polyline points="881.3,288.0 894.3,297.0 881.3,306.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<circle cx="900.3" cy="297.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
-<line x1="1062.5" y1="135.5" x2="1062.5" y2="119.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="1056.5" y1="135.5" x2="1056.5" y2="119.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<polyline points="1400.0,136.5 1387.0,127.5 1400.0,118.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<circle cx="1381.0" cy="127.5" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
-<line x1="1297.5" y1="119.5" x2="1297.5" y2="135.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="1303.5" y1="119.5" x2="1303.5" y2="135.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<polyline points="1171.0,600.0 1180.0,587.0 1189.0,600.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<circle cx="1180.0" cy="581.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
-<line x1="1188.0" y1="202.0" x2="1172.0" y2="202.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="1188.0" y1="208.0" x2="1172.0" y2="208.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<polyline points="1292.6,667.0 1305.6,676.0 1292.6,685.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<circle cx="1311.6" cy="676.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
-<line x1="1488.0" y1="326.0" x2="1472.0" y2="326.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="1488.0" y1="332.0" x2="1472.0" y2="332.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<polyline points="761.0,640.0 770.0,627.0 779.0,640.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<circle cx="770.0" cy="621.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
-<line x1="778.0" y1="342.0" x2="762.0" y2="342.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="778.0" y1="348.0" x2="762.0" y2="348.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<polyline points="875.9,688.5 888.9,697.5 875.9,706.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="892.9" y1="689.5" x2="892.9" y2="705.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="1060.4" y1="705.5" x2="1060.4" y2="689.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="1054.4" y1="705.5" x2="1054.4" y2="689.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<polyline points="511.0,880.0 520.0,867.0 529.0,880.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<circle cx="520.0" cy="861.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
-<line x1="528.0" y1="322.0" x2="512.0" y2="322.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="528.0" y1="328.0" x2="512.0" y2="328.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<polyline points="625.9,938.5 638.9,947.5 625.9,956.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<circle cx="644.9" cy="947.5" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
-<line x1="1148.0" y1="819.0" x2="1132.0" y2="819.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="1148.0" y1="825.0" x2="1132.0" y2="825.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<rect x="-40" y="-80" width="2679" height="641" fill="#ffffff"/>
+<rect x="-40" y="-80" width="2679" height="641" fill="url(#mere_crowsfoot_g2)"/>
+<text x="1299" y="-46" text-anchor="middle" font-size="20" fill="#000">MODELO ENTIDAD RELACIÓN EXTENDIDO · CROW&#x27;S FOOT</text>
+<polyline points="2144.7,175.0 2144.7,270.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1911.7,327.5 1973.1,327.5 1973.1,337.5 2034.5,337.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2257.7,87.5 2377.7,87.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2383.2,317.5 2254.8,317.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="242.4,47.5 362.4,47.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1586.5,67.5 2031.7,67.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1706.5,327.5 1480.6,327.5 1480.6,335.5 1254.7,335.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="201.2,365.0 201.2,395.5 725.6,395.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="228.1,317.5 476.9,317.5 476.9,335.5 725.6,335.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1374.7,67.5 605.6,67.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<rect x="725.6" y="270.0" width="529.0" height="251.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="990.1" y="289.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">ACTOR</text><text x="990.1" y="307.0" text-anchor="middle" font-size="10" fill="#000">jerarquía s (solapada), parcial</text><line x1="725.6" y1="312.0" x2="1254.7" y2="312.0" stroke="#000" stroke-width="1.1"/><text x="733.6" y="328.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="760.3" y="328.0" font-size="12" fill="#000" text-decoration="underline">id_actor</text><text x="861.0" y="328.0" font-size="11" fill="#000">VARCHAR (15)</text><text x="733.6" y="348.0" font-size="11" font-weight="bold" fill="#000">U *</text><text x="760.3" y="348.0" font-size="12" fill="#000">nombre_artistico</text><text x="861.0" y="348.0" font-size="11" fill="#000">VARCHAR (60)</text><text x="733.6" y="368.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="760.3" y="368.0" font-size="12" fill="#000">nombres</text><text x="861.0" y="368.0" font-size="11" fill="#000">VARCHAR (50)</text><text x="733.6" y="388.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="760.3" y="388.0" font-size="12" fill="#000">apellidos</text><text x="861.0" y="388.0" font-size="11" fill="#000">VARCHAR (50)</text><line x1="725.6" y1="398.0" x2="1254.7" y2="398.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="735.6" y="412.0" font-size="11" fill="#000">ACTOR_PK (id_actor)</text>
+<rect x="765.6" y="441.0" width="211.8" height="56.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="871.5" y="460.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">CANTANTE</text><line x1="765.6" y1="469.0" x2="977.5" y2="469.0" stroke="#000" stroke-width="1.1"/><text x="773.6" y="485.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="788.3" y="485.0" font-size="12" fill="#000">registro_vocal</text><text x="875.0" y="485.0" font-size="11" fill="#000">VARCHAR (20)</text>
+<rect x="1017.5" y="441.0" width="197.2" height="56.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1116.1" y="460.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">BAILARIN</text><line x1="1017.5" y1="469.0" x2="1214.7" y2="469.0" stroke="#000" stroke-width="1.1"/><text x="1025.5" y="485.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1040.1" y="485.0" font-size="12" fill="#000">estilo_baile</text><text x="1112.2" y="485.0" font-size="11" fill="#000">VARCHAR (30)</text>
+<rect x="362.4" y="0.0" width="243.2" height="175.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="484.0" y="19.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">ESPECTADOR</text><line x1="362.4" y1="28.0" x2="605.6" y2="28.0" stroke="#000" stroke-width="1.1"/><text x="370.4" y="44.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="397.1" y="44.0" font-size="12" fill="#000" text-decoration="underline">documento</text><text x="503.2" y="44.0" font-size="11" fill="#000">VARCHAR (15)</text><text x="370.4" y="64.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="397.1" y="64.0" font-size="12" fill="#000">nombres</text><text x="503.2" y="64.0" font-size="11" fill="#000">VARCHAR (50)</text><text x="370.4" y="84.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="397.1" y="84.0" font-size="12" fill="#000">apellidos</text><text x="503.2" y="84.0" font-size="11" fill="#000">VARCHAR (50)</text><text x="370.4" y="104.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="397.1" y="104.0" font-size="12" fill="#000">fecha_nacimiento</text><text x="503.2" y="104.0" font-size="11" fill="#000">DATE</text><text x="370.4" y="124.0" font-size="11" font-weight="bold" fill="#000">/</text><text x="397.1" y="124.0" font-size="12" fill="#000">edad</text><text x="503.2" y="124.0" font-size="11" fill="#000">INTEGER</text><text x="370.4" y="144.0" font-size="11" font-weight="bold" fill="#000">U *</text><text x="397.1" y="144.0" font-size="12" fill="#000">correo</text><text x="503.2" y="144.0" font-size="11" fill="#000">VARCHAR (80)</text><line x1="362.4" y1="154.0" x2="605.6" y2="154.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="372.4" y="168.0" font-size="11" fill="#000">ESPECTADOR_PK (documento)</text>
+<rect x="2031.7" y="0.0" width="226.1" height="175.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="2144.7" y="19.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">FUNCION</text><line x1="2031.7" y1="28.0" x2="2257.7" y2="28.0" stroke="#000" stroke-width="1.1"/><text x="2039.7" y="44.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="2065.4" y="44.0" font-size="12" fill="#000" text-decoration="underline">id_funcion</text><text x="2150.1" y="44.0" font-size="11" fill="#000">INTEGER</text><text x="2039.7" y="64.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="2065.4" y="64.0" font-size="12" fill="#000">fecha</text><text x="2150.1" y="64.0" font-size="11" fill="#000">DATE</text><text x="2039.7" y="84.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="2065.4" y="84.0" font-size="12" fill="#000">hora</text><text x="2150.1" y="84.0" font-size="11" fill="#000">TIME</text><text x="2039.7" y="104.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="2065.4" y="104.0" font-size="12" fill="#000">precio</text><text x="2150.1" y="104.0" font-size="11" fill="#000">DECIMAL (10,2)</text><text x="2039.7" y="124.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="2065.4" y="124.0" font-size="12" fill="#000">codigo_teatro</text><text x="2150.1" y="124.0" font-size="11" fill="#000">CHAR (3)</text><text x="2039.7" y="144.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="2065.4" y="144.0" font-size="12" fill="#000">id_obra</text><text x="2150.1" y="144.0" font-size="11" fill="#000">INTEGER</text><line x1="2031.7" y1="154.0" x2="2257.7" y2="154.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="2041.7" y="168.0" font-size="11" fill="#000">FUNCION_PK (id_funcion)</text>
+<rect x="2377.7" y="0.0" width="221.0" height="135.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="2488.2" y="19.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">TEATRO</text><line x1="2377.7" y1="28.0" x2="2598.7" y2="28.0" stroke="#000" stroke-width="1.1"/><text x="2385.7" y="44.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="2411.5" y="44.0" font-size="12" fill="#000" text-decoration="underline">codigo_teatro</text><text x="2496.2" y="44.0" font-size="11" fill="#000">CHAR (3)</text><text x="2385.7" y="64.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="2411.5" y="64.0" font-size="12" fill="#000">nombre</text><text x="2496.2" y="64.0" font-size="11" fill="#000">VARCHAR (60)</text><text x="2385.7" y="84.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="2411.5" y="84.0" font-size="12" fill="#000">direccion</text><text x="2496.2" y="84.0" font-size="11" fill="#000">VARCHAR (80)</text><text x="2385.7" y="104.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="2411.5" y="104.0" font-size="12" fill="#000">aforo</text><text x="2496.2" y="104.0" font-size="11" fill="#000">INTEGER</text><line x1="2377.7" y1="114.0" x2="2598.7" y2="114.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="2387.7" y="128.0" font-size="11" fill="#000">TEATRO_PK (codigo_teatro)</text>
+<rect x="2034.5" y="270.0" width="220.3" height="135.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="2144.7" y="289.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">OBRA</text><line x1="2034.5" y1="298.0" x2="2254.8" y2="298.0" stroke="#000" stroke-width="1.1"/><text x="2042.5" y="314.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="2068.3" y="314.0" font-size="12" fill="#000" text-decoration="underline">id_obra</text><text x="2152.4" y="314.0" font-size="11" fill="#000">INTEGER</text><text x="2042.5" y="334.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="2068.3" y="334.0" font-size="12" fill="#000">titulo</text><text x="2152.4" y="334.0" font-size="11" fill="#000">VARCHAR (80)</text><text x="2042.5" y="354.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="2068.3" y="354.0" font-size="12" fill="#000">autor</text><text x="2152.4" y="354.0" font-size="11" fill="#000">VARCHAR (60)</text><text x="2042.5" y="374.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="2068.3" y="374.0" font-size="12" fill="#000">duracion_min</text><text x="2152.4" y="374.0" font-size="11" fill="#000">INTEGER</text><line x1="2034.5" y1="384.0" x2="2254.8" y2="384.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="2044.5" y="398.0" font-size="11" fill="#000">OBRA_PK (id_obra)</text>
+<rect x="0.0" y="0.0" width="242.4" height="95.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="121.2" y="19.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">ESP_TELEFONO</text><line x1="0.0" y1="28.0" x2="242.4" y2="28.0" stroke="#000" stroke-width="1.1"/><text x="8.0" y="44.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="38.0" y="44.0" font-size="12" fill="#000" text-decoration="underline">documento</text><text x="109.4" y="44.0" font-size="11" fill="#000">VARCHAR (15)</text><text x="8.0" y="64.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="38.0" y="64.0" font-size="12" fill="#000" text-decoration="underline">telefono</text><text x="109.4" y="64.0" font-size="11" fill="#000">VARCHAR (15)</text><line x1="0.0" y1="74.0" x2="242.4" y2="74.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="10.0" y="88.0" font-size="11" fill="#000">ESP_TELEFONO_PK (documento, telefono)</text>
+<rect x="2383.2" y="270.0" width="210.0" height="95.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="2488.2" y="289.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">OBR_GENERO</text><line x1="2383.2" y1="298.0" x2="2593.2" y2="298.0" stroke="#000" stroke-width="1.1"/><text x="2391.2" y="314.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="2421.2" y="314.0" font-size="12" fill="#000" text-decoration="underline">id_obra</text><text x="2473.2" y="314.0" font-size="11" fill="#000">INTEGER</text><text x="2391.2" y="334.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="2421.2" y="334.0" font-size="12" fill="#000" text-decoration="underline">genero</text><text x="2473.2" y="334.0" font-size="11" fill="#000">VARCHAR (20)</text><line x1="2383.2" y1="344.0" x2="2593.2" y2="344.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="2393.2" y="358.0" font-size="11" fill="#000">OBR_GENERO_PK (id_obra, genero)</text>
+<rect x="1374.7" y="0.0" width="211.8" height="135.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1480.6" y="19.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">BOLETA</text><line x1="1374.7" y1="28.0" x2="1586.5" y2="28.0" stroke="#000" stroke-width="1.1"/><text x="1382.7" y="44.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="1412.7" y="44.0" font-size="12" fill="#000" text-decoration="underline">documento</text><text x="1484.0" y="44.0" font-size="11" fill="#000">VARCHAR (15)</text><text x="1382.7" y="64.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="1412.7" y="64.0" font-size="12" fill="#000" text-decoration="underline">id_funcion</text><text x="1484.0" y="64.0" font-size="11" fill="#000">INTEGER</text><text x="1382.7" y="84.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1412.7" y="84.0" font-size="12" fill="#000">fila</text><text x="1484.0" y="84.0" font-size="11" fill="#000">CHAR (1)</text><text x="1382.7" y="104.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1412.7" y="104.0" font-size="12" fill="#000">silla</text><text x="1484.0" y="104.0" font-size="11" fill="#000">INTEGER</text><line x1="1374.7" y1="114.0" x2="1586.5" y2="114.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="1384.7" y="128.0" font-size="11" fill="#000">BOLETA_PK (documento, id_funcion)</text>
+<rect x="1706.5" y="270.0" width="205.2" height="115.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1809.1" y="289.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">REPARTO</text><line x1="1706.5" y1="298.0" x2="1911.7" y2="298.0" stroke="#000" stroke-width="1.1"/><text x="1714.5" y="314.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="1744.5" y="314.0" font-size="12" fill="#000" text-decoration="underline">id_actor</text><text x="1809.2" y="314.0" font-size="11" fill="#000">VARCHAR (15)</text><text x="1714.5" y="334.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="1744.5" y="334.0" font-size="12" fill="#000" text-decoration="underline">id_obra</text><text x="1809.2" y="334.0" font-size="11" fill="#000">INTEGER</text><text x="1714.5" y="354.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1744.5" y="354.0" font-size="12" fill="#000">personaje</text><text x="1809.2" y="354.0" font-size="11" fill="#000">VARCHAR (40)</text><line x1="1706.5" y1="364.0" x2="1911.7" y2="364.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="1716.5" y="378.0" font-size="11" fill="#000">REPARTO_PK (id_actor, id_obra)</text>
+<rect x="14.3" y="270.0" width="213.8" height="95.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="121.2" y="289.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">SUPLENCIA</text><line x1="14.3" y1="298.0" x2="228.1" y2="298.0" stroke="#000" stroke-width="1.1"/><text x="22.3" y="314.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="52.3" y="314.0" font-size="12" fill="#000" text-decoration="underline">id_suplente</text><text x="125.7" y="314.0" font-size="11" fill="#000">VARCHAR (15)</text><text x="22.3" y="334.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="52.3" y="334.0" font-size="12" fill="#000">id_titular</text><text x="125.7" y="334.0" font-size="11" fill="#000">VARCHAR (15)</text><line x1="14.3" y1="344.0" x2="228.1" y2="344.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="24.3" y="358.0" font-size="11" fill="#000">SUPLENCIA_PK (id_suplente)</text>
+<polyline points="2153.7,175.0 2144.7,188.0 2135.7,175.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="2144.7" cy="194.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="2136.7" y1="263.0" x2="2152.7" y2="263.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="2136.7" y1="257.0" x2="2152.7" y2="257.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1911.7,318.5 1924.7,327.5 1911.7,336.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1928.7" y1="319.5" x2="1928.7" y2="335.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="2027.5" y1="345.5" x2="2027.5" y2="329.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="2021.5" y1="345.5" x2="2021.5" y2="329.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="2257.7,78.5 2270.7,87.5 2257.7,96.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="2276.7" cy="87.5" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="2370.7" y1="95.5" x2="2370.7" y2="79.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="2364.7" y1="95.5" x2="2364.7" y2="79.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="2383.2,326.5 2370.2,317.5 2383.2,308.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="2366.2" y1="325.5" x2="2366.2" y2="309.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="2261.8" y1="309.5" x2="2261.8" y2="325.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="2267.8" y1="309.5" x2="2267.8" y2="325.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="242.4,38.5 255.4,47.5 242.4,56.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="259.4" y1="39.5" x2="259.4" y2="55.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="355.4" y1="55.5" x2="355.4" y2="39.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="349.4" y1="55.5" x2="349.4" y2="39.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1586.5,58.5 1599.5,67.5 1586.5,76.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="1605.5" cy="67.5" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="2024.7" y1="75.5" x2="2024.7" y2="59.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="2018.7" y1="75.5" x2="2018.7" y2="59.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1706.5,336.5 1693.5,327.5 1706.5,318.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1689.5" y1="335.5" x2="1689.5" y2="319.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1261.7" y1="327.5" x2="1261.7" y2="343.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1267.7" y1="327.5" x2="1267.7" y2="343.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="209.2" y1="372.0" x2="193.2" y2="372.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="201.2" cy="383.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="718.6" y1="403.5" x2="718.6" y2="387.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="712.6" y1="403.5" x2="712.6" y2="387.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="228.1,308.5 241.1,317.5 228.1,326.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="247.1" cy="317.5" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="718.6" y1="343.5" x2="718.6" y2="327.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="712.6" y1="343.5" x2="712.6" y2="327.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1374.7,76.5 1361.7,67.5 1374.7,58.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1357.7" y1="75.5" x2="1357.7" y2="59.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="612.6" y1="59.5" x2="612.6" y2="75.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="618.6" y1="59.5" x2="618.6" y2="75.5" stroke="#000" stroke-width="1.4" fill="none"/>
 </svg></div>
 </section>
 
@@ -247,8 +248,8 @@
   <footer>Universidad El Bosque · Bogotá D.C</footer>
 </div>
 
-<script src="../../js/estrellas.js?v=20261116c"></script>
-<script src="../../js/ejercicios.js?v=20261116c"></script>
+<script src="../../js/estrellas.js?v=20261116d"></script>
+<script src="../../js/ejercicios.js?v=20261116d"></script>
 <script>iniciarEtapa("mer-e");</script>
 </body>
 </html>

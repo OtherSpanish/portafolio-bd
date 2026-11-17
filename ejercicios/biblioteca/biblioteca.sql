@@ -1,7 +1,9 @@
 -- Red de bibliotecas - script completo (01 + 02 + 04 + 05). Probado en MySQL 8.0.
 
 -- Red de bibliotecas - Bases de Datos 1
--- 01: creacion de la sede de datos y de las 9 tablas
+-- 01: creacion de la base de datos y de las 10 tablas
+-- Las tablas van en orden: primero las que no dependen de otras.
+
 SET NAMES utf8mb4;
 
 CREATE DATABASE IF NOT EXISTS biblioteca
@@ -10,271 +12,225 @@ CREATE DATABASE IF NOT EXISTS biblioteca
 
 USE biblioteca;
 
+-- AUTOR
+CREATE TABLE AUTOR (
+  id_autor int NOT NULL,
+  nombre varchar(80) NOT NULL,
+  nacionalidad varchar(40) NOT NULL,
+  PRIMARY KEY (id_autor)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- EDITORIAL
+CREATE TABLE EDITORIAL (
+  id_editorial int NOT NULL,
+  nombre varchar(60) NOT NULL,
+  pais varchar(40) NOT NULL,
+  PRIMARY KEY (id_editorial),
+  UNIQUE KEY uq_editorial_nombre (nombre)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- SEDE
 CREATE TABLE SEDE (
   codigo_sede char(3) NOT NULL,
-  nombre varchar(80) NOT NULL,
-  ciudad varchar(50) NOT NULL,
-  pais varchar(50) NOT NULL,
+  nombre varchar(60) NOT NULL,
+  localidad varchar(40) NOT NULL,
   PRIMARY KEY (codigo_sede)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE PERSONA (
-  documento varchar(15) NOT NULL,
+-- LECTOR
+CREATE TABLE LECTOR (
+  carne varchar(10) NOT NULL,
   nombres varchar(50) NOT NULL,
   apellidos varchar(50) NOT NULL,
   fecha_nacimiento date NOT NULL,
-  tipo_persona enum('bibliotecario','lector','ambos') NOT NULL,
-  registro varchar(10) DEFAULT NULL,
-  anios_experiencia int DEFAULT NULL,
-  codigo_sede char(3) DEFAULT NULL,
   correo varchar(80) DEFAULT NULL,
-  prestamos int DEFAULT NULL,
-  PRIMARY KEY (documento),
-  UNIQUE KEY uq_persona_registro (registro),
-  UNIQUE KEY uq_persona_correo (correo),
-  KEY fk_persona_sede (codigo_sede),
-  CONSTRAINT fk_persona_sede FOREIGN KEY (codigo_sede) REFERENCES SEDE (codigo_sede)
+  tipo_lector enum('infantil','adulto') NOT NULL,
+  acudiente varchar(80) DEFAULT NULL,
+  ocupacion varchar(40) DEFAULT NULL,
+  PRIMARY KEY (carne),
+  UNIQUE KEY uq_lector_correo (correo)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE PER_TELEFONO (
-  documento varchar(15) NOT NULL,
+-- BIBLIOTECARIO
+CREATE TABLE BIBLIOTECARIO (
+  id_bibliotecario varchar(15) NOT NULL,
+  nombres varchar(50) NOT NULL,
+  apellidos varchar(50) NOT NULL,
+  turno enum('manana','tarde') NOT NULL,
+  codigo_sede char(3) NOT NULL,
+  PRIMARY KEY (id_bibliotecario),
+  CONSTRAINT fk_bibliotecario_codigo_sede FOREIGN KEY (codigo_sede) REFERENCES SEDE (codigo_sede)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- LEC_TELEFONO
+CREATE TABLE LEC_TELEFONO (
+  carne varchar(10) NOT NULL,
   telefono varchar(15) NOT NULL,
-  PRIMARY KEY (documento,telefono),
-  CONSTRAINT fk_per_telefono_persona FOREIGN KEY (documento) REFERENCES PERSONA (documento)
+  PRIMARY KEY (carne, telefono),
+  CONSTRAINT fk_lec_telefono_carne FOREIGN KEY (carne) REFERENCES LECTOR (carne)
     ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE SALA (
-  codigo_sala varchar(10) NOT NULL,
-  nombre_sala varchar(40) NOT NULL,
-  piso varchar(40) NOT NULL,
+-- LIBRO
+CREATE TABLE LIBRO (
+  isbn varchar(13) NOT NULL,
+  titulo varchar(100) NOT NULL,
+  anio int NOT NULL,
+  id_editorial int NOT NULL,
+  PRIMARY KEY (isbn),
+  CONSTRAINT fk_libro_id_editorial FOREIGN KEY (id_editorial) REFERENCES EDITORIAL (id_editorial)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- EJEMPLAR
+CREATE TABLE EJEMPLAR (
+  codigo_barras varchar(10) NOT NULL,
+  estado enum('bueno','regular','danado') NOT NULL,
+  isbn varchar(13) NOT NULL,
   codigo_sede char(3) NOT NULL,
-  PRIMARY KEY (codigo_sala),
-  KEY fk_sala_sede (codigo_sede),
-  CONSTRAINT fk_sala_sede FOREIGN KEY (codigo_sede) REFERENCES SEDE (codigo_sede)
+  PRIMARY KEY (codigo_barras),
+  CONSTRAINT fk_ejemplar_isbn FOREIGN KEY (isbn) REFERENCES LIBRO (isbn),
+  CONSTRAINT fk_ejemplar_codigo_sede FOREIGN KEY (codigo_sede) REFERENCES SEDE (codigo_sede)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE SALA_COMPUTO (
-  codigo_sala varchar(10) NOT NULL,
-  num_equipos int NOT NULL,
-  PRIMARY KEY (codigo_sala),
-  CONSTRAINT fk_sala_computo_sala FOREIGN KEY (codigo_sala) REFERENCES SALA (codigo_sala)
+-- AUTORIA
+CREATE TABLE AUTORIA (
+  id_autor int NOT NULL,
+  isbn varchar(13) NOT NULL,
+  PRIMARY KEY (id_autor, isbn),
+  CONSTRAINT fk_autoria_id_autor FOREIGN KEY (id_autor) REFERENCES AUTOR (id_autor),
+  CONSTRAINT fk_autoria_isbn FOREIGN KEY (isbn) REFERENCES LIBRO (isbn)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE SALA_INFANTIL (
-  codigo_sala varchar(10) NOT NULL,
-  area_m2 decimal(10,2) NOT NULL,
-  PRIMARY KEY (codigo_sala),
-  CONSTRAINT fk_sala_infantil_sala FOREIGN KEY (codigo_sala) REFERENCES SALA (codigo_sala)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-CREATE TABLE TALLER (
-  id_taller bigint NOT NULL AUTO_INCREMENT,
-  codigo varchar(8) NOT NULL,
-  fecha date NOT NULL,
-  hora_inicio time NOT NULL,
-  tema varchar(50) NOT NULL,
-  codigo_sala varchar(10) NOT NULL,
-  sede_taller char(3) NOT NULL,
-  PRIMARY KEY (id_taller),
-  UNIQUE KEY uq_taller_codigo_fecha (codigo,fecha),
-  KEY fk_taller_sala (codigo_sala),
-  KEY fk_taller_sede (sede_taller),
-  CONSTRAINT fk_taller_sala FOREIGN KEY (codigo_sala) REFERENCES SALA (codigo_sala),
-  CONSTRAINT fk_taller_sede FOREIGN KEY (sede_taller) REFERENCES SEDE (codigo_sede)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-CREATE TABLE ORIENTACION (
-  documento varchar(15) NOT NULL,
-  id_taller bigint NOT NULL,
-  rol enum('principal','apoyo') NOT NULL,
-  PRIMARY KEY (documento,id_taller),
-  KEY fk_orientacion_taller (id_taller),
-  CONSTRAINT fk_orientacion_persona FOREIGN KEY (documento) REFERENCES PERSONA (documento),
-  CONSTRAINT fk_orientacion_taller FOREIGN KEY (id_taller) REFERENCES TALLER (id_taller)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-CREATE TABLE INSCRIPCION (
-  documento varchar(15) NOT NULL,
-  id_taller bigint NOT NULL,
-  puesto varchar(4) NOT NULL,
-  modalidad enum('presencial','virtual') NOT NULL,
-  PRIMARY KEY (documento,id_taller),
-  UNIQUE KEY uq_inscripcion_taller_puesto (id_taller,puesto),
-  CONSTRAINT fk_inscripcion_persona FOREIGN KEY (documento) REFERENCES PERSONA (documento),
-  CONSTRAINT fk_inscripcion_taller FOREIGN KEY (id_taller) REFERENCES TALLER (id_taller)
+-- PRESTAMO
+CREATE TABLE PRESTAMO (
+  carne varchar(10) NOT NULL,
+  codigo_barras varchar(10) NOT NULL,
+  id_bibliotecario varchar(15) NOT NULL,
+  fecha_prestamo date NOT NULL,
+  fecha_devolucion date DEFAULT NULL,
+  PRIMARY KEY (carne, codigo_barras, id_bibliotecario, fecha_prestamo),
+  CONSTRAINT fk_prestamo_carne FOREIGN KEY (carne) REFERENCES LECTOR (carne),
+  CONSTRAINT fk_prestamo_codigo_barras FOREIGN KEY (codigo_barras) REFERENCES EJEMPLAR (codigo_barras),
+  CONSTRAINT fk_prestamo_id_bibliotecario FOREIGN KEY (id_bibliotecario) REFERENCES BIBLIOTECARIO (id_bibliotecario)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Red de bibliotecas - Bases de Datos 1
--- 02: registros de prueba (64), en una sola transaccion
+-- 02: registros de prueba, en una sola transaccion
 
 USE biblioteca;
 
-
-
 START TRANSACTION;
 
+INSERT INTO AUTOR (id_autor, nombre, nacionalidad) VALUES
+(1, 'Gabriel Garcia Marquez', 'colombiana'),
+(2, 'Isabel Allende', 'chilena'),
+(3, 'Julio Cortazar', 'argentina'),
+(4, 'Rafael Pombo', 'colombiana'),
+(5, 'Laura Restrepo', 'colombiana'),
+(6, 'Pilar Quintana', 'colombiana');
 
+INSERT INTO EDITORIAL (id_editorial, nombre, pais) VALUES
+(1, 'Penguin Random House', 'Espana'),
+(2, 'Planeta', 'Espana'),
+(3, 'Panamericana', 'Colombia');
 
-INSERT INTO SEDE (codigo_sede, nombre, ciudad, pais) VALUES
-('BOG', 'Biblioteca Virgilio Barco', 'Bogota', 'Colombia'),
-('MED', 'Biblioteca EPM', 'Medellin', 'Colombia'),
-('CAL', 'Biblioteca Departamental', 'Cali', 'Colombia');
+INSERT INTO SEDE (codigo_sede, nombre, localidad) VALUES
+('VBA', 'Biblioteca Virgilio Barco', 'Teusaquillo'),
+('TIN', 'Biblioteca El Tintal', 'Kennedy'),
+('TUN', 'Biblioteca El Tunal', 'Tunjuelito');
 
-INSERT INTO PERSONA (documento, nombres, apellidos, fecha_nacimiento, tipo_persona,
-                     registro, anios_experiencia, codigo_sede, correo, prestamos) VALUES
-('1010', 'Hernando', 'Lozada Rey', '1980-03-12', 'bibliotecario', 'BIB-1101', 17, 'BOG', NULL, NULL),
-('1020', 'Patricia', 'Ospina Vela', '1988-07-25', 'bibliotecario', 'BIB-1288', 9, 'MED', NULL, NULL),
-('1030', 'German', 'Riascos Mesa', '1975-11-02', 'bibliotecario', 'BIB-0975', 28, 'BOG', NULL, NULL),
-('1040', 'Teresa', 'Galindo Paz', '1992-01-18', 'ambos', 'BIB-1390', 5, 'CAL', 'teresa.galindo@correo.co', 40),
-('2010', 'Nicolas', 'Arias Cano', '2000-05-30', 'lector', NULL, NULL, NULL, 'nicolas.arias@correo.co', 85),
-('2020', 'Valentina', 'Cruz Leon', '1997-09-14', 'lector', NULL, NULL, NULL, 'valentina.cruz@correo.co', 12),
-('2030', 'Emilio', 'Duarte Gil', '1985-12-01', 'lector', NULL, NULL, NULL, 'emilio.duarte@correo.co', 130),
-('2040', 'Luciana', 'Romero Sol', '2003-04-22', 'lector', NULL, NULL, NULL, 'luciana.romero@correo.co', 3),
-('2050', 'Ignacio', 'Vargas Lima', '1979-08-08', 'lector', NULL, NULL, NULL, 'ignacio.vargas@correo.co', 66);
+INSERT INTO LECTOR (carne, nombres, apellidos, fecha_nacimiento, correo, tipo_lector, acudiente, ocupacion) VALUES
+('L-1001', 'Valeria', 'Cruz Leon', '2014-03-02', NULL, 'infantil', 'Martha Leon', NULL),
+('L-1002', 'Nicolas', 'Arias Cano', '1990-07-19', 'nicolas.arias@correo.co', 'adulto', NULL, 'contador'),
+('L-1003', 'Emilio', 'Duarte Gil', '1958-11-04', 'emilio.duarte@correo.co', 'adulto', NULL, 'pensionado'),
+('L-1004', 'Luciana', 'Romero Sol', '2016-09-27', NULL, 'infantil', 'Andres Romero', NULL),
+('L-1005', 'Ignacio', 'Vargas Lima', '2001-01-15', 'ignacio.vargas@correo.co', 'adulto', NULL, 'estudiante'),
+('L-1006', 'Sofia', 'Beltran Ruiz', '1985-05-08', 'sofia.beltran@correo.co', 'adulto', NULL, 'docente');
 
-INSERT INTO PER_TELEFONO (documento, telefono) VALUES
-('1010', '3001112233'),
-('1010', '6015550101'),
-('1020', '3104445566'),
-('1030', '3207778899'),
-('1040', '3156667788'),
-('1040', '3019990000'),
-('2010', '3121234567'),
-('2020', '3189876543'),
-('2030', '3001239876'),
-('2030', '6047771234'),
-('2040', '3165554433'),
-('2050', '3112223344');
+INSERT INTO BIBLIOTECARIO (id_bibliotecario, nombres, apellidos, turno, codigo_sede) VALUES
+('B01', 'Hernando', 'Lozada Rey', 'manana', 'VBA'),
+('B02', 'Patricia', 'Ospina Vela', 'tarde', 'VBA'),
+('B03', 'German', 'Riascos Mesa', 'manana', 'TIN'),
+('B04', 'Teresa', 'Galindo Paz', 'tarde', 'TUN');
 
-INSERT INTO SALA (codigo_sala, nombre_sala, piso, codigo_sede) VALUES
-('SL-01', 'Sala Digital', 'Piso 2', 'BOG'),
-('SL-02', 'Sala Multimedia', 'Piso 1', 'MED'),
-('SL-03', 'Sala Digital', 'Piso 3', 'CAL'),
-('SL-04', 'Sala Infantil', 'Piso 1', 'BOG'),
-('SL-05', 'Hemeroteca', 'Piso 1', 'BOG');
+INSERT INTO LEC_TELEFONO (carne, telefono) VALUES
+('L-1001', '3201112233'),
+('L-1002', '3002223344'),
+('L-1002', '6013334455'),
+('L-1003', '3104445566'),
+('L-1004', '3115556677'),
+('L-1005', '3126667788'),
+('L-1005', '6017778899'),
+('L-1006', '3138889900');
 
-INSERT INTO SALA_COMPUTO (codigo_sala, num_equipos) VALUES
-('SL-01', 30),
-('SL-02', 24),
-('SL-03', 20);
+INSERT INTO LIBRO (isbn, titulo, anio, id_editorial) VALUES
+('9789584279', 'Cien anos de soledad', 1967, 1),
+('9789584280', 'Cronica de una muerte anunciada', 1981, 1),
+('9789584281', 'La casa de los espiritus', 1982, 2),
+('9789584282', 'Rayuela', 1963, 1),
+('9789584283', 'Cuentos pintados', 1867, 3),
+('9789584284', 'Delirio', 2004, 2),
+('9789584285', 'Cuentos de America', 2010, 3);
 
-INSERT INTO SALA_INFANTIL (codigo_sala, area_m2) VALUES
-('SL-04', 120.00);
+INSERT INTO EJEMPLAR (codigo_barras, estado, isbn, codigo_sede) VALUES
+('EJ-001', 'bueno', '9789584279', 'VBA'),
+('EJ-002', 'regular', '9789584279', 'TIN'),
+('EJ-003', 'bueno', '9789584280', 'VBA'),
+('EJ-004', 'bueno', '9789584281', 'TUN'),
+('EJ-005', 'danado', '9789584282', 'VBA'),
+('EJ-006', 'bueno', '9789584283', 'TIN'),
+('EJ-007', 'bueno', '9789584283', 'TUN'),
+('EJ-008', 'regular', '9789584284', 'VBA'),
+('EJ-009', 'bueno', '9789584285', 'TIN');
 
-INSERT INTO TALLER (id_taller, codigo, fecha, hora_inicio, tema, codigo_sala, sede_taller) VALUES
-(1, 'LEC01', '2026-09-05', '10:00', 'Club de lectura', 'SL-01', 'BOG'),
-(2, 'ESC02', '2026-09-05', '15:00', 'Escritura creativa', 'SL-02', 'MED'),
-(3, 'LEC03', '2026-09-06', '10:00', 'Club de lectura', 'SL-03', 'CAL'),
-(4, 'LEC01', '2026-09-07', '10:00', 'Club de lectura', 'SL-01', 'BOG'),
-(5, 'CUE05', '2026-09-07', '16:00', 'Cuentos para ninos', 'SL-04', 'BOG'),
-(6, 'INV06', '2026-09-08', '14:00', 'Investigacion', 'SL-02', 'MED');
+INSERT INTO AUTORIA (id_autor, isbn) VALUES
+(1, '9789584279'),
+(1, '9789584280'),
+(2, '9789584281'),
+(3, '9789584282'),
+(4, '9789584283'),
+(5, '9789584284'),
+(3, '9789584285'),
+(1, '9789584285');
 
-INSERT INTO ORIENTACION (documento, id_taller, rol) VALUES
-('1010', 1, 'principal'),
-('1040', 1, 'apoyo'),
-('1020', 2, 'principal'),
-('1030', 2, 'apoyo'),
-('1040', 3, 'principal'),
-('1020', 3, 'apoyo'),
-('1030', 4, 'principal'),
-('1010', 4, 'apoyo'),
-('1030', 5, 'principal'),
-('1010', 5, 'apoyo'),
-('1020', 6, 'principal'),
-('1040', 6, 'apoyo');
-
-INSERT INTO INSCRIPCION (documento, id_taller, puesto, modalidad) VALUES
-('2010', 1, '12', 'presencial'),
-('2010', 3, '5', 'presencial'),
-('2010', 4, '14', 'presencial'),
-('2020', 1, '2', 'virtual'),
-('2020', 2, '8', 'presencial'),
-('2030', 2, '1', 'virtual'),
-('2030', 6, '3', 'virtual'),
-('2040', 3, '20', 'presencial'),
-('2040', 6, '22', 'presencial'),
-('2050', 1, '15', 'presencial'),
-('2050', 3, '9', 'presencial'),
-('2050', 4, '4', 'virtual'),
-('1040', 2, '18', 'presencial');
-
-
+INSERT INTO PRESTAMO (carne, codigo_barras, id_bibliotecario, fecha_prestamo, fecha_devolucion) VALUES
+('L-1002', 'EJ-001', 'B01', '2026-10-01', '2026-10-15'),
+('L-1002', 'EJ-003', 'B02', '2026-10-20', '2026-11-02'),
+('L-1002', 'EJ-008', 'B01', '2026-11-05', NULL),
+('L-1003', 'EJ-001', 'B02', '2026-10-18', '2026-10-30'),
+('L-1001', 'EJ-006', 'B03', '2026-10-10', '2026-10-24'),
+('L-1004', 'EJ-007', 'B04', '2026-11-03', NULL),
+('L-1005', 'EJ-002', 'B03', '2026-11-01', '2026-11-12'),
+('L-1006', 'EJ-005', 'B01', '2026-09-15', '2026-09-29'),
+('L-1005', 'EJ-001', 'B01', '2026-11-10', NULL);
 
 COMMIT;
 
 -- Red de bibliotecas - Bases de Datos 1
 -- 04: restricciones adicionales de los supuestos
+
 USE biblioteca;
 
-ALTER TABLE PERSONA ADD CONSTRAINT ck_persona_datos_bibliotecario CHECK (
-  tipo_persona = 'lector'
-  OR (registro IS NOT NULL AND anios_experiencia IS NOT NULL AND codigo_sede IS NOT NULL));
+-- quien es infantil debe tener sus datos
+ALTER TABLE LECTOR ADD CONSTRAINT ck_lector_infantil CHECK (
+  tipo_lector IS NULL OR tipo_lector NOT IN ('infantil') OR (acudiente IS NOT NULL));
 
-ALTER TABLE PERSONA ADD CONSTRAINT ck_persona_solo_lector CHECK (
-  tipo_persona <> 'lector'
-  OR (registro IS NULL AND anios_experiencia IS NULL AND codigo_sede IS NULL));
+-- quien es adulto debe tener sus datos
+ALTER TABLE LECTOR ADD CONSTRAINT ck_lector_adulto CHECK (
+  tipo_lector IS NULL OR tipo_lector NOT IN ('adulto') OR (ocupacion IS NOT NULL));
 
-ALTER TABLE PERSONA ADD CONSTRAINT ck_persona_datos_lector CHECK (
-  tipo_persona = 'bibliotecario' OR (correo IS NOT NULL AND prestamos IS NOT NULL));
+-- la devolucion no puede ser antes del prestamo
+ALTER TABLE PRESTAMO ADD CONSTRAINT ck_prestamo_fechas CHECK (fecha_devolucion IS NULL OR fecha_devolucion >= fecha_prestamo);
 
-ALTER TABLE PERSONA ADD CONSTRAINT ck_persona_solo_bibliotecario CHECK (
-  tipo_persona <> 'bibliotecario' OR (correo IS NULL AND prestamos IS NULL));
-
-ALTER TABLE PERSONA ADD CONSTRAINT ck_persona_horas CHECK (anios_experiencia IS NULL OR anios_experiencia >= 0);
-ALTER TABLE PERSONA ADD CONSTRAINT ck_persona_prestamos CHECK (prestamos IS NULL OR prestamos >= 0);
-ALTER TABLE PERSONA ADD CONSTRAINT ck_persona_correo CHECK (correo IS NULL OR correo LIKE '%_@_%._%');
-
-ALTER TABLE SALA_COMPUTO ADD CONSTRAINT ck_sala_computo_asientos CHECK (num_equipos > 0);
-ALTER TABLE SALA_INFANTIL ADD CONSTRAINT ck_sala_infantil_capacidad CHECK (area_m2 > 0);
-
-ALTER TABLE TALLER ADD CONSTRAINT ck_taller_tema CHECK (CHAR_LENGTH(TRIM(tema)) > 0);
-
-ALTER TABLE ORIENTACION ADD COLUMN es_principal tinyint
-  GENERATED ALWAYS AS (IF(rol = 'principal', 1, NULL)) VIRTUAL;
-ALTER TABLE ORIENTACION ADD CONSTRAINT uq_orientacion_principal UNIQUE (id_taller, es_principal);
-
-SELECT TABLE_NAME, CONSTRAINT_NAME, CONSTRAINT_TYPE
-FROM information_schema.TABLE_CONSTRAINTS
-WHERE TABLE_SCHEMA = 'biblioteca' AND CONSTRAINT_TYPE IN ('CHECK', 'UNIQUE')
-ORDER BY TABLE_NAME, CONSTRAINT_TYPE, CONSTRAINT_NAME;
+-- un adulto debe tener correo
+ALTER TABLE LECTOR ADD CONSTRAINT ck_lector_correo CHECK (tipo_lector = 'infantil' OR correo IS NOT NULL);
 
 -- Red de bibliotecas - Bases de Datos 1
--- 05: vistas
+-- 05: vistas (consultas guardadas, no guardan datos)
+
 USE biblioteca;
 
-CREATE OR REPLACE VIEW v_persona_edad AS
-SELECT p.documento, p.nombres, p.apellidos, p.tipo_persona, p.fecha_nacimiento,
-       TIMESTAMPDIFF(YEAR, p.fecha_nacimiento, CURDATE()) AS edad
-FROM PERSONA p;
-
-CREATE OR REPLACE VIEW v_tipo_sala AS
-SELECT a.codigo_sala, a.piso, a.nombre_sala, a.codigo_sede,
-       CASE
-         WHEN c.codigo_sala IS NOT NULL THEN 'computo'
-         WHEN g.codigo_sala IS NOT NULL THEN 'infantil'
-         ELSE 'otro'
-       END AS tipo,
-       c.num_equipos, g.area_m2
-FROM SALA a
-LEFT JOIN SALA_COMPUTO c ON c.codigo_sala = a.codigo_sala
-LEFT JOIN SALA_INFANTIL g ON g.codigo_sala = a.codigo_sala;
-
-CREATE OR REPLACE VIEW v_orientacion_taller AS
-SELECT v.id_taller, v.codigo, v.fecha, v.tema, t.rol,
-       p.documento, p.nombres, p.apellidos
-FROM ORIENTACION t
-JOIN TALLER v ON v.id_taller = t.id_taller
-JOIN PERSONA p ON p.documento = t.documento;
-
-CREATE OR REPLACE VIEW v_ocupacion_taller AS
-SELECT v.id_taller, v.codigo, v.fecha, v.tema, c.num_equipos,
-       COUNT(r.documento) AS ocupados,
-       ROUND(100 * COUNT(r.documento) / c.num_equipos, 2) AS porcentaje
-FROM TALLER v
-JOIN SALA_COMPUTO c ON c.codigo_sala = v.codigo_sala
-LEFT JOIN INSCRIPCION r ON r.id_taller = v.id_taller
-GROUP BY v.id_taller, v.codigo, v.fecha, v.tema, c.num_equipos;
-
-SELECT * FROM v_tipo_sala;
-SELECT * FROM v_ocupacion_taller ORDER BY id_taller;
+-- edad es derivado: no se guarda, se calcula
+CREATE OR REPLACE VIEW v_lector_edad AS
+SELECT x.carne, TIMESTAMPDIFF(YEAR, x.fecha_nacimiento, CURDATE()) AS edad
+FROM LECTOR x;

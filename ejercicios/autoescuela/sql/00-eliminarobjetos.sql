@@ -1,18 +1,22 @@
 -- Escuela de conducción - Bases de Datos 1
--- 00: elimina vistas y tablas
+-- 00: elimina vistas y tablas para volver a instalar desde cero
+-- OJO: borra todos los datos.
+
 USE autoescuela;
 
-DROP VIEW IF EXISTS v_ocupacion_practica;
-DROP VIEW IF EXISTS v_instruccion_practica;
 DROP VIEW IF EXISTS v_tipo_vehiculo;
-DROP VIEW IF EXISTS v_persona_edad;
+DROP VIEW IF EXISTS v_instructor_edad;
+DROP VIEW IF EXISTS v_alumno_edad;
 
-DROP TABLE IF EXISTS INSCRIPCION;
-DROP TABLE IF EXISTS INSTRUCCION;
+-- las tablas se borran en orden inverso al de creacion
 DROP TABLE IF EXISTS PRACTICA;
+DROP TABLE IF EXISTS CAMION;
 DROP TABLE IF EXISTS MOTO;
 DROP TABLE IF EXISTS CARRO;
 DROP TABLE IF EXISTS VEHICULO;
-DROP TABLE IF EXISTS PER_TELEFONO;
-DROP TABLE IF EXISTS PERSONA;
+DROP TABLE IF EXISTS OFERTA;
+DROP TABLE IF EXISTS ALU_TELEFONO;
+DROP TABLE IF EXISTS INSTRUCTOR;
+DROP TABLE IF EXISTS ALUMNO;
+DROP TABLE IF EXISTS CURSO;
 DROP TABLE IF EXISTS SEDE;

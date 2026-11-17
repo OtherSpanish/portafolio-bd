@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../css/estilos.css?v=20261116c">
+<link rel="stylesheet" href="../../css/estilos.css?v=20261116d">
 </head>
 <body>
 <div class="sky"></div>
@@ -29,52 +29,49 @@
 
   <main>
 <section class="panel"><details><summary>Ver enunciado del ejercicio</summary>
-<p>Una clínica con sedes en varias ciudades organiza jornadas de salud (vacunación, odontología, pediatría…) y quiere guardarlas en una base de datos.</p>
+<p>Una clínica con tres sedes en Bogotá quiere organizar sus citas, médicos y fórmulas.</p>
 <ul>
-  <li>Cada <strong>SEDE</strong> tiene un código de tres letras, nombre, ciudad y país.</li>
-  <li>Cada <strong>MÉDICO</strong> tiene identificación, nombre, registro médico, años de experiencia y uno o varios teléfonos. Pertenece a exactamente una sede.</li>
-  <li>Cada <strong>CONSULTORIO</strong> tiene un código, bloque, piso y capacidad, y queda en una sede.</li>
-  <li>Una <strong>JORNADA</strong> tiene un identificador, un código (por ejemplo <code>VAC01</code>), fecha, hora de inicio y especialidad. La realiza una sede y se hace en un solo consultorio.</li>
-  <li>En cada jornada atienden uno o más médicos con un <em>rol</em> (principal o apoyo), y un médico puede atender muchas jornadas.</li>
-  <li>Los <strong>PACIENTES</strong> se registran con identificación, nombre (nombres y apellidos), fecha de nacimiento, correo y número de visitas; la edad se calcula. Un paciente agenda citas en las jornadas y en cada cita se guarda el <em>turno</em> y el <em>régimen</em> (contributivo o subsidiado).</li>
-  <li>Un médico también puede ser paciente. Algunos consultorios son de observación (se guarda el número de camillas) y otros son laboratorios (se guarda el área en m²); los consultorios generales no son ni lo uno ni lo otro.</li>
+  <li>Cada <strong>PACIENTE</strong> tiene documento, nombre (nombres y apellidos), fecha de nacimiento, tipo de sangre y teléfonos; la edad se calcula. Está afiliado a una <strong>EPS</strong> (NIT y nombre).</li>
+  <li>Cada <strong>MÉDICO</strong> tiene identificación, nombre (nombres y apellidos), registro médico y una <strong>ESPECIALIDAD</strong>. Atiende en varias <strong>SEDES</strong> ciertos días de la semana.</li>
+  <li>Una <strong>CITA</strong> tiene número, fecha, hora y motivo; es de un paciente y la atiende un médico. Las citas presenciales se hacen en una sede y en un consultorio; las virtuales tienen un enlace y una plataforma. Toda cita es de uno de los dos tipos.</li>
+  <li>En una cita se pueden formular varios <strong>MEDICAMENTOS</strong> (código, nombre y presentación), cada uno con su dosis.</li>
 </ul>
-<p class="nota">Entidades base: <strong>Médico</strong>, <strong>Paciente</strong> y <strong>Sede</strong>. Entidades inventadas para completar el problema: <strong>Consultorio</strong> y <strong>Jornada</strong>.</p></details></section>
+<p class="nota">Entidades base: <strong>Médico</strong>, <strong>Paciente</strong> y <strong>Sede</strong>. Entidades inventadas para completar el problema: <strong>EPS</strong>, <strong>Especialidad</strong>, <strong>Cita</strong> y <strong>Medicamento</strong>.</p></details></section>
 <section class="panel">
 <h2>Consulta 1</h2>
 
-<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>nombre, ciudad</sub>(SEDE)</span>: Muestra el nombre y la ciudad de todas las sedes.</p>
-<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombre</td><td class="xl-cab">ciudad</td></tr><tr><td class="xl-fila">2</td><td class="">Sede Envigado</td><td class="">Medellin</td></tr><tr><td class="xl-fila">3</td><td class="">Sede Norte</td><td class="">Bogota</td></tr><tr><td class="xl-fila">4</td><td class="">Sede San Fernando</td><td class="">Cali</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>nombre</sub>(ESPECIALIDAD)</span>: Muestra todas las especialidades.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombre</td></tr><tr><td class="xl-fila">2</td><td class="">Cardiologia</td></tr><tr><td class="xl-fila">3</td><td class="">Dermatologia</td></tr><tr><td class="xl-fila">4</td><td class="">Medicina general</td></tr><tr><td class="xl-fila">5</td><td class="">Pediatria</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 2</h2>
 
-<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>codigo, fecha, especialidad</sub>(<span class="op">σ</span><sub>especialidad='Vacunacion'</sub>(JORNADA))</span>: Muestra las jornadas de vacunación.</p>
-<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo</td><td class="xl-cab">fecha</td><td class="xl-cab">especialidad</td></tr><tr><td class="xl-fila">2</td><td class="">VAC01</td><td class="">2027-01-15</td><td class="">Vacunacion</td></tr><tr><td class="xl-fila">3</td><td class="">VAC03</td><td class="">2027-01-16</td><td class="">Vacunacion</td></tr><tr><td class="xl-fila">4</td><td class="">VAC01</td><td class="">2027-01-17</td><td class="">Vacunacion</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>id_cita, fecha, hora</sub>(<span class="op">σ</span><sub>id_medico='M02'</sub>(CITA))</span>: Muestra las citas del cardiólogo (médico M02).</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">id_cita</td><td class="xl-cab">fecha</td><td class="xl-cab">hora</td></tr><tr><td class="xl-fila">2</td><td class="xl-num">1</td><td class="">2026-11-20</td><td class="">08:00:00</td></tr><tr><td class="xl-fila">3</td><td class="xl-num">5</td><td class="">2026-11-23</td><td class="">11:00:00</td></tr><tr><td class="xl-fila">4</td><td class="xl-num">7</td><td class="">2026-11-25</td><td class="">09:30:00</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 3</h2>
 
-<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>codigo_consultorio, bloque</sub>(<span class="op">σ</span><sub>piso='Piso 1'</sub>(CONSULTORIO))</span>: Obtiene los consultorios que quedan en el piso 1.</p>
-<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo_consultorio</td><td class="xl-cab">bloque</td></tr><tr><td class="xl-fila">2</td><td class="">C-101</td><td class="">Bloque A</td></tr><tr><td class="xl-fila">3</td><td class="">C-102</td><td class="">Bloque A</td></tr><tr><td class="xl-fila">4</td><td class="">C-110</td><td class="">Bloque A</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>id_cita, enlace</sub>(<span class="op">σ</span><sub>plataforma='Meet'</sub>(TELECONSULTA))</span>: Obtiene las citas virtuales que son por Meet.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">id_cita</td><td class="xl-cab">enlace</td></tr><tr><td class="xl-fila">2</td><td class="xl-num">2</td><td class="">https://meet.clinica.co/a12</td></tr><tr><td class="xl-fila">3</td><td class="xl-num">8</td><td class="">https://meet.clinica.co/c56</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 4</h2>
 
-<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>codigo_consultorio</sub>(CONSULTORIO) <span class="op">−</span> <span class="op">π</span><sub>codigo_consultorio</sub>(JORNADA)</span>: Identifica los consultorios donde no se ha hecho ninguna jornada.</p>
-<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo_consultorio</td></tr><tr><td class="xl-fila">2</td><td class="">C-102</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>codigo_medicamento</sub>(MEDICAMENTO) <span class="op">−</span> <span class="op">π</span><sub>codigo_medicamento</sub>(FORMULA)</span>: Identifica los medicamentos que nunca se han formulado.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo_medicamento</td></tr><tr><td class="xl-fila">2</td><td class="">MED-006</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 5</h2>
 
-<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>documento</sub>(ATENCION) <span class="op">∩</span> <span class="op">π</span><sub>documento</sub>(CITA)</span>: Obtiene las personas que han sido médicos y también pacientes.</p>
-<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">documento</td></tr><tr><td class="xl-fila">2</td><td class="">1040</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>nombres, apellidos, nombre</sub>(MEDICO <span class="op">⋈</span> ESPECIALIDAD)</span>: Muestra cada médico con su especialidad.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">nombre</td></tr><tr><td class="xl-fila">2</td><td class="">Fabio</td><td class="">Sandoval Ortiz</td><td class="">Cardiologia</td></tr><tr><td class="xl-fila">3</td><td class="">Esteban</td><td class="">Mora Quintero</td><td class="">Dermatologia</td></tr><tr><td class="xl-fila">4</td><td class="">Adriana</td><td class="">Lopez Mejia</td><td class="">Medicina general</td></tr><tr><td class="xl-fila">5</td><td class="">Claudia</td><td class="">Rivas Toro</td><td class="">Medicina general</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 6</h2>
 
-<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>codigo, fecha, bloque</sub>(JORNADA <span class="op">⋈</span> CONSULTORIO)</span>: Muestra cada jornada con el bloque del consultorio donde se hace.</p>
-<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo</td><td class="xl-cab">fecha</td><td class="xl-cab">bloque</td></tr><tr><td class="xl-fila">2</td><td class="">ODO02</td><td class="">2027-01-15</td><td class="">Bloque B</td></tr><tr><td class="xl-fila">3</td><td class="">VAC01</td><td class="">2027-01-15</td><td class="">Bloque A</td></tr><tr><td class="xl-fila">4</td><td class="">VAC03</td><td class="">2027-01-16</td><td class="">Bloque A</td></tr><tr><td class="xl-fila">5</td><td class="">LAB05</td><td class="">2027-01-17</td><td class="">Bloque C</td></tr><tr><td class="xl-fila">6</td><td class="">VAC01</td><td class="">2027-01-17</td><td class="">Bloque A</td></tr><tr><td class="xl-fila">7</td><td class="">PED06</td><td class="">2027-01-18</td><td class="">Bloque B</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>documento</sub>(<span class="op">σ</span><sub>id_medico='M01'</sub>(CITA)) <span class="op">∩</span> <span class="op">π</span><sub>documento</sub>(<span class="op">σ</span><sub>id_medico='M02'</sub>(CITA))</span>: Obtiene los pacientes que han ido con la médica M01 y también con el M02.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">documento</td></tr><tr><td class="xl-fila">2</td><td class="">7010</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
   </main>
 
@@ -83,8 +80,8 @@
   <footer>Universidad El Bosque · Bogotá D.C</footer>
 </div>
 
-<script src="../../js/estrellas.js?v=20261116c"></script>
-<script src="../../js/ejercicios.js?v=20261116c"></script>
+<script src="../../js/estrellas.js?v=20261116d"></script>
+<script src="../../js/ejercicios.js?v=20261116d"></script>
 <script>iniciarEtapa("algebra");</script>
 </body>
 </html>

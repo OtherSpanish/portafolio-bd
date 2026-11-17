@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../css/estilos.css?v=20261116c">
+<link rel="stylesheet" href="../../css/estilos.css?v=20261116d">
 </head>
 <body>
 <div class="sky"></div>
@@ -29,65 +29,67 @@
 
   <main>
 <section class="panel"><details><summary>Ver enunciado del ejercicio</summary>
-<p>Una red de bibliotecas públicas organiza talleres (clubes de lectura, escritura, investigación…) y quiere manejarlos en una base de datos.</p>
+<p>La red de bibliotecas públicas de Bogotá quiere controlar su colección y los préstamos.</p>
 <ul>
-  <li>Cada <strong>SEDE</strong> tiene un código de tres letras, nombre, ciudad y país.</li>
-  <li>Cada <strong>BIBLIOTECARIO</strong> tiene identificación, nombre, número de registro, años de experiencia y uno o varios teléfonos. Trabaja en exactamente una sede.</li>
-  <li>Cada <strong>SALA</strong> tiene un código, nombre, piso y capacidad, y queda en una sede.</li>
-  <li>Un <strong>TALLER</strong> tiene un identificador, un código (por ejemplo <code>LEC01</code>), fecha, hora de inicio y tema. Lo organiza una sede y se hace en una sola sala.</li>
-  <li>Cada taller lo orientan uno o más bibliotecarios con un <em>rol</em> (principal o apoyo), y un bibliotecario puede orientar muchos talleres.</li>
-  <li>Los <strong>LECTORES</strong> se registran con identificación, nombre (nombres y apellidos), fecha de nacimiento, correo y número de préstamos; la edad se calcula. Un lector se inscribe en talleres y en cada inscripción se guarda su <em>puesto</em> y la <em>modalidad</em>.</li>
-  <li>Un bibliotecario también puede ser lector. Algunas salas son de cómputo (se guarda el número de equipos) y otras infantiles (se guarda el área en m²); la hemeroteca no es ni lo uno ni lo otro.</li>
+  <li>Cada <strong>LIBRO</strong> tiene ISBN, título y año. Lo publica una <strong>EDITORIAL</strong> (nombre y país) y lo escriben uno o varios <strong>AUTORES</strong> (nombre y nacionalidad).</li>
+  <li>De cada libro hay uno o varios <strong>EJEMPLARES</strong>, con código de barras y estado (bueno, regular o dañado). Cada ejemplar está en una <strong>SEDE</strong> (código, nombre y localidad).</li>
+  <li>Cada <strong>BIBLIOTECARIO</strong> tiene identificación, nombre (nombres y apellidos) y turno, y trabaja en una sede.</li>
+  <li>Cada <strong>LECTOR</strong> tiene carné, nombre (nombres y apellidos), fecha de nacimiento, teléfonos y correo (los niños pueden no tener). La edad se calcula. Los lectores son infantiles (se guarda el nombre del acudiente) o adultos (se guarda la ocupación).</li>
+  <li>En cada <strong>PRÉSTAMO</strong> se guarda qué lector se llevó qué ejemplar, qué bibliotecario lo registró, la fecha del préstamo y la fecha de devolución.</li>
 </ul>
-<p class="nota">Entidades base: <strong>Bibliotecario</strong>, <strong>Lector</strong> y <strong>Sede</strong>. Entidades inventadas para completar el problema: <strong>Sala</strong> y <strong>Taller</strong>.</p></details></section>
+<p class="nota">Entidades base: <strong>Bibliotecario</strong>, <strong>Lector</strong> y <strong>Sede</strong>. Entidades inventadas para completar el problema: <strong>Libro</strong>, <strong>Ejemplar</strong>, <strong>Autor</strong> y <strong>Editorial</strong>.</p></details></section>
 <section class="panel">
 <h2>Consulta 1</h2>
-<p class="enunciado">Lectores del taller 1 con su puesto y su modalidad.</p><pre class="codigo"><span class="kw">SELECT</span> r.puesto, p.nombres, p.apellidos, r.modalidad
-<span class="kw">FROM</span> INSCRIPCION r
-<span class="kw">JOIN</span> PERSONA p <span class="kw">ON</span> p.documento = r.documento
-<span class="kw">WHERE</span> r.id_taller = <span class="nu">1</span>
-<span class="kw">ORDER</span> <span class="kw">BY</span> r.modalidad <span class="kw">DESC</span>, p.apellidos;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th><th class="xl-col">D</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">puesto</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">modalidad</td></tr><tr><td class="xl-fila">2</td><td class="xl-num">2</td><td class="">Valentina</td><td class="">Cruz Leon</td><td class="">virtual</td></tr><tr><td class="xl-fila">3</td><td class="xl-num">12</td><td class="">Nicolas</td><td class="">Arias Cano</td><td class="">presencial</td></tr><tr><td class="xl-fila">4</td><td class="xl-num">15</td><td class="">Ignacio</td><td class="">Vargas Lima</td><td class="">presencial</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado">Préstamos pendientes y cuántos días llevan.</p><pre class="codigo"><span class="kw">SELECT</span> l.nombres, l.apellidos, li.titulo, p.fecha_prestamo,
+       DATEDIFF(CURDATE(), p.fecha_prestamo) <span class="kw">AS</span> dias
+<span class="kw">FROM</span> PRESTAMO p
+<span class="kw">JOIN</span> LECTOR l <span class="kw">ON</span> l.carne = p.carne
+<span class="kw">JOIN</span> EJEMPLAR e <span class="kw">ON</span> e.codigo_barras = p.codigo_barras
+<span class="kw">JOIN</span> LIBRO li <span class="kw">ON</span> li.isbn = e.isbn
+<span class="kw">WHERE</span> p.fecha_devolucion <span class="kw">IS</span> <span class="kw">NULL</span>
+<span class="kw">ORDER</span> <span class="kw">BY</span> dias <span class="kw">DESC</span>;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th><th class="xl-col">D</th><th class="xl-col">E</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">titulo</td><td class="xl-cab">fecha_prestamo</td><td class="xl-cab">dias</td></tr><tr><td class="xl-fila">2</td><td class="">Luciana</td><td class="">Romero Sol</td><td class="">Cuentos pintados</td><td class="">2026-11-03</td><td class="xl-num">14</td></tr><tr><td class="xl-fila">3</td><td class="">Nicolas</td><td class="">Arias Cano</td><td class="">Delirio</td><td class="">2026-11-05</td><td class="xl-num">12</td></tr><tr><td class="xl-fila">4</td><td class="">Ignacio</td><td class="">Vargas Lima</td><td class="">Cien anos de soledad</td><td class="">2026-11-10</td><td class="xl-num">7</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 2</h2>
-<p class="enunciado">Cuántos talleres hay de cada tema.</p><pre class="codigo"><span class="kw">SELECT</span> tema, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> vuelos
-<span class="kw">FROM</span> TALLER
-<span class="kw">GROUP</span> <span class="kw">BY</span> tema
-<span class="kw">ORDER</span> <span class="kw">BY</span> vuelos <span class="kw">DESC</span>, tema;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">tema</td><td class="xl-cab">vuelos</td></tr><tr><td class="xl-fila">2</td><td class="">Club de lectura</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">3</td><td class="">Cuentos para ninos</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">4</td><td class="">Escritura creativa</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">5</td><td class="">Investigacion</td><td class="xl-num">1</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado">Libros más prestados.</p><pre class="codigo"><span class="kw">SELECT</span> li.titulo, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> prestamos
+<span class="kw">FROM</span> PRESTAMO p
+<span class="kw">JOIN</span> EJEMPLAR e <span class="kw">ON</span> e.codigo_barras = p.codigo_barras
+<span class="kw">JOIN</span> LIBRO li <span class="kw">ON</span> li.isbn = e.isbn
+<span class="kw">GROUP</span> <span class="kw">BY</span> li.isbn, li.titulo
+<span class="kw">ORDER</span> <span class="kw">BY</span> prestamos <span class="kw">DESC</span>, li.titulo;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">titulo</td><td class="xl-cab">prestamos</td></tr><tr><td class="xl-fila">2</td><td class="">Cien anos de soledad</td><td class="xl-num">4</td></tr><tr><td class="xl-fila">3</td><td class="">Cuentos pintados</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">4</td><td class="">Cronica de una muerte anunciada</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">5</td><td class="">Delirio</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">6</td><td class="">Rayuela</td><td class="xl-num">1</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 3</h2>
-<p class="enunciado">Bibliotecarios con la ciudad de su sede.</p><pre class="codigo"><span class="kw">SELECT</span> p.nombres, p.apellidos, p.registro, b.ciudad
-<span class="kw">FROM</span> PERSONA p
-<span class="kw">JOIN</span> SEDE b <span class="kw">ON</span> b.codigo_sede = p.codigo_sede
-<span class="kw">WHERE</span> p.tipo_persona <span class="kw">IN</span> (<span class="st">'bibliotecario'</span>, <span class="st">'ambos'</span>)
-<span class="kw">ORDER</span> <span class="kw">BY</span> b.ciudad, p.apellidos;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th><th class="xl-col">D</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">registro</td><td class="xl-cab">ciudad</td></tr><tr><td class="xl-fila">2</td><td class="">Hernando</td><td class="">Lozada Rey</td><td class="">BIB-1101</td><td class="">Bogota</td></tr><tr><td class="xl-fila">3</td><td class="">German</td><td class="">Riascos Mesa</td><td class="">BIB-0975</td><td class="">Bogota</td></tr><tr><td class="xl-fila">4</td><td class="">Teresa</td><td class="">Galindo Paz</td><td class="">BIB-1390</td><td class="">Cali</td></tr><tr><td class="xl-fila">5</td><td class="">Patricia</td><td class="">Ospina Vela</td><td class="">BIB-1288</td><td class="">Medellin</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado">Ejemplares disponibles en cada sede (los que no están prestados).</p><pre class="codigo"><span class="kw">SELECT</span> s.nombre, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> disponibles
+<span class="kw">FROM</span> EJEMPLAR e
+<span class="kw">JOIN</span> SEDE s <span class="kw">ON</span> s.codigo_sede = e.codigo_sede
+<span class="kw">WHERE</span> <span class="kw">NOT</span> <span class="kw">EXISTS</span> (<span class="kw">SELECT</span> <span class="nu">1</span> <span class="kw">FROM</span> PRESTAMO p
+                  <span class="kw">WHERE</span> p.codigo_barras = e.codigo_barras
+                    <span class="kw">AND</span> p.fecha_devolucion <span class="kw">IS</span> <span class="kw">NULL</span>)
+<span class="kw">GROUP</span> <span class="kw">BY</span> s.codigo_sede, s.nombre;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombre</td><td class="xl-cab">disponibles</td></tr><tr><td class="xl-fila">2</td><td class="">Biblioteca El Tintal</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">3</td><td class="">Biblioteca El Tunal</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">4</td><td class="">Biblioteca Virgilio Barco</td><td class="xl-num">2</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 4</h2>
-<p class="enunciado">Cuántos talleres tiene cada sala, incluyendo las que no tienen.</p><pre class="codigo"><span class="kw">SELECT</span> a.codigo_sala, a.nombre_sala, <span class="kw">COUNT</span>(v.id_taller) <span class="kw">AS</span> vuelos
-<span class="kw">FROM</span> SALA a
-<span class="kw">LEFT</span> <span class="kw">JOIN</span> TALLER v <span class="kw">ON</span> v.codigo_sala = a.codigo_sala
-<span class="kw">GROUP</span> <span class="kw">BY</span> a.codigo_sala, a.nombre_sala
-<span class="kw">ORDER</span> <span class="kw">BY</span> vuelos <span class="kw">DESC</span>, a.codigo_sala;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo_sala</td><td class="xl-cab">nombre_sala</td><td class="xl-cab">vuelos</td></tr><tr><td class="xl-fila">2</td><td class="">SL-01</td><td class="">Sala Digital</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">3</td><td class="">SL-02</td><td class="">Sala Multimedia</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">4</td><td class="">SL-03</td><td class="">Sala Digital</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">5</td><td class="">SL-04</td><td class="">Sala Infantil</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">6</td><td class="">SL-05</td><td class="">Hemeroteca</td><td class="xl-num">0</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado">Lectores infantiles con su acudiente.</p><pre class="codigo"><span class="kw">SELECT</span> carne, nombres, apellidos, acudiente
+<span class="kw">FROM</span> LECTOR
+<span class="kw">WHERE</span> tipo_lector = <span class="st">'infantil'</span>
+<span class="kw">ORDER</span> <span class="kw">BY</span> apellidos;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th><th class="xl-col">D</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">carne</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">acudiente</td></tr><tr><td class="xl-fila">2</td><td class="">L-1001</td><td class="">Valeria</td><td class="">Cruz Leon</td><td class="">Martha Leon</td></tr><tr><td class="xl-fila">3</td><td class="">L-1004</td><td class="">Luciana</td><td class="">Romero Sol</td><td class="">Andres Romero</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 5</h2>
-<p class="enunciado">Lectores inscritos en más de un taller.</p><pre class="codigo"><span class="kw">SELECT</span> p.nombres, p.apellidos, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> reservas
-<span class="kw">FROM</span> INSCRIPCION r
-<span class="kw">JOIN</span> PERSONA p <span class="kw">ON</span> p.documento = r.documento
-<span class="kw">GROUP</span> <span class="kw">BY</span> p.documento, p.nombres, p.apellidos
-<span class="kw">HAVING</span> <span class="kw">COUNT</span>(*) &gt; <span class="nu">1</span>
-<span class="kw">ORDER</span> <span class="kw">BY</span> reservas <span class="kw">DESC</span>, p.apellidos;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">reservas</td></tr><tr><td class="xl-fila">2</td><td class="">Nicolas</td><td class="">Arias Cano</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">3</td><td class="">Ignacio</td><td class="">Vargas Lima</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">4</td><td class="">Valentina</td><td class="">Cruz Leon</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">5</td><td class="">Emilio</td><td class="">Duarte Gil</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">6</td><td class="">Luciana</td><td class="">Romero Sol</td><td class="xl-num">2</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado">Autores con cuántos libros tienen en la colección.</p><pre class="codigo"><span class="kw">SELECT</span> a.nombre, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> libros
+<span class="kw">FROM</span> AUTOR a
+<span class="kw">JOIN</span> AUTORIA x <span class="kw">ON</span> x.id_autor = a.id_autor
+<span class="kw">GROUP</span> <span class="kw">BY</span> a.id_autor, a.nombre
+<span class="kw">ORDER</span> <span class="kw">BY</span> libros <span class="kw">DESC</span>, a.nombre;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombre</td><td class="xl-cab">libros</td></tr><tr><td class="xl-fila">2</td><td class="">Gabriel Garcia Marquez</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">3</td><td class="">Julio Cortazar</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">4</td><td class="">Isabel Allende</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">5</td><td class="">Laura Restrepo</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">6</td><td class="">Rafael Pombo</td><td class="xl-num">1</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 6</h2>
-<p class="enunciado">Bibliotecario principal de cada taller.</p><pre class="codigo"><span class="kw">SELECT</span> v.codigo, v.fecha, p.nombres, p.apellidos
-<span class="kw">FROM</span> ORIENTACION t
-<span class="kw">JOIN</span> TALLER v <span class="kw">ON</span> v.id_taller = t.id_taller
-<span class="kw">JOIN</span> PERSONA p <span class="kw">ON</span> p.documento = t.documento
-<span class="kw">WHERE</span> t.rol = <span class="st">'principal'</span>
-<span class="kw">ORDER</span> <span class="kw">BY</span> v.fecha, v.codigo;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th><th class="xl-col">D</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo</td><td class="xl-cab">fecha</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td></tr><tr><td class="xl-fila">2</td><td class="">ESC02</td><td class="">2026-09-05</td><td class="">Patricia</td><td class="">Ospina Vela</td></tr><tr><td class="xl-fila">3</td><td class="">LEC01</td><td class="">2026-09-05</td><td class="">Hernando</td><td class="">Lozada Rey</td></tr><tr><td class="xl-fila">4</td><td class="">LEC03</td><td class="">2026-09-06</td><td class="">Teresa</td><td class="">Galindo Paz</td></tr><tr><td class="xl-fila">5</td><td class="">CUE05</td><td class="">2026-09-07</td><td class="">German</td><td class="">Riascos Mesa</td></tr><tr><td class="xl-fila">6</td><td class="">LEC01</td><td class="">2026-09-07</td><td class="">German</td><td class="">Riascos Mesa</td></tr><tr><td class="xl-fila">7</td><td class="">INV06</td><td class="">2026-09-08</td><td class="">Patricia</td><td class="">Ospina Vela</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado">Bibliotecarios que han registrado más de dos préstamos.</p><pre class="codigo"><span class="kw">SELECT</span> b.nombres, b.apellidos, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> prestamos
+<span class="kw">FROM</span> PRESTAMO p
+<span class="kw">JOIN</span> BIBLIOTECARIO b <span class="kw">ON</span> b.id_bibliotecario = p.id_bibliotecario
+<span class="kw">GROUP</span> <span class="kw">BY</span> b.id_bibliotecario, b.nombres, b.apellidos
+<span class="kw">HAVING</span> <span class="kw">COUNT</span>(*) &gt; <span class="nu">2</span>;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">prestamos</td></tr><tr><td class="xl-fila">2</td><td class="">Hernando</td><td class="">Lozada Rey</td><td class="xl-num">4</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
   </main>
 
@@ -96,8 +98,8 @@
   <footer>Universidad El Bosque · Bogotá D.C</footer>
 </div>
 
-<script src="../../js/estrellas.js?v=20261116c"></script>
-<script src="../../js/ejercicios.js?v=20261116c"></script>
+<script src="../../js/estrellas.js?v=20261116d"></script>
+<script src="../../js/ejercicios.js?v=20261116d"></script>
 <script>iniciarEtapa("sql");</script>
 </body>
 </html>

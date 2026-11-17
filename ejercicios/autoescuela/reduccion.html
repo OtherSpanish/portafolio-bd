@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../css/estilos.css?v=20261116c">
+<link rel="stylesheet" href="../../css/estilos.css?v=20261116d">
 </head>
 <body>
 <div class="sky"></div>
@@ -29,171 +29,164 @@
 
   <main>
 <section class="panel"><details><summary>Ver enunciado del ejercicio</summary>
-<p>Una escuela de conducción con sedes en varias ciudades quiere organizar sus prácticas en una base de datos.</p>
+<p>Una escuela de conducción con tres sedes quiere registrar sus cursos y las prácticas de los alumnos.</p>
 <ul>
-  <li>Cada <strong>SEDE</strong> tiene un código de tres letras, nombre, ciudad y país.</li>
-  <li>Cada <strong>INSTRUCTOR</strong> tiene identificación, nombre, número de licencia, horas de instrucción y uno o varios teléfonos. Trabaja en exactamente una sede.</li>
-  <li>Cada <strong>VEHÍCULO</strong> se identifica por su placa y tiene modelo, marca y capacidad. Está en una sede.</li>
-  <li>Una <strong>PRÁCTICA</strong> tiene un identificador, un código (por ejemplo <code>URB01</code>), fecha, hora de inicio y recorrido. La programa una sede y usa un solo vehículo.</li>
-  <li>Cada práctica la dirigen uno o más instructores con un <em>rol</em> (principal o apoyo), y un instructor puede dirigir muchas prácticas.</li>
-  <li>Los <strong>ALUMNOS</strong> se registran con identificación, nombre (nombres y apellidos), fecha de nacimiento, correo y horas de práctica acumuladas; la edad se calcula. Un alumno se inscribe en prácticas y en cada inscripción se guarda su <em>turno</em> y su <em>nivel</em>.</li>
-  <li>Un instructor también puede ser alumno (por ejemplo para sacar otra categoría). Algunos vehículos son carros (se guarda el número de puertas) y otros motos (se guarda el cilindraje); el camión de práctica no es ni lo uno ni lo otro.</li>
+  <li>Cada <strong>SEDE</strong> tiene código, nombre y dirección. En cada sede trabajan varios instructores y se ofrecen varios cursos, cada uno con su precio en esa sede.</li>
+  <li>Cada <strong>CURSO</strong> corresponde a una categoría de licencia (A1, A2, B1, C2) y tiene nombre, horas de teoría y horas de práctica.</li>
+  <li>Los <strong>ALUMNOS</strong> y los <strong>INSTRUCTORES</strong> tienen documento, nombre (nombres y apellidos) y fecha de nacimiento; la edad se calcula. El alumno además tiene correo y teléfonos y está matriculado en un curso. El instructor tiene un número de licencia de instructor. Un instructor no puede ser alumno de la misma escuela.</li>
+  <li>Cada <strong>VEHÍCULO</strong> tiene placa, marca y año, y un instructor responsable (cada instructor responde como mucho por uno). Los carros guardan el número de puertas, las motos el cilindraje y los camiones la capacidad en toneladas; el bus escolar no es ninguno de esos.</li>
+  <li>En cada <strong>PRÁCTICA</strong> participan un alumno, un instructor y un vehículo, y se guarda la fecha, la hora y los kilómetros recorridos.</li>
 </ul>
-<p class="nota">Entidades base: <strong>Instructor</strong>, <strong>Alumno</strong> y <strong>Sede</strong>. Entidades inventadas para completar el problema: <strong>Vehículo</strong> y <strong>Práctica</strong>.</p></details></section>
+<p class="nota">Entidades base: <strong>Instructor</strong>, <strong>Alumno</strong> y <strong>Sede</strong>. Entidades inventadas para completar el problema: <strong>Curso</strong> y <strong>Vehículo</strong>.</p></details></section>
 <section class="panel">
 <h2>Diagrama de la reducción</h2>
-<div class="diagrama tablero"><svg xmlns="http://www.w3.org/2000/svg" viewBox="25 -116 2334 1522" font-family="Arial, Helvetica, sans-serif" role="img">
+<div class="diagrama tablero"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-625 171 2876 1374" font-family="Arial, Helvetica, sans-serif" role="img">
 <defs><pattern id="reduccion_g1" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e3e6ea" stroke-width="1"/></pattern><pattern id="reduccion_g2" width="100" height="100" patternUnits="userSpaceOnUse"><rect width="100" height="100" fill="url(#reduccion_g1)"/><path d="M 100 0 L 0 0 0 100" fill="none" stroke="#cfd4da" stroke-width="1.2"/></pattern></defs>
-<rect x="25" y="-116" width="2334" height="1522" fill="#ffffff"/>
-<rect x="25" y="-116" width="2334" height="1522" fill="url(#reduccion_g2)"/>
-<text x="1192" y="-82" text-anchor="middle" font-size="20" fill="#000">REDUCCIÓN A TABLAS</text>
-<polyline points="303.0,180.0 415.0,180.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="485.0,180.0 610.0,180.0 610.0,315.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="800.0,350.0 965.0,350.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1035.0,350.0 1235.0,350.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1365.0,350.0 1565.0,350.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1635.0,350.0 1815.0,350.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="700.0,385.0 700.0,585.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="700.0,635.0 700.0,797.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="765.6,820.0 965.0,820.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1035.0,820.0 1170.0,820.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1300.0,373.0 1300.0,555.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1300.0,605.0 1300.0,790.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1870.0,373.0 1870.0,820.0 1635.0,820.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1565.0,820.0 1430.0,820.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1300.0,850.0 1300.0,1005.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1300.0,1055.0 1300.0,1207.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1235.0,1230.0 935.0,1230.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="865.0,1230.0 380.0,1230.0 380.0,370.0 600.0,370.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1850.0,327.0 1850.0,200.0 1765.0,200.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1730.0,175.0 1730.0,93.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1950.0,327.0 1950.0,200.0 2085.0,200.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="2120.0,175.0 2120.0,93.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="600.0,330.0 524.7,330.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="655.0,315.0 655.0,256.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="705.0,315.0 705.0,106.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="740.0,315.0 740.0,160.0 808.0,160.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="780.0,315.0 780.0,240.0 850.3,240.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="800.0,328.0 880.0,328.0 880.0,316.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="610.0,385.0 610.0,470.0 555.0,470.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="645.0,385.0 645.0,535.0 607.0,535.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="790.0,385.0 790.0,470.0 828.0,470.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="755.0,385.0 755.0,535.0 795.6,535.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="200.0,157.0 200.0,250.0 154.7,250.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="260.0,157.0 260.0,250.0 263.7,250.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1270.0,327.0 1270.0,250.0 1229.0,250.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1330.0,327.0 1330.0,250.0 1384.7,250.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1260.0,373.0 1260.0,450.0 1202.7,450.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1340.0,373.0 1340.0,450.0 1404.0,450.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1985.0,340.0 2060.7,340.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1950.0,373.0 1950.0,450.0 2015.3,450.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1920.0,373.0 1920.0,520.0 2038.3,520.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1840.0,373.0 1840.0,470.0 1789.0,470.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1635.0,70.0 1529.3,70.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1700.0,47.0 1700.0,-4.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="2185.0,70.0 2260.7,70.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="2120.0,47.0 2120.0,-4.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="634.4,820.0 564.7,820.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="670.0,843.0 670.0,910.0 604.0,910.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="730.0,843.0 730.0,910.0 798.3,910.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1230.0,790.0 1230.0,700.0 1164.0,700.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1370.0,790.0 1370.0,690.0 1437.3,690.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1220.0,850.0 1220.0,930.0 1129.7,930.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1260.0,850.0 1260.0,990.0 1194.0,990.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1380.0,850.0 1380.0,930.0 1461.3,930.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1340.0,850.0 1340.0,995.0 1450.7,995.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1415.0,790.0 1415.0,730.0 1587.6,730.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1255.0,1253.0 1255.0,1330.0 1194.7,1330.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1300.0,1253.0 1300.0,1334.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1345.0,1253.0 1345.0,1330.0 1431.3,1330.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1365.0,1230.0 1472.7,1230.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<rect x="600.0" y="315.0" width="200.0" height="70.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="700.0" y="355.0" text-anchor="middle" font-size="14" fill="#000">PERSONA</text>
-<rect x="157.0" y="157.0" width="146.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="230.0" y="185.0" text-anchor="middle" font-size="14" fill="#000">PER_TELEFONO</text>
-<rect x="1235.0" y="327.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1300.0" y="355.0" text-anchor="middle" font-size="14" fill="#000">SEDE</text>
-<rect x="1815.0" y="327.0" width="170.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1900.0" y="355.0" text-anchor="middle" font-size="14" fill="#000">VEHICULO</text>
-<rect x="1635.0" y="47.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1700.0" y="75.0" text-anchor="middle" font-size="14" fill="#000">CARRO</text>
-<rect x="2055.0" y="47.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="2120.0" y="75.0" text-anchor="middle" font-size="14" fill="#000">MOTO</text>
-<rect x="634.4" y="797.0" width="131.2" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="700.0" y="825.0" text-anchor="middle" font-size="14" fill="#000">INSTRUCCION</text>
-<rect x="1170.0" y="790.0" width="260.0" height="60.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1300.0" y="825.0" text-anchor="middle" font-size="14" fill="#000">PRACTICA</text>
-<rect x="1235.0" y="1207.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1300.0" y="1235.0" text-anchor="middle" font-size="14" fill="#000">INSCRIPCION</text>
-<polygon points="450,155.0 485.0,180 450,205.0 415.0,180" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="450.0" y="184.5" text-anchor="middle" font-size="13" fill="#000"></text>
-<polygon points="1000,325.0 1035.0,350 1000,375.0 965.0,350" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="354.5" text-anchor="middle" font-size="13" fill="#000"></text>
-<polygon points="1600,325.0 1635.0,350 1600,375.0 1565.0,350" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1600.0" y="354.5" text-anchor="middle" font-size="13" fill="#000"></text>
-<polygon points="700,585.0 735.0,610 700,635.0 665.0,610" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="700.0" y="614.5" text-anchor="middle" font-size="13" fill="#000"></text>
-<polygon points="1000,795.0 1035.0,820 1000,845.0 965.0,820" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="824.5" text-anchor="middle" font-size="13" fill="#000"></text>
-<polygon points="1300,555.0 1335.0,580 1300,605.0 1265.0,580" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1300.0" y="584.5" text-anchor="middle" font-size="13" fill="#000"></text>
-<polygon points="1600,795.0 1635.0,820 1600,845.0 1565.0,820" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1600.0" y="824.5" text-anchor="middle" font-size="13" fill="#000"></text>
-<polygon points="1300,1005.0 1335.0,1030 1300,1055.0 1265.0,1030" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1300.0" y="1034.5" text-anchor="middle" font-size="13" fill="#000"></text>
-<polygon points="900,1205.0 935.0,1230 900,1255.0 865.0,1230" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="900.0" y="1234.5" text-anchor="middle" font-size="13" fill="#000"></text>
-<polygon points="1730,175.0 1765.0,200 1730,225.0 1695.0,200" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1730.0" y="204.5" text-anchor="middle" font-size="13" fill="#000"></text>
-<polygon points="2120,175.0 2155.0,200 2120,225.0 2085.0,200" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="2120.0" y="204.5" text-anchor="middle" font-size="13" fill="#000"></text>
-<ellipse cx="480.0" cy="330.0" rx="44.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="480.0" y="334.0" text-anchor="middle" font-size="12" fill="#000">documento</text><line x1="450.3" y1="337.0" x2="509.7" y2="337.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="655.0" cy="240.0" rx="38.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="655.0" y="244.0" text-anchor="middle" font-size="12" fill="#000">nombres</text>
-<ellipse cx="705.0" cy="90.0" rx="38.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="705.0" y="94.0" text-anchor="middle" font-size="12" fill="#000">apellidos</text>
-<ellipse cx="870.0" cy="160.0" rx="62.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="870.0" y="164.0" text-anchor="middle" font-size="12" fill="#000">fecha_nacimiento</text>
-<ellipse cx="900.0" cy="240.0" rx="49.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="900.0" y="244.0" text-anchor="middle" font-size="12" fill="#000">tipo_persona</text>
-<ellipse cx="880.0" cy="300.0" rx="49.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="880.0" y="304.0" text-anchor="middle" font-size="12" fill="#000">codigo_sede</text><line x1="846.0" y1="307.0" x2="914.0" y2="307.0" stroke="#000" stroke-width="1" stroke-dasharray="3 2"/>
-<ellipse cx="520.0" cy="470.0" rx="35.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="520.0" y="474.0" text-anchor="middle" font-size="12" fill="#000">licencia</text>
-<ellipse cx="545.0" cy="535.0" rx="62.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="545.0" y="539.0" text-anchor="middle" font-size="12" fill="#000">horas_instruccion</text>
-<ellipse cx="860.0" cy="470.0" rx="32.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="860.0" y="474.0" text-anchor="middle" font-size="12" fill="#000">correo</text>
-<ellipse cx="850.0" cy="535.0" rx="54.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="850.0" y="539.0" text-anchor="middle" font-size="12" fill="#000">horas_practica</text>
-<ellipse cx="110.0" cy="250.0" rx="44.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="110.0" y="254.0" text-anchor="middle" font-size="12" fill="#000">documento</text><line x1="80.3" y1="257.0" x2="139.7" y2="257.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="300.0" cy="250.0" rx="36.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="300.0" y="254.0" text-anchor="middle" font-size="12" fill="#000">telefono</text><line x1="278.7" y1="257.0" x2="321.3" y2="257.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="1180.0" cy="250.0" rx="49.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1180.0" y="254.0" text-anchor="middle" font-size="12" fill="#000">codigo_sede</text><line x1="1146.0" y1="257.0" x2="1214.0" y2="257.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="1420.0" cy="250.0" rx="35.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1420.0" y="254.0" text-anchor="middle" font-size="12" fill="#000">nombre</text>
-<ellipse cx="1170.0" cy="450.0" rx="32.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1170.0" y="454.0" text-anchor="middle" font-size="12" fill="#000">ciudad</text>
-<ellipse cx="1430.0" cy="450.0" rx="26.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1430.0" y="454.0" text-anchor="middle" font-size="12" fill="#000">pais</text>
-<ellipse cx="2090.0" cy="340.0" rx="29.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2090.0" y="344.0" text-anchor="middle" font-size="12" fill="#000">placa</text><line x1="2075.7" y1="347.0" x2="2104.3" y2="347.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="2050.0" cy="450.0" rx="34.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2050.0" y="454.0" text-anchor="middle" font-size="12" fill="#000">modelo</text>
-<ellipse cx="2070.0" cy="520.0" rx="31.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2070.0" y="524.0" text-anchor="middle" font-size="12" fill="#000">marca</text>
-<ellipse cx="1740.0" cy="470.0" rx="49.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1740.0" y="474.0" text-anchor="middle" font-size="12" fill="#000">codigo_sede</text><line x1="1706.0" y1="477.0" x2="1774.0" y2="477.0" stroke="#000" stroke-width="1" stroke-dasharray="3 2"/>
-<ellipse cx="1500.0" cy="70.0" rx="29.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1500.0" y="74.0" text-anchor="middle" font-size="12" fill="#000">placa</text><line x1="1485.7" y1="77.0" x2="1514.3" y2="77.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="1700.0" cy="-20.0" rx="50.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1700.0" y="-16.0" text-anchor="middle" font-size="12" fill="#000">num_puertas</text>
-<ellipse cx="2290.0" cy="70.0" rx="29.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2290.0" y="74.0" text-anchor="middle" font-size="12" fill="#000">placa</text><line x1="2275.7" y1="77.0" x2="2304.3" y2="77.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="2120.0" cy="-20.0" rx="48.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2120.0" y="-16.0" text-anchor="middle" font-size="12" fill="#000">cilindraje_cc</text>
-<ellipse cx="520.0" cy="820.0" rx="44.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="520.0" y="824.0" text-anchor="middle" font-size="12" fill="#000">documento</text><line x1="490.3" y1="827.0" x2="549.7" y2="827.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="560.0" cy="910.0" rx="44.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="560.0" y="914.0" text-anchor="middle" font-size="12" fill="#000">id_practica</text><line x1="531.0" y1="917.0" x2="589.0" y2="917.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="820.0" cy="910.0" rx="21.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="820.0" y="914.0" text-anchor="middle" font-size="12" fill="#000">rol</text>
-<ellipse cx="1120.0" cy="700.0" rx="44.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1120.0" y="704.0" text-anchor="middle" font-size="12" fill="#000">id_practica</text><line x1="1091.0" y1="707.0" x2="1149.0" y2="707.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="1470.0" cy="690.0" rx="32.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1470.0" y="694.0" text-anchor="middle" font-size="12" fill="#000">codigo</text>
-<ellipse cx="1100.0" cy="930.0" rx="29.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1100.0" y="934.0" text-anchor="middle" font-size="12" fill="#000">fecha</text>
-<ellipse cx="1150.0" cy="990.0" rx="44.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1150.0" y="994.0" text-anchor="middle" font-size="12" fill="#000">hora_inicio</text>
-<ellipse cx="1500.0" cy="930.0" rx="38.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1500.0" y="934.0" text-anchor="middle" font-size="12" fill="#000">recorrido</text>
-<ellipse cx="1480.0" cy="995.0" rx="29.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1480.0" y="999.0" text-anchor="middle" font-size="12" fill="#000">placa</text><line x1="1465.7" y1="1002.0" x2="1494.3" y2="1002.0" stroke="#000" stroke-width="1" stroke-dasharray="3 2"/>
-<ellipse cx="1640.0" cy="730.0" rx="52.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1640.0" y="734.0" text-anchor="middle" font-size="12" fill="#000">sede_practica</text><line x1="1602.6" y1="737.0" x2="1677.4" y2="737.0" stroke="#000" stroke-width="1" stroke-dasharray="3 2"/>
-<ellipse cx="1150.0" cy="1330.0" rx="44.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1150.0" y="1334.0" text-anchor="middle" font-size="12" fill="#000">documento</text><line x1="1120.3" y1="1337.0" x2="1179.7" y2="1337.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="1300.0" cy="1350.0" rx="44.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1300.0" y="1354.0" text-anchor="middle" font-size="12" fill="#000">id_practica</text><line x1="1271.0" y1="1357.0" x2="1329.0" y2="1357.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="1460.0" cy="1330.0" rx="28.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1460.0" y="1334.0" text-anchor="middle" font-size="12" fill="#000">turno</text>
-<ellipse cx="1500.0" cy="1230.0" rx="27.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1500.0" y="1234.0" text-anchor="middle" font-size="12" fill="#000">nivel</text>
+<rect x="-625" y="171" width="2876" height="1374" fill="#ffffff"/>
+<rect x="-625" y="171" width="2876" height="1374" fill="url(#reduccion_g2)"/>
+<text x="813" y="205" text-anchor="middle" font-size="20" fill="#000">REDUCCIÓN A TABLAS</text>
+<polyline points="500.0,463.0 500.0,573.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="500.0,615.0 500.0,725.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-302.8,440.0 -214.4,440.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-154.4,440.0 -66.0,440.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="500.0,1165.0 500.0,989.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="500.0,947.0 500.0,771.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="434.0,440.0 280.0,440.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="220.0,440.0 66.0,440.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="566.0,440.0 720.0,440.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="780.0,440.0 934.0,440.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="565.0,730.0 730.0,730.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="790.0,730.0 955.0,730.0 955.0,463.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="892.5,1165.0 892.5,986.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="892.5,944.5 892.5,766.0 565.0,766.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="107.5,1165.0 107.5,986.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="107.5,944.5 107.5,766.0 435.0,766.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-15.0,463.0 -15.0,903.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-15.0,945.0 -15.0,1385.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1066.0,440.0 1470.5,440.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1530.5,440.0 1935.0,440.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1185.0,1408.0 655.0,1408.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="595.0,1408.0 65.0,1408.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1315.0,1390.0 1955.0,1390.0 1955.0,947.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1955.0,905.5 1955.0,463.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="45.0,417.0 45.0,359.0 75.3,359.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-45.0,417.0 -45.0,359.0 -61.7,359.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="45.0,463.0 45.0,521.0 61.3,521.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-45.0,463.0 -45.0,521.0 -78.0,521.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="0.0,417.0 0.0,375.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="66.0,458.0 164.7,458.0 164.7,564.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1045.0,417.0 1045.0,359.0 1075.3,359.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="955.0,417.0 955.0,359.0 938.3,359.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1045.0,463.0 1045.0,521.0 1061.3,521.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="934.0,458.0 824.0,458.0 824.0,484.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1000.0,417.0 1000.0,283.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1066.0,458.0 1220.0,458.0 1220.0,484.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="545.0,417.0 545.0,359.0 572.3,359.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="455.0,417.0 455.0,359.0 432.7,359.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="545.0,463.0 545.0,521.0 570.7,521.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="434.0,458.0 356.3,458.0 356.3,484.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="566.0,458.0 668.0,458.0 668.0,484.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="455.0,463.0 455.0,548.0 422.3,548.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="435.0,730.0 387.0,730.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="545.0,725.0 545.0,667.0 568.3,667.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="545.0,771.0 545.0,829.0 573.7,829.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="455.0,725.0 455.0,667.0 440.7,667.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-65.0,1408.0 -113.0,1408.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="45.0,1431.0 45.0,1489.0 64.7,1489.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="45.0,1385.0 45.0,1327.0 71.6,1327.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-45.0,1431.0 -45.0,1489.0 -65.6,1489.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2065.0,440.0 2113.0,440.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2045.0,417.0 2045.0,359.0 2064.7,359.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1955.0,417.0 1955.0,359.0 1939.0,359.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1315.0,1426.0 1363.0,1426.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1295.0,1385.0 1295.0,1327.0 1319.3,1327.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1295.0,1431.0 1295.0,1489.0 1318.7,1489.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="127.5,1188.0 175.5,1188.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="107.5,1211.0 107.5,1269.0 132.5,1269.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="435.0,1188.0 387.0,1188.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="565.0,1188.0 613.0,1188.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="872.5,1188.0 824.5,1188.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1002.5,1188.0 1050.5,1188.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-447.2,440.0 -495.2,440.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-330.0,417.0 -330.0,359.0 -291.3,359.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<rect x="1935.0" y="417.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="2000.0" y="445.0" text-anchor="middle" font-size="14" fill="#000">SEDE</text>
+<rect x="435.0" y="725.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="500.0" y="753.0" text-anchor="middle" font-size="14" fill="#000">VEHICULO</text>
+<rect x="-2.5" y="1165.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="62.5" y="1193.0" text-anchor="middle" font-size="14" fill="#000">CARRO</text>
+<rect x="435.0" y="1165.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="500.0" y="1193.0" text-anchor="middle" font-size="14" fill="#000">MOTO</text>
+<rect x="872.5" y="1165.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="937.5" y="1193.0" text-anchor="middle" font-size="14" fill="#000">CAMION</text>
+<rect x="-65.0" y="1385.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="0.0" y="1413.0" text-anchor="middle" font-size="14" fill="#000">CURSO</text>
+<rect x="-66.0" y="417.0" width="132.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="0.0" y="445.0" text-anchor="middle" font-size="14" fill="#000">ALUMNO</text>
+<rect x="934.0" y="417.0" width="132.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="445.0" text-anchor="middle" font-size="14" fill="#000">INSTRUCTOR</text>
+<rect x="1185.0" y="1385.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1250.0" y="1413.0" text-anchor="middle" font-size="14" fill="#000">OFERTA</text>
+<rect x="434.0" y="417.0" width="132.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="500.0" y="445.0" text-anchor="middle" font-size="14" fill="#000">PRACTICA</text>
+<rect x="-447.2" y="417.0" width="144.5" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="-375.0" y="445.0" text-anchor="middle" font-size="14" fill="#000">ALU_TELEFONO</text>
+<polygon points="500.0,573.0 530.0,594.0 500.0,615.0 470.0,594.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="500.0" y="598.5" text-anchor="middle" font-size="13" fill="#000"></text>
+<polygon points="-184.3828125,419.0 -154.3828125,440.0 -184.3828125,461.0 -214.3828125,440.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="-184.4" y="444.5" text-anchor="middle" font-size="13" fill="#000"></text>
+<polygon points="500.0,947.0 530.0,968.0 500.0,989.0 470.0,968.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="500.0" y="972.5" text-anchor="middle" font-size="13" fill="#000"></text>
+<polygon points="250.0,419.0 280.0,440.0 250.0,461.0 220.0,440.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="250.0" y="444.5" text-anchor="middle" font-size="13" fill="#000"></text>
+<polygon points="750.0,419.0 780.0,440.0 750.0,461.0 720.0,440.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="750.0" y="444.5" text-anchor="middle" font-size="13" fill="#000"></text>
+<polygon points="760.0,709.0 790.0,730.0 760.0,751.0 730.0,730.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="760.0" y="734.5" text-anchor="middle" font-size="13" fill="#000"></text>
+<polygon points="892.5,944.5 922.5,965.5 892.5,986.5 862.5,965.5" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="892.5" y="970.0" text-anchor="middle" font-size="13" fill="#000"></text>
+<polygon points="107.5,944.5 137.5,965.5 107.5,986.5 77.5,965.5" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="107.5" y="970.0" text-anchor="middle" font-size="13" fill="#000"></text>
+<polygon points="-15.0,903.0 15.0,924.0 -15.0,945.0 -45.0,924.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="-15.0" y="928.5" text-anchor="middle" font-size="13" fill="#000"></text>
+<polygon points="1500.5,419.0 1530.5,440.0 1500.5,461.0 1470.5,440.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1500.5" y="444.5" text-anchor="middle" font-size="13" fill="#000"></text>
+<polygon points="625.0,1387.0 655.0,1408.0 625.0,1429.0 595.0,1408.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="625.0" y="1412.5" text-anchor="middle" font-size="13" fill="#000"></text>
+<polygon points="1955.0,905.5 1985.0,926.5 1955.0,947.5 1925.0,926.5" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1955.0" y="931.0" text-anchor="middle" font-size="13" fill="#000"></text>
+<ellipse cx="120.0" cy="359.0" rx="44.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="120.0" y="363.0" text-anchor="middle" font-size="12" fill="#000">documento</text><line x1="90.3" y1="366.0" x2="149.7" y2="366.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="-100.0" cy="359.0" rx="38.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="-100.0" y="363.0" text-anchor="middle" font-size="12" fill="#000">nombres</text>
+<ellipse cx="100.0" cy="521.0" rx="38.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="100.0" y="525.0" text-anchor="middle" font-size="12" fill="#000">apellidos</text>
+<ellipse cx="-140.0" cy="521.0" rx="62.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="-140.0" y="525.0" text-anchor="middle" font-size="12" fill="#000">fecha_nacimiento</text>
+<ellipse cx="0.0" cy="359.0" rx="32.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="0.0" y="363.0" text-anchor="middle" font-size="12" fill="#000">correo</text>
+<ellipse cx="164.7" cy="580.0" rx="50.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="164.7" y="584.0" text-anchor="middle" font-size="12" fill="#000">codigo_curso</text><line x1="129.0" y1="587.0" x2="200.4" y2="587.0" stroke="#000" stroke-width="1" stroke-dasharray="3 2"/>
+<ellipse cx="1120.0" cy="359.0" rx="44.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1120.0" y="363.0" text-anchor="middle" font-size="12" fill="#000">documento</text><line x1="1090.3" y1="366.0" x2="1149.7" y2="366.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="900.0" cy="359.0" rx="38.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="900.0" y="363.0" text-anchor="middle" font-size="12" fill="#000">nombres</text>
+<ellipse cx="1100.0" cy="521.0" rx="38.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1100.0" y="525.0" text-anchor="middle" font-size="12" fill="#000">apellidos</text>
+<ellipse cx="824.0" cy="500.0" rx="62.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="824.0" y="504.0" text-anchor="middle" font-size="12" fill="#000">fecha_nacimiento</text>
+<ellipse cx="1000.0" cy="267.0" rx="63.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1000.0" y="271.0" text-anchor="middle" font-size="12" fill="#000">licencia_instructor</text>
+<ellipse cx="1220.0" cy="500.0" rx="49.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1220.0" y="504.0" text-anchor="middle" font-size="12" fill="#000">codigo_sede</text><line x1="1186.0" y1="507.0" x2="1254.0" y2="507.0" stroke="#000" stroke-width="1" stroke-dasharray="3 2"/>
+<ellipse cx="620.0" cy="359.0" rx="47.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="620.0" y="363.0" text-anchor="middle" font-size="12" fill="#000">doc_alumno</text><line x1="587.3" y1="366.0" x2="652.7" y2="366.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="380.0" cy="359.0" rx="52.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="380.0" y="363.0" text-anchor="middle" font-size="12" fill="#000">doc_instructor</text><line x1="342.3" y1="366.0" x2="417.7" y2="366.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="600.0" cy="521.0" rx="29.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="600.0" y="525.0" text-anchor="middle" font-size="12" fill="#000">placa</text><line x1="585.7" y1="528.0" x2="614.3" y2="528.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="356.3" cy="500.0" rx="29.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="356.3" y="504.0" text-anchor="middle" font-size="12" fill="#000">fecha</text><line x1="341.7" y1="507.0" x2="371.0" y2="507.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="668.0" cy="500.0" rx="27.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="668.0" y="504.0" text-anchor="middle" font-size="12" fill="#000">hora</text>
+<ellipse cx="380.0" cy="548.0" rx="42.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="380.0" y="552.0" text-anchor="middle" font-size="12" fill="#000">kilometros</text>
+<ellipse cx="357.7" cy="728.0" rx="29.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="357.7" y="732.0" text-anchor="middle" font-size="12" fill="#000">placa</text><line x1="343.3" y1="735.0" x2="372.0" y2="735.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="600.0" cy="667.0" rx="31.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="600.0" y="671.0" text-anchor="middle" font-size="12" fill="#000">marca</text>
+<ellipse cx="600.0" cy="829.0" rx="26.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="600.0" y="833.0" text-anchor="middle" font-size="12" fill="#000">anio</text>
+<ellipse cx="380.0" cy="667.0" rx="60.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="380.0" y="671.0" text-anchor="middle" font-size="12" fill="#000">doc_responsable</text><line x1="334.3" y1="674.0" x2="425.7" y2="674.0" stroke="#000" stroke-width="1" stroke-dasharray="3 2"/>
+<ellipse cx="-163.7" cy="1408.0" rx="50.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="-163.7" y="1412.0" text-anchor="middle" font-size="12" fill="#000">codigo_curso</text><line x1="-199.4" y1="1415.0" x2="-128.0" y2="1415.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="100.0" cy="1489.0" rx="35.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="100.0" y="1493.0" text-anchor="middle" font-size="12" fill="#000">nombre</text>
+<ellipse cx="120.0" cy="1327.0" rx="48.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="120.0" y="1331.0" text-anchor="middle" font-size="12" fill="#000">horas_teoria</text>
+<ellipse cx="-120.0" cy="1489.0" rx="54.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="-120.0" y="1493.0" text-anchor="middle" font-size="12" fill="#000">horas_practica</text>
+<ellipse cx="2162.0" cy="440.0" rx="49.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2162.0" y="444.0" text-anchor="middle" font-size="12" fill="#000">codigo_sede</text><line x1="2128.0" y1="447.0" x2="2196.0" y2="447.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="2100.0" cy="359.0" rx="35.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2100.0" y="363.0" text-anchor="middle" font-size="12" fill="#000">nombre</text>
+<ellipse cx="1900.0" cy="359.0" rx="39.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1900.0" y="363.0" text-anchor="middle" font-size="12" fill="#000">direccion</text>
+<ellipse cx="1412.0" cy="1428.0" rx="49.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1412.0" y="1432.0" text-anchor="middle" font-size="12" fill="#000">codigo_sede</text><line x1="1378.0" y1="1435.0" x2="1446.0" y2="1435.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="1370.0" cy="1327.0" rx="50.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1370.0" y="1331.0" text-anchor="middle" font-size="12" fill="#000">codigo_curso</text><line x1="1334.3" y1="1334.0" x2="1405.7" y2="1334.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="1350.0" cy="1489.0" rx="31.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1350.0" y="1493.0" text-anchor="middle" font-size="12" fill="#000">precio</text>
+<ellipse cx="204.8" cy="1188.0" rx="29.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="204.8" y="1192.0" text-anchor="middle" font-size="12" fill="#000">placa</text><line x1="190.5" y1="1195.0" x2="219.2" y2="1195.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="182.5" cy="1269.0" rx="50.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="182.5" y="1273.0" text-anchor="middle" font-size="12" fill="#000">num_puertas</text>
+<ellipse cx="357.7" cy="1188.0" rx="29.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="357.7" y="1192.0" text-anchor="middle" font-size="12" fill="#000">placa</text><line x1="343.3" y1="1195.0" x2="372.0" y2="1195.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="661.0" cy="1188.0" rx="48.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="661.0" y="1192.0" text-anchor="middle" font-size="12" fill="#000">cilindraje_cc</text>
+<ellipse cx="795.2" cy="1188.0" rx="29.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="795.2" y="1192.0" text-anchor="middle" font-size="12" fill="#000">placa</text><line x1="780.8" y1="1195.0" x2="809.5" y2="1195.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="1104.5" cy="1188.0" rx="54.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1104.5" y="1192.0" text-anchor="middle" font-size="12" fill="#000">capacidad_ton</text>
+<ellipse cx="-539.9" cy="440.0" rx="44.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="-539.9" y="444.0" text-anchor="middle" font-size="12" fill="#000">documento</text><line x1="-569.6" y1="447.0" x2="-510.2" y2="447.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="-255.0" cy="359.0" rx="36.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="-255.0" y="363.0" text-anchor="middle" font-size="12" fill="#000">telefono</text><line x1="-276.3" y1="366.0" x2="-233.7" y2="366.0" stroke="#000" stroke-width="1"/>
 </svg></div><p class="nota">Cada rectángulo ya es una tabla con todas sus columnas, y los rombos vacíos muestran qué tablas quedan unidas por una llave. La llave primaria va subrayada y la foránea con subrayado punteado.</p>
 </section>
 <section class="panel">
 <h2><span class="paso">FASE 1</span>Fase 1 · Simplificar el MER-E</h2>
-
-<ul>
-  <li><strong>Regla 1 · multivaluado.</strong> <code>telefono</code> se vuelve una entidad nueva. Como cada teléfono es de una sola persona,
-      la relación es 1:N y la llave de PERSONA viaja a la tabla nueva: <code>PER_TELEFONO</code>.</li>
-  <li><strong>Regla 2 · compuesto.</strong> <code>nombreCompleto</code> desaparece y quedan sus hojas: <code>nombres</code> y <code>apellidos</code>.</li>
-  <li><strong>Derivado.</strong> <code>edad</code> no se guarda, se calcula cuando se consulta.</li>
-</ul>
+<ul><li><strong>Regla 1 · multivaluados.</strong> <code>telefono</code> de ALUMNO pasa a ser la tabla ALU_TELEFONO, con la llave de ALUMNO y el valor; así cada telefono queda en su propia fila.</li><li><strong>Regla 2 · compuestos.</strong> <code>nombreCompleto</code> de PERSONA desaparece y quedan sus hojas: <code>nombres</code> y <code>apellidos</code>.</li><li><strong>Derivados.</strong> <code>edad</code> de PERSONA no se guardan, se calculan cuando se consultan (quedan como vistas en el script 05).</li></ul>
 </section>
 <section class="panel">
 <h2><span class="paso">FASE 2</span>Fase 2 · Entidades y relaciones</h2>
 
 <p><strong>Regla 3:</strong> toda entidad se convierte en tabla y su llave pasa a ser la llave primaria. Después se revisa cada relación
-con su cardinalidad y sus participaciones:</p><div class="tabla-wrap"><table class="t"><thead><tr><th>Relación</th><th>Cardinalidad y participación</th><th>Regla</th><th>Resultado</th></tr></thead><tbody><tr><td>pertenecer</td><td>N:1 · INSTRUCTOR (1:1)</td><td>6</td><td>La llave de SEDE viaja al lado muchos: <code>codigo_sede</code> en PERSONA</td></tr><tr><td>ubicar</td><td>1:N · VEHICULO (1:1)</td><td>6</td><td><code>codigo_sede</code> en VEHICULO, obligatoria</td></tr><tr><td>programar</td><td>1:N · PRACTICA (1:1)</td><td>6</td><td><code>sede_practica</code> en PRACTICA, obligatoria</td></tr><tr><td>usar</td><td>1:N · PRACTICA (1:1)</td><td>6</td><td><code>placa</code> en PRACTICA, obligatoria</td></tr><tr><td>dirigir</td><td>N:M</td><td>8</td><td>Tabla nueva INSTRUCCION con las dos llaves y el <code>rol</code></td></tr><tr><td>inscribir</td><td>N:M</td><td>8</td><td>Tabla nueva INSCRIPCION con las dos llaves, <code>turno</code> y <code>nivel</code></td></tr></tbody></table></div>
+con su cardinalidad y sus participaciones:</p><div class="tabla-wrap"><table class="t"><thead><tr><th>Relación</th><th>Cardinalidad y participación</th><th>Regla</th><th>Resultado</th></tr></thead><tbody><tr><td>matricular</td><td>N:1 · ALUMNO (1:1) · CURSO (0:N)</td><td>6</td><td>La llave de CURSO viaja al lado muchos: <code>codigo_curso</code> en ALUMNO, obligatoria.</td></tr><tr><td>ofrecer</td><td>N:M · SEDE (1:N) · CURSO (1:N)</td><td>8</td><td>Tabla nueva OFERTA; su llave son las dos llaves (<code>codigo_sede</code> y <code>codigo_curso</code>). Lleva <code>precio</code>.</td></tr><tr><td>trabajar</td><td>N:1 · INSTRUCTOR (1:1) · SEDE (1:N)</td><td>6</td><td>La llave de SEDE viaja al lado muchos: <code>codigo_sede</code> en INSTRUCTOR, obligatoria.</td></tr><tr><td>responder</td><td>1:1 · VEHICULO (1:1) · INSTRUCTOR (0:1)</td><td>5</td><td>1:1 con un lado opcional: la llave de INSTRUCTOR viaja al lado obligatorio, <code>doc_responsable</code> en VEHICULO, y se marca como única.</td></tr><tr><td>practicar</td><td>N:M:P · ALUMNO (0:N) · INSTRUCTOR (0:N) · VEHICULO (0:N)</td><td>9</td><td>Grado 3: tabla nueva PRACTICA con las llaves de las tres entidades. Lleva <code>fecha</code>, <code>hora</code> y <code>kilometros</code>.</td></tr></tbody></table></div>
 </section>
 <section class="panel">
 <h2><span class="paso">FASE 2</span>Fase 2 · Jerarquías (regla 11)</h2>
-
-<ul>
-  <li><strong>PERSONA (solapada y total) → una sola tabla.</strong> Es la única estrategia que sirve cuando la jerarquía es solapada:
-      PERSONA se queda con los atributos de instructor y de alumno y se le agrega la columna <code>tipo_persona</code>
-      ('instructor', 'alumno' o 'ambos'). Las columnas de un tipo quedan vacías en las personas del otro.</li>
-  <li><strong>VEHICULO (disjunta y parcial) → supertipo más subtipos.</strong> Se conservan VEHICULO, CARRO y MOTO,
-      y las tres comparten la llave <code>placa</code>. No se usa “una tabla por subtipo” por que la jerarquía es parcial
-      y el camión de práctica no tendría donde quedar.</li>
-</ul>
+<ul><li><strong>PERSONA (disjunta y total) → una tabla por subtipo.</strong> PERSONA desaparece: ALUMNO y INSTRUCTOR heredan sus atributos y su llave <code>documento</code>. Sirve porque es total y disjunta: nadie queda por fuera ni repetido. Se escoge así porque es total y disjunta: aquí un instructor no puede ser alumno de la misma escuela.</li><li><strong>VEHICULO (disjunta y parcial) → supertipo más subtipos.</strong> Se conservan VEHICULO y CARRO, MOTO y CAMION, y comparten la llave <code>placa</code>. Se escoge así porque es parcial (el bus escolar no es carro, moto ni camión) y VEHICULO lo usa PRACTICA.</li></ul>
 </section>
   </main>
 
@@ -202,8 +195,8 @@ con su cardinalidad y sus participaciones:</p><div class="tabla-wrap"><table cla
   <footer>Universidad El Bosque · Bogotá D.C</footer>
 </div>
 
-<script src="../../js/estrellas.js?v=20261116c"></script>
-<script src="../../js/ejercicios.js?v=20261116c"></script>
+<script src="../../js/estrellas.js?v=20261116d"></script>
+<script src="../../js/ejercicios.js?v=20261116d"></script>
 <script>iniciarEtapa("reduccion");</script>
 </body>
 </html>

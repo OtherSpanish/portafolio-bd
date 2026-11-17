@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../css/estilos.css?v=20261116c">
+<link rel="stylesheet" href="../../css/estilos.css?v=20261116d">
 </head>
 <body>
 <div class="sky"></div>
@@ -29,65 +29,70 @@
 
   <main>
 <section class="panel"><details><summary>Ver enunciado del ejercicio</summary>
-<p>Una universidad con varias sedes en Colombia quiere organizar en una base de datos sus cursos, salones, profesores y estudiantes.</p>
+<p>Una universidad con varias sedes quiere manejar sus programas, profesores, cursos y matrículas en una base de datos.</p>
 <ul>
-  <li>Cada <strong>SEDE</strong> tiene un código de tres letras, nombre, ciudad y país.</li>
-  <li>Cada <strong>PROFESOR</strong> tiene identificación, nombre, número de registro, años de experiencia y uno o varios teléfonos. Pertenece a exactamente una sede.</li>
-  <li>Cada <strong>SALÓN</strong> tiene un código, bloque, piso y capacidad, y queda en una sede.</li>
-  <li>Un <strong>CURSO</strong> tiene un identificador, un código (por ejemplo <code>BD101</code>), fecha de inicio, hora y asignatura. Lo ofrece una sede y se dicta en un solo salón.</li>
-  <li>Cada curso lo dictan uno o más profesores con un <em>rol</em> (titular o auxiliar), y un profesor puede dictar muchos cursos.</li>
-  <li>Los <strong>ESTUDIANTES</strong> se registran con identificación, nombre (nombres y apellidos), fecha de nacimiento, correo y créditos aprobados; la edad se calcula. Un estudiante se inscribe en cursos y en cada inscripción se guarda su <em>puesto</em> en la lista y la <em>modalidad</em>.</li>
-  <li>Un profesor también puede ser estudiante (por ejemplo de una maestría). Algunos salones son laboratorios (se guarda el número de equipos) y otros auditorios (se guarda el área en m²); los salones normales no son ni lo uno ni lo otro.</li>
+  <li>Cada <strong>SEDE</strong> tiene un código de tres letras, nombre, ciudad y dirección.</li>
+  <li>Cada <strong>PROGRAMA</strong> (por ejemplo Ingeniería de Sistemas) tiene un número, nombre, nivel (pregrado o posgrado) y créditos. Se ofrece en una sola sede y lo dirige un profesor; un profesor dirige como mucho un programa.</li>
+  <li>Cada <strong>PROFESOR</strong> tiene identificación, nombre (nombres y apellidos), título y fecha de ingreso; la antigüedad se calcula. Está vinculado a una sede. Los de planta tienen salario y categoría, los de cátedra cobran por hora y tienen horas a la semana, y los visitantes no son ni lo uno ni lo otro.</li>
+  <li>Cada <strong>ESTUDIANTE</strong> tiene identificación, nombre (nombres y apellidos), fecha de nacimiento, correo y uno o varios teléfonos; la edad se calcula. Está inscrito en un programa.</li>
+  <li>Una <strong>ASIGNATURA</strong> tiene código, nombre y créditos. Algunas piden otras como requisito (Bases de Datos pide Estructuras de Datos, por ejemplo).</li>
+  <li>De cada asignatura se abren <strong>CURSOS</strong> (grupos) en un periodo, con un horario. Cada curso lo dicta un profesor.</li>
+  <li>Un estudiante se matricula en varios cursos y en cada matrícula se guarda la nota final, que puede estar vacía mientras el curso no termina.</li>
 </ul>
-<p class="nota">Entidades base: <strong>Profesor</strong>, <strong>Estudiante</strong> y <strong>Sede</strong>. Entidades inventadas para completar el problema: <strong>Salón</strong> y <strong>Curso</strong>.</p></details></section>
+<p class="nota">Entidades base: <strong>Profesor</strong>, <strong>Estudiante</strong> y <strong>Sede</strong>. Entidades inventadas para completar el problema: <strong>Programa</strong>, <strong>Asignatura</strong> y <strong>Curso</strong>.</p></details></section>
 <section class="panel">
 <h2>Consulta 1</h2>
-<p class="enunciado">Estudiantes del curso 1 con su puesto y su modalidad.</p><pre class="codigo"><span class="kw">SELECT</span> r.puesto, p.nombres, p.apellidos, r.modalidad
-<span class="kw">FROM</span> INSCRIPCION r
-<span class="kw">JOIN</span> PERSONA p <span class="kw">ON</span> p.documento = r.documento
-<span class="kw">WHERE</span> r.id_curso = <span class="nu">1</span>
-<span class="kw">ORDER</span> <span class="kw">BY</span> r.modalidad <span class="kw">DESC</span>, p.apellidos;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th><th class="xl-col">D</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">puesto</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">modalidad</td></tr><tr><td class="xl-fila">2</td><td class="xl-num">2</td><td class="">Camila</td><td class="">Ospina Reyes</td><td class="">virtual</td></tr><tr><td class="xl-fila">3</td><td class="xl-num">12</td><td class="">Tomas</td><td class="">Bermudez Cano</td><td class="">presencial</td></tr><tr><td class="xl-fila">4</td><td class="xl-num">15</td><td class="">Felipe</td><td class="">Salazar Duque</td><td class="">presencial</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado">Profesores con su tipo de vinculación.</p><pre class="codigo"><span class="kw">SELECT</span> p.nombres, p.apellidos,
+       <span class="kw">CASE</span>
+         <span class="kw">WHEN</span> pl.id_profesor <span class="kw">IS</span> <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">THEN</span> <span class="st">'planta'</span>
+         <span class="kw">WHEN</span> ca.id_profesor <span class="kw">IS</span> <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">THEN</span> <span class="st">'catedra'</span>
+         <span class="kw">ELSE</span> <span class="st">'visitante'</span>
+       <span class="kw">END</span> <span class="kw">AS</span> vinculacion
+<span class="kw">FROM</span> PROFESOR p
+<span class="kw">LEFT</span> <span class="kw">JOIN</span> PLANTA pl <span class="kw">ON</span> pl.id_profesor = p.id_profesor
+<span class="kw">LEFT</span> <span class="kw">JOIN</span> CATEDRA ca <span class="kw">ON</span> ca.id_profesor = p.id_profesor
+<span class="kw">ORDER</span> <span class="kw">BY</span> vinculacion, p.apellidos;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">vinculacion</td></tr><tr><td class="xl-fila">2</td><td class="">Diana Carolina</td><td class="">Pardo Mesa</td><td class="">catedra</td></tr><tr><td class="xl-fila">3</td><td class="">Hector</td><td class="">Salazar Nino</td><td class="">catedra</td></tr><tr><td class="xl-fila">4</td><td class="">Jorge Eliecer</td><td class="">Cardenas Ruiz</td><td class="">planta</td></tr><tr><td class="xl-fila">5</td><td class="">Paola Andrea</td><td class="">Quintero Gil</td><td class="">planta</td></tr><tr><td class="xl-fila">6</td><td class="">Martha Lucia</td><td class="">Rincon Vega</td><td class="">planta</td></tr><tr><td class="xl-fila">7</td><td class="">Ricardo</td><td class="">Montoya Paz</td><td class="">visitante</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 2</h2>
-<p class="enunciado">Cuántos cursos hay de cada asignatura.</p><pre class="codigo"><span class="kw">SELECT</span> asignatura, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> vuelos
-<span class="kw">FROM</span> CURSO
-<span class="kw">GROUP</span> <span class="kw">BY</span> asignatura
-<span class="kw">ORDER</span> <span class="kw">BY</span> vuelos <span class="kw">DESC</span>, asignatura;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">asignatura</td><td class="xl-cab">vuelos</td></tr><tr><td class="xl-fila">2</td><td class="">Bases de Datos</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">3</td><td class="">Calculo</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">4</td><td class="">Programacion</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">5</td><td class="">Seminario</td><td class="xl-num">1</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado">Promedio de notas de cada curso, de mayor a menor.</p><pre class="codigo"><span class="kw">SELECT</span> c.id_curso, a.nombre <span class="kw">AS</span> asignatura, c.grupo, <span class="kw">ROUND</span>(<span class="kw">AVG</span>(m.nota), <span class="nu">2</span>) <span class="kw">AS</span> promedio
+<span class="kw">FROM</span> CURSO c
+<span class="kw">JOIN</span> ASIGNATURA a <span class="kw">ON</span> a.cod_asignatura = c.cod_asignatura
+<span class="kw">JOIN</span> MATRICULA m <span class="kw">ON</span> m.id_curso = c.id_curso
+<span class="kw">GROUP</span> <span class="kw">BY</span> c.id_curso, a.nombre, c.grupo
+<span class="kw">ORDER</span> <span class="kw">BY</span> promedio <span class="kw">DESC</span>;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th><th class="xl-col">D</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">id_curso</td><td class="xl-cab">asignatura</td><td class="xl-cab">grupo</td><td class="xl-cab">promedio</td></tr><tr><td class="xl-fila">2</td><td class="xl-num">5</td><td class="">Programacion 1</td><td class="xl-num">01</td><td class="xl-num">4.80</td></tr><tr><td class="xl-fila">3</td><td class="xl-num">6</td><td class="">Estadistica</td><td class="xl-num">01</td><td class="xl-num">4.20</td></tr><tr><td class="xl-fila">4</td><td class="xl-num">3</td><td class="">Estructuras de Datos</td><td class="xl-num">01</td><td class="xl-num">3.90</td></tr><tr><td class="xl-fila">5</td><td class="xl-num">1</td><td class="">Bases de Datos 1</td><td class="xl-num">01</td><td class="xl-num">3.87</td></tr><tr><td class="xl-fila">6</td><td class="xl-num">4</td><td class="">Calculo Diferencial</td><td class="xl-num">01</td><td class="xl-num">3.80</td></tr><tr><td class="xl-fila">7</td><td class="xl-num">2</td><td class="">Bases de Datos 1</td><td class="xl-num">02</td><td class="xl-num">3.25</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 3</h2>
-<p class="enunciado">Profesores con la ciudad de su sede.</p><pre class="codigo"><span class="kw">SELECT</span> p.nombres, p.apellidos, p.registro, b.ciudad
-<span class="kw">FROM</span> PERSONA p
-<span class="kw">JOIN</span> SEDE b <span class="kw">ON</span> b.codigo_sede = p.codigo_sede
-<span class="kw">WHERE</span> p.tipo_persona <span class="kw">IN</span> (<span class="st">'profesor'</span>, <span class="st">'ambos'</span>)
-<span class="kw">ORDER</span> <span class="kw">BY</span> b.ciudad, p.apellidos;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th><th class="xl-col">D</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">registro</td><td class="xl-cab">ciudad</td></tr><tr><td class="xl-fila">2</td><td class="">Ricardo</td><td class="">Nunez Vela</td><td class="">REG-0975</td><td class="">Bogota</td></tr><tr><td class="xl-fila">3</td><td class="">Jorge Ivan</td><td class="">Pardo Silva</td><td class="">REG-1201</td><td class="">Bogota</td></tr><tr><td class="xl-fila">4</td><td class="">Sara Lucia</td><td class="">Quintero Paz</td><td class="">REG-1590</td><td class="">Cali</td></tr><tr><td class="xl-fila">5</td><td class="">Diana Carolina</td><td class="">Mesa Rios</td><td class="">REG-1388</td><td class="">Medellin</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado">Requisitos de Bases de Datos 1, con su nombre.</p><pre class="codigo"><span class="kw">SELECT</span> r.cod_requisito, a.nombre <span class="kw">AS</span> requisito
+<span class="kw">FROM</span> PRERREQUISITO r
+<span class="kw">JOIN</span> ASIGNATURA a <span class="kw">ON</span> a.cod_asignatura = r.cod_requisito
+<span class="kw">WHERE</span> r.cod_asignatura = <span class="st">'BDD101'</span>
+<span class="kw">ORDER</span> <span class="kw">BY</span> a.nombre;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">cod_requisito</td><td class="xl-cab">requisito</td></tr><tr><td class="xl-fila">2</td><td class="">MAT101</td><td class="">Calculo Diferencial</td></tr><tr><td class="xl-fila">3</td><td class="">PRG201</td><td class="">Estructuras de Datos</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 4</h2>
-<p class="enunciado">Cuántos cursos tiene cada salón, incluyendo los que no tienen.</p><pre class="codigo"><span class="kw">SELECT</span> a.codigo_salon, a.bloque, <span class="kw">COUNT</span>(v.id_curso) <span class="kw">AS</span> vuelos
-<span class="kw">FROM</span> SALON a
-<span class="kw">LEFT</span> <span class="kw">JOIN</span> CURSO v <span class="kw">ON</span> v.codigo_salon = a.codigo_salon
-<span class="kw">GROUP</span> <span class="kw">BY</span> a.codigo_salon, a.bloque
-<span class="kw">ORDER</span> <span class="kw">BY</span> vuelos <span class="kw">DESC</span>, a.codigo_salon;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo_salon</td><td class="xl-cab">bloque</td><td class="xl-cab">vuelos</td></tr><tr><td class="xl-fila">2</td><td class="">S-101</td><td class="">Bloque A</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">3</td><td class="">S-205</td><td class="">Bloque B</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">4</td><td class="">S-310</td><td class="">Bloque C</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">5</td><td class="">S-401</td><td class="">Bloque B</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">6</td><td class="">S-115</td><td class="">Bloque A</td><td class="xl-num">0</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado">Cada programa con su director y la ciudad de la sede.</p><pre class="codigo"><span class="kw">SELECT</span> g.nombre <span class="kw">AS</span> programa, p.nombres, p.apellidos, s.ciudad
+<span class="kw">FROM</span> PROGRAMA g
+<span class="kw">JOIN</span> PROFESOR p <span class="kw">ON</span> p.id_profesor = g.id_director
+<span class="kw">JOIN</span> SEDE s <span class="kw">ON</span> s.codigo_sede = g.codigo_sede
+<span class="kw">ORDER</span> <span class="kw">BY</span> g.nombre;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th><th class="xl-col">D</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">programa</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">ciudad</td></tr><tr><td class="xl-fila">2</td><td class="">Ingenieria de Sistemas</td><td class="">Martha Lucia</td><td class="">Rincon Vega</td><td class="">Bogota</td></tr><tr><td class="xl-fila">3</td><td class="">Ingenieria Electronica</td><td class="">Diana Carolina</td><td class="">Pardo Mesa</td><td class="">Chia</td></tr><tr><td class="xl-fila">4</td><td class="">Maestria en Ciencia de Datos</td><td class="">Paola Andrea</td><td class="">Quintero Gil</td><td class="">Bogota</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 5</h2>
-<p class="enunciado">Estudiantes inscritos en más de un curso.</p><pre class="codigo"><span class="kw">SELECT</span> p.nombres, p.apellidos, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> reservas
-<span class="kw">FROM</span> INSCRIPCION r
-<span class="kw">JOIN</span> PERSONA p <span class="kw">ON</span> p.documento = r.documento
-<span class="kw">GROUP</span> <span class="kw">BY</span> p.documento, p.nombres, p.apellidos
-<span class="kw">HAVING</span> <span class="kw">COUNT</span>(*) &gt; <span class="nu">1</span>
-<span class="kw">ORDER</span> <span class="kw">BY</span> reservas <span class="kw">DESC</span>, p.apellidos;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">reservas</td></tr><tr><td class="xl-fila">2</td><td class="">Tomas</td><td class="">Bermudez Cano</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">3</td><td class="">Felipe</td><td class="">Salazar Duque</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">4</td><td class="">Juan David</td><td class="">Arango Mejia</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">5</td><td class="">Mariana</td><td class="">Cardenas Ruiz</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">6</td><td class="">Camila</td><td class="">Ospina Reyes</td><td class="xl-num">2</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado">Asignaturas que no tienen ningún curso abierto en 2026-2.</p><pre class="codigo"><span class="kw">SELECT</span> a.cod_asignatura, a.nombre
+<span class="kw">FROM</span> ASIGNATURA a
+<span class="kw">WHERE</span> <span class="kw">NOT</span> <span class="kw">EXISTS</span> (<span class="kw">SELECT</span> <span class="nu">1</span> <span class="kw">FROM</span> CURSO c
+                  <span class="kw">WHERE</span> c.cod_asignatura = a.cod_asignatura
+                    <span class="kw">AND</span> c.periodo = <span class="st">'2026-2'</span>);</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">cod_asignatura</td><td class="xl-cab">nombre</td></tr><tr><td class="xl-fila">2</td><td class="">RED101</td><td class="">Redes 1</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 6</h2>
-<p class="enunciado">Profesor titular de cada curso.</p><pre class="codigo"><span class="kw">SELECT</span> v.codigo, v.fecha, p.nombres, p.apellidos
-<span class="kw">FROM</span> DOCENCIA t
-<span class="kw">JOIN</span> CURSO v <span class="kw">ON</span> v.id_curso = t.id_curso
-<span class="kw">JOIN</span> PERSONA p <span class="kw">ON</span> p.documento = t.documento
-<span class="kw">WHERE</span> t.rol = <span class="st">'titular'</span>
-<span class="kw">ORDER</span> <span class="kw">BY</span> v.fecha, v.codigo;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th><th class="xl-col">D</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo</td><td class="xl-cab">fecha</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td></tr><tr><td class="xl-fila">2</td><td class="">BD101</td><td class="">2026-02-02</td><td class="">Jorge Ivan</td><td class="">Pardo Silva</td></tr><tr><td class="xl-fila">3</td><td class="">PR201</td><td class="">2026-02-02</td><td class="">Diana Carolina</td><td class="">Mesa Rios</td></tr><tr><td class="xl-fila">4</td><td class="">BD301</td><td class="">2026-02-03</td><td class="">Sara Lucia</td><td class="">Quintero Paz</td></tr><tr><td class="xl-fila">5</td><td class="">BD101</td><td class="">2026-02-04</td><td class="">Ricardo</td><td class="">Nunez Vela</td></tr><tr><td class="xl-fila">6</td><td class="">SE900</td><td class="">2026-02-04</td><td class="">Ricardo</td><td class="">Nunez Vela</td></tr><tr><td class="xl-fila">7</td><td class="">CA420</td><td class="">2026-02-05</td><td class="">Diana Carolina</td><td class="">Mesa Rios</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado">Estudiantes matriculados en más de dos cursos.</p><pre class="codigo"><span class="kw">SELECT</span> e.nombres, e.apellidos, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> cursos
+<span class="kw">FROM</span> MATRICULA m
+<span class="kw">JOIN</span> ESTUDIANTE e <span class="kw">ON</span> e.id_estudiante = m.id_estudiante
+<span class="kw">GROUP</span> <span class="kw">BY</span> e.id_estudiante, e.nombres, e.apellidos
+<span class="kw">HAVING</span> <span class="kw">COUNT</span>(*) &gt; <span class="nu">2</span>;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">cursos</td></tr><tr><td class="xl-fila">2</td><td class="">Juan Camilo</td><td class="">Rojas Perez</td><td class="xl-num">3</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
   </main>
 
@@ -96,8 +101,8 @@
   <footer>Universidad El Bosque · Bogotá D.C</footer>
 </div>
 
-<script src="../../js/estrellas.js?v=20261116c"></script>
-<script src="../../js/ejercicios.js?v=20261116c"></script>
+<script src="../../js/estrellas.js?v=20261116d"></script>
+<script src="../../js/ejercicios.js?v=20261116d"></script>
 <script>iniciarEtapa("sql");</script>
 </body>
 </html>

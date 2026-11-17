@@ -1,7 +1,9 @@
 -- Gimnasio - script completo (01 + 02 + 04 + 05). Probado en MySQL 8.0.
 
 -- Gimnasio - Bases de Datos 1
--- 01: creacion de la sede de datos y de las 9 tablas
+-- 01: creacion de la base de datos y de las 9 tablas
+-- Las tablas van en orden: primero las que no dependen de otras.
+
 SET NAMES utf8mb4;
 
 CREATE DATABASE IF NOT EXISTS gimnasio
@@ -10,271 +12,218 @@ CREATE DATABASE IF NOT EXISTS gimnasio
 
 USE gimnasio;
 
-CREATE TABLE SEDE (
-  codigo_sede char(3) NOT NULL,
-  nombre varchar(80) NOT NULL,
-  ciudad varchar(50) NOT NULL,
-  pais varchar(50) NOT NULL,
-  PRIMARY KEY (codigo_sede)
+-- PLAN
+CREATE TABLE PLAN (
+  id_plan int NOT NULL,
+  nombre varchar(40) NOT NULL,
+  precio_mes decimal(10,2) NOT NULL,
+  meses int NOT NULL,
+  PRIMARY KEY (id_plan),
+  UNIQUE KEY uq_plan_nombre (nombre)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE PERSONA (
-  documento varchar(15) NOT NULL,
+-- SOCIO
+CREATE TABLE SOCIO (
+  id_socio varchar(15) NOT NULL,
   nombres varchar(50) NOT NULL,
   apellidos varchar(50) NOT NULL,
   fecha_nacimiento date NOT NULL,
-  tipo_persona enum('entrenador','socio','ambos') NOT NULL,
-  certificacion varchar(10) DEFAULT NULL,
-  anios_experiencia int DEFAULT NULL,
-  codigo_sede char(3) DEFAULT NULL,
-  correo varchar(80) DEFAULT NULL,
-  puntos int DEFAULT NULL,
-  PRIMARY KEY (documento),
-  UNIQUE KEY uq_persona_certificacion (certificacion),
-  UNIQUE KEY uq_persona_correo (correo),
-  KEY fk_persona_sede (codigo_sede),
-  CONSTRAINT fk_persona_sede FOREIGN KEY (codigo_sede) REFERENCES SEDE (codigo_sede)
+  correo varchar(80) NOT NULL,
+  id_plan int NOT NULL,
+  PRIMARY KEY (id_socio),
+  UNIQUE KEY uq_socio_correo (correo),
+  CONSTRAINT fk_socio_id_plan FOREIGN KEY (id_plan) REFERENCES PLAN (id_plan)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE PER_TELEFONO (
-  documento varchar(15) NOT NULL,
+-- SEDE
+CREATE TABLE SEDE (
+  codigo_sede char(3) NOT NULL,
+  nombre varchar(60) NOT NULL,
+  direccion varchar(80) NOT NULL,
+  horario varchar(40) NOT NULL,
+  PRIMARY KEY (codigo_sede)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- CARDIO
+CREATE TABLE CARDIO (
+  serial varchar(12) NOT NULL,
+  marca varchar(30) NOT NULL,
+  anio int NOT NULL,
+  velocidad_max decimal(4,1) NOT NULL,
+  codigo_sede char(3) NOT NULL,
+  PRIMARY KEY (serial),
+  CONSTRAINT fk_cardio_codigo_sede FOREIGN KEY (codigo_sede) REFERENCES SEDE (codigo_sede)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- FUERZA
+CREATE TABLE FUERZA (
+  serial varchar(12) NOT NULL,
+  marca varchar(30) NOT NULL,
+  anio int NOT NULL,
+  peso_max_kg int NOT NULL,
+  codigo_sede char(3) NOT NULL,
+  PRIMARY KEY (serial),
+  CONSTRAINT fk_fuerza_codigo_sede FOREIGN KEY (codigo_sede) REFERENCES SEDE (codigo_sede)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- SOC_TELEFONO
+CREATE TABLE SOC_TELEFONO (
+  id_socio varchar(15) NOT NULL,
   telefono varchar(15) NOT NULL,
-  PRIMARY KEY (documento,telefono),
-  CONSTRAINT fk_per_telefono_persona FOREIGN KEY (documento) REFERENCES PERSONA (documento)
+  PRIMARY KEY (id_socio, telefono),
+  CONSTRAINT fk_soc_telefono_id_socio FOREIGN KEY (id_socio) REFERENCES SOCIO (id_socio)
     ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE SALA (
-  codigo_sala varchar(10) NOT NULL,
-  ambiente varchar(40) NOT NULL,
-  piso varchar(40) NOT NULL,
+-- ASISTENCIA
+CREATE TABLE ASISTENCIA (
+  id_socio varchar(15) NOT NULL,
   codigo_sede char(3) NOT NULL,
-  PRIMARY KEY (codigo_sala),
-  KEY fk_sala_sede (codigo_sede),
-  CONSTRAINT fk_sala_sede FOREIGN KEY (codigo_sede) REFERENCES SEDE (codigo_sede)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-CREATE TABLE SALA_CARDIO (
-  codigo_sala varchar(10) NOT NULL,
-  num_maquinas int NOT NULL,
-  PRIMARY KEY (codigo_sala),
-  CONSTRAINT fk_sala_cardio_sala FOREIGN KEY (codigo_sala) REFERENCES SALA (codigo_sala)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-CREATE TABLE PISCINA (
-  codigo_sala varchar(10) NOT NULL,
-  volumen_m3 decimal(10,2) NOT NULL,
-  PRIMARY KEY (codigo_sala),
-  CONSTRAINT fk_piscina_sala FOREIGN KEY (codigo_sala) REFERENCES SALA (codigo_sala)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-CREATE TABLE CLASE (
-  id_clase bigint NOT NULL AUTO_INCREMENT,
-  codigo varchar(8) NOT NULL,
   fecha date NOT NULL,
-  hora_inicio time NOT NULL,
-  actividad varchar(50) NOT NULL,
-  codigo_sala varchar(10) NOT NULL,
-  sede_clase char(3) NOT NULL,
-  PRIMARY KEY (id_clase),
-  UNIQUE KEY uq_clase_codigo_fecha (codigo,fecha),
-  KEY fk_clase_sala (codigo_sala),
-  KEY fk_clase_sede (sede_clase),
-  CONSTRAINT fk_clase_sala FOREIGN KEY (codigo_sala) REFERENCES SALA (codigo_sala),
-  CONSTRAINT fk_clase_sede FOREIGN KEY (sede_clase) REFERENCES SEDE (codigo_sede)
+  hora_entrada time NOT NULL,
+  PRIMARY KEY (id_socio, codigo_sede, fecha),
+  CONSTRAINT fk_asistencia_id_socio FOREIGN KEY (id_socio) REFERENCES SOCIO (id_socio),
+  CONSTRAINT fk_asistencia_codigo_sede FOREIGN KEY (codigo_sede) REFERENCES SEDE (codigo_sede)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE INSTRUCCION (
-  documento varchar(15) NOT NULL,
-  id_clase bigint NOT NULL,
-  rol enum('principal','apoyo') NOT NULL,
-  PRIMARY KEY (documento,id_clase),
-  KEY fk_instruccion_clase (id_clase),
-  CONSTRAINT fk_instruccion_persona FOREIGN KEY (documento) REFERENCES PERSONA (documento),
-  CONSTRAINT fk_instruccion_clase FOREIGN KEY (id_clase) REFERENCES CLASE (id_clase)
+-- ENTRENADOR
+CREATE TABLE ENTRENADOR (
+  id_entrenador varchar(15) NOT NULL,
+  nombres varchar(50) NOT NULL,
+  apellidos varchar(50) NOT NULL,
+  especialidad varchar(40) NOT NULL,
+  certificacion varchar(40) NOT NULL,
+  codigo_sede char(3) NOT NULL,
+  PRIMARY KEY (id_entrenador),
+  CONSTRAINT fk_entrenador_codigo_sede FOREIGN KEY (codigo_sede) REFERENCES SEDE (codigo_sede)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE CUPO (
-  documento varchar(15) NOT NULL,
-  id_clase bigint NOT NULL,
-  puesto varchar(4) NOT NULL,
-  plan enum('basico','premium') NOT NULL,
-  PRIMARY KEY (documento,id_clase),
-  UNIQUE KEY uq_cupo_clase_puesto (id_clase,puesto),
-  CONSTRAINT fk_cupo_persona FOREIGN KEY (documento) REFERENCES PERSONA (documento),
-  CONSTRAINT fk_cupo_clase FOREIGN KEY (id_clase) REFERENCES CLASE (id_clase)
+-- ASESORIA
+CREATE TABLE ASESORIA (
+  id_socio varchar(15) NOT NULL,
+  id_entrenador varchar(15) NOT NULL,
+  desde date NOT NULL,
+  PRIMARY KEY (id_socio),
+  CONSTRAINT fk_asesoria_id_socio FOREIGN KEY (id_socio) REFERENCES SOCIO (id_socio),
+  CONSTRAINT fk_asesoria_id_entrenador FOREIGN KEY (id_entrenador) REFERENCES ENTRENADOR (id_entrenador)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Gimnasio - Bases de Datos 1
--- 02: registros de prueba (64), en una sola transaccion
+-- 02: registros de prueba, en una sola transaccion
 
 USE gimnasio;
 
-
-
 START TRANSACTION;
 
+INSERT INTO PLAN (id_plan, nombre, precio_mes, meses) VALUES
+(1, 'Basico', 89000, 1),
+(2, 'Trimestral', 240000, 3),
+(3, 'Anual', 850000, 12),
+(4, 'Estudiante', 69000, 1);
 
+INSERT INTO SOCIO (id_socio, nombres, apellidos, fecha_nacimiento, correo, id_plan) VALUES
+('S01', 'Daniela', 'Mejia Rojas', '1995-04-10', 'daniela.mejia@correo.co', 3),
+('S02', 'Felipe', 'Arango Diaz', '1990-09-22', 'felipe.arango@correo.co', 1),
+('S03', 'Tatiana', 'Mora Gil', '2001-01-05', 'tatiana.mora@correo.co', 4),
+('S04', 'Oscar', 'Pineda Ruiz', '1985-06-17', 'oscar.pineda@correo.co', 2),
+('S05', 'Lorena', 'Castro Vela', '1998-12-30', 'lorena.castro@correo.co', 3),
+('S06', 'Mauricio', 'Leal Soto', '1979-03-08', 'mauricio.leal@correo.co', 1),
+('S07', 'Juliana', 'Pena Ortiz', '2003-07-21', 'juliana.pena@correo.co', 4),
+('S08', 'Esteban', 'Rios Lara', '1992-11-11', 'esteban.rios@correo.co', 2);
 
-INSERT INTO SEDE (codigo_sede, nombre, ciudad, pais) VALUES
-('BOG', 'Sede Chapinero', 'Bogota', 'Colombia'),
-('MED', 'Sede Laureles', 'Medellin', 'Colombia'),
-('BAQ', 'Sede Norte', 'Barranquilla', 'Colombia');
+INSERT INTO SEDE (codigo_sede, nombre, direccion, horario) VALUES
+('CHA', 'Sede Chapinero', 'Cra 13 # 57-20', '5am a 10pm'),
+('SUB', 'Sede Suba', 'Av Suba # 115-50', '5am a 9pm'),
+('SOA', 'Sede Soacha', 'Cll 13 # 7-30', '6am a 9pm');
 
-INSERT INTO PERSONA (documento, nombres, apellidos, fecha_nacimiento, tipo_persona,
-                     certificacion, anios_experiencia, codigo_sede, correo, puntos) VALUES
-('1010', 'Andres Camilo', 'Rueda Lara', '1980-03-12', 'entrenador', 'CER-210', 10, 'BOG', NULL, NULL),
-('1020', 'Paola Andrea', 'Vargas Cruz', '1988-07-25', 'entrenador', 'CER-344', 6, 'MED', NULL, NULL),
-('1030', 'Sebastian', 'Mora Ortiz', '1975-11-02', 'entrenador', 'CER-118', 14, 'BOG', NULL, NULL),
-('1040', 'Natalia Sofia', 'Pineda Gil', '1992-01-18', 'ambos', 'CER-402', 3, 'BAQ', 'natalia.pineda@correo.co', 350),
-('2010', 'Luis Miguel', 'Torres Pena', '2000-05-30', 'socio', NULL, NULL, NULL, 'luis.torres@correo.co', 1200),
-('2020', 'Laura', 'Gutierrez Sol', '1997-09-14', 'socio', NULL, NULL, NULL, 'laura.gutierrez@correo.co', 90),
-('2030', 'Esteban', 'Rojas Prieto', '1985-12-01', 'socio', NULL, NULL, NULL, 'esteban.rojas@correo.co', 2600),
-('2040', 'Manuela', 'Cortes Lima', '2003-04-22', 'socio', NULL, NULL, NULL, 'manuela.cortes@correo.co', 0),
-('2050', 'Ricardo', 'Herrera Paz', '1979-08-08', 'socio', NULL, NULL, NULL, 'ricardo.herrera@correo.co', 1800);
+INSERT INTO CARDIO (serial, marca, anio, velocidad_max, codigo_sede) VALUES
+('CAR-001', 'Life Fitness', 2021, 20.0, 'CHA'),
+('CAR-002', 'Technogym', 2019, 18.5, 'SUB'),
+('CAR-003', 'Matrix', 2023, 22.0, 'CHA');
 
-INSERT INTO PER_TELEFONO (documento, telefono) VALUES
-('1010', '3001112233'),
-('1010', '6015550101'),
-('1020', '3104445566'),
-('1030', '3207778899'),
-('1040', '3156667788'),
-('1040', '3019990000'),
-('2010', '3121234567'),
-('2020', '3189876543'),
-('2030', '3001239876'),
-('2030', '6047771234'),
-('2040', '3165554433'),
-('2050', '3112223344');
+INSERT INTO FUERZA (serial, marca, anio, peso_max_kg, codigo_sede) VALUES
+('FUE-001', 'Hammer', 2020, 180, 'CHA'),
+('FUE-002', 'Technogym', 2022, 150, 'SUB'),
+('FUE-003', 'Matrix', 2018, 200, 'SOA');
 
-INSERT INTO SALA (codigo_sala, ambiente, piso, codigo_sede) VALUES
-('SL-01', 'Cardio 1', 'Piso 1', 'BOG'),
-('SL-02', 'Funcional', 'Piso 2', 'MED'),
-('SL-03', 'Cardio 2', 'Piso 1', 'BAQ'),
-('SL-04', 'Funcional', 'Sotano', 'BOG'),
-('SL-05', 'Estiramiento', 'Piso 3', 'BOG');
+INSERT INTO SOC_TELEFONO (id_socio, telefono) VALUES
+('S01', '3001112233'),
+('S01', '6014567890'),
+('S02', '3112223344'),
+('S03', '3123334455'),
+('S04', '3134445566'),
+('S04', '6017654321'),
+('S05', '3145556677'),
+('S06', '3156667788'),
+('S07', '3167778899'),
+('S08', '3178889900');
 
-INSERT INTO SALA_CARDIO (codigo_sala, num_maquinas) VALUES
-('SL-01', 40),
-('SL-02', 35),
-('SL-03', 25);
+INSERT INTO ASISTENCIA (id_socio, codigo_sede, fecha, hora_entrada) VALUES
+('S01', 'CHA', '2026-11-03', '06:10'),
+('S01', 'CHA', '2026-11-05', '06:05'),
+('S01', 'SUB', '2026-11-08', '09:30'),
+('S02', 'CHA', '2026-11-03', '18:20'),
+('S03', 'SUB', '2026-11-04', '17:00'),
+('S03', 'SUB', '2026-11-06', '17:15'),
+('S04', 'CHA', '2026-11-04', '05:45'),
+('S04', 'SUB', '2026-11-07', '07:00'),
+('S05', 'SOA', '2026-11-05', '19:00'),
+('S06', 'CHA', '2026-11-06', '12:30'),
+('S07', 'SUB', '2026-11-03', '16:40'),
+('S08', 'CHA', '2026-11-07', '20:10');
 
-INSERT INTO PISCINA (codigo_sala, volumen_m3) VALUES
-('SL-04', 375.00);
+INSERT INTO ENTRENADOR (id_entrenador, nombres, apellidos, especialidad, certificacion, codigo_sede) VALUES
+('T01', 'Carlos', 'Benitez Paz', 'funcional', 'NSCA-CPT', 'CHA'),
+('T02', 'Angela', 'Torres Lima', 'pesas', 'ACE', 'SUB'),
+('T03', 'Ivan', 'Restrepo Cano', 'cardio', 'ISSA', 'CHA'),
+('T04', 'Sara', 'Gomez Luna', 'yoga', 'RYT-200', 'SOA');
 
-INSERT INTO CLASE (id_clase, codigo, fecha, hora_inicio, actividad, codigo_sala, sede_clase) VALUES
-(1, 'SPN01', '2026-03-02', '06:00', 'Spinning', 'SL-01', 'BOG'),
-(2, 'FUN02', '2026-03-02', '07:00', 'Funcional', 'SL-02', 'MED'),
-(3, 'SPN03', '2026-03-03', '18:00', 'Spinning', 'SL-03', 'BAQ'),
-(4, 'SPN01', '2026-03-04', '06:00', 'Spinning', 'SL-01', 'BOG'),
-(5, 'NAT05', '2026-03-04', '19:00', 'Natacion', 'SL-04', 'BOG'),
-(6, 'YOG06', '2026-03-05', '08:00', 'Yoga', 'SL-02', 'MED');
-
-INSERT INTO INSTRUCCION (documento, id_clase, rol) VALUES
-('1010', 1, 'principal'),
-('1040', 1, 'apoyo'),
-('1020', 2, 'principal'),
-('1030', 2, 'apoyo'),
-('1040', 3, 'principal'),
-('1020', 3, 'apoyo'),
-('1030', 4, 'principal'),
-('1010', 4, 'apoyo'),
-('1030', 5, 'principal'),
-('1010', 5, 'apoyo'),
-('1020', 6, 'principal'),
-('1040', 6, 'apoyo');
-
-INSERT INTO CUPO (documento, id_clase, puesto, plan) VALUES
-('2010', 1, 'B12', 'basico'),
-('2010', 3, 'B05', 'basico'),
-('2010', 4, 'B14', 'basico'),
-('2020', 1, 'B02', 'premium'),
-('2020', 2, 'C08', 'basico'),
-('2030', 2, 'C01', 'premium'),
-('2030', 6, 'C03', 'premium'),
-('2040', 3, 'B20', 'basico'),
-('2040', 6, 'C22', 'basico'),
-('2050', 1, 'B15', 'basico'),
-('2050', 3, 'B09', 'basico'),
-('2050', 4, 'B04', 'premium'),
-('1040', 2, 'C18', 'basico');
-
-
+INSERT INTO ASESORIA (id_socio, id_entrenador, desde) VALUES
+('S01', 'T01', '2026-06-01'),
+('S03', 'T02', '2026-08-15'),
+('S04', 'T01', '2026-09-10'),
+('S05', 'T04', '2026-10-01'),
+('S07', 'T02', '2026-10-20');
 
 COMMIT;
 
 -- Gimnasio - Bases de Datos 1
 -- 04: restricciones adicionales de los supuestos
+
 USE gimnasio;
 
-ALTER TABLE PERSONA ADD CONSTRAINT ck_persona_datos_entrenador CHECK (
-  tipo_persona = 'socio'
-  OR (certificacion IS NOT NULL AND anios_experiencia IS NOT NULL AND codigo_sede IS NOT NULL));
+-- precios y meses positivos
+ALTER TABLE PLAN ADD CONSTRAINT ck_plan_valores CHECK (precio_mes > 0 AND meses > 0);
 
-ALTER TABLE PERSONA ADD CONSTRAINT ck_persona_solo_socio CHECK (
-  tipo_persona <> 'socio'
-  OR (certificacion IS NULL AND anios_experiencia IS NULL AND codigo_sede IS NULL));
+-- cada maquina con su dato positivo
+ALTER TABLE CARDIO ADD CONSTRAINT ck_cardio_vel CHECK (velocidad_max > 0);
+ALTER TABLE FUERZA ADD CONSTRAINT ck_fuerza_peso CHECK (peso_max_kg > 0);
 
-ALTER TABLE PERSONA ADD CONSTRAINT ck_persona_datos_socio CHECK (
-  tipo_persona = 'entrenador' OR (correo IS NOT NULL AND puntos IS NOT NULL));
-
-ALTER TABLE PERSONA ADD CONSTRAINT ck_persona_solo_entrenador CHECK (
-  tipo_persona <> 'entrenador' OR (correo IS NULL AND puntos IS NULL));
-
-ALTER TABLE PERSONA ADD CONSTRAINT ck_persona_horas CHECK (anios_experiencia IS NULL OR anios_experiencia >= 0);
-ALTER TABLE PERSONA ADD CONSTRAINT ck_persona_puntos CHECK (puntos IS NULL OR puntos >= 0);
-ALTER TABLE PERSONA ADD CONSTRAINT ck_persona_correo CHECK (correo IS NULL OR correo LIKE '%_@_%._%');
-
-ALTER TABLE SALA_CARDIO ADD CONSTRAINT ck_sala_cardio_asientos CHECK (num_maquinas > 0);
-ALTER TABLE PISCINA ADD CONSTRAINT ck_piscina_capacidad CHECK (volumen_m3 > 0);
-
-ALTER TABLE CLASE ADD CONSTRAINT ck_clase_actividad CHECK (CHAR_LENGTH(TRIM(actividad)) > 0);
-
-ALTER TABLE INSTRUCCION ADD COLUMN es_principal tinyint
-  GENERATED ALWAYS AS (IF(rol = 'principal', 1, NULL)) VIRTUAL;
-ALTER TABLE INSTRUCCION ADD CONSTRAINT uq_instruccion_principal UNIQUE (id_clase, es_principal);
-
-SELECT TABLE_NAME, CONSTRAINT_NAME, CONSTRAINT_TYPE
-FROM information_schema.TABLE_CONSTRAINTS
-WHERE TABLE_SCHEMA = 'gimnasio' AND CONSTRAINT_TYPE IN ('CHECK', 'UNIQUE')
-ORDER BY TABLE_NAME, CONSTRAINT_TYPE, CONSTRAINT_NAME;
+-- un serial no puede estar en las dos tablas: se revisa con la vista v_maquina
+-- (MySQL no deja CHECK entre tablas)
 
 -- Gimnasio - Bases de Datos 1
--- 05: vistas
+-- 05: vistas (consultas guardadas, no guardan datos)
+
 USE gimnasio;
 
-CREATE OR REPLACE VIEW v_persona_edad AS
-SELECT p.documento, p.nombres, p.apellidos, p.tipo_persona, p.fecha_nacimiento,
-       TIMESTAMPDIFF(YEAR, p.fecha_nacimiento, CURDATE()) AS edad
-FROM PERSONA p;
+-- edad es derivado: no se guarda, se calcula
+CREATE OR REPLACE VIEW v_socio_edad AS
+SELECT x.id_socio, TIMESTAMPDIFF(YEAR, x.fecha_nacimiento, CURDATE()) AS edad
+FROM SOCIO x;
 
-CREATE OR REPLACE VIEW v_tipo_sala AS
-SELECT a.codigo_sala, a.piso, a.ambiente, a.codigo_sede,
-       CASE
-         WHEN c.codigo_sala IS NOT NULL THEN 'cardio'
-         WHEN g.codigo_sala IS NOT NULL THEN 'piscina'
-         ELSE 'otro'
-       END AS tipo,
-       c.num_maquinas, g.volumen_m3
-FROM SALA a
-LEFT JOIN SALA_CARDIO c ON c.codigo_sala = a.codigo_sala
-LEFT JOIN PISCINA g ON g.codigo_sala = a.codigo_sala;
+-- anios_uso es derivado: no se guarda, se calcula
+CREATE OR REPLACE VIEW v_cardio_anios_uso AS
+SELECT x.serial, YEAR(CURDATE()) - x.anio AS anios_uso
+FROM CARDIO x;
 
-CREATE OR REPLACE VIEW v_instruccion_clase AS
-SELECT v.id_clase, v.codigo, v.fecha, v.actividad, t.rol,
-       p.documento, p.nombres, p.apellidos
-FROM INSTRUCCION t
-JOIN CLASE v ON v.id_clase = t.id_clase
-JOIN PERSONA p ON p.documento = t.documento;
+-- anios_uso es derivado: no se guarda, se calcula
+CREATE OR REPLACE VIEW v_fuerza_anios_uso AS
+SELECT x.serial, YEAR(CURDATE()) - x.anio AS anios_uso
+FROM FUERZA x;
 
-CREATE OR REPLACE VIEW v_ocupacion_clase AS
-SELECT v.id_clase, v.codigo, v.fecha, v.actividad, c.num_maquinas,
-       COUNT(r.documento) AS ocupados,
-       ROUND(100 * COUNT(r.documento) / c.num_maquinas, 2) AS porcentaje
-FROM CLASE v
-JOIN SALA_CARDIO c ON c.codigo_sala = v.codigo_sala
-LEFT JOIN CUPO r ON r.id_clase = v.id_clase
-GROUP BY v.id_clase, v.codigo, v.fecha, v.actividad, c.num_maquinas;
-
-SELECT * FROM v_tipo_sala;
-SELECT * FROM v_ocupacion_clase ORDER BY id_clase;
+-- todas las maquinas juntas, sin importar su tipo
+CREATE OR REPLACE VIEW v_maquina AS
+SELECT serial, marca, anio, codigo_sede, 'cardio' AS tipo FROM CARDIO
+UNION ALL
+SELECT serial, marca, anio, codigo_sede, 'fuerza' FROM FUERZA;

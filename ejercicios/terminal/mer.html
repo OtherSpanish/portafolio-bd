@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../css/estilos.css?v=20261116c">
+<link rel="stylesheet" href="../../css/estilos.css?v=20261116d">
 </head>
 <body>
 <div class="sky"></div>
@@ -22,7 +22,7 @@
   <header class="interno">
     <div class="eyebrow">Ejercicio · Terminal de transporte</div>
     <h1>MER</h1>
-    <p class="subtitle">Modelo entidad relación · Terminal de transporte.</p>
+    <p class="subtitle">Modelo entidad relación · Terminal de transporte (6 entidades, 7 relaciones).</p>
   </header>
 
   <div class="ruta" id="ruta"></div>
@@ -36,126 +36,141 @@
 <section class="panel">
 <h2>Enunciado</h2>
 
-<p>Una empresa de buses intermunicipales que opera desde varias terminales necesita una base de datos para sus viajes.</p>
+<p>La asociación de terminales de transporte quiere una base de datos con las rutas intermunicipales y la venta de tiquetes.</p>
 <ul>
-  <li>Cada <strong>TERMINAL</strong> tiene un código de tres letras, nombre, ciudad y país.</li>
-  <li>Cada <strong>CONDUCTOR</strong> tiene identificación, nombre, licencia, horas de manejo y uno o varios teléfonos. Está asignado a exactamente una terminal.</li>
-  <li>Cada <strong>BUS</strong> se identifica por su placa y tiene modelo, marca y capacidad. Se estaciona en una terminal.</li>
-  <li>Un <strong>VIAJE</strong> tiene un identificador, un código de ruta (por ejemplo <code>RT101</code>), fecha, hora de salida y destino. Sale de una terminal y lo realiza un solo bus.</li>
-  <li>Cada viaje lo conducen uno o más conductores con un <em>rol</em> (principal o relevo), y un conductor puede conducir muchos viajes.</li>
-  <li>Los <strong>VIAJEROS</strong> se registran con identificación, nombre (nombres y apellidos), fecha de nacimiento, correo y puntos acumulados; la edad se calcula. Un viajero compra tiquetes y en cada uno se guarda la <em>silla</em> y el <em>servicio</em>.</li>
-  <li>Un conductor también puede viajar como pasajero. Algunos buses son de pasajeros (se guarda el número de sillas) y otros de carga (se guarda la capacidad en kg); los de mantenimiento no son ni lo uno ni lo otro.</li>
+  <li>Cada <strong>TERMINAL</strong> tiene un código de tres letras, nombre y ciudad.</li>
+  <li>Cada <strong>EMPRESA</strong> de transporte tiene NIT, razón social y la ciudad de su sede. Una empresa tiene taquillas en varias terminales y en cada terminal hay taquillas de varias empresas; se guarda el número de la taquilla.</li>
+  <li>Cada <strong>BUS</strong> tiene placa, marca y capacidad, y es de una empresa.</li>
+  <li>Cada <strong>RUTA</strong> tiene un código, duración en minutos y valor. La cubre una empresa, sale de una terminal de origen y llega a una terminal de destino.</li>
+  <li>Los <strong>CONDUCTORES</strong> tienen identificación, nombre (nombres y apellidos), fecha de nacimiento, teléfonos, número de licencia y categoría; trabajan para una empresa.</li>
+  <li>Los <strong>VIAJEROS</strong> tienen los mismos datos personales y un correo. Un viajero compra tiquetes: en cada uno se guarda la ruta, la fecha del viaje y la silla.</li>
+  <li>Un conductor también puede comprar tiquetes y viajar como pasajero. La edad se calcula.</li>
 </ul>
-<p class="nota">Entidades base: <strong>Conductor</strong>, <strong>Viajero</strong> y <strong>Terminal</strong>. Entidades inventadas para completar el problema: <strong>Bus</strong> y <strong>Viaje</strong>.</p>
+<p class="nota">Entidades base: <strong>Conductor</strong>, <strong>Viajero</strong> y <strong>Terminal</strong>. Entidades inventadas para completar el problema: <strong>Empresa</strong>, <strong>Bus</strong> y <strong>Ruta</strong>.</p>
 </section>
 
 <div class="vista" data-n="chen">
 <section class="panel">
 <h2>Diagrama · Peter Chen</h2>
-<div class="diagrama tablero"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-10 44 2022 1752" font-family="Arial, Helvetica, sans-serif" role="img">
+<div class="diagrama tablero"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-95 156 2557 1596" font-family="Arial, Helvetica, sans-serif" role="img">
 <defs><pattern id="mer_chen_g1" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e3e6ea" stroke-width="1"/></pattern><pattern id="mer_chen_g2" width="100" height="100" patternUnits="userSpaceOnUse"><rect width="100" height="100" fill="url(#mer_chen_g1)"/><path d="M 100 0 L 0 0 0 100" fill="none" stroke="#cfd4da" stroke-width="1.2"/></pattern></defs>
-<rect x="-10" y="44" width="2022" height="1752" fill="#ffffff"/>
-<rect x="-10" y="44" width="2022" height="1752" fill="url(#mer_chen_g2)"/>
-<text x="1001" y="78" text-anchor="middle" font-size="20" fill="#000">MODELO ENTIDAD RELACIÓN</text>
-<polyline points="315.0,250.0 563.9,250.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="676.1,250.0 935.0,250.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1065.0,250.0 1325.0,250.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1435.0,250.0 1695.0,250.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="250.0,273.0 250.0,588.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="250.0,652.0 250.0,960.0 910.0,960.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1000.0,273.0 1000.0,588.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1000.0,652.0 1000.0,937.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1760.0,273.0 1760.0,588.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1760.0,652.0 1760.0,960.0 1090.0,960.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1000.0,983.0 1000.0,1218.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1000.0,1282.0 1000.0,1517.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="210.0,227.0 210.0,140.0 157.4,140.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="270.0,227.0 270.0,153.2" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="185.0,240.0 120.0,240.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="185.0,262.0 80.0,262.0 80.0,329.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="210.0,273.0 210.0,420.0 156.3,420.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="970.0,227.0 970.0,140.0 935.4,140.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1030.0,227.0 1030.0,140.0 1084.7,140.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="955.0,273.0 955.0,340.0 892.7,340.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1045.0,273.0 1045.0,340.0 1114.0,340.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1730.0,227.0 1730.0,140.0 1689.3,140.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1790.0,227.0 1790.0,140.0 1825.3,140.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1825.0,250.0 1908.3,250.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1800.0,273.0 1800.0,350.0 1887.6,350.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="945.0,937.0 945.0,870.0 862.9,870.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1055.0,937.0 1055.0,870.0 1140.3,870.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="910.0,975.0 800.0,975.0 800.0,1034.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1090.0,975.0 1230.0,975.0 1230.0,1029.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1055.0,983.0 1055.0,1110.0 1145.7,1110.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="195.0,620.0 121.7,620.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="945.0,1250.0 845.3,1250.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1055.0,1250.0 1144.7,1250.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="935.0,1540.0 858.2,1540.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1065.0,1540.0 1148.0,1540.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1045.0,1517.0 1045.0,1475.0 1127.0,1475.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="950.0,1563.0 950.0,1640.0 859.7,1640.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1000.0,1563.0 1000.0,1644.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1050.0,1563.0 1050.0,1640.0 1129.0,1640.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1160.0,1653.9 1160.0,1740.0 1148.3,1740.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1220.0,1653.9 1220.0,1740.0 1251.3,1740.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<rect x="185.0" y="227.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="250.0" y="255.0" text-anchor="middle" font-size="14" fill="#000">CONDUCTOR</text>
-<rect x="935.0" y="227.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="255.0" text-anchor="middle" font-size="14" fill="#000">TERMINAL</text>
-<rect x="1695.0" y="227.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1760.0" y="255.0" text-anchor="middle" font-size="14" fill="#000">BUS</text>
-<rect x="910.0" y="937.0" width="180.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="965.0" text-anchor="middle" font-size="14" fill="#000">VIAJE</text>
-<rect x="935.0" y="1517.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="1545.0" text-anchor="middle" font-size="14" fill="#000">VIAJERO</text>
-<polygon points="620,218.0 676.0859375,250 620,282.0 563.9140625,250" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="620.0" y="254.5" text-anchor="middle" font-size="13" fill="#000">pertenecer</text>
-<polygon points="1380,218.0 1435.0,250 1380,282.0 1325.0,250" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1380.0" y="254.5" text-anchor="middle" font-size="13" fill="#000">estacionar</text>
-<polygon points="250,588.0 305.0,620 250,652.0 195.0,620" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="250.0" y="624.5" text-anchor="middle" font-size="13" fill="#000">conducir</text>
-<polygon points="1000,588.0 1055.0,620 1000,652.0 945.0,620" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="624.5" text-anchor="middle" font-size="13" fill="#000">salir</text>
-<polygon points="1760,588.0 1815.0,620 1760,652.0 1705.0,620" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1760.0" y="624.5" text-anchor="middle" font-size="13" fill="#000">realizar</text>
-<polygon points="1000,1218.0 1055.0,1250 1000,1282.0 945.0,1250" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="1254.5" text-anchor="middle" font-size="13" fill="#000">comprar</text>
-<ellipse cx="110.0" cy="140.0" rx="47.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="110.0" y="144.0" text-anchor="middle" font-size="12" fill="#000">idConductor</text><line x1="77.6" y1="147.0" x2="142.4" y2="147.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="290.0" cy="140.0" rx="35.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="290.0" y="144.0" text-anchor="middle" font-size="12" fill="#000">nombre</text>
-<ellipse cx="85.0" cy="240.0" rx="35.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="85.0" y="244.0" text-anchor="middle" font-size="12" fill="#000">licencia</text>
-<ellipse cx="80.0" cy="345.0" rx="49.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="80.0" y="349.0" text-anchor="middle" font-size="12" fill="#000">horasManejo</text>
-<ellipse cx="120.0" cy="420.0" rx="36.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><ellipse cx="120.0" cy="420.0" rx="32.3" ry="12.0" fill="none" stroke="#000" stroke-width="1.1"/><text x="120.0" y="424.0" text-anchor="middle" font-size="12" fill="#000">telefono</text>
-<ellipse cx="880.0" cy="140.0" rx="55.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="880.0" y="144.0" text-anchor="middle" font-size="12" fill="#000">codigoTerminal</text><line x1="839.6" y1="147.0" x2="920.4" y2="147.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="1120.0" cy="140.0" rx="35.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1120.0" y="144.0" text-anchor="middle" font-size="12" fill="#000">nombre</text>
-<ellipse cx="860.0" cy="340.0" rx="32.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="860.0" y="344.0" text-anchor="middle" font-size="12" fill="#000">ciudad</text>
-<ellipse cx="1140.0" cy="340.0" rx="26.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1140.0" y="344.0" text-anchor="middle" font-size="12" fill="#000">pais</text>
-<ellipse cx="1660.0" cy="140.0" rx="29.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1660.0" y="144.0" text-anchor="middle" font-size="12" fill="#000">placa</text><line x1="1645.7" y1="147.0" x2="1674.3" y2="147.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="1860.0" cy="140.0" rx="34.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1860.0" y="144.0" text-anchor="middle" font-size="12" fill="#000">modelo</text>
-<ellipse cx="1940.0" cy="250.0" rx="31.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1940.0" y="254.0" text-anchor="middle" font-size="12" fill="#000">marca</text>
-<ellipse cx="1930.0" cy="350.0" rx="42.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1930.0" y="354.0" text-anchor="middle" font-size="12" fill="#000">capacidad</text>
-<ellipse cx="830.0" cy="870.0" rx="32.9" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="830.0" y="874.0" text-anchor="middle" font-size="12" fill="#000">idViaje</text><line x1="812.1" y1="877.0" x2="847.9" y2="877.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="1170.0" cy="870.0" rx="29.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1170.0" y="874.0" text-anchor="middle" font-size="12" fill="#000">fecha</text>
-<ellipse cx="800.0" cy="1050.0" rx="32.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="800.0" y="1054.0" text-anchor="middle" font-size="12" fill="#000">codigo</text>
-<ellipse cx="1230.0" cy="1045.0" rx="43.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1230.0" y="1049.0" text-anchor="middle" font-size="12" fill="#000">horaSalida</text>
-<ellipse cx="1180.0" cy="1110.0" rx="34.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1180.0" y="1114.0" text-anchor="middle" font-size="12" fill="#000">destino</text>
-<ellipse cx="100.0" cy="620.0" rx="21.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="100.0" y="624.0" text-anchor="middle" font-size="12" fill="#000">rol</text>
-<ellipse cx="820.0" cy="1250.0" rx="25.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="820.0" y="1254.0" text-anchor="middle" font-size="12" fill="#000">silla</text>
-<ellipse cx="1180.0" cy="1250.0" rx="35.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1180.0" y="1254.0" text-anchor="middle" font-size="12" fill="#000">servicio</text>
-<ellipse cx="820.0" cy="1540.0" rx="38.2" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="820.0" y="1544.0" text-anchor="middle" font-size="12" fill="#000">idViajero</text><line x1="796.8" y1="1547.0" x2="843.2" y2="1547.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="1180.0" cy="1540.0" rx="32.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1180.0" y="1544.0" text-anchor="middle" font-size="12" fill="#000">correo</text>
-<ellipse cx="1160.0" cy="1475.0" rx="33.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1160.0" y="1479.0" text-anchor="middle" font-size="12" fill="#000">puntos</text>
-<ellipse cx="800.0" cy="1640.0" rx="59.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="800.0" y="1644.0" text-anchor="middle" font-size="12" fill="#000">fechaNacimiento</text>
-<ellipse cx="1000.0" cy="1660.0" rx="28.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2" stroke-dasharray="5 3"/><text x="1000.0" y="1664.0" text-anchor="middle" font-size="12" fill="#000">edad</text>
-<ellipse cx="1190.0" cy="1640.0" rx="61.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1190.0" y="1644.0" text-anchor="middle" font-size="12" fill="#000">nombreCompleto</text>
-<ellipse cx="1110.0" cy="1740.0" rx="38.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1110.0" y="1744.0" text-anchor="middle" font-size="12" fill="#000">nombres</text>
-<ellipse cx="1290.0" cy="1740.0" rx="38.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1290.0" y="1744.0" text-anchor="middle" font-size="12" fill="#000">apellidos</text>
-<text x="438.0" y="240.0" text-anchor="middle" font-size="12" fill="#000">(1:1)</text>
-<text x="808.0" y="240.0" text-anchor="middle" font-size="12" fill="#000">(0:N)</text>
-<text x="620.0" y="206.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">N:1</text>
-<text x="1188.0" y="240.0" text-anchor="middle" font-size="12" fill="#000">(0:N)</text>
-<text x="1570.0" y="240.0" text-anchor="middle" font-size="12" fill="#000">(1:1)</text>
-<text x="1380.0" y="206.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">1:N</text>
-<text x="262.0" y="440.0" text-anchor="start" font-size="12" fill="#000">(0:N)</text>
-<text x="820.0" y="950.0" text-anchor="middle" font-size="12" fill="#000">(1:N)</text>
-<text x="318.0" y="626.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:M</text>
-<text x="1012.0" y="440.0" text-anchor="start" font-size="12" fill="#000">(0:N)</text>
-<text x="1012.0" y="800.0" text-anchor="start" font-size="12" fill="#000">(1:1)</text>
-<text x="1070.0" y="626.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">1:N</text>
-<text x="1772.0" y="440.0" text-anchor="start" font-size="12" fill="#000">(0:N)</text>
-<text x="1220.0" y="950.0" text-anchor="middle" font-size="12" fill="#000">(1:1)</text>
-<text x="1830.0" y="626.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">1:N</text>
-<text x="1012.0" y="1110.0" text-anchor="start" font-size="12" fill="#000">(0:N)</text>
-<text x="1012.0" y="1405.0" text-anchor="start" font-size="12" fill="#000">(1:N)</text>
-<text x="940.0" y="1212.0" text-anchor="end" font-size="13" font-weight="bold" fill="#000">N:M</text>
+<rect x="-95" y="156" width="2557" height="1596" fill="#ffffff"/>
+<rect x="-95" y="156" width="2557" height="1596" fill="url(#mer_chen_g2)"/>
+<text x="1183" y="190" text-anchor="middle" font-size="20" fill="#000">MODELO ENTIDAD RELACIÓN</text>
+<polyline points="1250.0,1043.0 1250.0,1285.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1250.0,448.0 1250.0,690.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1250.0,997.0 1250.0,754.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="250.0,448.0 250.0,690.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="250.0,997.0 250.0,754.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2185.0,1020.0 1805.0,1020.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1315.0,1020.0 1695.0,1020.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="315.0,1020.0 695.0,1020.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1185.0,1020.0 805.0,1020.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="185.0,1038.0 0.0,1038.0 0.0,1285.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="185.0,1597.0 0.0,1597.0 0.0,1349.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="315.0,1038.0 500.0,1038.0 500.0,1285.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="315.0,1597.0 500.0,1597.0 500.0,1349.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="315.0,1615.0 1250.0,1615.0 1250.0,1349.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1176.5,425.0 1128.5,425.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1323.5,425.0 1371.5,425.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1432.5,409.0 1432.5,395.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1432.5,441.0 1432.5,455.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1205.0,402.0 1205.0,344.0 1169.7,344.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1295.0,402.0 1295.0,344.0 1321.7,344.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1205.0,448.0 1205.0,506.0 1166.3,506.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1295.0,448.0 1295.0,533.0 1335.0,533.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1250.0,402.0 1250.0,268.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="185.0,425.0 137.0,425.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="315.0,425.0 363.0,425.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="424.0,409.0 424.0,395.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="424.0,441.0 424.0,455.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="205.0,402.0 205.0,344.0 189.7,344.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="205.0,448.0 205.0,506.0 178.3,506.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="280.0,402.0 280.0,344.0 293.7,344.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="295.0,448.0 295.0,533.0 318.0,533.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="295.0,1043.0 295.0,1101.0 324.6,1101.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="185.0,1020.0 89.3,1020.0 89.3,996.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="295.0,997.0 295.0,939.0 322.0,939.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1295.0,997.0 1295.0,939.0 1308.7,939.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1295.0,1043.0 1295.0,1101.0 1323.6,1101.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1185.0,1038.0 1090.3,1038.0 1090.3,1064.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2315.0,1020.0 2363.0,1020.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2295.0,997.0 2295.0,939.0 2318.3,939.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2295.0,1043.0 2295.0,1101.0 2327.6,1101.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="185.0,1633.0 137.0,1633.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="295.0,1592.0 295.0,1534.0 314.7,1534.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="295.0,1638.0 295.0,1696.0 317.3,1696.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1195.0,1317.5 1147.0,1317.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="195.0,722.5 147.0,722.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="305.0,722.5 353.0,722.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<rect x="185.0" y="402.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="250.0" y="430.0" text-anchor="middle" font-size="14" fill="#000">VIAJERO</text>
+<rect x="1176.5" y="402.0" width="147.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1250.0" y="430.0" text-anchor="middle" font-size="14" fill="#000">CONDUCTOR</text>
+<rect x="185.0" y="997.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="250.0" y="1025.0" text-anchor="middle" font-size="14" fill="#000">RUTA</text>
+<rect x="1185.0" y="997.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1250.0" y="1025.0" text-anchor="middle" font-size="14" fill="#000">EMPRESA</text>
+<rect x="2185.0" y="997.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="2250.0" y="1025.0" text-anchor="middle" font-size="14" fill="#000">BUS</text>
+<rect x="185.0" y="1592.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="250.0" y="1620.0" text-anchor="middle" font-size="14" fill="#000">TERMINAL</text>
+<polygon points="1250,1285.5 1305.0,1317.5 1250,1349.5 1195.0,1317.5" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1250.0" y="1322.0" text-anchor="middle" font-size="13" fill="#000">operar</text>
+<polygon points="1250,690.5 1305.0,722.5 1250,754.5 1195.0,722.5" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1250.0" y="727.0" text-anchor="middle" font-size="13" fill="#000">contratar</text>
+<polygon points="1750,988.0 1805.0,1020 1750,1052.0 1695.0,1020" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1750.0" y="1024.5" text-anchor="middle" font-size="13" fill="#000">poseer</text>
+<polygon points="0,1285.5 55.0,1317.5 0,1349.5 -55.0,1317.5" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="0.0" y="1322.0" text-anchor="middle" font-size="13" fill="#000">partir</text>
+<polygon points="500,1285.5 555.0,1317.5 500,1349.5 445.0,1317.5" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="500.0" y="1322.0" text-anchor="middle" font-size="13" fill="#000">llegar</text>
+<polygon points="750,988.0 805.0,1020 750,1052.0 695.0,1020" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="750.0" y="1024.5" text-anchor="middle" font-size="13" fill="#000">cubrir</text>
+<polygon points="250,690.5 305.0,722.5 250,754.5 195.0,722.5" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="250.0" y="727.0" text-anchor="middle" font-size="13" fill="#000">comprar</text>
+<ellipse cx="1083.8" cy="425.0" rx="44.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1083.8" y="429.0" text-anchor="middle" font-size="12" fill="#000">documento</text><line x1="1054.1" y1="432.0" x2="1113.5" y2="432.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="1432.5" cy="425.0" rx="61.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1432.5" y="429.0" text-anchor="middle" font-size="12" fill="#000">nombreCompleto</text>
+<ellipse cx="1432.5" cy="379.0" rx="38.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1432.5" y="383.0" text-anchor="middle" font-size="12" fill="#000">nombres</text>
+<ellipse cx="1432.5" cy="471.0" rx="38.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1432.5" y="475.0" text-anchor="middle" font-size="12" fill="#000">apellidos</text>
+<ellipse cx="1110.0" cy="344.0" rx="59.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1110.0" y="348.0" text-anchor="middle" font-size="12" fill="#000">fechaNacimiento</text>
+<ellipse cx="1350.0" cy="344.0" rx="28.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2" stroke-dasharray="5 3"/><text x="1350.0" y="348.0" text-anchor="middle" font-size="12" fill="#000">edad</text>
+<ellipse cx="1130.0" cy="506.0" rx="36.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><ellipse cx="1130.0" cy="506.0" rx="32.3" ry="12.0" fill="none" stroke="#000" stroke-width="1.1"/><text x="1130.0" y="510.0" text-anchor="middle" font-size="12" fill="#000">telefono</text>
+<ellipse cx="1370.0" cy="533.0" rx="35.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1370.0" y="537.0" text-anchor="middle" font-size="12" fill="#000">licencia</text>
+<ellipse cx="1250.0" cy="252.0" rx="61.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1250.0" y="256.0" text-anchor="middle" font-size="12" fill="#000">categoriaLicencia</text>
+<ellipse cx="92.3" cy="425.0" rx="44.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="92.3" y="429.0" text-anchor="middle" font-size="12" fill="#000">documento</text><line x1="62.6" y1="432.0" x2="122.0" y2="432.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="424.0" cy="425.0" rx="61.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="424.0" y="429.0" text-anchor="middle" font-size="12" fill="#000">nombreCompleto</text>
+<ellipse cx="424.0" cy="379.0" rx="38.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="424.0" y="383.0" text-anchor="middle" font-size="12" fill="#000">nombres</text>
+<ellipse cx="424.0" cy="471.0" rx="38.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="424.0" y="475.0" text-anchor="middle" font-size="12" fill="#000">apellidos</text>
+<ellipse cx="130.0" cy="344.0" rx="59.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="130.0" y="348.0" text-anchor="middle" font-size="12" fill="#000">fechaNacimiento</text>
+<ellipse cx="150.0" cy="506.0" rx="28.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2" stroke-dasharray="5 3"/><text x="150.0" y="510.0" text-anchor="middle" font-size="12" fill="#000">edad</text>
+<ellipse cx="330.0" cy="344.0" rx="36.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><ellipse cx="330.0" cy="344.0" rx="32.3" ry="12.0" fill="none" stroke="#000" stroke-width="1.1"/><text x="330.0" y="348.0" text-anchor="middle" font-size="12" fill="#000">telefono</text>
+<ellipse cx="350.0" cy="533.0" rx="32.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="350.0" y="537.0" text-anchor="middle" font-size="12" fill="#000">correo</text>
+<ellipse cx="370.0" cy="1101.0" rx="45.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="370.0" y="1105.0" text-anchor="middle" font-size="12" fill="#000">codigoRuta</text><line x1="339.6" y1="1108.0" x2="400.4" y2="1108.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="89.3" cy="980.0" rx="47.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="89.3" y="984.0" text-anchor="middle" font-size="12" fill="#000">duracionMin</text>
+<ellipse cx="350.0" cy="939.0" rx="28.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="350.0" y="943.0" text-anchor="middle" font-size="12" fill="#000">valor</text>
+<ellipse cx="1330.0" cy="939.0" rx="21.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1330.0" y="943.0" text-anchor="middle" font-size="12" fill="#000">nit</text><line x1="1323.7" y1="946.0" x2="1336.3" y2="946.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="1370.0" cy="1101.0" rx="46.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1370.0" y="1105.0" text-anchor="middle" font-size="12" fill="#000">razonSocial</text>
+<ellipse cx="1090.3" cy="1080.0" rx="46.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1090.3" y="1084.0" text-anchor="middle" font-size="12" fill="#000">ciudadSede</text>
+<ellipse cx="2392.3" cy="1020.0" rx="29.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2392.3" y="1024.0" text-anchor="middle" font-size="12" fill="#000">placa</text><line x1="2378.0" y1="1027.0" x2="2406.7" y2="1027.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="2350.0" cy="939.0" rx="31.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2350.0" y="943.0" text-anchor="middle" font-size="12" fill="#000">marca</text>
+<ellipse cx="2370.0" cy="1101.0" rx="42.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2370.0" y="1105.0" text-anchor="middle" font-size="12" fill="#000">capacidad</text>
+<ellipse cx="81.6" cy="1635.0" rx="55.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="81.6" y="1639.0" text-anchor="middle" font-size="12" fill="#000">codigoTerminal</text><line x1="41.3" y1="1642.0" x2="122.0" y2="1642.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="350.0" cy="1534.0" rx="35.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="350.0" y="1538.0" text-anchor="middle" font-size="12" fill="#000">nombre</text>
+<ellipse cx="350.0" cy="1696.0" rx="32.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="350.0" y="1700.0" text-anchor="middle" font-size="12" fill="#000">ciudad</text>
+<ellipse cx="1091.3" cy="1317.5" rx="55.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1091.3" y="1321.5" text-anchor="middle" font-size="12" fill="#000">numeroTaquilla</text>
+<ellipse cx="104.1" cy="722.5" rx="42.9" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="104.1" y="726.5" text-anchor="middle" font-size="12" fill="#000">fechaViaje</text><line x1="76.2" y1="729.5" x2="132.0" y2="729.5" stroke="#000" stroke-width="1"/>
+<ellipse cx="378.3" cy="722.5" rx="25.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="378.3" y="726.5" text-anchor="middle" font-size="12" fill="#000">silla</text>
+<text x="1257.0" y="1063.0" text-anchor="start" font-size="12" fill="#000">(1:N)</text>
+<text x="1257.0" y="468.0" text-anchor="start" font-size="12" fill="#000">(1:1)</text>
+<text x="1257.0" y="985.0" text-anchor="start" font-size="12" fill="#000">(1:N)</text>
+<text x="257.0" y="468.0" text-anchor="start" font-size="12" fill="#000">(1:N)</text>
+<text x="257.0" y="985.0" text-anchor="start" font-size="12" fill="#000">(0:N)</text>
+<text x="2156.7" y="1013.0" text-anchor="middle" font-size="12" fill="#000">(1:1)</text>
+<text x="1344.3" y="1013.0" text-anchor="middle" font-size="12" fill="#000">(0:N)</text>
+<text x="343.3" y="1013.0" text-anchor="middle" font-size="12" fill="#000">(1:1)</text>
+<text x="1155.7" y="1013.0" text-anchor="middle" font-size="12" fill="#000">(0:N)</text>
+<text x="156.7" y="1031.0" text-anchor="middle" font-size="12" fill="#000">(1:1)</text>
+<text x="155.7" y="1590.0" text-anchor="middle" font-size="12" fill="#000">(0:N)</text>
+<text x="343.3" y="1031.0" text-anchor="middle" font-size="12" fill="#000">(1:1)</text>
+<text x="344.3" y="1590.0" text-anchor="middle" font-size="12" fill="#000">(0:N)</text>
+<text x="344.3" y="1608.0" text-anchor="middle" font-size="12" fill="#000">(1:N)</text>
+<text x="1286.2" y="1279.5" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:M</text>
+<text x="1286.2" y="684.5" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:1</text>
+<text x="1786.2" y="982.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:1</text>
+<text x="36.2" y="1279.5" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:1</text>
+<text x="536.2" y="1279.5" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:1</text>
+<text x="786.2" y="982.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:1</text>
+<text x="286.2" y="684.5" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:M</text>
+<text x="-7.0" y="1275.5" text-anchor="end" font-size="11" fill="#000">origen</text>
+<text x="493.0" y="1275.5" text-anchor="end" font-size="11" fill="#000">destino</text>
 </svg></div>
 </section>
 
@@ -163,71 +178,83 @@
 <div class="vista" data-n="crowsfoot" hidden>
 <section class="panel">
 <h2>Diagrama · Crow's Foot</h2>
-<div class="diagrama tablero"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-26 -40 1548 925" font-family="Arial, Helvetica, sans-serif" role="img">
+<div class="diagrama tablero"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-40 -80 1409 1445" font-family="Arial, Helvetica, sans-serif" role="img">
 <defs><pattern id="mer_crowsfoot_g1" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e3e6ea" stroke-width="1"/></pattern><pattern id="mer_crowsfoot_g2" width="100" height="100" patternUnits="userSpaceOnUse"><rect width="100" height="100" fill="url(#mer_crowsfoot_g1)"/><path d="M 100 0 L 0 0 0 100" fill="none" stroke="#cfd4da" stroke-width="1.2"/></pattern></defs>
-<rect x="-26" y="-40" width="1548" height="925" fill="#ffffff"/>
-<rect x="-26" y="-40" width="1548" height="925" fill="url(#mer_crowsfoot_g2)"/>
-<text x="748" y="-6" text-anchor="middle" font-size="20" fill="#000">MODELO ENTIDAD RELACIÓN · CROW&#x27;S FOOT</text>
-<polyline points="399.7,97.5 266.4,97.5" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="640.3,107.5 803.5,107.5" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1203.5,107.5 1036.5,107.5" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="920.0,330.0 920.0,175.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1035.9,416.0 1320.0,416.0 1320.0,195.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="520.0,380.0 520.0,195.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="638.4,437.5 804.1,437.5" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="920.0,690.0 920.0,542.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1021.9,757.5 1238.4,757.5" fill="none" stroke="#000" stroke-width="1.3"/>
-<rect x="13.6" y="60.0" width="252.8" height="95.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="140.0" y="79.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">CON_TELEFONO</text><line x1="13.6" y1="88.0" x2="266.4" y2="88.0" stroke="#000" stroke-width="1.1"/><text x="21.6" y="104.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="51.6" y="104.0" font-size="12" fill="#000" text-decoration="underline">id_conductor</text><text x="132.3" y="104.0" font-size="11" fill="#000">INTEGER</text><text x="21.6" y="124.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="51.6" y="124.0" font-size="12" fill="#000" text-decoration="underline">telefono</text><text x="132.3" y="124.0" font-size="11" fill="#000">VARCHAR (15)</text><line x1="13.6" y1="134.0" x2="266.4" y2="134.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="23.6" y="148.0" font-size="11" fill="#000">CON_TELEFONO_PK (id_conductor, telefono)</text>
-<rect x="399.7" y="40.0" width="240.5" height="155.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="520.0" y="59.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">CONDUCTOR</text><line x1="399.7" y1="68.0" x2="640.3" y2="68.0" stroke="#000" stroke-width="1.1"/><text x="407.7" y="84.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="434.4" y="84.0" font-size="12" fill="#000" text-decoration="underline">id_conductor</text><text x="531.1" y="84.0" font-size="11" fill="#000">INTEGER</text><text x="407.7" y="104.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="434.4" y="104.0" font-size="12" fill="#000">nombre</text><text x="531.1" y="104.0" font-size="11" fill="#000">VARCHAR (100)</text><text x="407.7" y="124.0" font-size="11" font-weight="bold" fill="#000">U *</text><text x="434.4" y="124.0" font-size="12" fill="#000">licencia</text><text x="531.1" y="124.0" font-size="11" fill="#000">VARCHAR (10)</text><text x="407.7" y="144.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="434.4" y="144.0" font-size="12" fill="#000">horas_manejo</text><text x="531.1" y="144.0" font-size="11" fill="#000">INTEGER</text><text x="407.7" y="164.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="434.4" y="164.0" font-size="12" fill="#000">codigo_terminal</text><text x="531.1" y="164.0" font-size="11" fill="#000">CHAR (3)</text><line x1="399.7" y1="174.0" x2="640.3" y2="174.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="409.7" y="188.0" font-size="11" fill="#000">CONDUCTOR_PK (id_conductor)</text>
-<rect x="803.5" y="40.0" width="233.0" height="135.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="920.0" y="59.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">TERMINAL</text><line x1="803.5" y1="68.0" x2="1036.5" y2="68.0" stroke="#000" stroke-width="1.1"/><text x="811.5" y="84.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="837.3" y="84.0" font-size="12" fill="#000" text-decoration="underline">codigo_terminal</text><text x="934.0" y="84.0" font-size="11" fill="#000">CHAR (3)</text><text x="811.5" y="104.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="837.3" y="104.0" font-size="12" fill="#000">nombre</text><text x="934.0" y="104.0" font-size="11" fill="#000">VARCHAR (80)</text><text x="811.5" y="124.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="837.3" y="124.0" font-size="12" fill="#000">ciudad</text><text x="934.0" y="124.0" font-size="11" fill="#000">VARCHAR (50)</text><text x="811.5" y="144.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="837.3" y="144.0" font-size="12" fill="#000">pais</text><text x="934.0" y="144.0" font-size="11" fill="#000">VARCHAR (50)</text><line x1="803.5" y1="154.0" x2="1036.5" y2="154.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="813.5" y="168.0" font-size="11" fill="#000">TERMINAL_PK (codigo_terminal)</text>
-<rect x="1203.5" y="40.0" width="233.0" height="155.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1320.0" y="59.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">BUS</text><line x1="1203.5" y1="68.0" x2="1436.5" y2="68.0" stroke="#000" stroke-width="1.1"/><text x="1211.5" y="84.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="1237.3" y="84.0" font-size="12" fill="#000" text-decoration="underline">placa</text><text x="1334.0" y="84.0" font-size="11" fill="#000">VARCHAR (10)</text><text x="1211.5" y="104.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1237.3" y="104.0" font-size="12" fill="#000">modelo</text><text x="1334.0" y="104.0" font-size="11" fill="#000">VARCHAR (40)</text><text x="1211.5" y="124.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1237.3" y="124.0" font-size="12" fill="#000">marca</text><text x="1334.0" y="124.0" font-size="11" fill="#000">VARCHAR (40)</text><text x="1211.5" y="144.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1237.3" y="144.0" font-size="12" fill="#000">capacidad</text><text x="1334.0" y="144.0" font-size="11" fill="#000">INTEGER</text><text x="1211.5" y="164.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="1237.3" y="164.0" font-size="12" fill="#000">codigo_terminal</text><text x="1334.0" y="164.0" font-size="11" fill="#000">CHAR (3)</text><line x1="1203.5" y1="174.0" x2="1436.5" y2="174.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="1213.5" y="188.0" font-size="11" fill="#000">BUS_PK (placa)</text>
-<rect x="401.6" y="380.0" width="236.8" height="115.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="520.0" y="399.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">CONDUCCION</text><line x1="401.6" y1="408.0" x2="638.4" y2="408.0" stroke="#000" stroke-width="1.1"/><text x="409.6" y="424.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="439.6" y="424.0" font-size="12" fill="#000" text-decoration="underline">id_conductor</text><text x="520.3" y="424.0" font-size="11" fill="#000">INTEGER</text><text x="409.6" y="444.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="439.6" y="444.0" font-size="12" fill="#000" text-decoration="underline">id_viaje</text><text x="520.3" y="444.0" font-size="11" fill="#000">INTEGER</text><text x="409.6" y="464.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="439.6" y="464.0" font-size="12" fill="#000">rol</text><text x="520.3" y="464.0" font-size="11" fill="#000">VARCHAR (10)</text><line x1="401.6" y1="474.0" x2="638.4" y2="474.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="411.6" y="488.0" font-size="11" fill="#000">CONDUCCION_PK (id_conductor, id_viaje)</text>
-<rect x="804.1" y="330.0" width="231.9" height="212.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="920.0" y="349.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">VIAJE</text><line x1="804.1" y1="358.0" x2="1035.9" y2="358.0" stroke="#000" stroke-width="1.1"/><text x="812.1" y="374.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="838.7" y="374.0" font-size="12" fill="#000" text-decoration="underline">id_viaje</text><text x="933.5" y="374.0" font-size="11" fill="#000">INTEGER</text><text x="812.1" y="394.0" font-size="11" font-weight="bold" fill="#000">U *</text><text x="838.7" y="394.0" font-size="12" fill="#000">codigo</text><text x="933.5" y="394.0" font-size="11" fill="#000">VARCHAR (8)</text><text x="812.1" y="414.0" font-size="11" font-weight="bold" fill="#000">U *</text><text x="838.7" y="414.0" font-size="12" fill="#000">fecha</text><text x="933.5" y="414.0" font-size="11" fill="#000">DATE</text><text x="812.1" y="434.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="838.7" y="434.0" font-size="12" fill="#000">hora_salida</text><text x="933.5" y="434.0" font-size="11" fill="#000">TIME</text><text x="812.1" y="454.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="838.7" y="454.0" font-size="12" fill="#000">destino</text><text x="933.5" y="454.0" font-size="11" fill="#000">VARCHAR (50)</text><text x="812.1" y="474.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="838.7" y="474.0" font-size="12" fill="#000">placa</text><text x="933.5" y="474.0" font-size="11" fill="#000">VARCHAR (10)</text><text x="812.1" y="494.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="838.7" y="494.0" font-size="12" fill="#000">terminal_origen</text><text x="933.5" y="494.0" font-size="11" fill="#000">CHAR (3)</text><line x1="804.1" y1="504.0" x2="1035.9" y2="504.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="814.1" y="518.0" font-size="11" fill="#000">VIAJE_PK (id_viaje)</text><text x="814.1" y="535.0" font-size="11" fill="#000">VIAJE_UK (codigo, fecha)</text>
-<rect x="818.1" y="690.0" width="203.8" height="135.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="920.0" y="709.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">TIQUETE</text><line x1="818.1" y1="718.0" x2="1021.9" y2="718.0" stroke="#000" stroke-width="1.1"/><text x="826.1" y="734.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="856.1" y="734.0" font-size="12" fill="#000" text-decoration="underline">id_viajero</text><text x="919.5" y="734.0" font-size="11" fill="#000">INTEGER</text><text x="826.1" y="754.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="856.1" y="754.0" font-size="12" fill="#000" text-decoration="underline">id_viaje</text><text x="919.5" y="754.0" font-size="11" fill="#000">INTEGER</text><text x="826.1" y="774.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="856.1" y="774.0" font-size="12" fill="#000">silla</text><text x="919.5" y="774.0" font-size="11" fill="#000">VARCHAR (4)</text><text x="826.1" y="794.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="856.1" y="794.0" font-size="12" fill="#000">servicio</text><text x="919.5" y="794.0" font-size="11" fill="#000">VARCHAR (10)</text><line x1="818.1" y1="804.0" x2="1021.9" y2="804.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="828.1" y="818.0" font-size="11" fill="#000">TIQUETE_PK (id_viajero, id_viaje)</text>
-<rect x="1238.4" y="650.0" width="243.2" height="195.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1360.0" y="669.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">VIAJERO</text><line x1="1238.4" y1="678.0" x2="1481.6" y2="678.0" stroke="#000" stroke-width="1.1"/><text x="1246.4" y="694.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="1273.1" y="694.0" font-size="12" fill="#000" text-decoration="underline">id_viajero</text><text x="1379.1" y="694.0" font-size="11" fill="#000">INTEGER</text><text x="1246.4" y="714.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1273.1" y="714.0" font-size="12" fill="#000">nombres</text><text x="1379.1" y="714.0" font-size="11" fill="#000">VARCHAR (50)</text><text x="1246.4" y="734.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1273.1" y="734.0" font-size="12" fill="#000">apellidos</text><text x="1379.1" y="734.0" font-size="11" fill="#000">VARCHAR (50)</text><text x="1246.4" y="754.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1273.1" y="754.0" font-size="12" fill="#000">fecha_nacimiento</text><text x="1379.1" y="754.0" font-size="11" fill="#000">DATE</text><text x="1246.4" y="774.0" font-size="11" font-weight="bold" fill="#000">/</text><text x="1273.1" y="774.0" font-size="12" fill="#000">edad</text><text x="1379.1" y="774.0" font-size="11" fill="#000">INTEGER</text><text x="1246.4" y="794.0" font-size="11" font-weight="bold" fill="#000">U *</text><text x="1273.1" y="794.0" font-size="12" fill="#000">correo</text><text x="1379.1" y="794.0" font-size="11" fill="#000">VARCHAR (80)</text><text x="1246.4" y="814.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1273.1" y="814.0" font-size="12" fill="#000">puntos</text><text x="1379.1" y="814.0" font-size="11" fill="#000">INTEGER</text><line x1="1238.4" y1="824.0" x2="1481.6" y2="824.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="1248.4" y="838.0" font-size="11" fill="#000">VIAJERO_PK (id_viajero)</text>
-<line x1="392.7" y1="105.5" x2="392.7" y2="89.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="386.7" y1="105.5" x2="386.7" y2="89.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<polyline points="266.4,88.5 279.4,97.5 266.4,106.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="283.4" y1="89.5" x2="283.4" y2="105.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<polyline points="640.3,98.5 653.3,107.5 640.3,116.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<circle cx="659.3" cy="107.5" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
-<line x1="796.5" y1="115.5" x2="796.5" y2="99.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="790.5" y1="115.5" x2="790.5" y2="99.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<polyline points="1203.5,116.5 1190.5,107.5 1203.5,98.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<circle cx="1184.5" cy="107.5" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
-<line x1="1043.5" y1="99.5" x2="1043.5" y2="115.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="1049.5" y1="99.5" x2="1049.5" y2="115.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<polyline points="911.0,330.0 920.0,317.0 929.0,330.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<circle cx="920.0" cy="311.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
-<line x1="928.0" y1="182.0" x2="912.0" y2="182.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="928.0" y1="188.0" x2="912.0" y2="188.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<polyline points="1035.9,407.0 1048.9,416.0 1035.9,425.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<circle cx="1054.9" cy="416.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
-<line x1="1328.0" y1="202.0" x2="1312.0" y2="202.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="1328.0" y1="208.0" x2="1312.0" y2="208.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<polyline points="511.0,380.0 520.0,367.0 529.0,380.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<circle cx="520.0" cy="361.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
-<line x1="528.0" y1="202.0" x2="512.0" y2="202.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="528.0" y1="208.0" x2="512.0" y2="208.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<polyline points="638.4,428.5 651.4,437.5 638.4,446.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="655.4" y1="429.5" x2="655.4" y2="445.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="797.1" y1="445.5" x2="797.1" y2="429.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="791.1" y1="445.5" x2="791.1" y2="429.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<polyline points="911.0,690.0 920.0,677.0 929.0,690.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<circle cx="920.0" cy="671.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
-<line x1="928.0" y1="549.0" x2="912.0" y2="549.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="928.0" y1="555.0" x2="912.0" y2="555.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<polyline points="1021.9,748.5 1034.9,757.5 1021.9,766.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="1038.9" y1="749.5" x2="1038.9" y2="765.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="1231.4" y1="765.5" x2="1231.4" y2="749.5" stroke="#000" stroke-width="1.4" fill="none"/>
-<line x1="1225.4" y1="765.5" x2="1225.4" y2="749.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<rect x="-40" y="-80" width="1409" height="1445" fill="#ffffff"/>
+<rect x="-40" y="-80" width="1409" height="1445" fill="url(#mer_crowsfoot_g2)"/>
+<text x="665" y="-46" text-anchor="middle" font-size="20" fill="#000">MODELO ENTIDAD RELACIÓN · CROW&#x27;S FOOT</text>
+<polyline points="883.6,95.0 883.6,190.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="499.6,635.0 499.6,730.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="883.6,1000.0 883.6,845.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="499.6,500.0 499.6,365.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1126.2,797.5 1059.2,797.5 1059.2,787.5 992.2,787.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="620.3,817.5 697.6,817.5 697.6,807.5 775.0,807.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="238.2,237.5 378.0,237.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="499.6,905.0 499.6,1210.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="519.6,905.0 519.6,1210.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="883.6,405.0 883.6,730.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="783.6,1115.0 783.6,1247.5 616.0,1247.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<rect x="378.0" y="190.0" width="243.2" height="175.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="499.6" y="209.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">VIAJERO</text><line x1="378.0" y1="218.0" x2="621.2" y2="218.0" stroke="#000" stroke-width="1.1"/><text x="386.0" y="234.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="412.6" y="234.0" font-size="12" fill="#000" text-decoration="underline">documento</text><text x="518.7" y="234.0" font-size="11" fill="#000">VARCHAR (15)</text><text x="386.0" y="254.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="412.6" y="254.0" font-size="12" fill="#000">nombres</text><text x="518.7" y="254.0" font-size="11" fill="#000">VARCHAR (50)</text><text x="386.0" y="274.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="412.6" y="274.0" font-size="12" fill="#000">apellidos</text><text x="518.7" y="274.0" font-size="11" fill="#000">VARCHAR (50)</text><text x="386.0" y="294.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="412.6" y="294.0" font-size="12" fill="#000">fecha_nacimiento</text><text x="518.7" y="294.0" font-size="11" fill="#000">DATE</text><text x="386.0" y="314.0" font-size="11" font-weight="bold" fill="#000">/</text><text x="412.6" y="314.0" font-size="12" fill="#000">edad</text><text x="518.7" y="314.0" font-size="11" fill="#000">INTEGER</text><text x="386.0" y="334.0" font-size="11" font-weight="bold" fill="#000">U *</text><text x="412.6" y="334.0" font-size="12" fill="#000">correo</text><text x="518.7" y="334.0" font-size="11" fill="#000">VARCHAR (80)</text><line x1="378.0" y1="344.0" x2="621.2" y2="344.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="388.0" y="358.0" font-size="11" fill="#000">VIAJERO_PK (documento)</text>
+<rect x="761.0" y="190.0" width="245.2" height="215.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="883.6" y="209.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">CONDUCTOR</text><line x1="761.0" y1="218.0" x2="1006.2" y2="218.0" stroke="#000" stroke-width="1.1"/><text x="769.0" y="234.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="795.6" y="234.0" font-size="12" fill="#000" text-decoration="underline">documento</text><text x="903.7" y="234.0" font-size="11" fill="#000">VARCHAR (15)</text><text x="769.0" y="254.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="795.6" y="254.0" font-size="12" fill="#000">nombres</text><text x="903.7" y="254.0" font-size="11" fill="#000">VARCHAR (50)</text><text x="769.0" y="274.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="795.6" y="274.0" font-size="12" fill="#000">apellidos</text><text x="903.7" y="274.0" font-size="11" fill="#000">VARCHAR (50)</text><text x="769.0" y="294.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="795.6" y="294.0" font-size="12" fill="#000">fecha_nacimiento</text><text x="903.7" y="294.0" font-size="11" fill="#000">DATE</text><text x="769.0" y="314.0" font-size="11" font-weight="bold" fill="#000">/</text><text x="795.6" y="314.0" font-size="12" fill="#000">edad</text><text x="903.7" y="314.0" font-size="11" fill="#000">INTEGER</text><text x="769.0" y="334.0" font-size="11" font-weight="bold" fill="#000">U *</text><text x="795.6" y="334.0" font-size="12" fill="#000">licencia</text><text x="903.7" y="334.0" font-size="11" fill="#000">VARCHAR (12)</text><text x="769.0" y="354.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="795.6" y="354.0" font-size="12" fill="#000">categoria_licencia</text><text x="903.7" y="354.0" font-size="11" fill="#000">CHAR (2)</text><text x="769.0" y="374.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="795.6" y="374.0" font-size="12" fill="#000">nit</text><text x="903.7" y="374.0" font-size="11" fill="#000">VARCHAR (12)</text><line x1="761.0" y1="384.0" x2="1006.2" y2="384.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="771.0" y="398.0" font-size="11" fill="#000">CONDUCTOR_PK (documento)</text>
+<rect x="378.9" y="730.0" width="241.4" height="175.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="499.6" y="749.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">RUTA</text><line x1="378.9" y1="758.0" x2="620.3" y2="758.0" stroke="#000" stroke-width="1.1"/><text x="386.9" y="774.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="412.6" y="774.0" font-size="12" fill="#000" text-decoration="underline">codigo_ruta</text><text x="512.7" y="774.0" font-size="11" fill="#000">VARCHAR (8)</text><text x="386.9" y="794.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="412.6" y="794.0" font-size="12" fill="#000">duracion_min</text><text x="512.7" y="794.0" font-size="11" fill="#000">INTEGER</text><text x="386.9" y="814.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="412.6" y="814.0" font-size="12" fill="#000">valor</text><text x="512.7" y="814.0" font-size="11" fill="#000">DECIMAL (10,2)</text><text x="386.9" y="834.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="412.6" y="834.0" font-size="12" fill="#000">terminal_origen</text><text x="512.7" y="834.0" font-size="11" fill="#000">CHAR (3)</text><text x="386.9" y="854.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="412.6" y="854.0" font-size="12" fill="#000">terminal_destino</text><text x="512.7" y="854.0" font-size="11" fill="#000">CHAR (3)</text><text x="386.9" y="874.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="412.6" y="874.0" font-size="12" fill="#000">nit</text><text x="512.7" y="874.0" font-size="11" fill="#000">VARCHAR (12)</text><line x1="378.9" y1="884.0" x2="620.3" y2="884.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="388.9" y="898.0" font-size="11" fill="#000">RUTA_PK (codigo_ruta)</text>
+<rect x="775.0" y="730.0" width="217.2" height="115.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="883.6" y="749.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">EMPRESA</text><line x1="775.0" y1="758.0" x2="992.2" y2="758.0" stroke="#000" stroke-width="1.1"/><text x="783.0" y="774.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="809.6" y="774.0" font-size="12" fill="#000" text-decoration="underline">nit</text><text x="889.7" y="774.0" font-size="11" fill="#000">VARCHAR (12)</text><text x="783.0" y="794.0" font-size="11" font-weight="bold" fill="#000">U *</text><text x="809.6" y="794.0" font-size="12" fill="#000">razon_social</text><text x="889.7" y="794.0" font-size="11" fill="#000">VARCHAR (80)</text><text x="783.0" y="814.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="809.6" y="814.0" font-size="12" fill="#000">ciudad_sede</text><text x="889.7" y="814.0" font-size="11" fill="#000">VARCHAR (50)</text><line x1="775.0" y1="824.0" x2="992.2" y2="824.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="785.0" y="838.0" font-size="11" fill="#000">EMPRESA_PK (nit)</text>
+<rect x="1126.2" y="730.0" width="203.0" height="135.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1227.6" y="749.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">BUS</text><line x1="1126.2" y1="758.0" x2="1329.1" y2="758.0" stroke="#000" stroke-width="1.1"/><text x="1134.2" y="774.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="1160.0" y="774.0" font-size="12" fill="#000" text-decoration="underline">placa</text><text x="1226.7" y="774.0" font-size="11" fill="#000">CHAR (6)</text><text x="1134.2" y="794.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1160.0" y="794.0" font-size="12" fill="#000">marca</text><text x="1226.7" y="794.0" font-size="11" fill="#000">VARCHAR (30)</text><text x="1134.2" y="814.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1160.0" y="814.0" font-size="12" fill="#000">capacidad</text><text x="1226.7" y="814.0" font-size="11" fill="#000">INTEGER</text><text x="1134.2" y="834.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="1160.0" y="834.0" font-size="12" fill="#000">nit</text><text x="1226.7" y="834.0" font-size="11" fill="#000">VARCHAR (12)</text><line x1="1126.2" y1="844.0" x2="1329.1" y2="844.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="1136.2" y="858.0" font-size="11" fill="#000">BUS_PK (placa)</text>
+<rect x="383.1" y="1210.0" width="233.0" height="115.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="499.6" y="1229.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">TERMINAL</text><line x1="383.1" y1="1238.0" x2="616.0" y2="1238.0" stroke="#000" stroke-width="1.1"/><text x="391.1" y="1254.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="416.9" y="1254.0" font-size="12" fill="#000" text-decoration="underline">codigo_terminal</text><text x="513.6" y="1254.0" font-size="11" fill="#000">CHAR (3)</text><text x="391.1" y="1274.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="416.9" y="1274.0" font-size="12" fill="#000">nombre</text><text x="513.6" y="1274.0" font-size="11" fill="#000">VARCHAR (60)</text><text x="391.1" y="1294.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="416.9" y="1294.0" font-size="12" fill="#000">ciudad</text><text x="513.6" y="1294.0" font-size="11" fill="#000">VARCHAR (50)</text><line x1="383.1" y1="1304.0" x2="616.0" y2="1304.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="393.1" y="1318.0" font-size="11" fill="#000">TERMINAL_PK (codigo_terminal)</text>
+<rect x="0.0" y="190.0" width="238.2" height="95.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="119.1" y="209.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">VIA_TELEFONO</text><line x1="0.0" y1="218.0" x2="238.2" y2="218.0" stroke="#000" stroke-width="1.1"/><text x="8.0" y="234.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="38.0" y="234.0" font-size="12" fill="#000" text-decoration="underline">documento</text><text x="109.4" y="234.0" font-size="11" fill="#000">VARCHAR (15)</text><text x="8.0" y="254.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="38.0" y="254.0" font-size="12" fill="#000" text-decoration="underline">telefono</text><text x="109.4" y="254.0" font-size="11" fill="#000">VARCHAR (15)</text><line x1="0.0" y1="264.0" x2="238.2" y2="264.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="10.0" y="278.0" font-size="11" fill="#000">VIA_TELEFONO_PK (documento, telefono)</text>
+<rect x="761.1" y="0.0" width="244.8" height="95.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="883.6" y="19.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">CON_TELEFONO</text><line x1="761.1" y1="28.0" x2="1006.0" y2="28.0" stroke="#000" stroke-width="1.1"/><text x="769.1" y="44.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="799.1" y="44.0" font-size="12" fill="#000" text-decoration="underline">documento</text><text x="870.5" y="44.0" font-size="11" fill="#000">VARCHAR (15)</text><text x="769.1" y="64.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="799.1" y="64.0" font-size="12" fill="#000" text-decoration="underline">telefono</text><text x="870.5" y="64.0" font-size="11" fill="#000">VARCHAR (15)</text><line x1="761.1" y1="74.0" x2="1006.0" y2="74.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="771.1" y="88.0" font-size="11" fill="#000">CON_TELEFONO_PK (documento, telefono)</text>
+<rect x="764.6" y="1000.0" width="237.9" height="115.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="883.6" y="1019.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">TAQUILLA</text><line x1="764.6" y1="1028.0" x2="1002.5" y2="1028.0" stroke="#000" stroke-width="1.1"/><text x="772.6" y="1044.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="802.6" y="1044.0" font-size="12" fill="#000" text-decoration="underline">nit</text><text x="900.0" y="1044.0" font-size="11" fill="#000">VARCHAR (12)</text><text x="772.6" y="1064.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="802.6" y="1064.0" font-size="12" fill="#000" text-decoration="underline">codigo_terminal</text><text x="900.0" y="1064.0" font-size="11" fill="#000">CHAR (3)</text><text x="772.6" y="1084.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="802.6" y="1084.0" font-size="12" fill="#000">numero_taquilla</text><text x="900.0" y="1084.0" font-size="11" fill="#000">VARCHAR (6)</text><line x1="764.6" y1="1094.0" x2="1002.5" y2="1094.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="774.6" y="1108.0" font-size="11" fill="#000">TAQUILLA_PK (nit, codigo_terminal)</text>
+<rect x="358.2" y="500.0" width="282.8" height="135.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="499.6" y="519.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">TIQUETE</text><line x1="358.2" y1="528.0" x2="641.0" y2="528.0" stroke="#000" stroke-width="1.1"/><text x="366.2" y="544.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="396.2" y="544.0" font-size="12" fill="#000" text-decoration="underline">documento</text><text x="470.9" y="544.0" font-size="11" fill="#000">VARCHAR (15)</text><text x="366.2" y="564.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="396.2" y="564.0" font-size="12" fill="#000" text-decoration="underline">codigo_ruta</text><text x="470.9" y="564.0" font-size="11" fill="#000">VARCHAR (8)</text><text x="366.2" y="584.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="396.2" y="584.0" font-size="12" fill="#000" text-decoration="underline">fecha_viaje</text><text x="470.9" y="584.0" font-size="11" fill="#000">DATE</text><text x="366.2" y="604.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="396.2" y="604.0" font-size="12" fill="#000">silla</text><text x="470.9" y="604.0" font-size="11" fill="#000">INTEGER</text><line x1="358.2" y1="614.0" x2="641.0" y2="614.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="368.2" y="628.0" font-size="11" fill="#000">TIQUETE_PK (documento, codigo_ruta, fecha_viaje)</text>
+<polyline points="892.6,95.0 883.6,108.0 874.6,95.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="891.6" y1="112.0" x2="875.6" y2="112.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="875.6" y1="183.0" x2="891.6" y2="183.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="875.6" y1="177.0" x2="891.6" y2="177.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="508.6,635.0 499.6,648.0 490.6,635.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="499.6" cy="654.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="491.6" y1="723.0" x2="507.6" y2="723.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="491.6" y1="717.0" x2="507.6" y2="717.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="874.6,1000.0 883.6,987.0 892.6,1000.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="875.6" y1="983.0" x2="891.6" y2="983.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="891.6" y1="852.0" x2="875.6" y2="852.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="891.6" y1="858.0" x2="875.6" y2="858.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="490.6,500.0 499.6,487.0 508.6,500.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="491.6" y1="483.0" x2="507.6" y2="483.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="507.6" y1="372.0" x2="491.6" y2="372.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="507.6" y1="378.0" x2="491.6" y2="378.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1126.2,806.5 1113.2,797.5 1126.2,788.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="1107.2" cy="797.5" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="999.2" y1="779.5" x2="999.2" y2="795.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1005.2" y1="779.5" x2="1005.2" y2="795.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="620.3,808.5 633.3,817.5 620.3,826.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="639.3" cy="817.5" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="768.0" y1="815.5" x2="768.0" y2="799.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="762.0" y1="815.5" x2="762.0" y2="799.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="238.2,228.5 251.2,237.5 238.2,246.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="255.2" y1="229.5" x2="255.2" y2="245.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="371.0" y1="245.5" x2="371.0" y2="229.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="365.0" y1="245.5" x2="365.0" y2="229.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="508.6,905.0 499.6,918.0 490.6,905.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="499.6" cy="924.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="491.6" y1="1203.0" x2="507.6" y2="1203.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="491.6" y1="1197.0" x2="507.6" y2="1197.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="528.6,905.0 519.6,918.0 510.6,905.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="519.6" cy="924.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="511.6" y1="1203.0" x2="527.6" y2="1203.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="511.6" y1="1197.0" x2="527.6" y2="1197.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="892.6,405.0 883.6,418.0 874.6,405.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="891.6" y1="422.0" x2="875.6" y2="422.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="875.6" y1="723.0" x2="891.6" y2="723.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="875.6" y1="717.0" x2="891.6" y2="717.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="792.6,1115.0 783.6,1128.0 774.6,1115.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="791.6" y1="1132.0" x2="775.6" y2="1132.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="623.0" y1="1239.5" x2="623.0" y2="1255.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="629.0" y1="1239.5" x2="629.0" y2="1255.5" stroke="#000" stroke-width="1.4" fill="none"/>
 </svg></div>
 </section>
 
 </div>
 <section class="panel">
 <h2>Relaciones</h2>
-<div class="tabla-wrap"><table class="t"><thead><tr><th>Relación</th><th>Participaciones</th><th>Cardinalidad</th><th>Se lee</th></tr></thead><tbody><tr><td>pertenecer</td><td>CONDUCTOR (1:1) · TERMINAL (0:N)</td><td>N:1</td><td style="white-space:normal">Cada conductor pertenece a una sola terminal y una terminal tiene muchos conductores.</td></tr><tr><td>estacionar</td><td>TERMINAL (0:N) · BUS (1:1)</td><td>1:N</td><td style="white-space:normal">Cada bus se estaciona en una terminal.</td></tr><tr><td>salir</td><td>TERMINAL (0:N) · VIAJE (1:1)</td><td>1:N</td><td style="white-space:normal">Todo viaje sale de una terminal.</td></tr><tr><td>realizar</td><td>BUS (0:N) · VIAJE (1:1)</td><td>1:N</td><td style="white-space:normal">Cada viaje lo realiza un solo bus.</td></tr><tr><td>conducir</td><td>CONDUCTOR (0:N) · VIAJE (1:N)</td><td>N:M</td><td style="white-space:normal">Un viaje lo conduce por lo menos un conductor; se guarda el rol.</td></tr><tr><td>comprar</td><td>VIAJE (0:N) · VIAJERO (1:N)</td><td>N:M</td><td style="white-space:normal">Un viajero se registra cuando compra; un viaje de carga no vende tiquetes.</td></tr></tbody></table></div><p class="nota alerta">Aquí CONDUCTOR y VIAJERO repiten los datos de una persona. Eso se arregla en el MER-E.</p>
+<div class="tabla-wrap"><table class="t"><thead><tr><th>Relación</th><th>Participaciones</th><th>Cardinalidad</th><th>Se lee</th></tr></thead><tbody><tr><td>operar</td><td>EMPRESA (1:N) · TERMINAL (1:N)</td><td>N:M</td><td style="white-space:normal">Una empresa tiene taquilla en varias terminales y en una terminal operan varias empresas; se guarda el número de la taquilla.</td></tr><tr><td>contratar</td><td>CONDUCTOR (1:1) · EMPRESA (1:N)</td><td>N:1</td><td style="white-space:normal">Cada conductor trabaja para una empresa y toda empresa tiene conductores.</td></tr><tr><td>poseer</td><td>BUS (1:1) · EMPRESA (0:N)</td><td>N:1</td><td style="white-space:normal">Cada bus es de una empresa.</td></tr><tr><td>partir</td><td>RUTA (origen) (1:1) · TERMINAL (0:N)</td><td>N:1</td><td style="white-space:normal">Cada ruta sale de una terminal.</td></tr><tr><td>llegar</td><td>RUTA (destino) (1:1) · TERMINAL (0:N)</td><td>N:1</td><td style="white-space:normal">Cada ruta llega a otra terminal. Son dos relaciones distintas entre las mismas entidades.</td></tr><tr><td>cubrir</td><td>RUTA (1:1) · EMPRESA (0:N)</td><td>N:1</td><td style="white-space:normal">Cada ruta la cubre una empresa.</td></tr><tr><td>comprar</td><td>VIAJERO (1:N) · RUTA (0:N)</td><td>N:M</td><td style="white-space:normal">Un viajero compra tiquetes para varias rutas; en cada tiquete va la fecha del viaje y la silla.</td></tr></tbody></table></div><p class="nota alerta">En el MER, CONDUCTOR y VIAJERO repiten los datos de una persona (documento, nombre, nacimiento, edad y teléfonos). Eso se arregla en el MER-E.</p>
 </section>
   </main>
 
@@ -236,8 +263,8 @@
   <footer>Universidad El Bosque · Bogotá D.C</footer>
 </div>
 
-<script src="../../js/estrellas.js?v=20261116c"></script>
-<script src="../../js/ejercicios.js?v=20261116c"></script>
+<script src="../../js/estrellas.js?v=20261116d"></script>
+<script src="../../js/ejercicios.js?v=20261116d"></script>
 <script>iniciarEtapa("mer");</script>
 </body>
 </html>

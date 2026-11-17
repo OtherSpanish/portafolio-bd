@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../css/estilos.css?v=20261116c">
+<link rel="stylesheet" href="../../css/estilos.css?v=20261116d">
 </head>
 <body>
 <div class="sky"></div>
@@ -29,65 +29,65 @@
 
   <main>
 <section class="panel"><details><summary>Ver enunciado del ejercicio</summary>
-<p>Una clínica con sedes en varias ciudades organiza jornadas de salud (vacunación, odontología, pediatría…) y quiere guardarlas en una base de datos.</p>
+<p>Una clínica con tres sedes en Bogotá quiere organizar sus citas, médicos y fórmulas.</p>
 <ul>
-  <li>Cada <strong>SEDE</strong> tiene un código de tres letras, nombre, ciudad y país.</li>
-  <li>Cada <strong>MÉDICO</strong> tiene identificación, nombre, registro médico, años de experiencia y uno o varios teléfonos. Pertenece a exactamente una sede.</li>
-  <li>Cada <strong>CONSULTORIO</strong> tiene un código, bloque, piso y capacidad, y queda en una sede.</li>
-  <li>Una <strong>JORNADA</strong> tiene un identificador, un código (por ejemplo <code>VAC01</code>), fecha, hora de inicio y especialidad. La realiza una sede y se hace en un solo consultorio.</li>
-  <li>En cada jornada atienden uno o más médicos con un <em>rol</em> (principal o apoyo), y un médico puede atender muchas jornadas.</li>
-  <li>Los <strong>PACIENTES</strong> se registran con identificación, nombre (nombres y apellidos), fecha de nacimiento, correo y número de visitas; la edad se calcula. Un paciente agenda citas en las jornadas y en cada cita se guarda el <em>turno</em> y el <em>régimen</em> (contributivo o subsidiado).</li>
-  <li>Un médico también puede ser paciente. Algunos consultorios son de observación (se guarda el número de camillas) y otros son laboratorios (se guarda el área en m²); los consultorios generales no son ni lo uno ni lo otro.</li>
+  <li>Cada <strong>PACIENTE</strong> tiene documento, nombre (nombres y apellidos), fecha de nacimiento, tipo de sangre y teléfonos; la edad se calcula. Está afiliado a una <strong>EPS</strong> (NIT y nombre).</li>
+  <li>Cada <strong>MÉDICO</strong> tiene identificación, nombre (nombres y apellidos), registro médico y una <strong>ESPECIALIDAD</strong>. Atiende en varias <strong>SEDES</strong> ciertos días de la semana.</li>
+  <li>Una <strong>CITA</strong> tiene número, fecha, hora y motivo; es de un paciente y la atiende un médico. Las citas presenciales se hacen en una sede y en un consultorio; las virtuales tienen un enlace y una plataforma. Toda cita es de uno de los dos tipos.</li>
+  <li>En una cita se pueden formular varios <strong>MEDICAMENTOS</strong> (código, nombre y presentación), cada uno con su dosis.</li>
 </ul>
-<p class="nota">Entidades base: <strong>Médico</strong>, <strong>Paciente</strong> y <strong>Sede</strong>. Entidades inventadas para completar el problema: <strong>Consultorio</strong> y <strong>Jornada</strong>.</p></details></section>
+<p class="nota">Entidades base: <strong>Médico</strong>, <strong>Paciente</strong> y <strong>Sede</strong>. Entidades inventadas para completar el problema: <strong>EPS</strong>, <strong>Especialidad</strong>, <strong>Cita</strong> y <strong>Medicamento</strong>.</p></details></section>
 <section class="panel">
 <h2>Consulta 1</h2>
-<p class="enunciado">Pacientes de la jornada 1 con su turno y su régimen.</p><pre class="codigo"><span class="kw">SELECT</span> r.turno, p.nombres, p.apellidos, r.regimen
-<span class="kw">FROM</span> CITA r
-<span class="kw">JOIN</span> PERSONA p <span class="kw">ON</span> p.documento = r.documento
-<span class="kw">WHERE</span> r.id_jornada = <span class="nu">1</span>
-<span class="kw">ORDER</span> <span class="kw">BY</span> r.regimen <span class="kw">DESC</span>, p.apellidos;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th><th class="xl-col">D</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">turno</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">regimen</td></tr><tr><td class="xl-fila">2</td><td class="">T02</td><td class="">Catalina</td><td class="">Neira Pinto</td><td class="">subsidiado</td></tr><tr><td class="xl-fila">3</td><td class="">T15</td><td class="">Rodrigo</td><td class="">Pardo Vega</td><td class="">contributivo</td></tr><tr><td class="xl-fila">4</td><td class="">T12</td><td class="">Brayan</td><td class="">Suarez Lopez</td><td class="">contributivo</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado">Agenda del 25 de noviembre: dónde es cada cita o por qué enlace.</p><pre class="codigo"><span class="kw">SELECT</span> c.hora, p.nombres, p.apellidos,
+       <span class="kw">COALESCE</span>(CONCAT(pr.codigo_sede, <span class="st">' '</span>, pr.consultorio), v.enlace) <span class="kw">AS</span> donde
+<span class="kw">FROM</span> CITA c
+<span class="kw">JOIN</span> PACIENTE p <span class="kw">ON</span> p.documento = c.documento
+<span class="kw">LEFT</span> <span class="kw">JOIN</span> PRESENCIAL pr <span class="kw">ON</span> pr.id_cita = c.id_cita
+<span class="kw">LEFT</span> <span class="kw">JOIN</span> TELECONSULTA v <span class="kw">ON</span> v.id_cita = c.id_cita
+<span class="kw">WHERE</span> c.fecha = <span class="st">'2026-11-25'</span>
+<span class="kw">ORDER</span> <span class="kw">BY</span> c.hora;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th><th class="xl-col">D</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">hora</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">donde</td></tr><tr><td class="xl-fila">2</td><td class="">09:30:00</td><td class="">Rosa Elena</td><td class="">Patino Gil</td><td class="">SUR C-202</td></tr><tr><td class="xl-fila">3</td><td class="">16:00:00</td><td class="">Mateo</td><td class="">Quintana Lara</td><td class="">https://meet.clinica.co/c56</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 2</h2>
-<p class="enunciado">Cuántas jornadas hay de cada especialidad.</p><pre class="codigo"><span class="kw">SELECT</span> especialidad, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> vuelos
-<span class="kw">FROM</span> JORNADA
-<span class="kw">GROUP</span> <span class="kw">BY</span> especialidad
-<span class="kw">ORDER</span> <span class="kw">BY</span> vuelos <span class="kw">DESC</span>, especialidad;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">especialidad</td><td class="xl-cab">vuelos</td></tr><tr><td class="xl-fila">2</td><td class="">Vacunacion</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">3</td><td class="">Odontologia</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">4</td><td class="">Pediatria</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">5</td><td class="">Toma de muestras</td><td class="xl-num">1</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado">Medicamentos más formulados.</p><pre class="codigo"><span class="kw">SELECT</span> m.nombre, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> veces
+<span class="kw">FROM</span> FORMULA f
+<span class="kw">JOIN</span> MEDICAMENTO m <span class="kw">ON</span> m.codigo_medicamento = f.codigo_medicamento
+<span class="kw">GROUP</span> <span class="kw">BY</span> m.codigo_medicamento, m.nombre
+<span class="kw">ORDER</span> <span class="kw">BY</span> veces <span class="kw">DESC</span>, m.nombre;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombre</td><td class="xl-cab">veces</td></tr><tr><td class="xl-fila">2</td><td class="">Acetaminofen</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">3</td><td class="">Losartan</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">4</td><td class="">Amoxicilina</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">5</td><td class="">Hidrocortisona</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">6</td><td class="">Loratadina</td><td class="xl-num">1</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 3</h2>
-<p class="enunciado">Médicos con la ciudad de su sede.</p><pre class="codigo"><span class="kw">SELECT</span> p.nombres, p.apellidos, p.registro_medico, b.ciudad
-<span class="kw">FROM</span> PERSONA p
-<span class="kw">JOIN</span> SEDE b <span class="kw">ON</span> b.codigo_sede = p.codigo_sede
-<span class="kw">WHERE</span> p.tipo_persona <span class="kw">IN</span> (<span class="st">'medico'</span>, <span class="st">'ambos'</span>)
-<span class="kw">ORDER</span> <span class="kw">BY</span> b.ciudad, p.apellidos;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th><th class="xl-col">D</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">registro_medico</td><td class="xl-cab">ciudad</td></tr><tr><td class="xl-fila">2</td><td class="">Javier Andres</td><td class="">Cuellar Rios</td><td class="">RM-24051</td><td class="">Bogota</td></tr><tr><td class="xl-fila">3</td><td class="">Eduardo</td><td class="">Villamil Sanz</td><td class="">RM-18190</td><td class="">Bogota</td></tr><tr><td class="xl-fila">4</td><td class="">Monica Patricia</td><td class="">Salgado Diaz</td><td class="">RM-40233</td><td class="">Cali</td></tr><tr><td class="xl-fila">5</td><td class="">Natalia</td><td class="">Prieto Ramos</td><td class="">RM-31882</td><td class="">Medellin</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado">Pacientes con su EPS y cuántas citas tienen.</p><pre class="codigo"><span class="kw">SELECT</span> p.nombres, p.apellidos, e.nombre <span class="kw">AS</span> eps, <span class="kw">COUNT</span>(c.id_cita) <span class="kw">AS</span> citas
+<span class="kw">FROM</span> PACIENTE p
+<span class="kw">JOIN</span> EPS e <span class="kw">ON</span> e.nit_eps = p.nit_eps
+<span class="kw">LEFT</span> <span class="kw">JOIN</span> CITA c <span class="kw">ON</span> c.documento = p.documento
+<span class="kw">GROUP</span> <span class="kw">BY</span> p.documento, p.nombres, p.apellidos, e.nombre
+<span class="kw">ORDER</span> <span class="kw">BY</span> citas <span class="kw">DESC</span>;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th><th class="xl-col">D</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">eps</td><td class="xl-cab">citas</td></tr><tr><td class="xl-fila">2</td><td class="">Rosa Elena</td><td class="">Patino Gil</td><td class="">Nueva EPS</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">3</td><td class="">Kevin</td><td class="">Zapata Ruiz</td><td class="">Sanitas</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">4</td><td class="">Gladys</td><td class="">Cifuentes Mora</td><td class="">Famisanar</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">5</td><td class="">Mateo</td><td class="">Quintana Lara</td><td class="">Nueva EPS</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">6</td><td class="">Liliana</td><td class="">Bohorquez Paz</td><td class="">Sanitas</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">7</td><td class="">Arturo</td><td class="">Velandia Rey</td><td class="">Famisanar</td><td class="xl-num">1</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 4</h2>
-<p class="enunciado">Cuántas jornadas tiene cada consultorio, incluyendo los que no tienen.</p><pre class="codigo"><span class="kw">SELECT</span> a.codigo_consultorio, a.bloque, <span class="kw">COUNT</span>(v.id_jornada) <span class="kw">AS</span> vuelos
-<span class="kw">FROM</span> CONSULTORIO a
-<span class="kw">LEFT</span> <span class="kw">JOIN</span> JORNADA v <span class="kw">ON</span> v.codigo_consultorio = a.codigo_consultorio
-<span class="kw">GROUP</span> <span class="kw">BY</span> a.codigo_consultorio, a.bloque
-<span class="kw">ORDER</span> <span class="kw">BY</span> vuelos <span class="kw">DESC</span>, a.codigo_consultorio;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo_consultorio</td><td class="xl-cab">bloque</td><td class="xl-cab">vuelos</td></tr><tr><td class="xl-fila">2</td><td class="">C-101</td><td class="">Bloque A</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">3</td><td class="">C-205</td><td class="">Bloque B</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">4</td><td class="">C-110</td><td class="">Bloque A</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">5</td><td class="">C-301</td><td class="">Bloque C</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">6</td><td class="">C-102</td><td class="">Bloque A</td><td class="xl-num">0</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado">Sedes y días en los que atiende cada médico.</p><pre class="codigo"><span class="kw">SELECT</span> m.nombres, m.apellidos,
+       GROUP_CONCAT(CONCAT(t.codigo_sede, <span class="st">' '</span>, t.dia) <span class="kw">ORDER</span> <span class="kw">BY</span> t.codigo_sede SEPARATOR <span class="st">', '</span>) <span class="kw">AS</span> turnos
+<span class="kw">FROM</span> MEDICO m
+<span class="kw">JOIN</span> TURNO t <span class="kw">ON</span> t.id_medico = m.id_medico
+<span class="kw">GROUP</span> <span class="kw">BY</span> m.id_medico, m.nombres, m.apellidos;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">turnos</td></tr><tr><td class="xl-fila">2</td><td class="">Adriana</td><td class="">Lopez Mejia</td><td class="">CEN viernes, NOR miercoles, NOR lunes</td></tr><tr><td class="xl-fila">3</td><td class="">Fabio</td><td class="">Sandoval Ortiz</td><td class="">NOR martes, SUR jueves</td></tr><tr><td class="xl-fila">4</td><td class="">Claudia</td><td class="">Rivas Toro</td><td class="">CEN lunes, SUR martes</td></tr><tr><td class="xl-fila">5</td><td class="">Esteban</td><td class="">Mora Quintero</td><td class="">CEN miercoles</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 5</h2>
-<p class="enunciado">Pacientes con más de una cita.</p><pre class="codigo"><span class="kw">SELECT</span> p.nombres, p.apellidos, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> reservas
-<span class="kw">FROM</span> CITA r
-<span class="kw">JOIN</span> PERSONA p <span class="kw">ON</span> p.documento = r.documento
-<span class="kw">GROUP</span> <span class="kw">BY</span> p.documento, p.nombres, p.apellidos
-<span class="kw">HAVING</span> <span class="kw">COUNT</span>(*) &gt; <span class="nu">1</span>
-<span class="kw">ORDER</span> <span class="kw">BY</span> reservas <span class="kw">DESC</span>, p.apellidos;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">reservas</td></tr><tr><td class="xl-fila">2</td><td class="">Rodrigo</td><td class="">Pardo Vega</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">3</td><td class="">Brayan</td><td class="">Suarez Lopez</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">4</td><td class="">Alejandro</td><td class="">Forero Caro</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">5</td><td class="">Gabriela</td><td class="">Medina Ruiz</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">6</td><td class="">Catalina</td><td class="">Neira Pinto</td><td class="xl-num">2</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado">Pacientes de más de 60 años que tienen cita.</p><pre class="codigo"><span class="kw">SELECT</span> <span class="kw">DISTINCT</span> p.nombres, p.apellidos,
+       TIMESTAMPDIFF(<span class="kw">YEAR</span>, p.fecha_nacimiento, CURDATE()) <span class="kw">AS</span> edad
+<span class="kw">FROM</span> PACIENTE p
+<span class="kw">JOIN</span> CITA c <span class="kw">ON</span> c.documento = p.documento
+<span class="kw">WHERE</span> TIMESTAMPDIFF(<span class="kw">YEAR</span>, p.fecha_nacimiento, CURDATE()) &gt; <span class="nu">60</span>;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">edad</td></tr><tr><td class="xl-fila">2</td><td class="">Rosa Elena</td><td class="">Patino Gil</td><td class="xl-num">68</td></tr><tr><td class="xl-fila">3</td><td class="">Arturo</td><td class="">Velandia Rey</td><td class="xl-num">77</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 6</h2>
-<p class="enunciado">Médico principal de cada jornada.</p><pre class="codigo"><span class="kw">SELECT</span> v.codigo, v.fecha, p.nombres, p.apellidos
-<span class="kw">FROM</span> ATENCION t
-<span class="kw">JOIN</span> JORNADA v <span class="kw">ON</span> v.id_jornada = t.id_jornada
-<span class="kw">JOIN</span> PERSONA p <span class="kw">ON</span> p.documento = t.documento
-<span class="kw">WHERE</span> t.rol = <span class="st">'principal'</span>
-<span class="kw">ORDER</span> <span class="kw">BY</span> v.fecha, v.codigo;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th><th class="xl-col">D</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo</td><td class="xl-cab">fecha</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td></tr><tr><td class="xl-fila">2</td><td class="">ODO02</td><td class="">2027-01-15</td><td class="">Natalia</td><td class="">Prieto Ramos</td></tr><tr><td class="xl-fila">3</td><td class="">VAC01</td><td class="">2027-01-15</td><td class="">Javier Andres</td><td class="">Cuellar Rios</td></tr><tr><td class="xl-fila">4</td><td class="">VAC03</td><td class="">2027-01-16</td><td class="">Monica Patricia</td><td class="">Salgado Diaz</td></tr><tr><td class="xl-fila">5</td><td class="">LAB05</td><td class="">2027-01-17</td><td class="">Eduardo</td><td class="">Villamil Sanz</td></tr><tr><td class="xl-fila">6</td><td class="">VAC01</td><td class="">2027-01-17</td><td class="">Eduardo</td><td class="">Villamil Sanz</td></tr><tr><td class="xl-fila">7</td><td class="">PED06</td><td class="">2027-01-18</td><td class="">Natalia</td><td class="">Prieto Ramos</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado">Citas presenciales de cada sede.</p><pre class="codigo"><span class="kw">SELECT</span> s.nombre, <span class="kw">COUNT</span>(pr.id_cita) <span class="kw">AS</span> presenciales
+<span class="kw">FROM</span> SEDE s
+<span class="kw">LEFT</span> <span class="kw">JOIN</span> PRESENCIAL pr <span class="kw">ON</span> pr.codigo_sede = s.codigo_sede
+<span class="kw">GROUP</span> <span class="kw">BY</span> s.codigo_sede, s.nombre
+<span class="kw">ORDER</span> <span class="kw">BY</span> presenciales <span class="kw">DESC</span>;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombre</td><td class="xl-cab">presenciales</td></tr><tr><td class="xl-fila">2</td><td class="">Sede Norte</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">3</td><td class="">Sede Centro</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">4</td><td class="">Sede Sur</td><td class="xl-num">1</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
   </main>
 
@@ -96,8 +96,8 @@
   <footer>Universidad El Bosque · Bogotá D.C</footer>
 </div>
 
-<script src="../../js/estrellas.js?v=20261116c"></script>
-<script src="../../js/ejercicios.js?v=20261116c"></script>
+<script src="../../js/estrellas.js?v=20261116d"></script>
+<script src="../../js/ejercicios.js?v=20261116d"></script>
 <script>iniciarEtapa("sql");</script>
 </body>
 </html>

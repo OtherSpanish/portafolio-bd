@@ -1,97 +1,97 @@
 -- Universidad - Bases de Datos 1
--- 02: registros de prueba (64), en una sola transaccion
+-- 02: registros de prueba, en una sola transaccion
 
 USE universidad;
 
-
-
 START TRANSACTION;
 
+INSERT INTO SEDE (codigo_sede, nombre, ciudad, direccion) VALUES
+('USQ', 'Sede Usaquen', 'Bogota', 'Cra 9 # 131A-02'),
+('CHA', 'Sede Chapinero', 'Bogota', 'Cra 7 # 63-44'),
+('CHI', 'Sede Chia', 'Chia', 'Km 20 Autopista Norte');
 
+INSERT INTO PROFESOR (id_profesor, nombres, apellidos, titulo, fecha_ingreso, codigo_sede) VALUES
+('P01', 'Martha Lucia', 'Rincon Vega', 'Doctora en Educacion', '2008-02-01', 'USQ'),
+('P02', 'Jorge Eliecer', 'Cardenas Ruiz', 'Magister en Software', '2015-07-15', 'USQ'),
+('P03', 'Diana Carolina', 'Pardo Mesa', 'Magister en Datos', '2019-01-20', 'CHI'),
+('P04', 'Hector', 'Salazar Nino', 'Ingeniero de Sistemas', '2021-08-01', 'CHA'),
+('P05', 'Paola Andrea', 'Quintero Gil', 'Doctora en Matematicas', '2012-02-10', 'USQ'),
+('P06', 'Ricardo', 'Montoya Paz', 'Magister en Redes', '2023-01-16', 'CHI');
 
-INSERT INTO SEDE (codigo_sede, nombre, ciudad, pais) VALUES
-('BOG', 'Sede Usaquen', 'Bogota', 'Colombia'),
-('MED', 'Sede Poblado', 'Medellin', 'Colombia'),
-('CAL', 'Sede Granada', 'Cali', 'Colombia');
+INSERT INTO PLANTA (id_profesor, salario, categoria) VALUES
+('P01', 8500000, 'titular'),
+('P02', 6200000, 'asociado'),
+('P05', 7900000, 'titular');
 
-INSERT INTO PERSONA (documento, nombres, apellidos, fecha_nacimiento, tipo_persona,
-                     registro, anios_experiencia, codigo_sede, correo, creditos) VALUES
-('1010', 'Jorge Ivan', 'Pardo Silva', '1980-03-12', 'profesor', 'REG-1201', 18, 'BOG', NULL, NULL),
-('1020', 'Diana Carolina', 'Mesa Rios', '1988-07-25', 'profesor', 'REG-1388', 9, 'MED', NULL, NULL),
-('1030', 'Ricardo', 'Nunez Vela', '1975-11-02', 'profesor', 'REG-0975', 25, 'BOG', NULL, NULL),
-('1040', 'Sara Lucia', 'Quintero Paz', '1992-01-18', 'ambos', 'REG-1590', 4, 'CAL', 'sara.quintero@correo.co', 30),
-('2010', 'Tomas', 'Bermudez Cano', '2000-05-30', 'estudiante', NULL, NULL, NULL, 'tomas.bermudez@correo.co', 112),
-('2020', 'Camila', 'Ospina Reyes', '1997-09-14', 'estudiante', NULL, NULL, NULL, 'camila.ospina@correo.co', 64),
-('2030', 'Juan David', 'Arango Mejia', '1985-12-01', 'estudiante', NULL, NULL, NULL, 'juan.arango@correo.co', 140),
-('2040', 'Mariana', 'Cardenas Ruiz', '2003-04-22', 'estudiante', NULL, NULL, NULL, 'mariana.cardenas@correo.co', 16),
-('2050', 'Felipe', 'Salazar Duque', '1979-08-08', 'estudiante', NULL, NULL, NULL, 'felipe.salazar@correo.co', 88);
+INSERT INTO CATEDRA (id_profesor, valor_hora, horas_semana) VALUES
+('P03', 95000, 12),
+('P04', 80000, 8);
 
-INSERT INTO PER_TELEFONO (documento, telefono) VALUES
-('1010', '3001112233'),
-('1010', '6015550101'),
-('1020', '3104445566'),
-('1030', '3207778899'),
-('1040', '3156667788'),
-('1040', '3019990000'),
-('2010', '3121234567'),
-('2020', '3189876543'),
-('2030', '3001239876'),
-('2030', '6047771234'),
-('2040', '3165554433'),
-('2050', '3112223344');
+INSERT INTO ASIGNATURA (cod_asignatura, nombre, creditos) VALUES
+('PRG101', 'Programacion 1', 3),
+('PRG201', 'Estructuras de Datos', 3),
+('BDD101', 'Bases de Datos 1', 3),
+('MAT101', 'Calculo Diferencial', 4),
+('EST101', 'Estadistica', 3),
+('RED101', 'Redes 1', 3);
 
-INSERT INTO SALON (codigo_salon, bloque, piso, codigo_sede) VALUES
-('S-101', 'Bloque A', 'Piso 1', 'BOG'),
-('S-205', 'Bloque B', 'Piso 2', 'MED'),
-('S-310', 'Bloque C', 'Piso 3', 'CAL'),
-('S-401', 'Bloque B', 'Piso 4', 'BOG'),
-('S-115', 'Bloque A', 'Piso 1', 'BOG');
+INSERT INTO PRERREQUISITO (cod_asignatura, cod_requisito) VALUES
+('PRG201', 'PRG101'),
+('BDD101', 'PRG201'),
+('BDD101', 'MAT101'),
+('EST101', 'MAT101'),
+('RED101', 'PRG101');
 
-INSERT INTO LABORATORIO (codigo_salon, num_equipos) VALUES
-('S-101', 30),
-('S-205', 24),
-('S-310', 20);
+INSERT INTO PROGRAMA (id_programa, nombre, nivel, creditos, codigo_sede, id_director) VALUES
+(1, 'Ingenieria de Sistemas', 'pregrado', 160, 'USQ', 'P01'),
+(2, 'Ingenieria Electronica', 'pregrado', 165, 'CHI', 'P03'),
+(3, 'Maestria en Ciencia de Datos', 'posgrado', 48, 'USQ', 'P05');
 
-INSERT INTO AUDITORIO (codigo_salon, area_m2) VALUES
-('S-401', 180.50);
+INSERT INTO ESTUDIANTE (id_estudiante, nombres, apellidos, fecha_nacimiento, correo, id_programa) VALUES
+('E01', 'Juan Camilo', 'Rojas Perez', '2004-03-12', 'juan.rojas@unimail.co', 1),
+('E02', 'Maria Fernanda', 'Lopez Diaz', '2005-07-25', 'maria.lopez@unimail.co', 1),
+('E03', 'Andres', 'Gutierrez Mora', '2003-11-02', 'andres.gutierrez@unimail.co', 1),
+('E04', 'Laura', 'Castillo Rey', '2004-01-18', 'laura.castillo@unimail.co', 2),
+('E05', 'Sebastian', 'Ortega Luna', '2002-05-30', 'sebastian.ortega@unimail.co', 2),
+('E06', 'Valentina', 'Herrera Gil', '2005-09-14', 'valentina.herrera@unimail.co', 1),
+('E07', 'Camilo', 'Vargas Leon', '1996-12-01', 'camilo.vargas@unimail.co', 3),
+('E08', 'Natalia', 'Suarez Pinto', '1998-04-22', 'natalia.suarez@unimail.co', 3);
 
-INSERT INTO CURSO (id_curso, codigo, fecha, hora_inicio, asignatura, codigo_salon, sede_curso) VALUES
-(1, 'BD101', '2026-02-02', '07:00', 'Bases de Datos', 'S-101', 'BOG'),
-(2, 'PR201', '2026-02-02', '09:00', 'Programacion', 'S-205', 'MED'),
-(3, 'BD301', '2026-02-03', '14:00', 'Bases de Datos', 'S-310', 'CAL'),
-(4, 'BD101', '2026-02-04', '07:00', 'Bases de Datos', 'S-101', 'BOG'),
-(5, 'SE900', '2026-02-04', '18:00', 'Seminario', 'S-401', 'BOG'),
-(6, 'CA420', '2026-02-05', '11:00', 'Calculo', 'S-205', 'MED');
+INSERT INTO CURSO (id_curso, grupo, periodo, horario, id_profesor, cod_asignatura) VALUES
+(1, '01', '2026-2', 'Lun-Mie 7-9', 'P02', 'BDD101'),
+(2, '02', '2026-2', 'Mar-Jue 9-11', 'P04', 'BDD101'),
+(3, '01', '2026-2', 'Lun-Mie 9-11', 'P03', 'PRG201'),
+(4, '01', '2026-2', 'Vie 7-11', 'P05', 'MAT101'),
+(5, '01', '2026-2', 'Mar-Jue 7-9', 'P02', 'PRG101'),
+(6, '01', '2026-2', 'Sab 8-12', 'P05', 'EST101');
 
-INSERT INTO DOCENCIA (documento, id_curso, rol) VALUES
-('1010', 1, 'titular'),
-('1040', 1, 'auxiliar'),
-('1020', 2, 'titular'),
-('1030', 2, 'auxiliar'),
-('1040', 3, 'titular'),
-('1020', 3, 'auxiliar'),
-('1030', 4, 'titular'),
-('1010', 4, 'auxiliar'),
-('1030', 5, 'titular'),
-('1010', 5, 'auxiliar'),
-('1020', 6, 'titular'),
-('1040', 6, 'auxiliar');
+INSERT INTO EST_TELEFONO (id_estudiante, telefono) VALUES
+('E01', '3001234567'),
+('E01', '6017441122'),
+('E02', '3109876543'),
+('E03', '3152223344'),
+('E03', '3205556677'),
+('E04', '3014445566'),
+('E05', '3126667788'),
+('E06', '3187778899'),
+('E07', '3008889900'),
+('E07', '6015553311'),
+('E08', '3161112233');
 
-INSERT INTO INSCRIPCION (documento, id_curso, puesto, modalidad) VALUES
-('2010', 1, '12', 'presencial'),
-('2010', 3, '5', 'presencial'),
-('2010', 4, '14', 'presencial'),
-('2020', 1, '2', 'virtual'),
-('2020', 2, '8', 'presencial'),
-('2030', 2, '1', 'virtual'),
-('2030', 6, '3', 'virtual'),
-('2040', 3, '20', 'presencial'),
-('2040', 6, '22', 'presencial'),
-('2050', 1, '15', 'presencial'),
-('2050', 3, '9', 'presencial'),
-('2050', 4, '4', 'virtual'),
-('1040', 2, '18', 'presencial');
-
-
+INSERT INTO MATRICULA (id_estudiante, id_curso, nota) VALUES
+('E01', 1, 4.5),
+('E01', 3, 3.8),
+('E01', 4, 4.1),
+('E02', 1, 3.2),
+('E02', 5, 4.7),
+('E03', 2, 2.9),
+('E03', 4, 3.5),
+('E04', 3, 4.0),
+('E04', 5, NULL),
+('E05', 2, 3.6),
+('E06', 5, 4.9),
+('E06', 1, 3.9),
+('E07', 6, 4.2),
+('E08', 6, NULL);
 
 COMMIT;

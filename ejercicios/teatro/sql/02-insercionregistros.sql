@@ -1,97 +1,96 @@
 -- Teatro - Bases de Datos 1
--- 02: registros de prueba (64), en una sola transaccion
+-- 02: registros de prueba, en una sola transaccion
 
 USE teatro;
 
-
-
 START TRANSACTION;
 
+INSERT INTO ESPECTADOR (documento, nombres, apellidos, fecha_nacimiento, correo) VALUES
+('3010', 'Mariana', 'Acosta Rey', '1991-02-11', 'mariana.acosta@correo.co'),
+('3020', 'Julian', 'Bravo Diaz', '1987-05-23', 'julian.bravo@correo.co'),
+('3030', 'Natalia', 'Cortes Gil', '2000-09-02', 'natalia.cortes@correo.co'),
+('3040', 'Hernan', 'Duarte Paz', '1965-12-15', 'hernan.duarte@correo.co'),
+('3050', 'Isabel', 'Franco Luna', '1995-03-30', 'isabel.franco@correo.co'),
+('3060', 'Tomas', 'Guerra Vela', '2004-07-18', 'tomas.guerra@correo.co');
 
+INSERT INTO TEATRO (codigo_teatro, nombre, direccion, aforo) VALUES
+('COL', 'Teatro Colon', 'Cll 10 # 5-32', 900),
+('MAY', 'Teatro Mayor', 'Av Cll 170 # 67-51', 1300),
+('LIB', 'Teatro Libre', 'Cra 11 # 61-80', 350);
 
-INSERT INTO TEATRO (codigo_teatro, nombre, ciudad, pais) VALUES
-('BOG', 'Teatro Colon', 'Bogota', 'Colombia'),
-('MED', 'Teatro Pablo Tobon', 'Medellin', 'Colombia'),
-('CAL', 'Teatro Municipal', 'Cali', 'Colombia');
+INSERT INTO OBRA (id_obra, titulo, autor, duracion_min) VALUES
+(1, 'La Casa de Bernarda Alba', 'Federico Garcia Lorca', 110),
+(2, 'Cats', 'Andrew Lloyd Webber', 150),
+(3, 'El Avaro', 'Moliere', 95),
+(4, 'Chicago', 'John Kander', 140),
+(5, 'Esperando a Godot', 'Samuel Beckett', 120);
 
-INSERT INTO PERSONA (documento, nombres, apellidos, fecha_nacimiento, tipo_persona,
-                     carnet, anios_carrera, codigo_teatro, correo, puntos) VALUES
-('1010', 'Alejandro', 'Buitrago Diaz', '1980-03-12', 'actor', 'ACT-301', 22, 'BOG', NULL, NULL),
-('1020', 'Carolina', 'Restrepo Gil', '1988-07-25', 'actor', 'ACT-455', 11, 'MED', NULL, NULL),
-('1030', 'Gustavo', 'Arenas Polo', '1975-11-02', 'actor', 'ACT-118', 30, 'BOG', NULL, NULL),
-('1040', 'Elena Maria', 'Montes Ruiz', '1992-01-18', 'ambos', 'ACT-602', 6, 'CAL', 'elena.montes@correo.co', 120),
-('2010', 'Pablo', 'Sierra Cano', '2000-05-30', 'espectador', NULL, NULL, NULL, 'pablo.sierra@correo.co', 540),
-('2020', 'Juliana', 'Velez Mora', '1997-09-14', 'espectador', NULL, NULL, NULL, 'juliana.velez@correo.co', 60),
-('2030', 'Martin', 'Ochoa Prada', '1985-12-01', 'espectador', NULL, NULL, NULL, 'martin.ochoa@correo.co', 980),
-('2040', 'Antonia', 'Rey Salas', '2003-04-22', 'espectador', NULL, NULL, NULL, 'antonia.rey@correo.co', 0),
-('2050', 'Simon', 'Castano Leon', '1979-08-08', 'espectador', NULL, NULL, NULL, 'simon.castano@correo.co', 730);
+INSERT INTO ACTOR (id_actor, nombre_artistico, nombres, apellidos, tipo_actor, registro_vocal, estilo_baile) VALUES
+('A01', 'Lucho Ramos', 'Luis Fernando', 'Ramos Pardo', NULL, NULL, NULL),
+('A02', 'Vicky Mar', 'Victoria', 'Martinez Cruz', 'cantante', 'soprano', NULL),
+('A03', 'Tono Danza', 'Antonio', 'Gil Rojas', 'bailarin', NULL, 'jazz'),
+('A04', 'Cami Luz', 'Camila', 'Luz Herrera', 'ambos', 'mezzosoprano', 'contemporaneo'),
+('A05', 'Pedro Sol', 'Pedro', 'Soler Mesa', NULL, NULL, NULL),
+('A06', 'Sara Vega', 'Sara', 'Vega Leon', 'ambos', 'contralto', 'tap'),
+('A07', 'Diego Ruiz', 'Diego', 'Ruiz Tapia', 'cantante', 'baritono', NULL);
 
-INSERT INTO PER_TELEFONO (documento, telefono) VALUES
-('1010', '3001112233'),
-('1010', '6015550101'),
-('1020', '3104445566'),
-('1030', '3207778899'),
-('1040', '3156667788'),
-('1040', '3019990000'),
-('2010', '3121234567'),
-('2020', '3189876543'),
-('2030', '3001239876'),
-('2030', '6047771234'),
-('2040', '3165554433'),
-('2050', '3112223344');
+INSERT INTO ESP_TELEFONO (documento, telefono) VALUES
+('3010', '3011234567'),
+('3010', '6012345678'),
+('3020', '3022345678'),
+('3030', '3033456789'),
+('3030', '6014567890'),
+('3040', '3044567890'),
+('3050', '3055678901'),
+('3060', '3066789012');
 
-INSERT INTO SALA (codigo_sala, nombre_sala, piso, codigo_teatro) VALUES
-('SA-01', 'Sala Principal', 'Piso 1', 'BOG'),
-('SA-02', 'Sala Estudio', 'Piso 2', 'MED'),
-('SA-03', 'Sala Grande', 'Piso 1', 'CAL'),
-('SA-04', 'Sala Estudio', 'Piso 3', 'BOG'),
-('SA-05', 'Foyer', 'Piso 1', 'BOG');
+INSERT INTO OBR_GENERO (id_obra, genero) VALUES
+(1, 'drama'),
+(2, 'musical'),
+(2, 'infantil'),
+(3, 'comedia'),
+(4, 'musical'),
+(4, 'comedia'),
+(5, 'drama'),
+(5, 'absurdo');
 
-INSERT INTO SALA_MAYOR (codigo_sala, num_sillas) VALUES
-('SA-01', 750),
-('SA-02', 420),
-('SA-03', 600);
+INSERT INTO REPARTO (id_actor, id_obra, personaje) VALUES
+('A01', 3, 'Harpagon'),
+('A05', 3, 'Cleante'),
+('A02', 2, 'Grizabella'),
+('A04', 2, 'Jellylorum'),
+('A03', 2, 'Mistoffelees'),
+('A04', 4, 'Roxie Hart'),
+('A06', 4, 'Velma Kelly'),
+('A07', 4, 'Billy Flynn'),
+('A06', 1, 'Adela'),
+('A02', 1, 'Bernarda'),
+('A01', 5, 'Vladimir'),
+('A05', 5, 'Estragon');
 
-INSERT INTO SALA_ENSAYO (codigo_sala, area_m2) VALUES
-('SA-04', 95.00);
+INSERT INTO SUPLENCIA (id_suplente, id_titular) VALUES
+('A05', 'A01'),
+('A06', 'A04'),
+('A07', 'A02');
 
-INSERT INTO FUNCION (id_funcion, codigo, fecha, hora_inicio, obra, codigo_sala, teatro_funcion) VALUES
-(1, 'HAM01', '2026-10-02', '19:00', 'Hamlet', 'SA-01', 'BOG'),
-(2, 'BOD02', '2026-10-02', '20:00', 'Bodas de Sangre', 'SA-02', 'MED'),
-(3, 'HAM03', '2026-10-03', '19:00', 'Hamlet', 'SA-03', 'CAL'),
-(4, 'HAM01', '2026-10-04', '19:00', 'Hamlet', 'SA-01', 'BOG'),
-(5, 'ENS05', '2026-10-04', '10:00', 'Ensayo General', 'SA-04', 'BOG'),
-(6, 'MIS06', '2026-10-05', '17:00', 'La Miseria', 'SA-02', 'MED');
+INSERT INTO FUNCION (id_funcion, fecha, hora, precio, codigo_teatro, id_obra) VALUES
+(1, '2026-12-04', '20:00', 85000, 'COL', 1),
+(2, '2026-12-05', '20:00', 85000, 'COL', 1),
+(3, '2026-12-05', '19:30', 120000, 'MAY', 2),
+(4, '2026-12-06', '16:00', 95000, 'MAY', 4),
+(5, '2026-12-06', '20:00', 45000, 'LIB', 3),
+(6, '2026-12-07', '18:00', 45000, 'LIB', 3);
 
-INSERT INTO ELENCO (documento, id_funcion, rol) VALUES
-('1010', 1, 'protagonista'),
-('1040', 1, 'reparto'),
-('1020', 2, 'protagonista'),
-('1030', 2, 'reparto'),
-('1040', 3, 'protagonista'),
-('1020', 3, 'reparto'),
-('1030', 4, 'protagonista'),
-('1010', 4, 'reparto'),
-('1030', 5, 'protagonista'),
-('1010', 5, 'reparto'),
-('1020', 6, 'protagonista'),
-('1040', 6, 'reparto');
-
-INSERT INTO BOLETA (documento, id_funcion, silla, zona) VALUES
-('2010', 1, 'F12', 'general'),
-('2010', 3, 'A05', 'general'),
-('2010', 4, 'C14', 'general'),
-('2020', 1, 'P02', 'palco'),
-('2020', 2, 'D08', 'general'),
-('2030', 2, 'P01', 'palco'),
-('2030', 6, 'P03', 'palco'),
-('2040', 3, 'H20', 'general'),
-('2040', 6, 'J22', 'general'),
-('2050', 1, 'F15', 'general'),
-('2050', 3, 'B09', 'general'),
-('2050', 4, 'P04', 'palco'),
-('1040', 2, 'E18', 'general');
-
-
+INSERT INTO BOLETA (documento, id_funcion, fila, silla) VALUES
+('3010', 1, 'C', 10),
+('3010', 3, 'F', 4),
+('3010', 5, 'A', 2),
+('3020', 1, 'C', 11),
+('3030', 1, 'D', 1),
+('3030', 2, 'B', 7),
+('3040', 3, 'F', 5),
+('3050', 4, 'H', 12),
+('3060', 4, 'H', 13),
+('3020', 6, 'A', 1);
 
 COMMIT;

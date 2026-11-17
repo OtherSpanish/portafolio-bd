@@ -1,5 +1,7 @@
 -- Terminal de transporte - Bases de Datos 1
--- 01: creacion de la terminal de datos y de las 9 tablas
+-- 01: creacion de la base de datos y de las 8 tablas
+-- Las tablas van en orden: primero las que no dependen de otras.
+
 SET NAMES utf8mb4;
 
 CREATE DATABASE IF NOT EXISTS terminal
@@ -8,97 +10,90 @@ CREATE DATABASE IF NOT EXISTS terminal
 
 USE terminal;
 
+-- EMPRESA
+CREATE TABLE EMPRESA (
+  nit varchar(12) NOT NULL,
+  razon_social varchar(80) NOT NULL,
+  ciudad_sede varchar(50) NOT NULL,
+  PRIMARY KEY (nit),
+  UNIQUE KEY uq_empresa_razon_social (razon_social)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- BUS
+CREATE TABLE BUS (
+  placa char(6) NOT NULL,
+  marca varchar(30) NOT NULL,
+  capacidad int NOT NULL,
+  nit varchar(12) NOT NULL,
+  PRIMARY KEY (placa),
+  CONSTRAINT fk_bus_nit FOREIGN KEY (nit) REFERENCES EMPRESA (nit)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- TERMINAL
 CREATE TABLE TERMINAL (
   codigo_terminal char(3) NOT NULL,
-  nombre varchar(80) NOT NULL,
+  nombre varchar(60) NOT NULL,
   ciudad varchar(50) NOT NULL,
-  pais varchar(50) NOT NULL,
   PRIMARY KEY (codigo_terminal)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+-- TAQUILLA
+CREATE TABLE TAQUILLA (
+  nit varchar(12) NOT NULL,
+  codigo_terminal char(3) NOT NULL,
+  numero_taquilla varchar(6) NOT NULL,
+  PRIMARY KEY (nit, codigo_terminal),
+  CONSTRAINT fk_taquilla_nit FOREIGN KEY (nit) REFERENCES EMPRESA (nit),
+  CONSTRAINT fk_taquilla_codigo_terminal FOREIGN KEY (codigo_terminal) REFERENCES TERMINAL (codigo_terminal)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- PERSONA
 CREATE TABLE PERSONA (
   documento varchar(15) NOT NULL,
   nombres varchar(50) NOT NULL,
   apellidos varchar(50) NOT NULL,
   fecha_nacimiento date NOT NULL,
   tipo_persona enum('conductor','viajero','ambos') NOT NULL,
-  licencia varchar(10) DEFAULT NULL,
-  horas_manejo int DEFAULT NULL,
-  codigo_terminal char(3) DEFAULT NULL,
+  licencia varchar(12) DEFAULT NULL,
+  categoria_licencia char(2) DEFAULT NULL,
   correo varchar(80) DEFAULT NULL,
-  puntos int DEFAULT NULL,
+  nit varchar(12) DEFAULT NULL,
   PRIMARY KEY (documento),
   UNIQUE KEY uq_persona_licencia (licencia),
   UNIQUE KEY uq_persona_correo (correo),
-  KEY fk_persona_terminal (codigo_terminal),
-  CONSTRAINT fk_persona_terminal FOREIGN KEY (codigo_terminal) REFERENCES TERMINAL (codigo_terminal)
+  CONSTRAINT fk_persona_nit FOREIGN KEY (nit) REFERENCES EMPRESA (nit)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+-- RUTA
+CREATE TABLE RUTA (
+  codigo_ruta varchar(8) NOT NULL,
+  duracion_min int NOT NULL,
+  valor decimal(10,2) NOT NULL,
+  terminal_origen char(3) NOT NULL,
+  terminal_destino char(3) NOT NULL,
+  nit varchar(12) NOT NULL,
+  PRIMARY KEY (codigo_ruta),
+  CONSTRAINT fk_ruta_terminal_origen FOREIGN KEY (terminal_origen) REFERENCES TERMINAL (codigo_terminal),
+  CONSTRAINT fk_ruta_terminal_destino FOREIGN KEY (terminal_destino) REFERENCES TERMINAL (codigo_terminal),
+  CONSTRAINT fk_ruta_nit FOREIGN KEY (nit) REFERENCES EMPRESA (nit)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- PER_TELEFONO
 CREATE TABLE PER_TELEFONO (
   documento varchar(15) NOT NULL,
   telefono varchar(15) NOT NULL,
-  PRIMARY KEY (documento,telefono),
-  CONSTRAINT fk_per_telefono_persona FOREIGN KEY (documento) REFERENCES PERSONA (documento)
+  PRIMARY KEY (documento, telefono),
+  CONSTRAINT fk_per_telefono_documento FOREIGN KEY (documento) REFERENCES PERSONA (documento)
     ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE BUS (
-  placa varchar(10) NOT NULL,
-  modelo varchar(40) NOT NULL,
-  marca varchar(40) NOT NULL,
-  codigo_terminal char(3) NOT NULL,
-  PRIMARY KEY (placa),
-  KEY fk_bus_terminal (codigo_terminal),
-  CONSTRAINT fk_bus_terminal FOREIGN KEY (codigo_terminal) REFERENCES TERMINAL (codigo_terminal)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-CREATE TABLE BUS_PASAJEROS (
-  placa varchar(10) NOT NULL,
-  num_sillas int NOT NULL,
-  PRIMARY KEY (placa),
-  CONSTRAINT fk_bus_pasajeros_bus FOREIGN KEY (placa) REFERENCES BUS (placa)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-CREATE TABLE BUS_CARGA (
-  placa varchar(10) NOT NULL,
-  capacidad_kg decimal(10,2) NOT NULL,
-  PRIMARY KEY (placa),
-  CONSTRAINT fk_bus_carga_bus FOREIGN KEY (placa) REFERENCES BUS (placa)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-CREATE TABLE VIAJE (
-  id_viaje bigint NOT NULL AUTO_INCREMENT,
-  codigo varchar(8) NOT NULL,
-  fecha date NOT NULL,
-  hora_salida time NOT NULL,
-  destino varchar(50) NOT NULL,
-  placa varchar(10) NOT NULL,
-  terminal_origen char(3) NOT NULL,
-  PRIMARY KEY (id_viaje),
-  UNIQUE KEY uq_viaje_codigo_fecha (codigo,fecha),
-  KEY fk_viaje_bus (placa),
-  KEY fk_viaje_terminal (terminal_origen),
-  CONSTRAINT fk_viaje_bus FOREIGN KEY (placa) REFERENCES BUS (placa),
-  CONSTRAINT fk_viaje_terminal FOREIGN KEY (terminal_origen) REFERENCES TERMINAL (codigo_terminal)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-CREATE TABLE CONDUCCION (
-  documento varchar(15) NOT NULL,
-  id_viaje bigint NOT NULL,
-  rol enum('principal','relevo') NOT NULL,
-  PRIMARY KEY (documento,id_viaje),
-  KEY fk_conduccion_viaje (id_viaje),
-  CONSTRAINT fk_conduccion_persona FOREIGN KEY (documento) REFERENCES PERSONA (documento),
-  CONSTRAINT fk_conduccion_viaje FOREIGN KEY (id_viaje) REFERENCES VIAJE (id_viaje)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
+-- TIQUETE
 CREATE TABLE TIQUETE (
   documento varchar(15) NOT NULL,
-  id_viaje bigint NOT NULL,
-  silla varchar(4) NOT NULL,
-  servicio enum('basico','preferencial') NOT NULL,
-  PRIMARY KEY (documento,id_viaje),
-  UNIQUE KEY uq_tiquete_viaje_silla (id_viaje,silla),
-  CONSTRAINT fk_tiquete_persona FOREIGN KEY (documento) REFERENCES PERSONA (documento),
-  CONSTRAINT fk_tiquete_viaje FOREIGN KEY (id_viaje) REFERENCES VIAJE (id_viaje)
+  codigo_ruta varchar(8) NOT NULL,
+  fecha_viaje date NOT NULL,
+  silla int NOT NULL,
+  PRIMARY KEY (documento, codigo_ruta, fecha_viaje),
+  CONSTRAINT fk_tiquete_documento FOREIGN KEY (documento) REFERENCES PERSONA (documento),
+  CONSTRAINT fk_tiquete_codigo_ruta FOREIGN KEY (codigo_ruta) REFERENCES RUTA (codigo_ruta)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

@@ -1,97 +1,98 @@
 -- Clínica - Bases de Datos 1
--- 02: registros de prueba (64), en una sola transaccion
+-- 02: registros de prueba, en una sola transaccion
 
 USE clinica;
 
-
-
 START TRANSACTION;
 
+INSERT INTO EPS (nit_eps, nombre) VALUES
+('900156264', 'Nueva EPS'),
+('800251440', 'Sanitas'),
+('830003564', 'Famisanar');
 
+INSERT INTO PACIENTE (documento, nombres, apellidos, fecha_nacimiento, tipo_sangre, nit_eps) VALUES
+('7010', 'Rosa Elena', 'Patino Gil', '1958-05-12', 'O+', '900156264'),
+('7020', 'Kevin', 'Zapata Ruiz', '1999-09-30', 'A+', '800251440'),
+('7030', 'Gladys', 'Cifuentes Mora', '1971-01-21', 'B-', '830003564'),
+('7040', 'Mateo', 'Quintana Lara', '1988-11-05', 'O-', '900156264'),
+('7050', 'Liliana', 'Bohorquez Paz', '1993-04-17', 'AB+', '800251440'),
+('7060', 'Arturo', 'Velandia Rey', '1949-08-08', 'O+', '830003564');
 
-INSERT INTO SEDE (codigo_sede, nombre, ciudad, pais) VALUES
-('BOG', 'Sede Norte', 'Bogota', 'Colombia'),
-('MED', 'Sede Envigado', 'Medellin', 'Colombia'),
-('CAL', 'Sede San Fernando', 'Cali', 'Colombia');
+INSERT INTO ESPECIALIDAD (id_especialidad, nombre) VALUES
+(1, 'Medicina general'),
+(2, 'Pediatria'),
+(3, 'Cardiologia'),
+(4, 'Dermatologia');
 
-INSERT INTO PERSONA (documento, nombres, apellidos, fecha_nacimiento, tipo_persona,
-                     registro_medico, anios_experiencia, codigo_sede, correo, visitas) VALUES
-('1010', 'Javier Andres', 'Cuellar Rios', '1980-03-12', 'medico', 'RM-24051', 15, 'BOG', NULL, NULL),
-('1020', 'Natalia', 'Prieto Ramos', '1988-07-25', 'medico', 'RM-31882', 8, 'MED', NULL, NULL),
-('1030', 'Eduardo', 'Villamil Sanz', '1975-11-02', 'medico', 'RM-18190', 26, 'BOG', NULL, NULL),
-('1040', 'Monica Patricia', 'Salgado Diaz', '1992-01-18', 'ambos', 'RM-40233', 4, 'CAL', 'monica.salgado@correo.co', 3),
-('2010', 'Brayan', 'Suarez Lopez', '2000-05-30', 'paciente', NULL, NULL, NULL, 'brayan.suarez@correo.co', 7),
-('2020', 'Catalina', 'Neira Pinto', '1997-09-14', 'paciente', NULL, NULL, NULL, 'catalina.neira@correo.co', 2),
-('2030', 'Alejandro', 'Forero Caro', '1985-12-01', 'paciente', NULL, NULL, NULL, 'alejandro.forero@correo.co', 12),
-('2040', 'Gabriela', 'Medina Ruiz', '2003-04-22', 'paciente', NULL, NULL, NULL, 'gabriela.medina@correo.co', 1),
-('2050', 'Rodrigo', 'Pardo Vega', '1979-08-08', 'paciente', NULL, NULL, NULL, 'rodrigo.pardo@correo.co', 9);
+INSERT INTO MEDICAMENTO (codigo_medicamento, nombre, presentacion) VALUES
+('MED-001', 'Acetaminofen', 'tabletas 500 mg'),
+('MED-002', 'Losartan', 'tabletas 50 mg'),
+('MED-003', 'Amoxicilina', 'capsulas 500 mg'),
+('MED-004', 'Hidrocortisona', 'crema 1%'),
+('MED-005', 'Loratadina', 'tabletas 10 mg'),
+('MED-006', 'Ibuprofeno', 'tabletas 400 mg');
 
-INSERT INTO PER_TELEFONO (documento, telefono) VALUES
-('1010', '3001112233'),
-('1010', '6015550101'),
-('1020', '3104445566'),
-('1030', '3207778899'),
-('1040', '3156667788'),
-('1040', '3019990000'),
-('2010', '3121234567'),
-('2020', '3189876543'),
-('2030', '3001239876'),
-('2030', '6047771234'),
-('2040', '3165554433'),
-('2050', '3112223344');
+INSERT INTO MEDICO (id_medico, nombres, apellidos, registro_medico, id_especialidad) VALUES
+('M01', 'Adriana', 'Lopez Mejia', 'RM-24051', 1),
+('M02', 'Fabio', 'Sandoval Ortiz', 'RM-31882', 3),
+('M03', 'Claudia', 'Rivas Toro', 'RM-18190', 1),
+('M04', 'Esteban', 'Mora Quintero', 'RM-40233', 4);
 
-INSERT INTO CONSULTORIO (codigo_consultorio, bloque, piso, codigo_sede) VALUES
-('C-101', 'Bloque A', 'Piso 1', 'BOG'),
-('C-205', 'Bloque B', 'Piso 2', 'MED'),
-('C-110', 'Bloque A', 'Piso 1', 'CAL'),
-('C-301', 'Bloque C', 'Piso 3', 'BOG'),
-('C-102', 'Bloque A', 'Piso 1', 'BOG');
+INSERT INTO SEDE (codigo_sede, nombre, direccion) VALUES
+('NOR', 'Sede Norte', 'Cll 134 # 7-83'),
+('CEN', 'Sede Centro', 'Cra 7 # 22-15'),
+('SUR', 'Sede Sur', 'Av 1 de Mayo # 52-20');
 
-INSERT INTO OBSERVACION (codigo_consultorio, num_camillas) VALUES
-('C-101', 6),
-('C-205', 4),
-('C-110', 5);
+INSERT INTO PAC_TELEFONO (documento, telefono) VALUES
+('7010', '3101234567'),
+('7010', '6012345601'),
+('7020', '3112345678'),
+('7030', '3123456789'),
+('7030', '6013456702'),
+('7040', '3134567890'),
+('7050', '3145678901'),
+('7060', '3156789012');
 
-INSERT INTO LABORATORIO (codigo_consultorio, area_m2) VALUES
-('C-301', 42.50);
+INSERT INTO TURNO (id_medico, codigo_sede, dia) VALUES
+('M01', 'NOR', 'lunes'),
+('M01', 'NOR', 'miercoles'),
+('M01', 'CEN', 'viernes'),
+('M02', 'NOR', 'martes'),
+('M02', 'SUR', 'jueves'),
+('M03', 'CEN', 'lunes'),
+('M03', 'SUR', 'martes'),
+('M04', 'CEN', 'miercoles');
 
-INSERT INTO JORNADA (id_jornada, codigo, fecha, hora_inicio, especialidad, codigo_consultorio, sede_jornada) VALUES
-(1, 'VAC01', '2027-01-15', '07:00', 'Vacunacion', 'C-101', 'BOG'),
-(2, 'ODO02', '2027-01-15', '08:00', 'Odontologia', 'C-205', 'MED'),
-(3, 'VAC03', '2027-01-16', '07:00', 'Vacunacion', 'C-110', 'CAL'),
-(4, 'VAC01', '2027-01-17', '07:00', 'Vacunacion', 'C-101', 'BOG'),
-(5, 'LAB05', '2027-01-17', '06:00', 'Toma de muestras', 'C-301', 'BOG'),
-(6, 'PED06', '2027-01-18', '09:00', 'Pediatria', 'C-205', 'MED');
+INSERT INTO CITA (id_cita, fecha, hora, motivo, documento, id_medico) VALUES
+(1, '2026-11-20', '08:00', 'control de presion', '7010', 'M02'),
+(2, '2026-11-20', '09:00', 'dolor de garganta', '7020', 'M01'),
+(3, '2026-11-21', '10:30', 'revision de lunar', '7030', 'M04'),
+(4, '2026-11-23', '07:30', 'control general', '7010', 'M01'),
+(5, '2026-11-23', '11:00', 'dolor en el pecho', '7060', 'M02'),
+(6, '2026-11-24', '15:00', 'alergia', '7050', 'M03'),
+(7, '2026-11-25', '09:30', 'control de presion', '7010', 'M02'),
+(8, '2026-11-25', '16:00', 'fiebre', '7040', 'M03');
 
-INSERT INTO ATENCION (documento, id_jornada, rol) VALUES
-('1010', 1, 'principal'),
-('1040', 1, 'apoyo'),
-('1020', 2, 'principal'),
-('1030', 2, 'apoyo'),
-('1040', 3, 'principal'),
-('1020', 3, 'apoyo'),
-('1030', 4, 'principal'),
-('1010', 4, 'apoyo'),
-('1030', 5, 'principal'),
-('1010', 5, 'apoyo'),
-('1020', 6, 'principal'),
-('1040', 6, 'apoyo');
+INSERT INTO PRESENCIAL (id_cita, consultorio, codigo_sede) VALUES
+(1, 'C-201', 'NOR'),
+(3, 'C-105', 'CEN'),
+(4, 'C-110', 'NOR'),
+(5, 'C-201', 'NOR'),
+(7, 'C-202', 'SUR');
 
-INSERT INTO CITA (documento, id_jornada, turno, regimen) VALUES
-('2010', 1, 'T12', 'contributivo'),
-('2010', 3, 'T05', 'contributivo'),
-('2010', 4, 'T14', 'contributivo'),
-('2020', 1, 'T02', 'subsidiado'),
-('2020', 2, 'T08', 'contributivo'),
-('2030', 2, 'T01', 'subsidiado'),
-('2030', 6, 'T03', 'subsidiado'),
-('2040', 3, 'T20', 'contributivo'),
-('2040', 6, 'T22', 'contributivo'),
-('2050', 1, 'T15', 'contributivo'),
-('2050', 3, 'T09', 'contributivo'),
-('2050', 4, 'T04', 'subsidiado'),
-('1040', 2, 'T18', 'contributivo');
+INSERT INTO TELECONSULTA (id_cita, enlace, plataforma) VALUES
+(2, 'https://meet.clinica.co/a12', 'Meet'),
+(6, 'https://teams.clinica.co/b34', 'Teams'),
+(8, 'https://meet.clinica.co/c56', 'Meet');
 
-
+INSERT INTO FORMULA (id_cita, codigo_medicamento, dosis) VALUES
+(1, 'MED-002', '1 tableta cada 12 horas'),
+(2, 'MED-003', '1 capsula cada 8 horas por 7 dias'),
+(2, 'MED-001', '1 tableta cada 6 horas si hay fiebre'),
+(3, 'MED-004', 'aplicar 2 veces al dia'),
+(5, 'MED-002', '1 tableta cada 12 horas'),
+(5, 'MED-001', '1 tableta cada 8 horas'),
+(6, 'MED-005', '1 tableta diaria'),
+(8, 'MED-001', '1 tableta cada 6 horas');
 
 COMMIT;

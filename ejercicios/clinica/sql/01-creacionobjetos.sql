@@ -1,5 +1,7 @@
 -- Clínica - Bases de Datos 1
--- 01: creacion de la sede de datos y de las 9 tablas
+-- 01: creacion de la base de datos y de las 12 tablas
+-- Las tablas van en orden: primero las que no dependen de otras.
+
 SET NAMES utf8mb4;
 
 CREATE DATABASE IF NOT EXISTS clinica
@@ -8,97 +10,122 @@ CREATE DATABASE IF NOT EXISTS clinica
 
 USE clinica;
 
-CREATE TABLE SEDE (
-  codigo_sede char(3) NOT NULL,
-  nombre varchar(80) NOT NULL,
-  ciudad varchar(50) NOT NULL,
-  pais varchar(50) NOT NULL,
-  PRIMARY KEY (codigo_sede)
+-- EPS
+CREATE TABLE EPS (
+  nit_eps varchar(12) NOT NULL,
+  nombre varchar(60) NOT NULL,
+  PRIMARY KEY (nit_eps),
+  UNIQUE KEY uq_eps_nombre (nombre)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE PERSONA (
+-- PACIENTE
+CREATE TABLE PACIENTE (
   documento varchar(15) NOT NULL,
   nombres varchar(50) NOT NULL,
   apellidos varchar(50) NOT NULL,
   fecha_nacimiento date NOT NULL,
-  tipo_persona enum('medico','paciente','ambos') NOT NULL,
-  registro_medico varchar(10) DEFAULT NULL,
-  anios_experiencia int DEFAULT NULL,
-  codigo_sede char(3) DEFAULT NULL,
-  correo varchar(80) DEFAULT NULL,
-  visitas int DEFAULT NULL,
+  tipo_sangre varchar(3) NOT NULL,
+  nit_eps varchar(12) NOT NULL,
   PRIMARY KEY (documento),
-  UNIQUE KEY uq_persona_registro_medico (registro_medico),
-  UNIQUE KEY uq_persona_correo (correo),
-  KEY fk_persona_sede (codigo_sede),
-  CONSTRAINT fk_persona_sede FOREIGN KEY (codigo_sede) REFERENCES SEDE (codigo_sede)
+  CONSTRAINT fk_paciente_nit_eps FOREIGN KEY (nit_eps) REFERENCES EPS (nit_eps)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE PER_TELEFONO (
+-- ESPECIALIDAD
+CREATE TABLE ESPECIALIDAD (
+  id_especialidad int NOT NULL,
+  nombre varchar(50) NOT NULL,
+  PRIMARY KEY (id_especialidad),
+  UNIQUE KEY uq_especialidad_nombre (nombre)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- MEDICAMENTO
+CREATE TABLE MEDICAMENTO (
+  codigo_medicamento varchar(10) NOT NULL,
+  nombre varchar(60) NOT NULL,
+  presentacion varchar(40) NOT NULL,
+  PRIMARY KEY (codigo_medicamento)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- MEDICO
+CREATE TABLE MEDICO (
+  id_medico varchar(15) NOT NULL,
+  nombres varchar(50) NOT NULL,
+  apellidos varchar(50) NOT NULL,
+  registro_medico varchar(12) NOT NULL,
+  id_especialidad int NOT NULL,
+  PRIMARY KEY (id_medico),
+  UNIQUE KEY uq_medico_registro_medico (registro_medico),
+  CONSTRAINT fk_medico_id_especialidad FOREIGN KEY (id_especialidad) REFERENCES ESPECIALIDAD (id_especialidad)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- SEDE
+CREATE TABLE SEDE (
+  codigo_sede char(3) NOT NULL,
+  nombre varchar(60) NOT NULL,
+  direccion varchar(80) NOT NULL,
+  PRIMARY KEY (codigo_sede)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- PAC_TELEFONO
+CREATE TABLE PAC_TELEFONO (
   documento varchar(15) NOT NULL,
   telefono varchar(15) NOT NULL,
-  PRIMARY KEY (documento,telefono),
-  CONSTRAINT fk_per_telefono_persona FOREIGN KEY (documento) REFERENCES PERSONA (documento)
+  PRIMARY KEY (documento, telefono),
+  CONSTRAINT fk_pac_telefono_documento FOREIGN KEY (documento) REFERENCES PACIENTE (documento)
     ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE CONSULTORIO (
-  codigo_consultorio varchar(10) NOT NULL,
-  bloque varchar(40) NOT NULL,
-  piso varchar(40) NOT NULL,
+-- TURNO
+CREATE TABLE TURNO (
+  id_medico varchar(15) NOT NULL,
   codigo_sede char(3) NOT NULL,
-  PRIMARY KEY (codigo_consultorio),
-  KEY fk_consultorio_sede (codigo_sede),
-  CONSTRAINT fk_consultorio_sede FOREIGN KEY (codigo_sede) REFERENCES SEDE (codigo_sede)
+  dia varchar(10) NOT NULL,
+  PRIMARY KEY (id_medico, codigo_sede, dia),
+  CONSTRAINT fk_turno_id_medico FOREIGN KEY (id_medico) REFERENCES MEDICO (id_medico),
+  CONSTRAINT fk_turno_codigo_sede FOREIGN KEY (codigo_sede) REFERENCES SEDE (codigo_sede)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE OBSERVACION (
-  codigo_consultorio varchar(10) NOT NULL,
-  num_camillas int NOT NULL,
-  PRIMARY KEY (codigo_consultorio),
-  CONSTRAINT fk_observacion_consultorio FOREIGN KEY (codigo_consultorio) REFERENCES CONSULTORIO (codigo_consultorio)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-CREATE TABLE LABORATORIO (
-  codigo_consultorio varchar(10) NOT NULL,
-  area_m2 decimal(10,2) NOT NULL,
-  PRIMARY KEY (codigo_consultorio),
-  CONSTRAINT fk_laboratorio_consultorio FOREIGN KEY (codigo_consultorio) REFERENCES CONSULTORIO (codigo_consultorio)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-CREATE TABLE JORNADA (
-  id_jornada bigint NOT NULL AUTO_INCREMENT,
-  codigo varchar(8) NOT NULL,
-  fecha date NOT NULL,
-  hora_inicio time NOT NULL,
-  especialidad varchar(50) NOT NULL,
-  codigo_consultorio varchar(10) NOT NULL,
-  sede_jornada char(3) NOT NULL,
-  PRIMARY KEY (id_jornada),
-  UNIQUE KEY uq_jornada_codigo_fecha (codigo,fecha),
-  KEY fk_jornada_consultorio (codigo_consultorio),
-  KEY fk_jornada_sede (sede_jornada),
-  CONSTRAINT fk_jornada_consultorio FOREIGN KEY (codigo_consultorio) REFERENCES CONSULTORIO (codigo_consultorio),
-  CONSTRAINT fk_jornada_sede FOREIGN KEY (sede_jornada) REFERENCES SEDE (codigo_sede)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-CREATE TABLE ATENCION (
-  documento varchar(15) NOT NULL,
-  id_jornada bigint NOT NULL,
-  rol enum('principal','apoyo') NOT NULL,
-  PRIMARY KEY (documento,id_jornada),
-  KEY fk_atencion_jornada (id_jornada),
-  CONSTRAINT fk_atencion_persona FOREIGN KEY (documento) REFERENCES PERSONA (documento),
-  CONSTRAINT fk_atencion_jornada FOREIGN KEY (id_jornada) REFERENCES JORNADA (id_jornada)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
+-- CITA
 CREATE TABLE CITA (
+  id_cita int NOT NULL,
+  fecha date NOT NULL,
+  hora time NOT NULL,
+  motivo varchar(80) NOT NULL,
   documento varchar(15) NOT NULL,
-  id_jornada bigint NOT NULL,
-  turno varchar(4) NOT NULL,
-  regimen enum('contributivo','subsidiado') NOT NULL,
-  PRIMARY KEY (documento,id_jornada),
-  UNIQUE KEY uq_cita_jornada_turno (id_jornada,turno),
-  CONSTRAINT fk_cita_persona FOREIGN KEY (documento) REFERENCES PERSONA (documento),
-  CONSTRAINT fk_cita_jornada FOREIGN KEY (id_jornada) REFERENCES JORNADA (id_jornada)
+  id_medico varchar(15) NOT NULL,
+  PRIMARY KEY (id_cita),
+  CONSTRAINT fk_cita_documento FOREIGN KEY (documento) REFERENCES PACIENTE (documento),
+  CONSTRAINT fk_cita_id_medico FOREIGN KEY (id_medico) REFERENCES MEDICO (id_medico)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- PRESENCIAL
+CREATE TABLE PRESENCIAL (
+  id_cita int NOT NULL,
+  consultorio varchar(10) NOT NULL,
+  codigo_sede char(3) NOT NULL,
+  PRIMARY KEY (id_cita),
+  CONSTRAINT fk_presencial_id_cita FOREIGN KEY (id_cita) REFERENCES CITA (id_cita)
+    ON DELETE CASCADE,
+  CONSTRAINT fk_presencial_codigo_sede FOREIGN KEY (codigo_sede) REFERENCES SEDE (codigo_sede)
+    ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- TELECONSULTA
+CREATE TABLE TELECONSULTA (
+  id_cita int NOT NULL,
+  enlace varchar(120) NOT NULL,
+  plataforma varchar(20) NOT NULL,
+  PRIMARY KEY (id_cita),
+  CONSTRAINT fk_teleconsulta_id_cita FOREIGN KEY (id_cita) REFERENCES CITA (id_cita)
+    ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- FORMULA
+CREATE TABLE FORMULA (
+  id_cita int NOT NULL,
+  codigo_medicamento varchar(10) NOT NULL,
+  dosis varchar(60) NOT NULL,
+  PRIMARY KEY (id_cita, codigo_medicamento),
+  CONSTRAINT fk_formula_id_cita FOREIGN KEY (id_cita) REFERENCES CITA (id_cita),
+  CONSTRAINT fk_formula_codigo_medicamento FOREIGN KEY (codigo_medicamento) REFERENCES MEDICAMENTO (codigo_medicamento)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

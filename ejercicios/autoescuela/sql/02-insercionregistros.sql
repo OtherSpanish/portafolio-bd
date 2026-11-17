@@ -1,97 +1,82 @@
 -- Escuela de conducción - Bases de Datos 1
--- 02: registros de prueba (64), en una sola transaccion
+-- 02: registros de prueba, en una sola transaccion
 
 USE autoescuela;
 
-
-
 START TRANSACTION;
 
+INSERT INTO SEDE (codigo_sede, nombre, direccion) VALUES
+('KEN', 'Sede Kennedy', 'Av 1 de Mayo # 72-10'),
+('ENG', 'Sede Engativa', 'Cll 80 # 78-20'),
+('USA', 'Sede Usaquen', 'Cra 7 # 140-15');
 
+INSERT INTO CURSO (codigo_curso, nombre, horas_teoria, horas_practica) VALUES
+('A1', 'Moto hasta 125 cc', 20, 10),
+('A2', 'Moto de mas de 125 cc', 20, 15),
+('B1', 'Carro particular', 30, 20),
+('C2', 'Camion rigido', 40, 30);
 
-INSERT INTO SEDE (codigo_sede, nombre, ciudad, pais) VALUES
-('BOG', 'Sede Suba', 'Bogota', 'Colombia'),
-('MED', 'Sede Belen', 'Medellin', 'Colombia'),
-('BUC', 'Sede Cabecera', 'Bucaramanga', 'Colombia');
+INSERT INTO ALUMNO (documento, nombres, apellidos, fecha_nacimiento, correo, codigo_curso) VALUES
+('9010', 'Santiago', 'Uribe Lara', '2006-03-14', 'santiago.uribe@correo.co', 'B1'),
+('9020', 'Melissa', 'Torres Rey', '2001-08-09', 'melissa.torres@correo.co', 'A2'),
+('9030', 'Cristian', 'Galvis Soto', '1998-12-01', 'cristian.galvis@correo.co', 'C2'),
+('9040', 'Juliana', 'Pineda Mejia', '2004-05-22', 'juliana.pineda@correo.co', 'B1'),
+('9050', 'Hugo', 'Arevalo Diaz', '1979-07-30', 'hugo.arevalo@correo.co', 'A2'),
+('9060', 'Ximena', 'Rozo Gil', '2000-10-10', 'ximena.rozo@correo.co', 'B1');
 
-INSERT INTO PERSONA (documento, nombres, apellidos, fecha_nacimiento, tipo_persona,
-                     licencia, horas_instruccion, codigo_sede, correo, horas_practica) VALUES
-('1010', 'Wilson', 'Ardila Mora', '1980-03-12', 'instructor', 'INS-3301', 8400, 'BOG', NULL, NULL),
-('1020', 'Claudia', 'Benavides Paz', '1988-07-25', 'instructor', 'INS-4472', 3100, 'MED', NULL, NULL),
-('1030', 'Rafael', 'Contreras Gil', '1975-11-02', 'instructor', 'INS-2208', 12000, 'BOG', NULL, NULL),
-('1040', 'Angela Maria', 'Rendon Cruz', '1992-01-18', 'ambos', 'INS-5019', 1500, 'BUC', 'angela.rendon@correo.co', 12),
-('2010', 'Santiago', 'Uribe Lara', '2000-05-30', 'alumno', NULL, NULL, NULL, 'santiago.uribe@correo.co', 20),
-('2020', 'Melissa', 'Torres Rey', '1997-09-14', 'alumno', NULL, NULL, NULL, 'melissa.torres@correo.co', 6),
-('2030', 'Cristian', 'Galvis Soto', '1985-12-01', 'alumno', NULL, NULL, NULL, 'cristian.galvis@correo.co', 18),
-('2040', 'Juliana', 'Pineda Mejia', '2003-04-22', 'alumno', NULL, NULL, NULL, 'juliana.pineda@correo.co', 2),
-('2050', 'Orlando', 'Bernal Rojas', '1979-08-08', 'alumno', NULL, NULL, NULL, 'orlando.bernal@correo.co', 25);
+INSERT INTO INSTRUCTOR (documento, nombres, apellidos, fecha_nacimiento, licencia_instructor, codigo_sede) VALUES
+('8010', 'Orlando', 'Bernal Rojas', '1976-04-03', 'INS-3301', 'KEN'),
+('8020', 'Claudia', 'Benavides Paz', '1983-09-12', 'INS-4472', 'ENG'),
+('8030', 'Rafael', 'Contreras Gil', '1969-01-25', 'INS-2208', 'KEN'),
+('8040', 'Angela Maria', 'Rendon Cruz', '1990-06-30', 'INS-5019', 'USA'),
+('8050', 'Jairo', 'Ospina Vela', '1981-02-17', 'INS-6120', 'USA');
 
-INSERT INTO PER_TELEFONO (documento, telefono) VALUES
-('1010', '3001112233'),
-('1010', '6015550101'),
-('1020', '3104445566'),
-('1030', '3207778899'),
-('1040', '3156667788'),
-('1040', '3019990000'),
-('2010', '3121234567'),
-('2020', '3189876543'),
-('2030', '3001239876'),
-('2030', '6047771234'),
-('2040', '3165554433'),
-('2050', '3112223344');
+INSERT INTO ALU_TELEFONO (documento, telefono) VALUES
+('9010', '3001230001'),
+('9010', '6011230002'),
+('9020', '3101230003'),
+('9030', '3111230004'),
+('9040', '3121230005'),
+('9040', '6011230006'),
+('9050', '3131230007'),
+('9060', '3141230008');
 
-INSERT INTO VEHICULO (placa, modelo, marca, codigo_sede) VALUES
-('ABC-101', 'Spark', 'Chevrolet', 'BOG'),
-('XYZ-205', 'Logan', 'Renault', 'MED'),
-('DEF-310', 'Picanto', 'Kia', 'BUC'),
-('MTO-11F', 'NKD 125', 'AKT', 'BOG'),
-('TRK-701', 'NHR', 'Chevrolet', 'BOG');
+INSERT INTO OFERTA (codigo_sede, codigo_curso, precio) VALUES
+('KEN', 'A2', 950000),
+('KEN', 'B1', 1450000),
+('ENG', 'B1', 1400000),
+('ENG', 'C2', 2300000),
+('USA', 'B1', 1550000),
+('USA', 'A2', 990000),
+('USA', 'A1', 780000);
+
+INSERT INTO VEHICULO (placa, marca, anio, doc_responsable) VALUES
+('ABC123', 'Chevrolet', 2022, '8010'),
+('XYZ789', 'Renault', 2021, '8020'),
+('MTO11F', 'AKT', 2023, '8030'),
+('TRK701', 'Chevrolet', 2019, '8040'),
+('BUS900', 'Hino', 2018, '8050');
 
 INSERT INTO CARRO (placa, num_puertas) VALUES
-('ABC-101', 5),
-('XYZ-205', 4),
-('DEF-310', 5);
+('ABC123', 5),
+('XYZ789', 4);
 
 INSERT INTO MOTO (placa, cilindraje_cc) VALUES
-('MTO-11F', 125.00);
+('MTO11F', 150);
 
-INSERT INTO PRACTICA (id_practica, codigo, fecha, hora_inicio, recorrido, placa, sede_practica) VALUES
-(1, 'URB01', '2026-12-01', '07:00', 'Ruta urbana', 'ABC-101', 'BOG'),
-(2, 'PAR02', '2026-12-01', '08:00', 'Parqueo', 'XYZ-205', 'MED'),
-(3, 'URB03', '2026-12-02', '07:00', 'Ruta urbana', 'DEF-310', 'BUC'),
-(4, 'URB01', '2026-12-03', '07:00', 'Ruta urbana', 'ABC-101', 'BOG'),
-(5, 'MOT05', '2026-12-03', '15:00', 'Circuito motos', 'MTO-11F', 'BOG'),
-(6, 'CAR06', '2026-12-04', '06:00', 'Carretera', 'XYZ-205', 'MED');
+INSERT INTO CAMION (placa, capacidad_ton) VALUES
+('TRK701', 4.5);
 
-INSERT INTO INSTRUCCION (documento, id_practica, rol) VALUES
-('1010', 1, 'principal'),
-('1040', 1, 'apoyo'),
-('1020', 2, 'principal'),
-('1030', 2, 'apoyo'),
-('1040', 3, 'principal'),
-('1020', 3, 'apoyo'),
-('1030', 4, 'principal'),
-('1010', 4, 'apoyo'),
-('1030', 5, 'principal'),
-('1010', 5, 'apoyo'),
-('1020', 6, 'principal'),
-('1040', 6, 'apoyo');
-
-INSERT INTO INSCRIPCION (documento, id_practica, turno, nivel) VALUES
-('2010', 1, '12', 'basico'),
-('2010', 3, '5', 'basico'),
-('2010', 4, '14', 'basico'),
-('2020', 1, '2', 'avanzado'),
-('2020', 2, '8', 'basico'),
-('2030', 2, '1', 'avanzado'),
-('2030', 6, '3', 'avanzado'),
-('2040', 3, '20', 'basico'),
-('2040', 6, '22', 'basico'),
-('2050', 1, '15', 'basico'),
-('2050', 3, '9', 'basico'),
-('2050', 4, '4', 'avanzado'),
-('1040', 2, '18', 'basico');
-
-
+INSERT INTO PRACTICA (doc_alumno, doc_instructor, placa, fecha, hora, kilometros) VALUES
+('9010', '8010', 'ABC123', '2026-11-10', '07:00', 12),
+('9010', '8010', 'ABC123', '2026-11-12', '07:00', 15),
+('9010', '8020', 'XYZ789', '2026-11-14', '09:00', 18),
+('9040', '8010', 'ABC123', '2026-11-10', '09:00', 10),
+('9040', '8020', 'XYZ789', '2026-11-11', '15:00', 14),
+('9060', '8040', 'XYZ789', '2026-11-13', '10:00', 9),
+('9060', '8020', 'ABC123', '2026-11-16', '11:00', 8),
+('9020', '8030', 'MTO11F', '2026-11-11', '08:00', 20),
+('9050', '8030', 'MTO11F', '2026-11-12', '08:00', 22),
+('9030', '8040', 'TRK701', '2026-11-15', '06:30', 30);
 
 COMMIT;

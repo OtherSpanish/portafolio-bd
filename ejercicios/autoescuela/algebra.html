@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../css/estilos.css?v=20261116c">
+<link rel="stylesheet" href="../../css/estilos.css?v=20261116d">
 </head>
 <body>
 <div class="sky"></div>
@@ -29,52 +29,50 @@
 
   <main>
 <section class="panel"><details><summary>Ver enunciado del ejercicio</summary>
-<p>Una escuela de conducción con sedes en varias ciudades quiere organizar sus prácticas en una base de datos.</p>
+<p>Una escuela de conducción con tres sedes quiere registrar sus cursos y las prácticas de los alumnos.</p>
 <ul>
-  <li>Cada <strong>SEDE</strong> tiene un código de tres letras, nombre, ciudad y país.</li>
-  <li>Cada <strong>INSTRUCTOR</strong> tiene identificación, nombre, número de licencia, horas de instrucción y uno o varios teléfonos. Trabaja en exactamente una sede.</li>
-  <li>Cada <strong>VEHÍCULO</strong> se identifica por su placa y tiene modelo, marca y capacidad. Está en una sede.</li>
-  <li>Una <strong>PRÁCTICA</strong> tiene un identificador, un código (por ejemplo <code>URB01</code>), fecha, hora de inicio y recorrido. La programa una sede y usa un solo vehículo.</li>
-  <li>Cada práctica la dirigen uno o más instructores con un <em>rol</em> (principal o apoyo), y un instructor puede dirigir muchas prácticas.</li>
-  <li>Los <strong>ALUMNOS</strong> se registran con identificación, nombre (nombres y apellidos), fecha de nacimiento, correo y horas de práctica acumuladas; la edad se calcula. Un alumno se inscribe en prácticas y en cada inscripción se guarda su <em>turno</em> y su <em>nivel</em>.</li>
-  <li>Un instructor también puede ser alumno (por ejemplo para sacar otra categoría). Algunos vehículos son carros (se guarda el número de puertas) y otros motos (se guarda el cilindraje); el camión de práctica no es ni lo uno ni lo otro.</li>
+  <li>Cada <strong>SEDE</strong> tiene código, nombre y dirección. En cada sede trabajan varios instructores y se ofrecen varios cursos, cada uno con su precio en esa sede.</li>
+  <li>Cada <strong>CURSO</strong> corresponde a una categoría de licencia (A1, A2, B1, C2) y tiene nombre, horas de teoría y horas de práctica.</li>
+  <li>Los <strong>ALUMNOS</strong> y los <strong>INSTRUCTORES</strong> tienen documento, nombre (nombres y apellidos) y fecha de nacimiento; la edad se calcula. El alumno además tiene correo y teléfonos y está matriculado en un curso. El instructor tiene un número de licencia de instructor. Un instructor no puede ser alumno de la misma escuela.</li>
+  <li>Cada <strong>VEHÍCULO</strong> tiene placa, marca y año, y un instructor responsable (cada instructor responde como mucho por uno). Los carros guardan el número de puertas, las motos el cilindraje y los camiones la capacidad en toneladas; el bus escolar no es ninguno de esos.</li>
+  <li>En cada <strong>PRÁCTICA</strong> participan un alumno, un instructor y un vehículo, y se guarda la fecha, la hora y los kilómetros recorridos.</li>
 </ul>
-<p class="nota">Entidades base: <strong>Instructor</strong>, <strong>Alumno</strong> y <strong>Sede</strong>. Entidades inventadas para completar el problema: <strong>Vehículo</strong> y <strong>Práctica</strong>.</p></details></section>
+<p class="nota">Entidades base: <strong>Instructor</strong>, <strong>Alumno</strong> y <strong>Sede</strong>. Entidades inventadas para completar el problema: <strong>Curso</strong> y <strong>Vehículo</strong>.</p></details></section>
 <section class="panel">
 <h2>Consulta 1</h2>
 
-<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>nombre, ciudad</sub>(SEDE)</span>: Muestra el nombre y la ciudad de todas las sedes.</p>
-<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombre</td><td class="xl-cab">ciudad</td></tr><tr><td class="xl-fila">2</td><td class="">Sede Belen</td><td class="">Medellin</td></tr><tr><td class="xl-fila">3</td><td class="">Sede Cabecera</td><td class="">Bucaramanga</td></tr><tr><td class="xl-fila">4</td><td class="">Sede Suba</td><td class="">Bogota</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>codigo_curso, nombre</sub>(CURSO)</span>: Muestra los cursos (categorías) que hay.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo_curso</td><td class="xl-cab">nombre</td></tr><tr><td class="xl-fila">2</td><td class="">A1</td><td class="">Moto hasta 125 cc</td></tr><tr><td class="xl-fila">3</td><td class="">A2</td><td class="">Moto de mas de 125 cc</td></tr><tr><td class="xl-fila">4</td><td class="">B1</td><td class="">Carro particular</td></tr><tr><td class="xl-fila">5</td><td class="">C2</td><td class="">Camion rigido</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 2</h2>
 
-<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>codigo, fecha, recorrido</sub>(<span class="op">σ</span><sub>recorrido='Ruta urbana'</sub>(PRACTICA))</span>: Muestra las prácticas de ruta urbana.</p>
-<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo</td><td class="xl-cab">fecha</td><td class="xl-cab">recorrido</td></tr><tr><td class="xl-fila">2</td><td class="">URB01</td><td class="">2026-12-01</td><td class="">Ruta urbana</td></tr><tr><td class="xl-fila">3</td><td class="">URB03</td><td class="">2026-12-02</td><td class="">Ruta urbana</td></tr><tr><td class="xl-fila">4</td><td class="">URB01</td><td class="">2026-12-03</td><td class="">Ruta urbana</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>codigo_sede, precio</sub>(<span class="op">σ</span><sub>codigo_curso='B1'</sub>(OFERTA))</span>: Muestra el precio del curso B1 en cada sede.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo_sede</td><td class="xl-cab">precio</td></tr><tr><td class="xl-fila">2</td><td class="">ENG</td><td class="xl-num">1400000.00</td></tr><tr><td class="xl-fila">3</td><td class="">KEN</td><td class="xl-num">1450000.00</td></tr><tr><td class="xl-fila">4</td><td class="">USA</td><td class="xl-num">1550000.00</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 3</h2>
 
-<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>placa, modelo</sub>(<span class="op">σ</span><sub>marca='Chevrolet'</sub>(VEHICULO))</span>: Obtiene los vehículos de marca Chevrolet.</p>
-<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">placa</td><td class="xl-cab">modelo</td></tr><tr><td class="xl-fila">2</td><td class="">ABC-101</td><td class="">Spark</td></tr><tr><td class="xl-fila">3</td><td class="">TRK-701</td><td class="">NHR</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>placa</sub>(VEHICULO) <span class="op">−</span> (<span class="op">π</span><sub>placa</sub>(CARRO) <span class="op">∪</span> <span class="op">π</span><sub>placa</sub>(MOTO) <span class="op">∪</span> <span class="op">π</span><sub>placa</sub>(CAMION))</span>: Identifica los vehículos que no son carro, ni moto, ni camión.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">placa</td></tr><tr><td class="xl-fila">2</td><td class="">BUS900</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 4</h2>
 
-<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>placa</sub>(VEHICULO) <span class="op">−</span> <span class="op">π</span><sub>placa</sub>(PRACTICA)</span>: Identifica los vehículos que no se han usado en ninguna práctica.</p>
-<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">placa</td></tr><tr><td class="xl-fila">2</td><td class="">TRK-701</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>documento</sub>(INSTRUCTOR) <span class="op">−</span> <span class="op">π</span><sub>doc_instructor</sub>(PRACTICA)</span>: Obtiene los instructores que no han dado prácticas.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">documento</td></tr><tr><td class="xl-fila">2</td><td class="">8050</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 5</h2>
 
-<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>documento</sub>(INSTRUCCION) <span class="op">∩</span> <span class="op">π</span><sub>documento</sub>(INSCRIPCION)</span>: Obtiene las personas que han sido instructores y también alumnos.</p>
-<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">documento</td></tr><tr><td class="xl-fila">2</td><td class="">1040</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>nombres, apellidos, placa</sub>(INSTRUCTOR <span class="op">⋈</span><sub>documento=doc_responsable</sub> VEHICULO)</span>: Muestra cada instructor con el vehículo del que es responsable.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">placa</td></tr><tr><td class="xl-fila">2</td><td class="">Orlando</td><td class="">Bernal Rojas</td><td class="">ABC123</td></tr><tr><td class="xl-fila">3</td><td class="">Jairo</td><td class="">Ospina Vela</td><td class="">BUS900</td></tr><tr><td class="xl-fila">4</td><td class="">Rafael</td><td class="">Contreras Gil</td><td class="">MTO11F</td></tr><tr><td class="xl-fila">5</td><td class="">Angela Maria</td><td class="">Rendon Cruz</td><td class="">TRK701</td></tr><tr><td class="xl-fila">6</td><td class="">Claudia</td><td class="">Benavides Paz</td><td class="">XYZ789</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
 <section class="panel">
 <h2>Consulta 6</h2>
 
-<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>codigo, fecha, modelo</sub>(PRACTICA <span class="op">⋈</span> VEHICULO)</span>: Muestra cada práctica con el modelo del vehículo que usa.</p>
-<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo</td><td class="xl-cab">fecha</td><td class="xl-cab">modelo</td></tr><tr><td class="xl-fila">2</td><td class="">PAR02</td><td class="">2026-12-01</td><td class="">Logan</td></tr><tr><td class="xl-fila">3</td><td class="">URB01</td><td class="">2026-12-01</td><td class="">Spark</td></tr><tr><td class="xl-fila">4</td><td class="">URB03</td><td class="">2026-12-02</td><td class="">Picanto</td></tr><tr><td class="xl-fila">5</td><td class="">MOT05</td><td class="">2026-12-03</td><td class="">NKD 125</td></tr><tr><td class="xl-fila">6</td><td class="">URB01</td><td class="">2026-12-03</td><td class="">Spark</td></tr><tr><td class="xl-fila">7</td><td class="">CAR06</td><td class="">2026-12-04</td><td class="">Logan</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>doc_alumno</sub>(<span class="op">σ</span><sub>placa='ABC123'</sub>(PRACTICA)) <span class="op">∩</span> <span class="op">π</span><sub>doc_alumno</sub>(<span class="op">σ</span><sub>placa='XYZ789'</sub>(PRACTICA))</span>: Obtiene los alumnos que han practicado en los dos carros.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">doc_alumno</td></tr><tr><td class="xl-fila">2</td><td class="xl-num">9010</td></tr><tr><td class="xl-fila">3</td><td class="xl-num">9040</td></tr><tr><td class="xl-fila">4</td><td class="xl-num">9060</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
 </section>
   </main>
 
@@ -83,8 +81,8 @@
   <footer>Universidad El Bosque · Bogotá D.C</footer>
 </div>
 
-<script src="../../js/estrellas.js?v=20261116c"></script>
-<script src="../../js/ejercicios.js?v=20261116c"></script>
+<script src="../../js/estrellas.js?v=20261116d"></script>
+<script src="../../js/ejercicios.js?v=20261116d"></script>
 <script>iniciarEtapa("algebra");</script>
 </body>
 </html>

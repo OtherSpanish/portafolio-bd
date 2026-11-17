@@ -28,21 +28,21 @@ var EJERCICIOS = [
   { id: "aeropuerto", titulo: "Aeropuerto", icono: "✈", carpeta: "ejercicios/aeropuerto/",
     descripcion: "Pilotos, pasajeros, bases, aviones y vuelos." },
   { id: "universidad", titulo: "Universidad", icono: "🎓", carpeta: "ejercicios/universidad/",
-    descripcion: "Profesores, estudiantes, sedes, salones y cursos." },
+    descripcion: "Sedes, programas, profesores, estudiantes, cursos y prerrequisitos." },
   { id: "gimnasio", titulo: "Gimnasio", icono: "🏋", carpeta: "ejercicios/gimnasio/",
-    descripcion: "Entrenadores, socios, sedes, salas y clases grupales." },
+    descripcion: "Socios, planes, entrenadores, sedes, asistencias y máquinas." },
   { id: "terminal", titulo: "Terminal de transporte", icono: "🚌", carpeta: "ejercicios/terminal/",
-    descripcion: "Conductores, viajeros, terminales, buses y viajes." },
+    descripcion: "Terminales, empresas, rutas de origen y destino, buses, conductores y tiquetes." },
   { id: "teatro", titulo: "Teatro", icono: "🎭", carpeta: "ejercicios/teatro/",
-    descripcion: "Actores, espectadores, teatros, salas y funciones." },
+    descripcion: "Teatros, obras con géneros, funciones, reparto, suplentes y boletas." },
   { id: "turismo", titulo: "Agencia de turismo", icono: "🧭", carpeta: "ejercicios/turismo/",
-    descripcion: "Guías, turistas, oficinas, vehículos y tours." },
+    descripcion: "Paquetes nacionales e internacionales, destinos, hoteles, guías, oficinas y ventas." },
   { id: "clinica", titulo: "Clínica", icono: "🩺", carpeta: "ejercicios/clinica/",
-    descripcion: "Médicos, pacientes, sedes, consultorios y jornadas de salud." },
+    descripcion: "Pacientes, EPS, médicos, especialidades, citas presenciales y virtuales y fórmulas." },
   { id: "autoescuela", titulo: "Escuela de conducción", icono: "🚗", carpeta: "ejercicios/autoescuela/",
-    descripcion: "Instructores, alumnos, sedes, vehículos y prácticas." },
+    descripcion: "Alumnos, instructores, vehículos, cursos por sede y prácticas (relación ternaria)." },
   { id: "biblioteca", titulo: "Red de bibliotecas", icono: "📚", carpeta: "ejercicios/biblioteca/",
-    descripcion: "Bibliotecarios, lectores, sedes, salas y talleres." }
+    descripcion: "Libros, autores, editoriales, ejemplares por sede, lectores y préstamos." }
 ];
 
 var NOTACIONES = [

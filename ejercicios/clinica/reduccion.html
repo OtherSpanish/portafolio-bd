@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../css/estilos.css?v=20261116c">
+<link rel="stylesheet" href="../../css/estilos.css?v=20261116d">
 </head>
 <body>
 <div class="sky"></div>
@@ -29,171 +29,166 @@
 
   <main>
 <section class="panel"><details><summary>Ver enunciado del ejercicio</summary>
-<p>Una clínica con sedes en varias ciudades organiza jornadas de salud (vacunación, odontología, pediatría…) y quiere guardarlas en una base de datos.</p>
+<p>Una clínica con tres sedes en Bogotá quiere organizar sus citas, médicos y fórmulas.</p>
 <ul>
-  <li>Cada <strong>SEDE</strong> tiene un código de tres letras, nombre, ciudad y país.</li>
-  <li>Cada <strong>MÉDICO</strong> tiene identificación, nombre, registro médico, años de experiencia y uno o varios teléfonos. Pertenece a exactamente una sede.</li>
-  <li>Cada <strong>CONSULTORIO</strong> tiene un código, bloque, piso y capacidad, y queda en una sede.</li>
-  <li>Una <strong>JORNADA</strong> tiene un identificador, un código (por ejemplo <code>VAC01</code>), fecha, hora de inicio y especialidad. La realiza una sede y se hace en un solo consultorio.</li>
-  <li>En cada jornada atienden uno o más médicos con un <em>rol</em> (principal o apoyo), y un médico puede atender muchas jornadas.</li>
-  <li>Los <strong>PACIENTES</strong> se registran con identificación, nombre (nombres y apellidos), fecha de nacimiento, correo y número de visitas; la edad se calcula. Un paciente agenda citas en las jornadas y en cada cita se guarda el <em>turno</em> y el <em>régimen</em> (contributivo o subsidiado).</li>
-  <li>Un médico también puede ser paciente. Algunos consultorios son de observación (se guarda el número de camillas) y otros son laboratorios (se guarda el área en m²); los consultorios generales no son ni lo uno ni lo otro.</li>
+  <li>Cada <strong>PACIENTE</strong> tiene documento, nombre (nombres y apellidos), fecha de nacimiento, tipo de sangre y teléfonos; la edad se calcula. Está afiliado a una <strong>EPS</strong> (NIT y nombre).</li>
+  <li>Cada <strong>MÉDICO</strong> tiene identificación, nombre (nombres y apellidos), registro médico y una <strong>ESPECIALIDAD</strong>. Atiende en varias <strong>SEDES</strong> ciertos días de la semana.</li>
+  <li>Una <strong>CITA</strong> tiene número, fecha, hora y motivo; es de un paciente y la atiende un médico. Las citas presenciales se hacen en una sede y en un consultorio; las virtuales tienen un enlace y una plataforma. Toda cita es de uno de los dos tipos.</li>
+  <li>En una cita se pueden formular varios <strong>MEDICAMENTOS</strong> (código, nombre y presentación), cada uno con su dosis.</li>
 </ul>
-<p class="nota">Entidades base: <strong>Médico</strong>, <strong>Paciente</strong> y <strong>Sede</strong>. Entidades inventadas para completar el problema: <strong>Consultorio</strong> y <strong>Jornada</strong>.</p></details></section>
+<p class="nota">Entidades base: <strong>Médico</strong>, <strong>Paciente</strong> y <strong>Sede</strong>. Entidades inventadas para completar el problema: <strong>EPS</strong>, <strong>Especialidad</strong>, <strong>Cita</strong> y <strong>Medicamento</strong>.</p></details></section>
 <section class="panel">
 <h2>Diagrama de la reducción</h2>
-<div class="diagrama tablero"><svg xmlns="http://www.w3.org/2000/svg" viewBox="25 -116 2370 1522" font-family="Arial, Helvetica, sans-serif" role="img">
+<div class="diagrama tablero"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-301 -269 2539 2078" font-family="Arial, Helvetica, sans-serif" role="img">
 <defs><pattern id="reduccion_g1" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e3e6ea" stroke-width="1"/></pattern><pattern id="reduccion_g2" width="100" height="100" patternUnits="userSpaceOnUse"><rect width="100" height="100" fill="url(#reduccion_g1)"/><path d="M 100 0 L 0 0 0 100" fill="none" stroke="#cfd4da" stroke-width="1.2"/></pattern></defs>
-<rect x="25" y="-116" width="2370" height="1522" fill="#ffffff"/>
-<rect x="25" y="-116" width="2370" height="1522" fill="url(#reduccion_g2)"/>
-<text x="1210" y="-82" text-anchor="middle" font-size="20" fill="#000">REDUCCIÓN A TABLAS</text>
-<polyline points="303.0,180.0 415.0,180.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="485.0,180.0 610.0,180.0 610.0,315.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="800.0,350.0 965.0,350.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1035.0,350.0 1235.0,350.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1365.0,350.0 1565.0,350.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1635.0,350.0 1815.0,350.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="700.0,385.0 700.0,585.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="700.0,635.0 700.0,797.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="765.0,820.0 965.0,820.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1035.0,820.0 1170.0,820.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1300.0,373.0 1300.0,555.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1300.0,605.0 1300.0,790.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1870.0,373.0 1870.0,820.0 1635.0,820.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1565.0,820.0 1430.0,820.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1300.0,850.0 1300.0,1005.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1300.0,1055.0 1300.0,1207.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1235.0,1230.0 935.0,1230.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="865.0,1230.0 380.0,1230.0 380.0,370.0 600.0,370.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1850.0,327.0 1850.0,200.0 1765.0,200.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1730.0,175.0 1730.0,93.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1950.0,327.0 1950.0,200.0 2085.0,200.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="2120.0,175.0 2120.0,93.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="600.0,330.0 524.7,330.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="655.0,315.0 655.0,256.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="705.0,315.0 705.0,106.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="740.0,315.0 740.0,160.0 808.0,160.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="780.0,315.0 780.0,240.0 850.3,240.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="800.0,328.0 880.0,328.0 880.0,316.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="610.0,385.0 610.0,470.0 577.7,470.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="645.0,385.0 645.0,535.0 608.4,535.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="790.0,385.0 790.0,470.0 828.0,470.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="755.0,385.0 755.0,535.0 818.3,535.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="200.0,157.0 200.0,250.0 154.7,250.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="260.0,157.0 260.0,250.0 263.7,250.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1270.0,327.0 1270.0,250.0 1229.0,250.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1330.0,327.0 1330.0,250.0 1384.7,250.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1260.0,373.0 1260.0,450.0 1202.7,450.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1340.0,373.0 1340.0,450.0 1404.0,450.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1985.0,340.0 2025.0,340.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1950.0,373.0 1950.0,450.0 2017.0,450.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1920.0,373.0 1920.0,520.0 2044.0,520.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1840.0,373.0 1840.0,470.0 1789.0,470.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1632.3,70.0 1565.0,70.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1700.0,47.0 1700.0,-4.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="2186.9,70.0 2225.0,70.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="2120.0,47.0 2120.0,-4.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="635.0,820.0 564.7,820.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="670.0,843.0 670.0,910.0 603.0,910.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="730.0,843.0 730.0,910.0 798.3,910.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1230.0,790.0 1230.0,700.0 1163.0,700.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1370.0,790.0 1370.0,690.0 1437.3,690.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1220.0,850.0 1220.0,930.0 1129.7,930.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1260.0,850.0 1260.0,990.0 1194.0,990.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1380.0,850.0 1380.0,930.0 1451.6,930.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1340.0,850.0 1340.0,995.0 1415.0,995.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1415.0,790.0 1415.0,730.0 1588.6,730.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1255.0,1253.0 1255.0,1330.0 1194.7,1330.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1300.0,1253.0 1300.0,1334.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1345.0,1253.0 1345.0,1330.0 1431.3,1330.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<polyline points="1365.0,1230.0 1463.3,1230.0" fill="none" stroke="#000" stroke-width="1.3"/>
-<rect x="600.0" y="315.0" width="200.0" height="70.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="700.0" y="355.0" text-anchor="middle" font-size="14" fill="#000">PERSONA</text>
-<rect x="157.0" y="157.0" width="146.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="230.0" y="185.0" text-anchor="middle" font-size="14" fill="#000">PER_TELEFONO</text>
-<rect x="1235.0" y="327.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1300.0" y="355.0" text-anchor="middle" font-size="14" fill="#000">SEDE</text>
-<rect x="1815.0" y="327.0" width="170.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1900.0" y="355.0" text-anchor="middle" font-size="14" fill="#000">CONSULTORIO</text>
-<rect x="1632.3" y="47.0" width="135.4" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1700.0" y="75.0" text-anchor="middle" font-size="14" fill="#000">OBSERVACION</text>
-<rect x="2053.1" y="47.0" width="133.9" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="2120.0" y="75.0" text-anchor="middle" font-size="14" fill="#000">LABORATORIO</text>
-<rect x="635.0" y="797.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="700.0" y="825.0" text-anchor="middle" font-size="14" fill="#000">ATENCION</text>
-<rect x="1170.0" y="790.0" width="260.0" height="60.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1300.0" y="825.0" text-anchor="middle" font-size="14" fill="#000">JORNADA</text>
-<rect x="1235.0" y="1207.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1300.0" y="1235.0" text-anchor="middle" font-size="14" fill="#000">CITA</text>
-<polygon points="450,155.0 485.0,180 450,205.0 415.0,180" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="450.0" y="184.5" text-anchor="middle" font-size="13" fill="#000"></text>
-<polygon points="1000,325.0 1035.0,350 1000,375.0 965.0,350" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="354.5" text-anchor="middle" font-size="13" fill="#000"></text>
-<polygon points="1600,325.0 1635.0,350 1600,375.0 1565.0,350" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1600.0" y="354.5" text-anchor="middle" font-size="13" fill="#000"></text>
-<polygon points="700,585.0 735.0,610 700,635.0 665.0,610" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="700.0" y="614.5" text-anchor="middle" font-size="13" fill="#000"></text>
-<polygon points="1000,795.0 1035.0,820 1000,845.0 965.0,820" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="824.5" text-anchor="middle" font-size="13" fill="#000"></text>
-<polygon points="1300,555.0 1335.0,580 1300,605.0 1265.0,580" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1300.0" y="584.5" text-anchor="middle" font-size="13" fill="#000"></text>
-<polygon points="1600,795.0 1635.0,820 1600,845.0 1565.0,820" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1600.0" y="824.5" text-anchor="middle" font-size="13" fill="#000"></text>
-<polygon points="1300,1005.0 1335.0,1030 1300,1055.0 1265.0,1030" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1300.0" y="1034.5" text-anchor="middle" font-size="13" fill="#000"></text>
-<polygon points="900,1205.0 935.0,1230 900,1255.0 865.0,1230" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="900.0" y="1234.5" text-anchor="middle" font-size="13" fill="#000"></text>
-<polygon points="1730,175.0 1765.0,200 1730,225.0 1695.0,200" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1730.0" y="204.5" text-anchor="middle" font-size="13" fill="#000"></text>
-<polygon points="2120,175.0 2155.0,200 2120,225.0 2085.0,200" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="2120.0" y="204.5" text-anchor="middle" font-size="13" fill="#000"></text>
-<ellipse cx="480.0" cy="330.0" rx="44.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="480.0" y="334.0" text-anchor="middle" font-size="12" fill="#000">documento</text><line x1="450.3" y1="337.0" x2="509.7" y2="337.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="655.0" cy="240.0" rx="38.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="655.0" y="244.0" text-anchor="middle" font-size="12" fill="#000">nombres</text>
-<ellipse cx="705.0" cy="90.0" rx="38.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="705.0" y="94.0" text-anchor="middle" font-size="12" fill="#000">apellidos</text>
-<ellipse cx="870.0" cy="160.0" rx="62.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="870.0" y="164.0" text-anchor="middle" font-size="12" fill="#000">fecha_nacimiento</text>
-<ellipse cx="900.0" cy="240.0" rx="49.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="900.0" y="244.0" text-anchor="middle" font-size="12" fill="#000">tipo_persona</text>
-<ellipse cx="880.0" cy="300.0" rx="49.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="880.0" y="304.0" text-anchor="middle" font-size="12" fill="#000">codigo_sede</text><line x1="846.0" y1="307.0" x2="914.0" y2="307.0" stroke="#000" stroke-width="1" stroke-dasharray="3 2"/>
-<ellipse cx="520.0" cy="470.0" rx="57.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="520.0" y="474.0" text-anchor="middle" font-size="12" fill="#000">registro_medico</text>
-<ellipse cx="545.0" cy="535.0" rx="63.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="545.0" y="539.0" text-anchor="middle" font-size="12" fill="#000">anios_experiencia</text>
-<ellipse cx="860.0" cy="470.0" rx="32.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="860.0" y="474.0" text-anchor="middle" font-size="12" fill="#000">correo</text>
-<ellipse cx="850.0" cy="535.0" rx="31.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="850.0" y="539.0" text-anchor="middle" font-size="12" fill="#000">visitas</text>
-<ellipse cx="110.0" cy="250.0" rx="44.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="110.0" y="254.0" text-anchor="middle" font-size="12" fill="#000">documento</text><line x1="80.3" y1="257.0" x2="139.7" y2="257.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="300.0" cy="250.0" rx="36.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="300.0" y="254.0" text-anchor="middle" font-size="12" fill="#000">telefono</text><line x1="278.7" y1="257.0" x2="321.3" y2="257.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="1180.0" cy="250.0" rx="49.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1180.0" y="254.0" text-anchor="middle" font-size="12" fill="#000">codigo_sede</text><line x1="1146.0" y1="257.0" x2="1214.0" y2="257.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="1420.0" cy="250.0" rx="35.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1420.0" y="254.0" text-anchor="middle" font-size="12" fill="#000">nombre</text>
-<ellipse cx="1170.0" cy="450.0" rx="32.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1170.0" y="454.0" text-anchor="middle" font-size="12" fill="#000">ciudad</text>
-<ellipse cx="1430.0" cy="450.0" rx="26.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1430.0" y="454.0" text-anchor="middle" font-size="12" fill="#000">pais</text>
-<ellipse cx="2090.0" cy="340.0" rx="65.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2090.0" y="344.0" text-anchor="middle" font-size="12" fill="#000">codigo_consultorio</text><line x1="2040.0" y1="347.0" x2="2140.0" y2="347.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="2050.0" cy="450.0" rx="33.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2050.0" y="454.0" text-anchor="middle" font-size="12" fill="#000">bloque</text>
-<ellipse cx="2070.0" cy="520.0" rx="26.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2070.0" y="524.0" text-anchor="middle" font-size="12" fill="#000">piso</text>
-<ellipse cx="1740.0" cy="470.0" rx="49.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1740.0" y="474.0" text-anchor="middle" font-size="12" fill="#000">codigo_sede</text><line x1="1706.0" y1="477.0" x2="1774.0" y2="477.0" stroke="#000" stroke-width="1" stroke-dasharray="3 2"/>
-<ellipse cx="1500.0" cy="70.0" rx="65.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1500.0" y="74.0" text-anchor="middle" font-size="12" fill="#000">codigo_consultorio</text><line x1="1450.0" y1="77.0" x2="1550.0" y2="77.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="1700.0" cy="-20.0" rx="51.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1700.0" y="-16.0" text-anchor="middle" font-size="12" fill="#000">num_camillas</text>
-<ellipse cx="2290.0" cy="70.0" rx="65.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2290.0" y="74.0" text-anchor="middle" font-size="12" fill="#000">codigo_consultorio</text><line x1="2240.0" y1="77.0" x2="2340.0" y2="77.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="2120.0" cy="-20.0" rx="38.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2120.0" y="-16.0" text-anchor="middle" font-size="12" fill="#000">area_m2</text>
-<ellipse cx="520.0" cy="820.0" rx="44.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="520.0" y="824.0" text-anchor="middle" font-size="12" fill="#000">documento</text><line x1="490.3" y1="827.0" x2="549.7" y2="827.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="560.0" cy="910.0" rx="43.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="560.0" y="914.0" text-anchor="middle" font-size="12" fill="#000">id_jornada</text><line x1="532.0" y1="917.0" x2="588.0" y2="917.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="820.0" cy="910.0" rx="21.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="820.0" y="914.0" text-anchor="middle" font-size="12" fill="#000">rol</text>
-<ellipse cx="1120.0" cy="700.0" rx="43.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1120.0" y="704.0" text-anchor="middle" font-size="12" fill="#000">id_jornada</text><line x1="1092.0" y1="707.0" x2="1148.0" y2="707.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="1470.0" cy="690.0" rx="32.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1470.0" y="694.0" text-anchor="middle" font-size="12" fill="#000">codigo</text>
-<ellipse cx="1100.0" cy="930.0" rx="29.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1100.0" y="934.0" text-anchor="middle" font-size="12" fill="#000">fecha</text>
-<ellipse cx="1150.0" cy="990.0" rx="44.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1150.0" y="994.0" text-anchor="middle" font-size="12" fill="#000">hora_inicio</text>
-<ellipse cx="1500.0" cy="930.0" rx="48.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1500.0" y="934.0" text-anchor="middle" font-size="12" fill="#000">especialidad</text>
-<ellipse cx="1480.0" cy="995.0" rx="65.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1480.0" y="999.0" text-anchor="middle" font-size="12" fill="#000">codigo_consultorio</text><line x1="1430.0" y1="1002.0" x2="1530.0" y2="1002.0" stroke="#000" stroke-width="1" stroke-dasharray="3 2"/>
-<ellipse cx="1640.0" cy="730.0" rx="51.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1640.0" y="734.0" text-anchor="middle" font-size="12" fill="#000">sede_jornada</text><line x1="1603.6" y1="737.0" x2="1676.4" y2="737.0" stroke="#000" stroke-width="1" stroke-dasharray="3 2"/>
-<ellipse cx="1150.0" cy="1330.0" rx="44.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1150.0" y="1334.0" text-anchor="middle" font-size="12" fill="#000">documento</text><line x1="1120.3" y1="1337.0" x2="1179.7" y2="1337.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="1300.0" cy="1350.0" rx="43.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1300.0" y="1354.0" text-anchor="middle" font-size="12" fill="#000">id_jornada</text><line x1="1272.0" y1="1357.0" x2="1328.0" y2="1357.0" stroke="#000" stroke-width="1"/>
-<ellipse cx="1460.0" cy="1330.0" rx="28.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1460.0" y="1334.0" text-anchor="middle" font-size="12" fill="#000">turno</text>
-<ellipse cx="1500.0" cy="1230.0" rx="36.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1500.0" y="1234.0" text-anchor="middle" font-size="12" fill="#000">regimen</text>
+<rect x="-301" y="-269" width="2539" height="2078" fill="#ffffff"/>
+<rect x="-301" y="-269" width="2539" height="2078" fill="url(#reduccion_g2)"/>
+<text x="968" y="-235" text-anchor="middle" font-size="20" fill="#000">REDUCCIÓN A TABLAS</text>
+<polyline points="697.5,0.0 785.8,0.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="845.8,0.0 934.0,0.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="565.0,616.0 719.5,616.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="779.5,616.0 934.0,616.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="435.0,616.0 282.2,616.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="222.2,616.0 69.4,616.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1000.0,593.0 1000.0,329.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1000.0,287.0 1000.0,23.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2000.0,593.0 2000.0,329.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2000.0,287.0 2000.0,23.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="625.0,1079.0 625.0,1343.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="625.0,1385.0 625.0,1649.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="690.0,1038.0 955.0,1038.0 955.0,859.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="955.0,817.5 955.0,639.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1303.4,1038.0 1045.0,1038.0 1045.0,859.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1045.0,817.5 1045.0,639.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1066.0,616.0 1470.5,616.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1530.5,616.0 1935.0,616.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="955.0,-23.0 955.0,-58.0 530.0,-58.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="470.0,-58.0 45.0,-58.0 45.0,-23.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2000.0,1649.0 2000.0,1165.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2000.0,1123.0 2000.0,639.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1935.0,1672.0 1342.5,1672.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1282.5,1672.0 690.0,1672.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1066.0,0.0 1114.0,0.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1045.0,-23.0 1045.0,-81.0 1061.7,-81.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1045.0,23.0 1045.0,81.0 1061.3,81.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="955.0,23.0 955.0,81.0 922.0,81.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1000.0,-23.0 1000.0,-157.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="985.0,-23.0 985.0,-108.0 974.3,-108.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1045.0,593.0 1045.0,535.0 1067.7,535.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="934.0,634.0 856.3,634.0 856.3,660.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1066.0,634.0 1141.0,634.0 1141.0,660.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="955.0,593.0 955.0,535.0 932.7,535.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1066.0,598.0 1215.7,598.0 1215.7,572.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="934.0,598.0 786.6,598.0 786.6,572.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2065.0,616.0 2113.0,616.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2045.0,593.0 2045.0,535.0 2061.7,535.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2045.0,639.0 2045.0,697.0 2061.3,697.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1935.0,634.0 1829.3,634.0 1829.3,660.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1955.0,593.0 1955.0,535.0 1936.4,535.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-69.4,616.0 -117.4,616.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="45.0,593.0 45.0,535.0 64.7,535.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="45.0,639.0 45.0,697.0 70.6,697.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="560.0,1056.0 512.0,1056.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="690.0,1074.0 738.0,1074.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="670.0,1033.0 670.0,975.0 696.0,975.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1446.6,1056.0 1494.6,1056.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1303.4,1074.0 1255.4,1074.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1420.0,1033.0 1420.0,975.0 1451.7,975.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="560.0,1672.0 512.0,1672.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="670.0,1695.0 670.0,1753.0 689.7,1753.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="670.0,1649.0 670.0,1591.0 686.0,1591.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2065.0,1672.0 2113.0,1672.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2045.0,1695.0 2045.0,1753.0 2071.0,1753.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2045.0,1649.0 2045.0,1591.0 2077.0,1591.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="545.0,593.0 545.0,535.0 567.7,535.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="545.0,639.0 545.0,697.0 568.0,697.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="455.0,593.0 455.0,535.0 429.0,535.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-65.0,0.0 -113.0,0.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="65.0,0.0 113.0,0.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1932.0,0.0 1884.0,0.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2068.0,0.0 2116.0,0.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="552.5,0.0 504.5,0.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="670.0,23.0 670.0,81.0 708.7,81.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<rect x="-65.0" y="-23.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="0.0" y="5.0" text-anchor="middle" font-size="14" fill="#000">EPS</text>
+<rect x="934.0" y="-23.0" width="132.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="5.0" text-anchor="middle" font-size="14" fill="#000">PACIENTE</text>
+<rect x="1932.0" y="-23.0" width="136.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="2000.0" y="5.0" text-anchor="middle" font-size="14" fill="#000">ESPECIALIDAD</text>
+<rect x="-69.4" y="593.0" width="138.8" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="0.0" y="621.0" text-anchor="middle" font-size="14" fill="#000">MEDICAMENTO</text>
+<rect x="934.0" y="593.0" width="132.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="621.0" text-anchor="middle" font-size="14" fill="#000">CITA</text>
+<rect x="560.0" y="1033.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="625.0" y="1061.0" text-anchor="middle" font-size="14" fill="#000">PRESENCIAL</text>
+<rect x="1303.4" y="1033.0" width="143.2" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1375.0" y="1061.0" text-anchor="middle" font-size="14" fill="#000">TELECONSULTA</text>
+<rect x="1935.0" y="593.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="2000.0" y="621.0" text-anchor="middle" font-size="14" fill="#000">MEDICO</text>
+<rect x="560.0" y="1649.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="625.0" y="1677.0" text-anchor="middle" font-size="14" fill="#000">SEDE</text>
+<rect x="1935.0" y="1649.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="2000.0" y="1677.0" text-anchor="middle" font-size="14" fill="#000">TURNO</text>
+<rect x="435.0" y="593.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="500.0" y="621.0" text-anchor="middle" font-size="14" fill="#000">FORMULA</text>
+<rect x="552.5" y="-23.0" width="145.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="625.0" y="5.0" text-anchor="middle" font-size="14" fill="#000">PAC_TELEFONO</text>
+<polygon points="815.75,-21.0 845.75,0.0 815.75,21.0 785.75,0.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="815.8" y="4.5" text-anchor="middle" font-size="13" fill="#000"></text>
+<polygon points="749.5,595.0 779.5,616.0 749.5,637.0 719.5,616.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="749.5" y="620.5" text-anchor="middle" font-size="13" fill="#000"></text>
+<polygon points="252.1875,595.0 282.1875,616.0 252.1875,637.0 222.1875,616.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="252.2" y="620.5" text-anchor="middle" font-size="13" fill="#000"></text>
+<polygon points="1000.0,287.0 1030.0,308.0 1000.0,329.0 970.0,308.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="312.5" text-anchor="middle" font-size="13" fill="#000"></text>
+<polygon points="2000.0,287.0 2030.0,308.0 2000.0,329.0 1970.0,308.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="2000.0" y="312.5" text-anchor="middle" font-size="13" fill="#000"></text>
+<polygon points="625.0,1343.0 655.0,1364.0 625.0,1385.0 595.0,1364.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="625.0" y="1368.5" text-anchor="middle" font-size="13" fill="#000"></text>
+<polygon points="955.0,817.5 985.0,838.5 955.0,859.5 925.0,838.5" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="955.0" y="843.0" text-anchor="middle" font-size="13" fill="#000"></text>
+<polygon points="1045.0,817.5 1075.0,838.5 1045.0,859.5 1015.0,838.5" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1045.0" y="843.0" text-anchor="middle" font-size="13" fill="#000"></text>
+<polygon points="1500.5,595.0 1530.5,616.0 1500.5,637.0 1470.5,616.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1500.5" y="620.5" text-anchor="middle" font-size="13" fill="#000"></text>
+<polygon points="500.0,-79.0 530.0,-58.0 500.0,-37.0 470.0,-58.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="500.0" y="-53.5" text-anchor="middle" font-size="13" fill="#000"></text>
+<polygon points="2000.0,1123.0 2030.0,1144.0 2000.0,1165.0 1970.0,1144.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="2000.0" y="1148.5" text-anchor="middle" font-size="13" fill="#000"></text>
+<polygon points="1312.5,1651.0 1342.5,1672.0 1312.5,1693.0 1282.5,1672.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1312.5" y="1676.5" text-anchor="middle" font-size="13" fill="#000"></text>
+<ellipse cx="1158.7" cy="0.0" rx="44.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1158.7" y="4.0" text-anchor="middle" font-size="12" fill="#000">documento</text><line x1="1129.0" y1="7.0" x2="1188.4" y2="7.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="1100.0" cy="-81.0" rx="38.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1100.0" y="-77.0" text-anchor="middle" font-size="12" fill="#000">nombres</text>
+<ellipse cx="1100.0" cy="81.0" rx="38.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1100.0" y="85.0" text-anchor="middle" font-size="12" fill="#000">apellidos</text>
+<ellipse cx="860.0" cy="81.0" rx="62.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="860.0" y="85.0" text-anchor="middle" font-size="12" fill="#000">fecha_nacimiento</text>
+<ellipse cx="1000.0" cy="-173.0" rx="46.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1000.0" y="-169.0" text-anchor="middle" font-size="12" fill="#000">tipo_sangre</text>
+<ellipse cx="940.0" cy="-108.0" rx="34.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="940.0" y="-104.0" text-anchor="middle" font-size="12" fill="#000">nit_eps</text><line x1="920.7" y1="-101.0" x2="959.3" y2="-101.0" stroke="#000" stroke-width="1" stroke-dasharray="3 2"/>
+<ellipse cx="1100.0" cy="535.0" rx="32.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1100.0" y="539.0" text-anchor="middle" font-size="12" fill="#000">id_cita</text><line x1="1082.7" y1="542.0" x2="1117.3" y2="542.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="856.3" cy="676.0" rx="29.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="856.3" y="680.0" text-anchor="middle" font-size="12" fill="#000">fecha</text>
+<ellipse cx="1141.0" cy="676.0" rx="27.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1141.0" y="680.0" text-anchor="middle" font-size="12" fill="#000">hora</text>
+<ellipse cx="900.0" cy="535.0" rx="32.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="900.0" y="539.0" text-anchor="middle" font-size="12" fill="#000">motivo</text>
+<ellipse cx="1215.7" cy="556.0" rx="44.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1215.7" y="560.0" text-anchor="middle" font-size="12" fill="#000">documento</text><line x1="1186.0" y1="563.0" x2="1245.4" y2="563.0" stroke="#000" stroke-width="1" stroke-dasharray="3 2"/>
+<ellipse cx="786.6" cy="556.0" rx="42.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="786.6" y="560.0" text-anchor="middle" font-size="12" fill="#000">id_medico</text><line x1="759.3" y1="563.0" x2="814.0" y2="563.0" stroke="#000" stroke-width="1" stroke-dasharray="3 2"/>
+<ellipse cx="2155.4" cy="616.0" rx="42.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2155.4" y="620.0" text-anchor="middle" font-size="12" fill="#000">id_medico</text><line x1="2128.0" y1="623.0" x2="2182.7" y2="623.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="2100.0" cy="535.0" rx="38.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2100.0" y="539.0" text-anchor="middle" font-size="12" fill="#000">nombres</text>
+<ellipse cx="2100.0" cy="697.0" rx="38.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2100.0" y="701.0" text-anchor="middle" font-size="12" fill="#000">apellidos</text>
+<ellipse cx="1829.3" cy="676.0" rx="57.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1829.3" y="680.0" text-anchor="middle" font-size="12" fill="#000">registro_medico</text>
+<ellipse cx="1880.0" cy="535.0" rx="56.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1880.0" y="539.0" text-anchor="middle" font-size="12" fill="#000">id_especialidad</text><line x1="1838.6" y1="542.0" x2="1921.4" y2="542.0" stroke="#000" stroke-width="1" stroke-dasharray="3 2"/>
+<ellipse cx="-189.4" cy="616.0" rx="72.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="-189.4" y="620.0" text-anchor="middle" font-size="12" fill="#000">codigo_medicamento</text><line x1="-246.4" y1="623.0" x2="-132.4" y2="623.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="100.0" cy="535.0" rx="35.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="100.0" y="539.0" text-anchor="middle" font-size="12" fill="#000">nombre</text>
+<ellipse cx="120.0" cy="697.0" rx="49.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="120.0" y="701.0" text-anchor="middle" font-size="12" fill="#000">presentacion</text>
+<ellipse cx="479.7" cy="1056.0" rx="32.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="479.7" y="1060.0" text-anchor="middle" font-size="12" fill="#000">id_cita</text><line x1="462.3" y1="1063.0" x2="497.0" y2="1063.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="782.0" cy="1076.0" rx="44.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="782.0" y="1080.0" text-anchor="middle" font-size="12" fill="#000">consultorio</text>
+<ellipse cx="745.0" cy="975.0" rx="49.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="745.0" y="979.0" text-anchor="middle" font-size="12" fill="#000">codigo_sede</text><line x1="711.0" y1="982.0" x2="779.0" y2="982.0" stroke="#000" stroke-width="1" stroke-dasharray="3 2"/>
+<ellipse cx="1526.9" cy="1056.0" rx="32.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1526.9" y="1060.0" text-anchor="middle" font-size="12" fill="#000">id_cita</text><line x1="1509.6" y1="1063.0" x2="1544.3" y2="1063.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="1222.7" cy="1076.0" rx="32.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1222.7" y="1080.0" text-anchor="middle" font-size="12" fill="#000">enlace</text>
+<ellipse cx="1495.0" cy="975.0" rx="43.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1495.0" y="979.0" text-anchor="middle" font-size="12" fill="#000">plataforma</text>
+<ellipse cx="463.0" cy="1672.0" rx="49.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="463.0" y="1676.0" text-anchor="middle" font-size="12" fill="#000">codigo_sede</text><line x1="429.0" y1="1679.0" x2="497.0" y2="1679.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="725.0" cy="1753.0" rx="35.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="725.0" y="1757.0" text-anchor="middle" font-size="12" fill="#000">nombre</text>
+<ellipse cx="725.0" cy="1591.0" rx="39.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="725.0" y="1595.0" text-anchor="middle" font-size="12" fill="#000">direccion</text>
+<ellipse cx="2155.4" cy="1672.0" rx="42.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2155.4" y="1676.0" text-anchor="middle" font-size="12" fill="#000">id_medico</text><line x1="2128.0" y1="1679.0" x2="2182.7" y2="1679.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="2120.0" cy="1753.0" rx="49.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2120.0" y="1757.0" text-anchor="middle" font-size="12" fill="#000">codigo_sede</text><line x1="2086.0" y1="1760.0" x2="2154.0" y2="1760.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="2100.0" cy="1591.0" rx="23.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2100.0" y="1595.0" text-anchor="middle" font-size="12" fill="#000">dia</text><line x1="2092.0" y1="1598.0" x2="2108.0" y2="1598.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="600.0" cy="535.0" rx="32.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="600.0" y="539.0" text-anchor="middle" font-size="12" fill="#000">id_cita</text><line x1="582.7" y1="542.0" x2="617.3" y2="542.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="640.0" cy="697.0" rx="72.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="640.0" y="701.0" text-anchor="middle" font-size="12" fill="#000">codigo_medicamento</text><line x1="583.0" y1="704.0" x2="697.0" y2="704.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="400.0" cy="535.0" rx="29.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="400.0" y="539.0" text-anchor="middle" font-size="12" fill="#000">dosis</text>
+<ellipse cx="-147.3" cy="0.0" rx="34.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="-147.3" y="4.0" text-anchor="middle" font-size="12" fill="#000">nit_eps</text><line x1="-166.7" y1="7.0" x2="-128.0" y2="7.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="148.3" cy="0.0" rx="35.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="148.3" y="4.0" text-anchor="middle" font-size="12" fill="#000">nombre</text>
+<ellipse cx="1827.7" cy="0.0" rx="56.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1827.7" y="4.0" text-anchor="middle" font-size="12" fill="#000">id_especialidad</text><line x1="1786.3" y1="7.0" x2="1869.0" y2="7.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="2151.3" cy="0.0" rx="35.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2151.3" y="4.0" text-anchor="middle" font-size="12" fill="#000">nombre</text>
+<ellipse cx="459.8" cy="0.0" rx="44.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="459.8" y="4.0" text-anchor="middle" font-size="12" fill="#000">documento</text><line x1="430.1" y1="7.0" x2="489.5" y2="7.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="745.0" cy="81.0" rx="36.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="745.0" y="85.0" text-anchor="middle" font-size="12" fill="#000">telefono</text><line x1="723.7" y1="88.0" x2="766.3" y2="88.0" stroke="#000" stroke-width="1"/>
 </svg></div><p class="nota">Cada rectángulo ya es una tabla con todas sus columnas, y los rombos vacíos muestran qué tablas quedan unidas por una llave. La llave primaria va subrayada y la foránea con subrayado punteado.</p>
 </section>
 <section class="panel">
 <h2><span class="paso">FASE 1</span>Fase 1 · Simplificar el MER-E</h2>
-
-<ul>
-  <li><strong>Regla 1 · multivaluado.</strong> <code>telefono</code> se vuelve una entidad nueva. Como cada teléfono es de una sola persona,
-      la relación es 1:N y la llave de PERSONA viaja a la tabla nueva: <code>PER_TELEFONO</code>.</li>
-  <li><strong>Regla 2 · compuesto.</strong> <code>nombreCompleto</code> desaparece y quedan sus hojas: <code>nombres</code> y <code>apellidos</code>.</li>
-  <li><strong>Derivado.</strong> <code>edad</code> no se guarda, se calcula cuando se consulta.</li>
-</ul>
+<ul><li><strong>Regla 1 · multivaluados.</strong> <code>telefono</code> de PACIENTE pasa a ser la tabla PAC_TELEFONO, con la llave de PACIENTE y el valor; así cada telefono queda en su propia fila.</li><li><strong>Regla 2 · compuestos.</strong> <code>nombreCompleto</code> de PACIENTE desaparece y quedan sus hojas: <code>nombres</code> y <code>apellidos</code>. <code>nombreCompleto</code> de MEDICO desaparece y quedan sus hojas: <code>nombres</code> y <code>apellidos</code>.</li><li><strong>Derivados.</strong> <code>edad</code> de PACIENTE no se guardan, se calculan cuando se consultan (quedan como vistas en el script 05).</li></ul>
 </section>
 <section class="panel">
 <h2><span class="paso">FASE 2</span>Fase 2 · Entidades y relaciones</h2>
 
 <p><strong>Regla 3:</strong> toda entidad se convierte en tabla y su llave pasa a ser la llave primaria. Después se revisa cada relación
-con su cardinalidad y sus participaciones:</p><div class="tabla-wrap"><table class="t"><thead><tr><th>Relación</th><th>Cardinalidad y participación</th><th>Regla</th><th>Resultado</th></tr></thead><tbody><tr><td>pertenecer</td><td>N:1 · MEDICO (1:1)</td><td>6</td><td>La llave de SEDE viaja al lado muchos: <code>codigo_sede</code> en PERSONA</td></tr><tr><td>ubicar</td><td>1:N · CONSULTORIO (1:1)</td><td>6</td><td><code>codigo_sede</code> en CONSULTORIO, obligatoria</td></tr><tr><td>realizar</td><td>1:N · JORNADA (1:1)</td><td>6</td><td><code>sede_jornada</code> en JORNADA, obligatoria</td></tr><tr><td>albergar</td><td>1:N · JORNADA (1:1)</td><td>6</td><td><code>codigo_consultorio</code> en JORNADA, obligatoria</td></tr><tr><td>atender</td><td>N:M</td><td>8</td><td>Tabla nueva ATENCION con las dos llaves y el <code>rol</code></td></tr><tr><td>agendar</td><td>N:M</td><td>8</td><td>Tabla nueva CITA con las dos llaves, <code>turno</code> y <code>regimen</code></td></tr></tbody></table></div>
+con su cardinalidad y sus participaciones:</p><div class="tabla-wrap"><table class="t"><thead><tr><th>Relación</th><th>Cardinalidad y participación</th><th>Regla</th><th>Resultado</th></tr></thead><tbody><tr><td>afiliar</td><td>N:1 · PACIENTE (1:1) · EPS (0:N)</td><td>6</td><td>La llave de EPS viaja al lado muchos: <code>nit_eps</code> en PACIENTE, obligatoria.</td></tr><tr><td>tener</td><td>N:1 · MEDICO (1:1) · ESPECIALIDAD (0:N)</td><td>6</td><td>La llave de ESPECIALIDAD viaja al lado muchos: <code>id_especialidad</code> en MEDICO y PAC_TELEFONO, obligatoria.</td></tr><tr><td>laborar</td><td>N:M · MEDICO (1:N) · SEDE (1:N)</td><td>8</td><td>Tabla nueva TURNO; su llave son las dos llaves (<code>id_medico</code>, <code>codigo_sede</code> y <code>dia</code>). Lleva <code>dia</code>.</td></tr><tr><td>solicitar</td><td>N:1 · CITA (1:1) · PACIENTE (0:N)</td><td>6</td><td>La llave de PACIENTE viaja al lado muchos: <code>documento</code> en CITA, obligatoria.</td></tr><tr><td>atender</td><td>N:1 · CITA (1:1) · MEDICO (0:N)</td><td>6</td><td>La llave de MEDICO viaja al lado muchos: <code>id_medico</code> en CITA, obligatoria.</td></tr><tr><td>recetar</td><td>N:M · CITA (0:N) · MEDICAMENTO (0:N)</td><td>8</td><td>Tabla nueva FORMULA; su llave son las dos llaves (<code>id_cita</code> y <code>codigo_medicamento</code>). Lleva <code>dosis</code>.</td></tr><tr><td>realizar</td><td>N:1 · PRESENCIAL (1:1) · SEDE (0:N)</td><td>6</td><td>La llave de SEDE viaja al lado muchos: <code>codigo_sede</code> en PRESENCIAL, obligatoria.</td></tr></tbody></table></div>
 </section>
 <section class="panel">
 <h2><span class="paso">FASE 2</span>Fase 2 · Jerarquías (regla 11)</h2>
-
-<ul>
-  <li><strong>PERSONA (solapada y total) → una sola tabla.</strong> Es la única estrategia que sirve cuando la jerarquía es solapada:
-      PERSONA se queda con los atributos de medico y de paciente y se le agrega la columna <code>tipo_persona</code>
-      ('medico', 'paciente' o 'ambos'). Las columnas de un tipo quedan vacías en las personas del otro.</li>
-  <li><strong>CONSULTORIO (disjunta y parcial) → supertipo más subtipos.</strong> Se conservan CONSULTORIO, OBSERVACION y LABORATORIO,
-      y las tres comparten la llave <code>codigo_consultorio</code>. No se usa “una tabla por subtipo” por que la jerarquía es parcial
-      y un consultorio general no tendría donde quedar.</li>
-</ul>
+<ul><li><strong>CITA (disjunta y total) → supertipo más subtipos.</strong> Se conservan CITA y PRESENCIAL y TELECONSULTA, y comparten la llave <code>id_cita</code>. Se escoge así porque CITA la usa FORMULA y además PRESENCIAL tiene su propia relación con SEDE.</li></ul>
 </section>
   </main>
 
@@ -202,8 +197,8 @@ con su cardinalidad y sus participaciones:</p><div class="tabla-wrap"><table cla
   <footer>Universidad El Bosque · Bogotá D.C</footer>
 </div>
 
-<script src="../../js/estrellas.js?v=20261116c"></script>
-<script src="../../js/ejercicios.js?v=20261116c"></script>
+<script src="../../js/estrellas.js?v=20261116d"></script>
+<script src="../../js/ejercicios.js?v=20261116d"></script>
 <script>iniciarEtapa("reduccion");</script>
 </body>
 </html>
