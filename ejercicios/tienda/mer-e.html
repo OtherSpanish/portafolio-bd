@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MER-E · Tienda en línea — Portafolio de Bases de Datos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../css/estilos.css?v=20261116e">
+</head>
+<body>
+<div class="sky"></div>
+<canvas id="stars"></canvas>
+
+<div class="wrap ancho">
+  <nav class="topbar">
+    <a href="../../index.html">← Portafolio</a>
+    <a href="../../seccion.html?s=mer-e">Todos los ejercicios de MER-E</a>
+  </nav>
+
+  <header class="interno">
+    <div class="eyebrow">Ejercicio · Tienda en línea</div>
+    <h1>MER-E</h1>
+    <p class="subtitle">Modelo entidad relación extendido: jerarquía de PAGO.</p>
+  </header>
+
+  <div class="ruta" id="ruta"></div>
+
+  <div class="bloque-notacion">
+    <span class="etq">Notación</span>
+    <div class="selector" id="selector-notacion"></div>
+  </div>
+
+  <main>
+<section class="panel"><details><summary>Ver enunciado del ejercicio</summary>
+<p>Una tienda en línea de tecnología que despacha a todo el país necesita su base de datos.</p>
+<ul>
+  <li>Cada <strong>CLIENTE</strong> tiene documento, nombre (nombres y apellidos), fecha de nacimiento, correo y teléfonos; la edad se calcula. Vive en una <strong>CIUDAD</strong> (nombre y departamento).</li>
+  <li>Un cliente hace <strong>PEDIDOS</strong> (número, fecha y estado). Cada pedido trae uno o varios productos, con la cantidad y el precio al que se vendió, y puede usar un <strong>CUPÓN</strong> de descuento (código, porcentaje y fecha de vencimiento).</li>
+  <li>Un pedido se paga en uno o varios <strong>PAGOS</strong> (número, fecha y valor). Si es con tarjeta se guarda la franquicia y los últimos cuatro dígitos; si es por PSE, el banco. Los pagos contraentrega no son ninguno de los dos.</li>
+  <li>Cada <strong>PRODUCTO</strong> tiene SKU, nombre, precio y los colores en que viene. Es de una <strong>MARCA</strong> (nombre y país) y está en una <strong>CATEGORÍA</strong>. Las categorías pueden estar dentro de otras.</li>
+  <li>Los <strong>PROVEEDORES</strong> (NIT y razón social) surten productos, cada uno con su precio de compra.</li>
+  <li>Los productos se guardan en <strong>BODEGAS</strong> (código, nombre y dirección), con el stock de cada uno.</li>
+  <li>Un pedido tiene como mucho un <strong>ENVÍO</strong> (número de guía, fecha de envío y fecha de entrega), que sale de una bodega y lo lleva una <strong>TRANSPORTADORA</strong>.</li>
+</ul>
+<p class="nota">Entidades base: <strong>Cliente</strong>, <strong>Pedido</strong> y <strong>Producto</strong>. Entidades inventadas para completar el problema: <strong>Ciudad</strong>, <strong>Pago</strong>, <strong>Cupón</strong>, <strong>Envío</strong>, <strong>Transportadora</strong>, <strong>Bodega</strong>, <strong>Proveedor</strong>, <strong>Marca</strong> y <strong>Categoría</strong> (12 en total).</p></details></section>
+<section class="panel">
+<h2>¿Qué cambia?</h2>
+<ul><li><strong>PAGO</strong> se especializa en <strong>TARJETA</strong> (franquicia y últimos 4 dígitos) y <strong>PSE</strong> (banco).</li><li>Es <strong>disjunta (d)</strong>: un pago no puede ser con tarjeta y por PSE a la vez (carita feliz).</li><li>Es <strong>parcial</strong> (circulito): los pagos contraentrega no son ninguno de los dos.</li><li>Las otras 11 entidades no cambian.</li></ul>
+</section>
+
+<div class="vista" data-n="chen">
+<section class="panel">
+<h2>Diagrama · Peter Chen</h2>
+<div class="diagrama tablero"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-1048 -223 4144 2176" font-family="Arial, Helvetica, sans-serif" role="img">
+<defs><pattern id="mere_chen_g1" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e3e6ea" stroke-width="1"/></pattern><pattern id="mere_chen_g2" width="100" height="100" patternUnits="userSpaceOnUse"><rect width="100" height="100" fill="url(#mere_chen_g1)"/><path d="M 100 0 L 0 0 0 100" fill="none" stroke="#cfd4da" stroke-width="1.2"/></pattern></defs>
+<rect x="-1048" y="-223" width="4144" height="2176" fill="#ffffff"/>
+<rect x="-1048" y="-223" width="4144" height="2176" fill="url(#mere_chen_g2)"/>
+<text x="1024" y="-189" text-anchor="middle" font-size="20" fill="#000">MODELO ENTIDAD RELACIÓN EXTENDIDO</text>
+<polyline points="-500.0,338.0 -500.0,505.4" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-516.0,531.0 -812.5,531.0 -812.5,751.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-484.0,531.0 -187.5,531.0 -187.5,751.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="500.0,607.0 500.0,347.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="500.0,23.0 500.0,283.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="500.0,1237.0 500.0,977.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="500.0,653.0 500.0,913.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="500.0,1283.0 500.0,1543.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="500.0,1867.0 500.0,1607.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1500.0,653.0 1500.0,913.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1500.0,1237.0 1500.0,977.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1500.0,23.0 1500.0,283.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1500.0,607.0 1500.0,347.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2000.0,23.0 2000.0,283.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="435.0,0.0 55.0,0.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-435.0,0.0 -55.0,0.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-435.0,315.0 -55.0,315.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-435.0,1080.0 -55.0,1080.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="565.0,630.0 945.0,630.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1435.0,630.0 1055.0,630.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="565.0,1260.0 945.0,1260.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1435.0,1260.0 1055.0,1260.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1565.0,630.0 1945.0,630.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2435.0,630.0 2055.0,630.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2565.0,630.0 2945.0,630.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2545.0,607.0 2545.0,563.0 3000.0,563.0 3000.0,598.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="435.0,612.0 0.0,612.0 0.0,347.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1565.0,612.0 1755.0,612.0 1755.0,315.0 1945.0,315.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="435.0,648.0 0.0,648.0 0.0,1048.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="565.0,0.0 613.0,0.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="545.0,-23.0 545.0,-81.0 559.0,-81.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="620.0,-97.0 620.0,-111.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="681.0,-81.0 701.0,-81.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="435.0,18.0 327.3,18.0 327.3,44.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="455.0,-23.0 455.0,-81.0 428.3,-81.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="545.0,23.0 545.0,81.0 563.7,81.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="455.0,23.0 455.0,108.0 432.0,108.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1545.0,607.0 1545.0,549.0 1575.7,549.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1545.0,653.0 1545.0,711.0 1564.7,711.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1435.0,648.0 1355.7,648.0 1355.7,674.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1455.0,607.0 1455.0,549.0 1428.0,549.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-565.0,0.0 -613.0,0.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-455.0,-23.0 -455.0,-81.0 -435.3,-81.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-455.0,23.0 -455.0,81.0 -432.0,81.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1935.0,0.0 1887.0,0.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2065.0,0.0 2113.0,0.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2045.0,-23.0 2045.0,-81.0 2074.0,-81.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-565.0,315.0 -613.0,315.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-455.0,292.0 -455.0,234.0 -429.7,234.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-545.0,292.0 -545.0,234.0 -572.0,234.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="545.0,607.0 545.0,549.0 561.6,549.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="545.0,653.0 545.0,711.0 570.3,711.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="455.0,607.0 455.0,549.0 433.0,549.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-565.0,1080.0 -613.0,1080.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-455.0,1057.0 -455.0,999.0 -431.3,999.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-455.0,1103.0 -455.0,1161.0 -431.0,1161.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="435.0,1260.0 387.0,1260.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="545.0,1237.0 545.0,1179.0 575.3,1179.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="545.0,1283.0 545.0,1341.0 569.3,1341.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1565.0,1260.0 1613.0,1260.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1545.0,1283.0 1545.0,1341.0 1564.7,1341.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1545.0,1237.0 1545.0,1179.0 1561.0,1179.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1435.0,0.0 1387.0,0.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1565.0,0.0 1613.0,0.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-877.5,774.0 -925.5,774.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-747.5,774.0 -699.5,774.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2545.0,653.0 2545.0,711.0 2574.3,711.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2455.0,607.0 2455.0,549.0 2435.3,549.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="415.6,1890.0 367.6,1890.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="584.4,1890.0 632.4,1890.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="-252.5,774.0 -300.5,774.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1000.0,598.0 1000.0,556.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1000.0,662.0 1000.0,704.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1444.6,945.0 1396.6,945.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1445.0,315.0 1397.0,315.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<rect x="-565.0" y="-23.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="-500.0" y="5.0" text-anchor="middle" font-size="14" fill="#000">CIUDAD</text>
+<rect x="435.0" y="-23.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="500.0" y="5.0" text-anchor="middle" font-size="14" fill="#000">CLIENTE</text>
+<rect x="1435.0" y="-23.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1500.0" y="5.0" text-anchor="middle" font-size="14" fill="#000">PROVEEDOR</text>
+<rect x="1935.0" y="-23.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="2000.0" y="5.0" text-anchor="middle" font-size="14" fill="#000">MARCA</text>
+<rect x="-565.0" y="292.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="-500.0" y="320.0" text-anchor="middle" font-size="14" fill="#000">PAGO</text>
+<rect x="-877.5" y="751.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="-812.5" y="779.0" text-anchor="middle" font-size="14" fill="#000">TARJETA</text>
+<rect x="-252.5" y="751.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="-187.5" y="779.0" text-anchor="middle" font-size="14" fill="#000">PSE</text>
+<rect x="435.0" y="607.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="500.0" y="635.0" text-anchor="middle" font-size="14" fill="#000">PEDIDO</text>
+<rect x="1435.0" y="607.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1500.0" y="635.0" text-anchor="middle" font-size="14" fill="#000">PRODUCTO</text>
+<rect x="2435.0" y="607.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="2500.0" y="635.0" text-anchor="middle" font-size="14" fill="#000">CATEGORIA</text>
+<rect x="-565.0" y="1057.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="-500.0" y="1085.0" text-anchor="middle" font-size="14" fill="#000">CUPON</text>
+<rect x="435.0" y="1237.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="500.0" y="1265.0" text-anchor="middle" font-size="14" fill="#000">ENVIO</text>
+<rect x="1435.0" y="1237.0" width="130.0" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1500.0" y="1265.0" text-anchor="middle" font-size="14" fill="#000">BODEGA</text>
+<rect x="415.6" y="1867.0" width="168.9" height="46.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="500.0" y="1895.0" text-anchor="middle" font-size="14" fill="#000">TRANSPORTADORA</text>
+<polygon points="0,-32.0 55.0,0 0,32.0 -55.0,0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="0.0" y="4.5" text-anchor="middle" font-size="13" fill="#000">vivir</text>
+<polygon points="500,283.0 555.0,315.0 500,347.0 445.0,315.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="500.0" y="319.5" text-anchor="middle" font-size="13" fill="#000">hacer</text>
+<polygon points="0,283.0 55.0,315.0 0,347.0 -55.0,315.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="0.0" y="319.5" text-anchor="middle" font-size="13" fill="#000">pagar</text>
+<polygon points="0,1048.0 55.0,1080 0,1112.0 -55.0,1080" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="0.0" y="1084.5" text-anchor="middle" font-size="13" fill="#000">usar</text>
+<polygon points="1000,598.0 1055.0,630 1000,662.0 945.0,630" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="634.5" text-anchor="middle" font-size="13" fill="#000">incluir</text>
+<polygon points="500,913.0 555.3671875,945.0 500,977.0 444.6328125,945.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="500.0" y="949.5" text-anchor="middle" font-size="13" fill="#000">despachar</text>
+<polygon points="500,1543.0 555.0,1575.0 500,1607.0 445.0,1575.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="500.0" y="1579.5" text-anchor="middle" font-size="13" fill="#000">llevar</text>
+<polygon points="1000,1228.0 1055.0,1260 1000,1292.0 945.0,1260" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="1264.5" text-anchor="middle" font-size="13" fill="#000">salir</text>
+<polygon points="1500,913.0 1555.359375,945.0 1500,977.0 1444.640625,945.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1500.0" y="949.5" text-anchor="middle" font-size="13" fill="#000">almacenar</text>
+<polygon points="1500,283.0 1555.0,315.0 1500,347.0 1445.0,315.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1500.0" y="319.5" text-anchor="middle" font-size="13" fill="#000">surtir</text>
+<polygon points="2000,283.0 2055.0,315.0 2000,347.0 1945.0,315.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="2000.0" y="319.5" text-anchor="middle" font-size="13" fill="#000">fabricar</text>
+<polygon points="2000,598.0 2055.0,630 2000,662.0 1945.0,630" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="2000.0" y="634.5" text-anchor="middle" font-size="13" fill="#000">clasificar</text>
+<polygon points="3000,598.0 3055.0,630 3000,662.0 2945.0,630" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="3000.0" y="634.5" text-anchor="middle" font-size="13" fill="#000">dividir</text>
+<polygon points="-532.0,505.4 -468.0,505.4 -500,556.6" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="-500.0" y="527.4" text-anchor="middle" font-size="17" font-weight="bold" fill="#000">d</text>
+<ellipse cx="657.7" cy="0.0" rx="44.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="657.7" y="4.0" text-anchor="middle" font-size="12" fill="#000">documento</text><line x1="628.0" y1="7.0" x2="687.4" y2="7.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="620.0" cy="-81.0" rx="61.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="620.0" y="-77.0" text-anchor="middle" font-size="12" fill="#000">nombreCompleto</text>
+<ellipse cx="620.0" cy="-127.0" rx="38.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="620.0" y="-123.0" text-anchor="middle" font-size="12" fill="#000">nombres</text>
+<ellipse cx="739.7" cy="-81.0" rx="38.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="739.7" y="-77.0" text-anchor="middle" font-size="12" fill="#000">apellidos</text>
+<ellipse cx="327.3" cy="60.0" rx="59.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="327.3" y="64.0" text-anchor="middle" font-size="12" fill="#000">fechaNacimiento</text>
+<ellipse cx="400.0" cy="-81.0" rx="28.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2" stroke-dasharray="5 3"/><text x="400.0" y="-77.0" text-anchor="middle" font-size="12" fill="#000">edad</text>
+<ellipse cx="600.0" cy="81.0" rx="36.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><ellipse cx="600.0" cy="81.0" rx="32.3" ry="12.0" fill="none" stroke="#000" stroke-width="1.1"/><text x="600.0" y="85.0" text-anchor="middle" font-size="12" fill="#000">telefono</text>
+<ellipse cx="400.0" cy="108.0" rx="32.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="400.0" y="112.0" text-anchor="middle" font-size="12" fill="#000">correo</text>
+<ellipse cx="1600.0" cy="549.0" rx="24.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1600.0" y="553.0" text-anchor="middle" font-size="12" fill="#000">sku</text><line x1="1590.7" y1="556.0" x2="1609.3" y2="556.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="1600.0" cy="711.0" rx="35.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1600.0" y="715.0" text-anchor="middle" font-size="12" fill="#000">nombre</text>
+<ellipse cx="1355.7" cy="690.0" rx="31.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1355.7" y="694.0" text-anchor="middle" font-size="12" fill="#000">precio</text>
+<ellipse cx="1400.0" cy="549.0" rx="28.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><ellipse cx="1400.0" cy="549.0" rx="24.0" ry="12.0" fill="none" stroke="#000" stroke-width="1.1"/><text x="1400.0" y="553.0" text-anchor="middle" font-size="12" fill="#000">color</text>
+<ellipse cx="-651.7" cy="0.0" rx="38.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="-651.7" y="4.0" text-anchor="middle" font-size="12" fill="#000">idCiudad</text><line x1="-675.4" y1="7.0" x2="-628.0" y2="7.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="-400.0" cy="-81.0" rx="35.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="-400.0" y="-77.0" text-anchor="middle" font-size="12" fill="#000">nombre</text>
+<ellipse cx="-380.0" cy="81.0" rx="52.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="-380.0" y="85.0" text-anchor="middle" font-size="12" fill="#000">departamento</text>
+<ellipse cx="1850.7" cy="0.0" rx="36.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1850.7" y="4.0" text-anchor="middle" font-size="12" fill="#000">idMarca</text><line x1="1829.3" y1="7.0" x2="1872.0" y2="7.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="2148.3" cy="0.0" rx="35.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2148.3" y="4.0" text-anchor="middle" font-size="12" fill="#000">nombre</text>
+<ellipse cx="2100.0" cy="-81.0" rx="26.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2100.0" y="-77.0" text-anchor="middle" font-size="12" fill="#000">pais</text>
+<ellipse cx="-646.7" cy="315.0" rx="33.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="-646.7" y="319.0" text-anchor="middle" font-size="12" fill="#000">idPago</text><line x1="-665.4" y1="322.0" x2="-628.0" y2="322.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="-400.0" cy="234.0" rx="29.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="-400.0" y="238.0" text-anchor="middle" font-size="12" fill="#000">fecha</text>
+<ellipse cx="-600.0" cy="234.0" rx="28.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="-600.0" y="238.0" text-anchor="middle" font-size="12" fill="#000">valor</text>
+<ellipse cx="600.0" cy="549.0" rx="38.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="600.0" y="553.0" text-anchor="middle" font-size="12" fill="#000">idPedido</text><line x1="576.6" y1="556.0" x2="623.4" y2="556.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="600.0" cy="711.0" rx="29.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="600.0" y="715.0" text-anchor="middle" font-size="12" fill="#000">fecha</text>
+<ellipse cx="400.0" cy="549.0" rx="33.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="400.0" y="553.0" text-anchor="middle" font-size="12" fill="#000">estado</text>
+<ellipse cx="-663.4" cy="1080.0" rx="50.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="-663.4" y="1084.0" text-anchor="middle" font-size="12" fill="#000">codigoCupon</text><line x1="-698.7" y1="1087.0" x2="-628.0" y2="1087.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="-380.0" cy="999.0" rx="51.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="-380.0" y="1003.0" text-anchor="middle" font-size="12" fill="#000">descuentoPct</text>
+<ellipse cx="-400.0" cy="1161.0" rx="31.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="-400.0" y="1165.0" text-anchor="middle" font-size="12" fill="#000">vence</text>
+<ellipse cx="339.0" cy="1260.0" rx="48.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="339.0" y="1264.0" text-anchor="middle" font-size="12" fill="#000">numeroGuia</text><line x1="306.0" y1="1267.0" x2="372.0" y2="1267.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="620.0" cy="1179.0" rx="44.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="620.0" y="1183.0" text-anchor="middle" font-size="12" fill="#000">fechaEnvio</text>
+<ellipse cx="620.0" cy="1341.0" rx="50.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="620.0" y="1345.0" text-anchor="middle" font-size="12" fill="#000">fechaEntrega</text>
+<ellipse cx="1666.4" cy="1260.0" rx="53.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1666.4" y="1264.0" text-anchor="middle" font-size="12" fill="#000">codigoBodega</text><line x1="1628.0" y1="1267.0" x2="1704.7" y2="1267.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="1600.0" cy="1341.0" rx="35.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1600.0" y="1345.0" text-anchor="middle" font-size="12" fill="#000">nombre</text>
+<ellipse cx="1600.0" cy="1179.0" rx="39.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1600.0" y="1183.0" text-anchor="middle" font-size="12" fill="#000">direccion</text>
+<ellipse cx="1365.7" cy="0.0" rx="21.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1365.7" y="4.0" text-anchor="middle" font-size="12" fill="#000">nit</text><line x1="1359.3" y1="7.0" x2="1372.0" y2="7.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="1659.4" cy="0.0" rx="46.4" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1659.4" y="4.0" text-anchor="middle" font-size="12" fill="#000">razonSocial</text>
+<ellipse cx="-966.5" cy="774.0" rx="41.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="-966.5" y="778.0" text-anchor="middle" font-size="12" fill="#000">franquicia</text>
+<ellipse cx="-662.2" cy="774.0" rx="37.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="-662.2" y="778.0" text-anchor="middle" font-size="12" fill="#000">ultimos4</text>
+<ellipse cx="2620.0" cy="711.0" rx="45.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2620.0" y="715.0" text-anchor="middle" font-size="12" fill="#000">idCategoria</text><line x1="2589.3" y1="718.0" x2="2650.7" y2="718.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="2400.0" cy="549.0" rx="35.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="2400.0" y="553.0" text-anchor="middle" font-size="12" fill="#000">nombre</text>
+<ellipse cx="305.4" cy="1890.0" rx="62.1" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="305.4" y="1894.0" text-anchor="middle" font-size="12" fill="#000">nitTransportadora</text><line x1="258.3" y1="1897.0" x2="352.6" y2="1897.0" stroke="#000" stroke-width="1"/>
+<ellipse cx="667.8" cy="1890.0" rx="35.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="667.8" y="1894.0" text-anchor="middle" font-size="12" fill="#000">nombre</text>
+<ellipse cx="-331.8" cy="774.0" rx="31.3" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="-331.8" y="778.0" text-anchor="middle" font-size="12" fill="#000">banco</text>
+<ellipse cx="1000.0" cy="540.0" rx="37.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1000.0" y="544.0" text-anchor="middle" font-size="12" fill="#000">cantidad</text>
+<ellipse cx="1000.0" cy="720.0" rx="52.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1000.0" y="724.0" text-anchor="middle" font-size="12" fill="#000">precioUnitario</text>
+<ellipse cx="1367.6" cy="945.0" rx="29.0" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1367.6" y="949.0" text-anchor="middle" font-size="12" fill="#000">stock</text>
+<ellipse cx="1344.3" cy="315.0" rx="52.7" ry="16.0" fill="#fff" stroke="#000" stroke-width="1.2"/><text x="1344.3" y="319.0" text-anchor="middle" font-size="12" fill="#000">precioCompra</text>
+<path d="M -557.6 511.4 Q -500.0 590.6 -442.4 511.4" fill="none" stroke="#000" stroke-width="1.4"/>
+<circle cx="-500.0" cy="421.7" r="6" fill="#fff" stroke="#000" stroke-width="1.3"/>
+<text x="507.0" y="595.0" text-anchor="start" font-size="12" fill="#000">(1:1)</text>
+<text x="507.0" y="43.0" text-anchor="start" font-size="12" fill="#000">(0:N)</text>
+<text x="507.0" y="1225.0" text-anchor="start" font-size="12" fill="#000">(1:1)</text>
+<text x="507.0" y="673.0" text-anchor="start" font-size="12" fill="#000">(0:1)</text>
+<text x="507.0" y="1303.0" text-anchor="start" font-size="12" fill="#000">(1:1)</text>
+<text x="507.0" y="1855.0" text-anchor="start" font-size="12" fill="#000">(0:N)</text>
+<text x="1507.0" y="673.0" text-anchor="start" font-size="12" fill="#000">(0:N)</text>
+<text x="1507.0" y="1225.0" text-anchor="start" font-size="12" fill="#000">(0:N)</text>
+<text x="1507.0" y="43.0" text-anchor="start" font-size="12" fill="#000">(1:N)</text>
+<text x="1507.0" y="595.0" text-anchor="start" font-size="12" fill="#000">(1:N)</text>
+<text x="2007.0" y="43.0" text-anchor="start" font-size="12" fill="#000">(0:N)</text>
+<text x="406.7" y="-7.0" text-anchor="middle" font-size="12" fill="#000">(1:1)</text>
+<text x="-405.7" y="-7.0" text-anchor="middle" font-size="12" fill="#000">(0:N)</text>
+<text x="-406.7" y="308.0" text-anchor="middle" font-size="12" fill="#000">(1:1)</text>
+<text x="-405.7" y="1073.0" text-anchor="middle" font-size="12" fill="#000">(0:N)</text>
+<text x="594.3" y="623.0" text-anchor="middle" font-size="12" fill="#000">(1:N)</text>
+<text x="1405.7" y="623.0" text-anchor="middle" font-size="12" fill="#000">(0:N)</text>
+<text x="593.3" y="1253.0" text-anchor="middle" font-size="12" fill="#000">(1:1)</text>
+<text x="1405.7" y="1253.0" text-anchor="middle" font-size="12" fill="#000">(0:N)</text>
+<text x="1593.3" y="623.0" text-anchor="middle" font-size="12" fill="#000">(1:1)</text>
+<text x="2405.7" y="623.0" text-anchor="middle" font-size="12" fill="#000">(0:N)</text>
+<text x="2593.3" y="623.0" text-anchor="middle" font-size="12" fill="#000">(0:1)</text>
+<text x="2552.0" y="595.0" text-anchor="start" font-size="12" fill="#000">(0:N)</text>
+<text x="405.7" y="605.0" text-anchor="middle" font-size="12" fill="#000">(1:N)</text>
+<text x="1593.3" y="605.0" text-anchor="middle" font-size="12" fill="#000">(1:1)</text>
+<text x="406.7" y="641.0" text-anchor="middle" font-size="12" fill="#000">(0:1)</text>
+<text x="36.2" y="-38.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:1</text>
+<text x="536.2" y="277.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:1</text>
+<text x="36.2" y="277.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:1</text>
+<text x="36.2" y="1042.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:1</text>
+<text x="1036.2" y="592.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:M</text>
+<text x="536.5" y="907.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">1:1</text>
+<text x="536.2" y="1537.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:1</text>
+<text x="1036.2" y="1222.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:1</text>
+<text x="1536.4" y="907.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:M</text>
+<text x="1536.2" y="277.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:M</text>
+<text x="2036.2" y="277.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:1</text>
+<text x="2036.2" y="592.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:1</text>
+<text x="3036.2" y="592.0" text-anchor="start" font-size="13" font-weight="bold" fill="#000">N:1</text>
+<text x="2899.5" y="623.0" text-anchor="middle" font-size="11" fill="#000">subcategoria</text>
+<text x="2993.0" y="588.0" text-anchor="end" font-size="11" fill="#000">padre</text>
+</svg></div>
+</section>
+
+</div>
+<div class="vista" data-n="crowsfoot" hidden>
+<section class="panel">
+<h2>Diagrama · Crow's Foot</h2>
+<div class="diagrama tablero"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-40 -80 2993 1811" font-family="Arial, Helvetica, sans-serif" role="img">
+<defs><pattern id="mere_crowsfoot_g1" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e3e6ea" stroke-width="1"/></pattern><pattern id="mere_crowsfoot_g2" width="100" height="100" patternUnits="userSpaceOnUse"><rect width="100" height="100" fill="url(#mere_crowsfoot_g1)"/><path d="M 100 0 L 0 0 0 100" fill="none" stroke="#cfd4da" stroke-width="1.2"/></pattern></defs>
+<rect x="-40" y="-80" width="2993" height="1811" fill="#ffffff"/>
+<rect x="-40" y="-80" width="2993" height="1811" fill="url(#mere_crowsfoot_g2)"/>
+<text x="1456" y="-46" text-anchor="middle" font-size="20" fill="#000">MODELO ENTIDAD RELACIÓN EXTENDIDO · CROW&#x27;S FOOT</text>
+<polyline points="1081.8,1501.0 1081.8,1596.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1801.8,906.0 1801.8,811.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1801.8,290.0 1801.8,95.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2693.3,703.5 2573.3,703.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2693.3,723.5 2573.3,723.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1327.0,723.5 1185.6,723.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1563.3,723.5 1627.9,723.5 1627.9,733.5 1692.5,733.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="2050.3,703.5 1980.7,703.5 1980.7,713.5 1911.2,713.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1801.8,405.0 1801.8,656.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="836.5,47.5 898.4,47.5 898.4,57.5 960.2,57.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1801.8,1021.0 1801.8,1326.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="604.2,1163.5 478.4,1163.5 478.4,1173.5 352.6,1173.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1081.8,656.0 1081.8,195.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1081.8,1326.0 1081.8,791.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1911.2,773.5 2291.7,773.5 2291.7,723.5 2358.8,723.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1207.0,1413.5 1446.9,1413.5 1446.9,1403.5 1686.7,1403.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="831.4,1143.5 1001.8,1143.5 1001.8,791.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="960.2,117.5 533.5,117.5 533.5,77.5 350.6,77.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1911.2,693.5 1975.7,693.5 1975.7,77.5 2040.3,77.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="459.5,561.0 459.5,683.5 978.0,683.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<rect x="0.0" y="290.0" width="479.0" height="271.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="239.5" y="309.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">PAGO</text><text x="239.5" y="327.0" text-anchor="middle" font-size="10" fill="#000">jerarquía d (disjunta), parcial</text><line x1="0.0" y1="332.0" x2="479.0" y2="332.0" stroke="#000" stroke-width="1.1"/><text x="8.0" y="348.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="33.8" y="348.0" font-size="12" fill="#000" text-decoration="underline">id_pago</text><text x="97.8" y="348.0" font-size="11" fill="#000">INTEGER</text><text x="8.0" y="368.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="33.8" y="368.0" font-size="12" fill="#000">fecha</text><text x="97.8" y="368.0" font-size="11" fill="#000">DATE</text><text x="8.0" y="388.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="33.8" y="388.0" font-size="12" fill="#000">valor</text><text x="97.8" y="388.0" font-size="11" fill="#000">DECIMAL (12,2)</text><text x="8.0" y="408.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="33.8" y="408.0" font-size="12" fill="#000">id_pedido</text><text x="97.8" y="408.0" font-size="11" fill="#000">INTEGER</text><line x1="0.0" y1="418.0" x2="479.0" y2="418.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="10.0" y="432.0" font-size="11" fill="#000">PAGO_PK (id_pago)</text>
+<rect x="40.0" y="461.0" width="189.2" height="76.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="134.6" y="480.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">TARJETA</text><line x1="40.0" y1="489.0" x2="229.2" y2="489.0" stroke="#000" stroke-width="1.1"/><text x="48.0" y="505.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="62.7" y="505.0" font-size="12" fill="#000">franquicia</text><text x="126.7" y="505.0" font-size="11" fill="#000">VARCHAR (20)</text><text x="48.0" y="525.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="62.7" y="525.0" font-size="12" fill="#000">ultimos4</text><text x="126.7" y="525.0" font-size="11" fill="#000">CHAR (4)</text>
+<rect x="269.2" y="461.0" width="169.8" height="56.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="354.1" y="480.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">PSE</text><line x1="269.2" y1="489.0" x2="439.0" y2="489.0" stroke="#000" stroke-width="1.1"/><text x="277.2" y="505.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="291.8" y="505.0" font-size="12" fill="#000">banco</text><text x="336.5" y="505.0" font-size="11" fill="#000">VARCHAR (40)</text>
+<rect x="128.4" y="0.0" width="222.3" height="115.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="239.5" y="19.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">CIUDAD</text><line x1="128.4" y1="28.0" x2="350.6" y2="28.0" stroke="#000" stroke-width="1.1"/><text x="136.4" y="44.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="162.1" y="44.0" font-size="12" fill="#000" text-decoration="underline">id_ciudad</text><text x="248.2" y="44.0" font-size="11" fill="#000">INTEGER</text><text x="136.4" y="64.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="162.1" y="64.0" font-size="12" fill="#000">nombre</text><text x="248.2" y="64.0" font-size="11" fill="#000">VARCHAR (60)</text><text x="136.4" y="84.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="162.1" y="84.0" font-size="12" fill="#000">departamento</text><text x="248.2" y="84.0" font-size="11" fill="#000">VARCHAR (40)</text><line x1="128.4" y1="94.0" x2="350.6" y2="94.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="138.4" y="108.0" font-size="11" fill="#000">CIUDAD_PK (id_ciudad)</text>
+<rect x="960.2" y="0.0" width="243.2" height="195.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1081.8" y="19.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">CLIENTE</text><line x1="960.2" y1="28.0" x2="1203.4" y2="28.0" stroke="#000" stroke-width="1.1"/><text x="968.2" y="44.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="994.9" y="44.0" font-size="12" fill="#000" text-decoration="underline">documento</text><text x="1100.9" y="44.0" font-size="11" fill="#000">VARCHAR (15)</text><text x="968.2" y="64.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="994.9" y="64.0" font-size="12" fill="#000">nombres</text><text x="1100.9" y="64.0" font-size="11" fill="#000">VARCHAR (50)</text><text x="968.2" y="84.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="994.9" y="84.0" font-size="12" fill="#000">apellidos</text><text x="1100.9" y="84.0" font-size="11" fill="#000">VARCHAR (50)</text><text x="968.2" y="104.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="994.9" y="104.0" font-size="12" fill="#000">fecha_nacimiento</text><text x="1100.9" y="104.0" font-size="11" fill="#000">DATE</text><text x="968.2" y="124.0" font-size="11" font-weight="bold" fill="#000">/</text><text x="994.9" y="124.0" font-size="12" fill="#000">edad</text><text x="1100.9" y="124.0" font-size="11" fill="#000">INTEGER</text><text x="968.2" y="144.0" font-size="11" font-weight="bold" fill="#000">U *</text><text x="994.9" y="144.0" font-size="12" fill="#000">correo</text><text x="1100.9" y="144.0" font-size="11" fill="#000">VARCHAR (80)</text><text x="968.2" y="164.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="994.9" y="164.0" font-size="12" fill="#000">id_ciudad</text><text x="1100.9" y="164.0" font-size="11" fill="#000">INTEGER</text><line x1="960.2" y1="174.0" x2="1203.4" y2="174.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="970.2" y="188.0" font-size="11" fill="#000">CLIENTE_PK (documento)</text>
+<rect x="1693.6" y="0.0" width="216.5" height="95.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1801.8" y="19.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">PROVEEDOR</text><line x1="1693.6" y1="28.0" x2="1910.1" y2="28.0" stroke="#000" stroke-width="1.1"/><text x="1701.6" y="44.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="1728.2" y="44.0" font-size="12" fill="#000" text-decoration="underline">nit</text><text x="1807.6" y="44.0" font-size="11" fill="#000">VARCHAR (12)</text><text x="1701.6" y="64.0" font-size="11" font-weight="bold" fill="#000">U *</text><text x="1728.2" y="64.0" font-size="12" fill="#000">razon_social</text><text x="1807.6" y="64.0" font-size="11" fill="#000">VARCHAR (80)</text><line x1="1693.6" y1="74.0" x2="1910.1" y2="74.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="1703.6" y="88.0" font-size="11" fill="#000">PROVEEDOR_PK (nit)</text>
+<rect x="2040.3" y="0.0" width="198.5" height="115.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="2139.5" y="19.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">MARCA</text><line x1="2040.3" y1="28.0" x2="2238.8" y2="28.0" stroke="#000" stroke-width="1.1"/><text x="2048.3" y="44.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="2075.0" y="44.0" font-size="12" fill="#000" text-decoration="underline">id_marca</text><text x="2136.3" y="44.0" font-size="11" fill="#000">INTEGER</text><text x="2048.3" y="64.0" font-size="11" font-weight="bold" fill="#000">U *</text><text x="2075.0" y="64.0" font-size="12" fill="#000">nombre</text><text x="2136.3" y="64.0" font-size="11" fill="#000">VARCHAR (40)</text><text x="2048.3" y="84.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="2075.0" y="84.0" font-size="12" fill="#000">pais</text><text x="2136.3" y="84.0" font-size="11" fill="#000">VARCHAR (40)</text><line x1="2040.3" y1="94.0" x2="2238.8" y2="94.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="2050.3" y="108.0" font-size="11" fill="#000">MARCA_PK (id_marca)</text>
+<rect x="978.0" y="656.0" width="207.6" height="135.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1081.8" y="675.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">PEDIDO</text><line x1="978.0" y1="684.0" x2="1185.6" y2="684.0" stroke="#000" stroke-width="1.1"/><text x="986.0" y="700.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="1011.8" y="700.0" font-size="12" fill="#000" text-decoration="underline">id_pedido</text><text x="1083.1" y="700.0" font-size="11" fill="#000">INTEGER</text><text x="986.0" y="720.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1011.8" y="720.0" font-size="12" fill="#000">fecha</text><text x="1083.1" y="720.0" font-size="11" fill="#000">DATE</text><text x="986.0" y="740.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1011.8" y="740.0" font-size="12" fill="#000">estado</text><text x="1083.1" y="740.0" font-size="11" fill="#000">VARCHAR (12)</text><text x="986.0" y="760.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="1011.8" y="760.0" font-size="12" fill="#000">documento</text><text x="1083.1" y="760.0" font-size="11" fill="#000">VARCHAR (15)</text><line x1="978.0" y1="770.0" x2="1185.6" y2="770.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="988.0" y="784.0" font-size="11" fill="#000">PEDIDO_PK (id_pedido)</text>
+<rect x="1692.5" y="656.0" width="218.7" height="155.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1801.8" y="675.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">PRODUCTO</text><line x1="1692.5" y1="684.0" x2="1911.2" y2="684.0" stroke="#000" stroke-width="1.1"/><text x="1700.5" y="700.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="1726.2" y="700.0" font-size="12" fill="#000" text-decoration="underline">sku</text><text x="1803.6" y="700.0" font-size="11" fill="#000">VARCHAR (10)</text><text x="1700.5" y="720.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1726.2" y="720.0" font-size="12" fill="#000">nombre</text><text x="1803.6" y="720.0" font-size="11" fill="#000">VARCHAR (80)</text><text x="1700.5" y="740.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1726.2" y="740.0" font-size="12" fill="#000">precio</text><text x="1803.6" y="740.0" font-size="11" fill="#000">DECIMAL (12,2)</text><text x="1700.5" y="760.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="1726.2" y="760.0" font-size="12" fill="#000">id_marca</text><text x="1803.6" y="760.0" font-size="11" fill="#000">INTEGER</text><text x="1700.5" y="780.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="1726.2" y="780.0" font-size="12" fill="#000">id_categoria</text><text x="1803.6" y="780.0" font-size="11" fill="#000">INTEGER</text><line x1="1692.5" y1="790.0" x2="1911.2" y2="790.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="1702.5" y="804.0" font-size="11" fill="#000">PRODUCTO_PK (sku)</text>
+<rect x="2358.8" y="656.0" width="214.5" height="95.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="2466.1" y="675.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">CATEGORIA</text><line x1="2358.8" y1="684.0" x2="2573.3" y2="684.0" stroke="#000" stroke-width="1.1"/><text x="2366.8" y="700.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="2393.5" y="700.0" font-size="12" fill="#000" text-decoration="underline">id_categoria</text><text x="2470.8" y="700.0" font-size="11" fill="#000">INTEGER</text><text x="2366.8" y="720.0" font-size="11" font-weight="bold" fill="#000">U *</text><text x="2393.5" y="720.0" font-size="12" fill="#000">nombre</text><text x="2470.8" y="720.0" font-size="11" fill="#000">VARCHAR (40)</text><line x1="2358.8" y1="730.0" x2="2573.3" y2="730.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="2368.8" y="744.0" font-size="11" fill="#000">CATEGORIA_PK (id_categoria)</text>
+<rect x="126.4" y="1116.0" width="226.3" height="115.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="239.5" y="1135.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">CUPON</text><line x1="126.4" y1="1144.0" x2="352.6" y2="1144.0" stroke="#000" stroke-width="1.1"/><text x="134.4" y="1160.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="160.1" y="1160.0" font-size="12" fill="#000" text-decoration="underline">codigo_cupon</text><text x="250.2" y="1160.0" font-size="11" fill="#000">VARCHAR (12)</text><text x="134.4" y="1180.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="160.1" y="1180.0" font-size="12" fill="#000">descuento_pct</text><text x="250.2" y="1180.0" font-size="11" fill="#000">INTEGER</text><text x="134.4" y="1200.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="160.1" y="1200.0" font-size="12" fill="#000">vence</text><text x="250.2" y="1200.0" font-size="11" fill="#000">DATE</text><line x1="126.4" y1="1210.0" x2="352.6" y2="1210.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="136.4" y="1224.0" font-size="11" fill="#000">CUPON_PK (codigo_cupon)</text>
+<rect x="956.5" y="1326.0" width="250.5" height="175.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1081.8" y="1345.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">ENVIO</text><line x1="956.5" y1="1354.0" x2="1207.0" y2="1354.0" stroke="#000" stroke-width="1.1"/><text x="964.5" y="1370.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="995.2" y="1370.0" font-size="12" fill="#000" text-decoration="underline">numero_guia</text><text x="1104.6" y="1370.0" font-size="11" fill="#000">VARCHAR (15)</text><text x="964.5" y="1390.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="995.2" y="1390.0" font-size="12" fill="#000">fecha_envio</text><text x="1104.6" y="1390.0" font-size="11" fill="#000">DATE</text><text x="964.5" y="1410.0" font-size="11" font-weight="bold" fill="#000"></text><text x="995.2" y="1410.0" font-size="12" fill="#000">fecha_entrega</text><text x="1104.6" y="1410.0" font-size="11" fill="#000">DATE</text><text x="964.5" y="1430.0" font-size="11" font-weight="bold" fill="#000">FU*</text><text x="995.2" y="1430.0" font-size="12" fill="#000">id_pedido</text><text x="1104.6" y="1430.0" font-size="11" fill="#000">INTEGER</text><text x="964.5" y="1450.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="995.2" y="1450.0" font-size="12" fill="#000">nit_transportadora</text><text x="1104.6" y="1450.0" font-size="11" fill="#000">VARCHAR (12)</text><text x="964.5" y="1470.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="995.2" y="1470.0" font-size="12" fill="#000">codigo_bodega</text><text x="1104.6" y="1470.0" font-size="11" fill="#000">CHAR (3)</text><line x1="956.5" y1="1480.0" x2="1207.0" y2="1480.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="966.5" y="1494.0" font-size="11" fill="#000">ENVIO_PK (numero_guia)</text>
+<rect x="1686.7" y="1326.0" width="230.3" height="115.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1801.8" y="1345.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">BODEGA</text><line x1="1686.7" y1="1354.0" x2="1917.0" y2="1354.0" stroke="#000" stroke-width="1.1"/><text x="1694.7" y="1370.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="1720.4" y="1370.0" font-size="12" fill="#000" text-decoration="underline">codigo_bodega</text><text x="1814.5" y="1370.0" font-size="11" fill="#000">CHAR (3)</text><text x="1694.7" y="1390.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1720.4" y="1390.0" font-size="12" fill="#000">nombre</text><text x="1814.5" y="1390.0" font-size="11" fill="#000">VARCHAR (60)</text><text x="1694.7" y="1410.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1720.4" y="1410.0" font-size="12" fill="#000">direccion</text><text x="1814.5" y="1410.0" font-size="11" fill="#000">VARCHAR (80)</text><line x1="1686.7" y1="1420.0" x2="1917.0" y2="1420.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="1696.7" y="1434.0" font-size="11" fill="#000">BODEGA_PK (codigo_bodega)</text>
+<rect x="956.5" y="1596.0" width="250.5" height="95.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1081.8" y="1615.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">TRANSPORTADORA</text><line x1="956.5" y1="1624.0" x2="1207.0" y2="1624.0" stroke="#000" stroke-width="1.1"/><text x="964.5" y="1640.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="991.2" y="1640.0" font-size="12" fill="#000" text-decoration="underline">nit_transportadora</text><text x="1100.6" y="1640.0" font-size="11" fill="#000">VARCHAR (12)</text><text x="964.5" y="1660.0" font-size="11" font-weight="bold" fill="#000">U *</text><text x="991.2" y="1660.0" font-size="12" fill="#000">nombre</text><text x="1100.6" y="1660.0" font-size="11" fill="#000">VARCHAR (60)</text><line x1="956.5" y1="1670.0" x2="1207.0" y2="1670.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="966.5" y="1684.0" font-size="11" fill="#000">TRANSPORTADORA_PK (nit_transportadora)</text>
+<rect x="599.0" y="0.0" width="237.5" height="95.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="717.8" y="19.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">CLI_TELEFONO</text><line x1="599.0" y1="28.0" x2="836.5" y2="28.0" stroke="#000" stroke-width="1.1"/><text x="607.0" y="44.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="637.0" y="44.0" font-size="12" fill="#000" text-decoration="underline">documento</text><text x="708.4" y="44.0" font-size="11" fill="#000">VARCHAR (15)</text><text x="607.0" y="64.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="637.0" y="64.0" font-size="12" fill="#000" text-decoration="underline">telefono</text><text x="708.4" y="64.0" font-size="11" fill="#000">VARCHAR (15)</text><line x1="599.0" y1="74.0" x2="836.5" y2="74.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="609.0" y="88.0" font-size="11" fill="#000">CLI_TELEFONO_PK (documento, telefono)</text>
+<rect x="2050.3" y="656.0" width="178.5" height="95.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="2139.5" y="675.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">PRO_COLOR</text><line x1="2050.3" y1="684.0" x2="2228.8" y2="684.0" stroke="#000" stroke-width="1.1"/><text x="2058.3" y="700.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="2088.3" y="700.0" font-size="12" fill="#000" text-decoration="underline">sku</text><text x="2126.3" y="700.0" font-size="11" fill="#000">VARCHAR (10)</text><text x="2058.3" y="720.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="2088.3" y="720.0" font-size="12" fill="#000" text-decoration="underline">color</text><text x="2126.3" y="720.0" font-size="11" fill="#000">VARCHAR (20)</text><line x1="2050.3" y1="730.0" x2="2228.8" y2="730.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="2060.3" y="744.0" font-size="11" fill="#000">PRO_COLOR_PK (sku, color)</text>
+<rect x="604.2" y="1116.0" width="227.2" height="95.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="717.8" y="1135.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">PEDIDO_CUPON</text><line x1="604.2" y1="1144.0" x2="831.4" y2="1144.0" stroke="#000" stroke-width="1.1"/><text x="612.2" y="1160.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="642.2" y="1160.0" font-size="12" fill="#000" text-decoration="underline">id_pedido</text><text x="728.9" y="1160.0" font-size="11" fill="#000">INTEGER</text><text x="612.2" y="1180.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="642.2" y="1180.0" font-size="12" fill="#000">codigo_cupon</text><text x="728.9" y="1180.0" font-size="11" fill="#000">VARCHAR (12)</text><line x1="604.2" y1="1190.0" x2="831.4" y2="1190.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="614.2" y="1204.0" font-size="11" fill="#000">PEDIDO_CUPON_PK (id_pedido)</text>
+<rect x="1327.0" y="656.0" width="236.3" height="135.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1445.2" y="675.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">DETALLE</text><line x1="1327.0" y1="684.0" x2="1563.3" y2="684.0" stroke="#000" stroke-width="1.1"/><text x="1335.0" y="700.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="1365.0" y="700.0" font-size="12" fill="#000" text-decoration="underline">id_pedido</text><text x="1455.8" y="700.0" font-size="11" fill="#000">INTEGER</text><text x="1335.0" y="720.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="1365.0" y="720.0" font-size="12" fill="#000" text-decoration="underline">sku</text><text x="1455.8" y="720.0" font-size="11" fill="#000">VARCHAR (10)</text><text x="1335.0" y="740.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1365.0" y="740.0" font-size="12" fill="#000">cantidad</text><text x="1455.8" y="740.0" font-size="11" fill="#000">INTEGER</text><text x="1335.0" y="760.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1365.0" y="760.0" font-size="12" fill="#000">precio_unitario</text><text x="1455.8" y="760.0" font-size="11" fill="#000">DECIMAL (12,2)</text><line x1="1327.0" y1="770.0" x2="1563.3" y2="770.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="1337.0" y="784.0" font-size="11" fill="#000">DETALLE_PK (id_pedido, sku)</text>
+<rect x="1684.6" y="906.0" width="234.5" height="115.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1801.8" y="925.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">INVENTARIO</text><line x1="1684.6" y1="934.0" x2="1919.1" y2="934.0" stroke="#000" stroke-width="1.1"/><text x="1692.6" y="950.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="1722.6" y="950.0" font-size="12" fill="#000" text-decoration="underline">sku</text><text x="1816.6" y="950.0" font-size="11" fill="#000">VARCHAR (10)</text><text x="1692.6" y="970.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="1722.6" y="970.0" font-size="12" fill="#000" text-decoration="underline">codigo_bodega</text><text x="1816.6" y="970.0" font-size="11" fill="#000">CHAR (3)</text><text x="1692.6" y="990.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1722.6" y="990.0" font-size="12" fill="#000">stock</text><text x="1816.6" y="990.0" font-size="11" fill="#000">INTEGER</text><line x1="1684.6" y1="1000.0" x2="1919.1" y2="1000.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="1694.6" y="1014.0" font-size="11" fill="#000">INVENTARIO_PK (sku, codigo_bodega)</text>
+<rect x="1683.3" y="290.0" width="237.0" height="115.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1801.8" y="309.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">SUMINISTRO</text><line x1="1683.3" y1="318.0" x2="1920.3" y2="318.0" stroke="#000" stroke-width="1.1"/><text x="1691.3" y="334.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="1721.3" y="334.0" font-size="12" fill="#000" text-decoration="underline">nit</text><text x="1812.7" y="334.0" font-size="11" fill="#000">VARCHAR (12)</text><text x="1691.3" y="354.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="1721.3" y="354.0" font-size="12" fill="#000" text-decoration="underline">sku</text><text x="1812.7" y="354.0" font-size="11" fill="#000">VARCHAR (10)</text><text x="1691.3" y="374.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1721.3" y="374.0" font-size="12" fill="#000">precio_compra</text><text x="1812.7" y="374.0" font-size="11" fill="#000">DECIMAL (12,2)</text><line x1="1683.3" y1="384.0" x2="1920.3" y2="384.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="1693.3" y="398.0" font-size="11" fill="#000">SUMINISTRO_PK (nit, sku)</text>
+<rect x="2693.3" y="656.0" width="219.5" height="95.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="2803.1" y="675.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">SUBCATEGORIA</text><line x1="2693.3" y1="684.0" x2="2912.8" y2="684.0" stroke="#000" stroke-width="1.1"/><text x="2701.3" y="700.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="2731.3" y="700.0" font-size="12" fill="#000" text-decoration="underline">id_subcategoria</text><text x="2828.0" y="700.0" font-size="11" fill="#000">INTEGER</text><text x="2701.3" y="720.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="2731.3" y="720.0" font-size="12" fill="#000">id_padre</text><text x="2828.0" y="720.0" font-size="11" fill="#000">INTEGER</text><line x1="2693.3" y1="730.0" x2="2912.8" y2="730.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="2703.3" y="744.0" font-size="11" fill="#000">SUBCATEGORIA_PK (id_subcategoria)</text>
+<polyline points="1090.8,1501.0 1081.8,1514.0 1072.8,1501.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="1081.8" cy="1520.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="1073.8" y1="1589.0" x2="1089.8" y2="1589.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1073.8" y1="1583.0" x2="1089.8" y2="1583.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1792.8,906.0 1801.8,893.0 1810.8,906.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="1801.8" cy="887.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="1809.8" y1="818.0" x2="1793.8" y2="818.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1809.8" y1="824.0" x2="1793.8" y2="824.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1792.8,290.0 1801.8,277.0 1810.8,290.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1793.8" y1="273.0" x2="1809.8" y2="273.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1809.8" y1="102.0" x2="1793.8" y2="102.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1809.8" y1="108.0" x2="1793.8" y2="108.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="2686.3" y1="711.5" x2="2686.3" y2="695.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="2675.3" cy="703.5" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="2580.3" y1="695.5" x2="2580.3" y2="711.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="2586.3" y1="695.5" x2="2586.3" y2="711.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="2693.3,732.5 2680.3,723.5 2693.3,714.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="2674.3" cy="723.5" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="2580.3" y1="715.5" x2="2580.3" y2="731.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="2586.3" y1="715.5" x2="2586.3" y2="731.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1327.0,732.5 1314.0,723.5 1327.0,714.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1310.0" y1="731.5" x2="1310.0" y2="715.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1192.6" y1="715.5" x2="1192.6" y2="731.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1198.6" y1="715.5" x2="1198.6" y2="731.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1563.3,714.5 1576.3,723.5 1563.3,732.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="1582.3" cy="723.5" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="1685.5" y1="741.5" x2="1685.5" y2="725.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1679.5" y1="741.5" x2="1679.5" y2="725.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="2050.3,712.5 2037.3,703.5 2050.3,694.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="2033.3" y1="711.5" x2="2033.3" y2="695.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1918.2" y1="705.5" x2="1918.2" y2="721.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1924.2" y1="705.5" x2="1924.2" y2="721.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1810.8,405.0 1801.8,418.0 1792.8,405.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1809.8" y1="422.0" x2="1793.8" y2="422.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1793.8" y1="649.0" x2="1809.8" y2="649.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1793.8" y1="643.0" x2="1809.8" y2="643.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="836.5,38.5 849.5,47.5 836.5,56.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="853.5" y1="39.5" x2="853.5" y2="55.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="953.2" y1="65.5" x2="953.2" y2="49.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="947.2" y1="65.5" x2="947.2" y2="49.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1810.8,1021.0 1801.8,1034.0 1792.8,1021.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="1801.8" cy="1040.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="1793.8" y1="1319.0" x2="1809.8" y2="1319.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1793.8" y1="1313.0" x2="1809.8" y2="1313.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="604.2,1172.5 591.2,1163.5 604.2,1154.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="585.2" cy="1163.5" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="359.6" y1="1165.5" x2="359.6" y2="1181.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="365.6" y1="1165.5" x2="365.6" y2="1181.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1072.8,656.0 1081.8,643.0 1090.8,656.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="1081.8" cy="637.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="1089.8" y1="202.0" x2="1073.8" y2="202.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1089.8" y1="208.0" x2="1073.8" y2="208.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1073.8" y1="1319.0" x2="1089.8" y2="1319.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="1081.8" cy="1308.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="1089.8" y1="798.0" x2="1073.8" y2="798.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1089.8" y1="804.0" x2="1073.8" y2="804.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1911.2,764.5 1924.2,773.5 1911.2,782.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="1930.2" cy="773.5" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="2351.8" y1="731.5" x2="2351.8" y2="715.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="2345.8" y1="731.5" x2="2345.8" y2="715.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1207.0,1404.5 1220.0,1413.5 1207.0,1422.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="1226.0" cy="1413.5" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="1679.7" y1="1411.5" x2="1679.7" y2="1395.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1673.7" y1="1411.5" x2="1673.7" y2="1395.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="838.4" y1="1135.5" x2="838.4" y2="1151.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="849.4" cy="1143.5" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="1009.8" y1="798.0" x2="993.8" y2="798.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1009.8" y1="804.0" x2="993.8" y2="804.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="960.2,126.5 947.2,117.5 960.2,108.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="941.2" cy="117.5" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="357.6" y1="69.5" x2="357.6" y2="85.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="363.6" y1="69.5" x2="363.6" y2="85.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1911.2,684.5 1924.2,693.5 1911.2,702.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="1930.2" cy="693.5" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="2033.3" y1="85.5" x2="2033.3" y2="69.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="2027.3" y1="85.5" x2="2027.3" y2="69.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="468.5,561.0 459.5,574.0 450.5,561.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="467.5" y1="578.0" x2="451.5" y2="578.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="971.0" y1="691.5" x2="971.0" y2="675.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="965.0" y1="691.5" x2="965.0" y2="675.5" stroke="#000" stroke-width="1.4" fill="none"/>
+</svg></div>
+</section>
+
+</div>
+  </main>
+
+  <div class="stage-nav" id="siguiente"></div>
+
+  <footer>Universidad El Bosque · Bogotá D.C</footer>
+</div>
+
+<script src="../../js/estrellas.js?v=20261116e"></script>
+<script src="../../js/ejercicios.js?v=20261116e"></script>
+<script>iniciarEtapa("mer-e");</script>
+</body>
+</html>

@@ -42,7 +42,9 @@ var EJERCICIOS = [
   { id: "autoescuela", titulo: "Escuela de conducción", icono: "🚗", carpeta: "ejercicios/autoescuela/",
     descripcion: "Alumnos, instructores, vehículos, cursos por sede y prácticas (relación ternaria)." },
   { id: "biblioteca", titulo: "Red de bibliotecas", icono: "📚", carpeta: "ejercicios/biblioteca/",
-    descripcion: "Libros, autores, editoriales, ejemplares por sede, lectores y préstamos." }
+    descripcion: "Libros, autores, editoriales, ejemplares por sede, lectores y préstamos." },
+  { id: "tienda", titulo: "Tienda en línea", icono: "🛒", carpeta: "ejercicios/tienda/",
+    descripcion: "12 entidades: clientes, pedidos, pagos, cupones, envíos, bodegas, productos, proveedores y categorías." }
 ];
 
 var NOTACIONES = [

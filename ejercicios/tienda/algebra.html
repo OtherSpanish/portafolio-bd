@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Álgebra relacional · Tienda en línea — Portafolio de Bases de Datos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../css/estilos.css?v=20261116e">
+</head>
+<body>
+<div class="sky"></div>
+<canvas id="stars"></canvas>
+
+<div class="wrap ancho">
+  <nav class="topbar">
+    <a href="../../index.html">← Portafolio</a>
+    <a href="../../seccion.html?s=algebra">Todos los ejercicios de Álgebra relacional</a>
+  </nav>
+
+  <header class="interno">
+    <div class="eyebrow">Ejercicio · Tienda en línea</div>
+    <h1>Álgebra relacional</h1>
+    <p class="subtitle">Consultas básicas en el formato «expresión: enunciado», con su resultado.</p>
+  </header>
+
+  <div class="ruta" id="ruta"></div>
+
+  <main>
+<section class="panel"><details><summary>Ver enunciado del ejercicio</summary>
+<p>Una tienda en línea de tecnología que despacha a todo el país necesita su base de datos.</p>
+<ul>
+  <li>Cada <strong>CLIENTE</strong> tiene documento, nombre (nombres y apellidos), fecha de nacimiento, correo y teléfonos; la edad se calcula. Vive en una <strong>CIUDAD</strong> (nombre y departamento).</li>
+  <li>Un cliente hace <strong>PEDIDOS</strong> (número, fecha y estado). Cada pedido trae uno o varios productos, con la cantidad y el precio al que se vendió, y puede usar un <strong>CUPÓN</strong> de descuento (código, porcentaje y fecha de vencimiento).</li>
+  <li>Un pedido se paga en uno o varios <strong>PAGOS</strong> (número, fecha y valor). Si es con tarjeta se guarda la franquicia y los últimos cuatro dígitos; si es por PSE, el banco. Los pagos contraentrega no son ninguno de los dos.</li>
+  <li>Cada <strong>PRODUCTO</strong> tiene SKU, nombre, precio y los colores en que viene. Es de una <strong>MARCA</strong> (nombre y país) y está en una <strong>CATEGORÍA</strong>. Las categorías pueden estar dentro de otras.</li>
+  <li>Los <strong>PROVEEDORES</strong> (NIT y razón social) surten productos, cada uno con su precio de compra.</li>
+  <li>Los productos se guardan en <strong>BODEGAS</strong> (código, nombre y dirección), con el stock de cada uno.</li>
+  <li>Un pedido tiene como mucho un <strong>ENVÍO</strong> (número de guía, fecha de envío y fecha de entrega), que sale de una bodega y lo lleva una <strong>TRANSPORTADORA</strong>.</li>
+</ul>
+<p class="nota">Entidades base: <strong>Cliente</strong>, <strong>Pedido</strong> y <strong>Producto</strong>. Entidades inventadas para completar el problema: <strong>Ciudad</strong>, <strong>Pago</strong>, <strong>Cupón</strong>, <strong>Envío</strong>, <strong>Transportadora</strong>, <strong>Bodega</strong>, <strong>Proveedor</strong>, <strong>Marca</strong> y <strong>Categoría</strong> (12 en total).</p></details></section>
+<section class="panel">
+<h2>Consulta 1</h2>
+
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>nombre, departamento</sub>(CIUDAD)</span>: Muestra las ciudades con su departamento.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombre</td><td class="xl-cab">departamento</td></tr><tr><td class="xl-fila">2</td><td class="">Barranquilla</td><td class="">Atlantico</td></tr><tr><td class="xl-fila">3</td><td class="">Bogota</td><td class="">Cundinamarca</td></tr><tr><td class="xl-fila">4</td><td class="">Cali</td><td class="">Valle del Cauca</td></tr><tr><td class="xl-fila">5</td><td class="">Medellin</td><td class="">Antioquia</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+<section class="panel">
+<h2>Consulta 2</h2>
+
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>sku, nombre, precio</sub>(<span class="op">σ</span><sub>precio>1000000</sub>(PRODUCTO))</span>: Muestra los productos que cuestan más de un millón.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">sku</td><td class="xl-cab">nombre</td><td class="xl-cab">precio</td></tr><tr><td class="xl-fila">2</td><td class="">SKU-001</td><td class="">Galaxy A55</td><td class="xl-num">1650000.00</td></tr><tr><td class="xl-fila">3</td><td class="">SKU-002</td><td class="">IdeaPad Slim 3</td><td class="xl-num">2400000.00</td></tr><tr><td class="xl-fila">4</td><td class="">SKU-006</td><td class="">Galaxy Tab S9</td><td class="xl-num">3100000.00</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+<section class="panel">
+<h2>Consulta 3</h2>
+
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>id_pago</sub>(TARJETA) <span class="op">∪</span> <span class="op">π</span><sub>id_pago</sub>(PSE)</span>: Lista los pagos electrónicos (con tarjeta o por PSE).</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">id_pago</td></tr><tr><td class="xl-fila">2</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">3</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">4</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">5</td><td class="xl-num">5</td></tr><tr><td class="xl-fila">6</td><td class="xl-num">6</td></tr><tr><td class="xl-fila">7</td><td class="xl-num">7</td></tr><tr><td class="xl-fila">8</td><td class="xl-num">8</td></tr><tr><td class="xl-fila">9</td><td class="xl-num">9</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+<section class="panel">
+<h2>Consulta 4</h2>
+
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>id_pedido</sub>(PEDIDO) <span class="op">−</span> <span class="op">π</span><sub>id_pedido</sub>(ENVIO)</span>: Identifica los pedidos que todavía no tienen envío.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">id_pedido</td></tr><tr><td class="xl-fila">2</td><td class="xl-num">7</td></tr><tr><td class="xl-fila">3</td><td class="xl-num">4</td></tr><tr><td class="xl-fila">4</td><td class="xl-num">8</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+<section class="panel">
+<h2>Consulta 5</h2>
+
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>nombre, codigo_bodega, stock</sub>(PRODUCTO <span class="op">⋈</span> INVENTARIO)</span>: Muestra el stock de cada producto en cada bodega.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombre</td><td class="xl-cab">codigo_bodega</td><td class="xl-cab">stock</td></tr><tr><td class="xl-fila">2</td><td class="">Galaxy A55</td><td class="">BOG</td><td class="xl-num">25</td></tr><tr><td class="xl-fila">3</td><td class="">Galaxy A55</td><td class="">MED</td><td class="xl-num">10</td></tr><tr><td class="xl-fila">4</td><td class="">Galaxy Tab S9</td><td class="">BAQ</td><td class="xl-num">5</td></tr><tr><td class="xl-fila">5</td><td class="">IdeaPad Slim 3</td><td class="">BOG</td><td class="xl-num">8</td></tr><tr><td class="xl-fila">6</td><td class="">Mouse MX Master 3S</td><td class="">BAQ</td><td class="xl-num">15</td></tr><tr><td class="xl-fila">7</td><td class="">Mouse MX Master 3S</td><td class="">BOG</td><td class="xl-num">40</td></tr><tr><td class="xl-fila">8</td><td class="">Redmi Note 13</td><td class="">MED</td><td class="xl-num">30</td></tr><tr><td class="xl-fila">9</td><td class="">Teclado K380</td><td class="">BOG</td><td class="xl-num">60</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+<section class="panel">
+<h2>Consulta 6</h2>
+
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>id_subcategoria</sub>(<span class="op">σ</span><sub>id_padre=1</sub>(SUBCATEGORIA)) <span class="op">∩</span> <span class="op">π</span><sub>id_categoria</sub>(PRODUCTO)</span>: Obtiene las subcategorías de Tecnología que ya tienen productos.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">id_subcategoria</td></tr><tr><td class="xl-fila">2</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">3</td><td class="xl-num">4</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+  </main>
+
+  <div class="stage-nav" id="siguiente"></div>
+
+  <footer>Universidad El Bosque · Bogotá D.C</footer>
+</div>
+
+<script src="../../js/estrellas.js?v=20261116e"></script>
+<script src="../../js/ejercicios.js?v=20261116e"></script>
+<script>iniciarEtapa("algebra");</script>
+</body>
+</html>

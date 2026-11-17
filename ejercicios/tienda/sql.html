@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sentencias SQL · Tienda en línea — Portafolio de Bases de Datos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../css/estilos.css?v=20261116e">
+</head>
+<body>
+<div class="sky"></div>
+<canvas id="stars"></canvas>
+
+<div class="wrap ancho">
+  <nav class="topbar">
+    <a href="../../index.html">← Portafolio</a>
+    <a href="../../seccion.html?s=sql">Todos los ejercicios de Sentencias SQL</a>
+  </nav>
+
+  <header class="interno">
+    <div class="eyebrow">Ejercicio · Tienda en línea</div>
+    <h1>Sentencias SQL</h1>
+    <p class="subtitle">Consultas sobre la base de datos (MySQL) con su resultado · Tienda en línea.</p>
+  </header>
+
+  <div class="ruta" id="ruta"></div>
+
+  <main>
+<section class="panel"><details><summary>Ver enunciado del ejercicio</summary>
+<p>Una tienda en línea de tecnología que despacha a todo el país necesita su base de datos.</p>
+<ul>
+  <li>Cada <strong>CLIENTE</strong> tiene documento, nombre (nombres y apellidos), fecha de nacimiento, correo y teléfonos; la edad se calcula. Vive en una <strong>CIUDAD</strong> (nombre y departamento).</li>
+  <li>Un cliente hace <strong>PEDIDOS</strong> (número, fecha y estado). Cada pedido trae uno o varios productos, con la cantidad y el precio al que se vendió, y puede usar un <strong>CUPÓN</strong> de descuento (código, porcentaje y fecha de vencimiento).</li>
+  <li>Un pedido se paga en uno o varios <strong>PAGOS</strong> (número, fecha y valor). Si es con tarjeta se guarda la franquicia y los últimos cuatro dígitos; si es por PSE, el banco. Los pagos contraentrega no son ninguno de los dos.</li>
+  <li>Cada <strong>PRODUCTO</strong> tiene SKU, nombre, precio y los colores en que viene. Es de una <strong>MARCA</strong> (nombre y país) y está en una <strong>CATEGORÍA</strong>. Las categorías pueden estar dentro de otras.</li>
+  <li>Los <strong>PROVEEDORES</strong> (NIT y razón social) surten productos, cada uno con su precio de compra.</li>
+  <li>Los productos se guardan en <strong>BODEGAS</strong> (código, nombre y dirección), con el stock de cada uno.</li>
+  <li>Un pedido tiene como mucho un <strong>ENVÍO</strong> (número de guía, fecha de envío y fecha de entrega), que sale de una bodega y lo lleva una <strong>TRANSPORTADORA</strong>.</li>
+</ul>
+<p class="nota">Entidades base: <strong>Cliente</strong>, <strong>Pedido</strong> y <strong>Producto</strong>. Entidades inventadas para completar el problema: <strong>Ciudad</strong>, <strong>Pago</strong>, <strong>Cupón</strong>, <strong>Envío</strong>, <strong>Transportadora</strong>, <strong>Bodega</strong>, <strong>Proveedor</strong>, <strong>Marca</strong> y <strong>Categoría</strong> (12 en total).</p></details></section>
+<section class="panel">
+<h2>Consulta 1</h2>
+<p class="enunciado">Total de cada pedido, con el descuento del cupón si lo usó.</p><pre class="codigo"><span class="kw">SELECT</span> p.id_pedido, <span class="kw">SUM</span>(d.cantidad * d.precio_unitario) <span class="kw">AS</span> subtotal,
+       <span class="kw">COALESCE</span>(c.descuento_pct, <span class="nu">0</span>) <span class="kw">AS</span> descuento,
+       <span class="kw">ROUND</span>(<span class="kw">SUM</span>(d.cantidad * d.precio_unitario) * (<span class="nu">100</span> - <span class="kw">COALESCE</span>(c.descuento_pct, <span class="nu">0</span>)) / <span class="nu">100</span>) <span class="kw">AS</span> total
+<span class="kw">FROM</span> PEDIDO p
+<span class="kw">JOIN</span> DETALLE d <span class="kw">ON</span> d.id_pedido = p.id_pedido
+<span class="kw">LEFT</span> <span class="kw">JOIN</span> PEDIDO_CUPON pc <span class="kw">ON</span> pc.id_pedido = p.id_pedido
+<span class="kw">LEFT</span> <span class="kw">JOIN</span> CUPON c <span class="kw">ON</span> c.codigo_cupon = pc.codigo_cupon
+<span class="kw">GROUP</span> <span class="kw">BY</span> p.id_pedido, c.descuento_pct
+<span class="kw">ORDER</span> <span class="kw">BY</span> p.id_pedido;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th><th class="xl-col">D</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">id_pedido</td><td class="xl-cab">subtotal</td><td class="xl-cab">descuento</td><td class="xl-cab">total</td></tr><tr><td class="xl-fila">2</td><td class="xl-num">1</td><td class="xl-num">2070000.00</td><td class="xl-num">10</td><td class="xl-num">1863000</td></tr><tr><td class="xl-fila">3</td><td class="xl-num">2</td><td class="xl-num">2800000.00</td><td class="xl-num">0</td><td class="xl-num">2800000</td></tr><tr><td class="xl-fila">4</td><td class="xl-num">3</td><td class="xl-num">780000.00</td><td class="xl-num">20</td><td class="xl-num">624000</td></tr><tr><td class="xl-fila">5</td><td class="xl-num">4</td><td class="xl-num">980000.00</td><td class="xl-num">0</td><td class="xl-num">980000</td></tr><tr><td class="xl-fila">6</td><td class="xl-num">5</td><td class="xl-num">3280000.00</td><td class="xl-num">15</td><td class="xl-num">2788000</td></tr><tr><td class="xl-fila">7</td><td class="xl-num">6</td><td class="xl-num">3200000.00</td><td class="xl-num">0</td><td class="xl-num">3200000</td></tr><tr><td class="xl-fila">8</td><td class="xl-num">7</td><td class="xl-num">2350000.00</td><td class="xl-num">0</td><td class="xl-num">2350000</td></tr><tr><td class="xl-fila">9</td><td class="xl-num">8</td><td class="xl-num">1960000.00</td><td class="xl-num">10</td><td class="xl-num">1764000</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+<section class="panel">
+<h2>Consulta 2</h2>
+<p class="enunciado">Stock total de cada producto sumando todas las bodegas.</p><pre class="codigo"><span class="kw">SELECT</span> p.nombre, <span class="kw">SUM</span>(i.stock) <span class="kw">AS</span> stock_total, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> bodegas
+<span class="kw">FROM</span> PRODUCTO p
+<span class="kw">JOIN</span> INVENTARIO i <span class="kw">ON</span> i.sku = p.sku
+<span class="kw">GROUP</span> <span class="kw">BY</span> p.sku, p.nombre
+<span class="kw">ORDER</span> <span class="kw">BY</span> stock_total <span class="kw">DESC</span>;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombre</td><td class="xl-cab">stock_total</td><td class="xl-cab">bodegas</td></tr><tr><td class="xl-fila">2</td><td class="">Teclado K380</td><td class="xl-num">60</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">3</td><td class="">Mouse MX Master 3S</td><td class="xl-num">55</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">4</td><td class="">Galaxy A55</td><td class="xl-num">35</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">5</td><td class="">Redmi Note 13</td><td class="xl-num">30</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">6</td><td class="">IdeaPad Slim 3</td><td class="xl-num">8</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">7</td><td class="">Galaxy Tab S9</td><td class="xl-num">5</td><td class="xl-num">1</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+<section class="panel">
+<h2>Consulta 3</h2>
+<p class="enunciado">Cada subcategoría con su categoría padre.</p><pre class="codigo"><span class="kw">SELECT</span> h.nombre <span class="kw">AS</span> subcategoria, p.nombre <span class="kw">AS</span> padre
+<span class="kw">FROM</span> SUBCATEGORIA s
+<span class="kw">JOIN</span> CATEGORIA h <span class="kw">ON</span> h.id_categoria = s.id_subcategoria
+<span class="kw">JOIN</span> CATEGORIA p <span class="kw">ON</span> p.id_categoria = s.id_padre
+<span class="kw">ORDER</span> <span class="kw">BY</span> padre, subcategoria;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">subcategoria</td><td class="xl-cab">padre</td></tr><tr><td class="xl-fila">2</td><td class="">Portatiles</td><td class="">Computadores</td></tr><tr><td class="xl-fila">3</td><td class="">Accesorios</td><td class="">Tecnologia</td></tr><tr><td class="xl-fila">4</td><td class="">Celulares</td><td class="">Tecnologia</td></tr><tr><td class="xl-fila">5</td><td class="">Computadores</td><td class="">Tecnologia</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+<section class="panel">
+<h2>Consulta 4</h2>
+<p class="enunciado">Envíos con su transportadora y cuántos días tardó (o si va en camino).</p><pre class="codigo"><span class="kw">SELECT</span> e.numero_guia, e.id_pedido, t.nombre <span class="kw">AS</span> transportadora,
+       <span class="kw">COALESCE</span>(CAST(DATEDIFF(e.fecha_entrega, e.fecha_envio) <span class="kw">AS</span> <span class="ty">CHAR</span>), <span class="st">'en camino'</span>) <span class="kw">AS</span> dias
+<span class="kw">FROM</span> ENVIO e
+<span class="kw">JOIN</span> TRANSPORTADORA t <span class="kw">ON</span> t.nit_transportadora = e.nit_transportadora
+<span class="kw">ORDER</span> <span class="kw">BY</span> e.fecha_envio;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th><th class="xl-col">D</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">numero_guia</td><td class="xl-cab">id_pedido</td><td class="xl-cab">transportadora</td><td class="xl-cab">dias</td></tr><tr><td class="xl-fila">2</td><td class="">GU-10001</td><td class="xl-num">1</td><td class="">Servientrega</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">3</td><td class="">GU-10002</td><td class="xl-num">2</td><td class="">Coordinadora</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">4</td><td class="">GU-10003</td><td class="xl-num">3</td><td class="">Servientrega</td><td class="">en camino</td></tr><tr><td class="xl-fila">5</td><td class="">GU-10004</td><td class="xl-num">5</td><td class="">Interrapidisimo</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">6</td><td class="">GU-10005</td><td class="xl-num">6</td><td class="">Coordinadora</td><td class="">en camino</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+<section class="panel">
+<h2>Consulta 5</h2>
+<p class="enunciado">Margen de cada producto frente al proveedor más barato.</p><pre class="codigo"><span class="kw">SELECT</span> p.nombre, p.precio, <span class="kw">MIN</span>(s.precio_compra) <span class="kw">AS</span> compra_minima,
+       p.precio - <span class="kw">MIN</span>(s.precio_compra) <span class="kw">AS</span> margen
+<span class="kw">FROM</span> PRODUCTO p
+<span class="kw">JOIN</span> SUMINISTRO s <span class="kw">ON</span> s.sku = p.sku
+<span class="kw">GROUP</span> <span class="kw">BY</span> p.sku, p.nombre, p.precio
+<span class="kw">ORDER</span> <span class="kw">BY</span> margen <span class="kw">DESC</span>;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th><th class="xl-col">D</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombre</td><td class="xl-cab">precio</td><td class="xl-cab">compra_minima</td><td class="xl-cab">margen</td></tr><tr><td class="xl-fila">2</td><td class="">Galaxy Tab S9</td><td class="xl-num">3100000.00</td><td class="xl-num">2500000.00</td><td class="xl-num">600000.00</td></tr><tr><td class="xl-fila">3</td><td class="">IdeaPad Slim 3</td><td class="xl-num">2400000.00</td><td class="xl-num">1950000.00</td><td class="xl-num">450000.00</td></tr><tr><td class="xl-fila">4</td><td class="">Galaxy A55</td><td class="xl-num">1650000.00</td><td class="xl-num">1300000.00</td><td class="xl-num">350000.00</td></tr><tr><td class="xl-fila">5</td><td class="">Redmi Note 13</td><td class="xl-num">980000.00</td><td class="xl-num">760000.00</td><td class="xl-num">220000.00</td></tr><tr><td class="xl-fila">6</td><td class="">Mouse MX Master 3S</td><td class="xl-num">420000.00</td><td class="xl-num">300000.00</td><td class="xl-num">120000.00</td></tr><tr><td class="xl-fila">7</td><td class="">Teclado K380</td><td class="xl-num">180000.00</td><td class="xl-num">120000.00</td><td class="xl-num">60000.00</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+<section class="panel">
+<h2>Consulta 6</h2>
+<p class="enunciado">Clientes con más de un pedido y lo que han gastado.</p><pre class="codigo"><span class="kw">SELECT</span> c.nombres, c.apellidos, <span class="kw">COUNT</span>(<span class="kw">DISTINCT</span> p.id_pedido) <span class="kw">AS</span> pedidos,
+       <span class="kw">SUM</span>(d.cantidad * d.precio_unitario) <span class="kw">AS</span> gastado
+<span class="kw">FROM</span> CLIENTE c
+<span class="kw">JOIN</span> PEDIDO p <span class="kw">ON</span> p.documento = c.documento
+<span class="kw">JOIN</span> DETALLE d <span class="kw">ON</span> d.id_pedido = p.id_pedido
+<span class="kw">GROUP</span> <span class="kw">BY</span> c.documento, c.nombres, c.apellidos
+<span class="kw">HAVING</span> <span class="kw">COUNT</span>(<span class="kw">DISTINCT</span> p.id_pedido) &gt; <span class="nu">1</span>;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th><th class="xl-col">D</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">pedidos</td><td class="xl-cab">gastado</td></tr><tr><td class="xl-fila">2</td><td class="">Laura Sofia</td><td class="">Pardo Rincon</td><td class="xl-num">3</td><td class="xl-num">5200000.00</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+  </main>
+
+  <div class="stage-nav" id="siguiente"></div>
+
+  <footer>Universidad El Bosque · Bogotá D.C</footer>
+</div>
+
+<script src="../../js/estrellas.js?v=20261116e"></script>
+<script src="../../js/ejercicios.js?v=20261116e"></script>
+<script>iniciarEtapa("sql");</script>
+</body>
+</html>
