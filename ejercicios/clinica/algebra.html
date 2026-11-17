@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Álgebra relacional · Clínica — Portafolio de Bases de Datos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../css/estilos.css?v=20261116c">
+</head>
+<body>
+<div class="sky"></div>
+<canvas id="stars"></canvas>
+
+<div class="wrap ancho">
+  <nav class="topbar">
+    <a href="../../index.html">← Portafolio</a>
+    <a href="../../seccion.html?s=algebra">Todos los ejercicios de Álgebra relacional</a>
+  </nav>
+
+  <header class="interno">
+    <div class="eyebrow">Ejercicio · Clínica</div>
+    <h1>Álgebra relacional</h1>
+    <p class="subtitle">Consultas básicas en el formato «expresión: enunciado», con su resultado.</p>
+  </header>
+
+  <div class="ruta" id="ruta"></div>
+
+  <main>
+<section class="panel"><details><summary>Ver enunciado del ejercicio</summary>
+<p>Una clínica con sedes en varias ciudades organiza jornadas de salud (vacunación, odontología, pediatría…) y quiere guardarlas en una base de datos.</p>
+<ul>
+  <li>Cada <strong>SEDE</strong> tiene un código de tres letras, nombre, ciudad y país.</li>
+  <li>Cada <strong>MÉDICO</strong> tiene identificación, nombre, registro médico, años de experiencia y uno o varios teléfonos. Pertenece a exactamente una sede.</li>
+  <li>Cada <strong>CONSULTORIO</strong> tiene un código, bloque, piso y capacidad, y queda en una sede.</li>
+  <li>Una <strong>JORNADA</strong> tiene un identificador, un código (por ejemplo <code>VAC01</code>), fecha, hora de inicio y especialidad. La realiza una sede y se hace en un solo consultorio.</li>
+  <li>En cada jornada atienden uno o más médicos con un <em>rol</em> (principal o apoyo), y un médico puede atender muchas jornadas.</li>
+  <li>Los <strong>PACIENTES</strong> se registran con identificación, nombre (nombres y apellidos), fecha de nacimiento, correo y número de visitas; la edad se calcula. Un paciente agenda citas en las jornadas y en cada cita se guarda el <em>turno</em> y el <em>régimen</em> (contributivo o subsidiado).</li>
+  <li>Un médico también puede ser paciente. Algunos consultorios son de observación (se guarda el número de camillas) y otros son laboratorios (se guarda el área en m²); los consultorios generales no son ni lo uno ni lo otro.</li>
+</ul>
+<p class="nota">Entidades base: <strong>Médico</strong>, <strong>Paciente</strong> y <strong>Sede</strong>. Entidades inventadas para completar el problema: <strong>Consultorio</strong> y <strong>Jornada</strong>.</p></details></section>
+<section class="panel">
+<h2>Consulta 1</h2>
+
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>nombre, ciudad</sub>(SEDE)</span>: Muestra el nombre y la ciudad de todas las sedes.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombre</td><td class="xl-cab">ciudad</td></tr><tr><td class="xl-fila">2</td><td class="">Sede Envigado</td><td class="">Medellin</td></tr><tr><td class="xl-fila">3</td><td class="">Sede Norte</td><td class="">Bogota</td></tr><tr><td class="xl-fila">4</td><td class="">Sede San Fernando</td><td class="">Cali</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+<section class="panel">
+<h2>Consulta 2</h2>
+
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>codigo, fecha, especialidad</sub>(<span class="op">σ</span><sub>especialidad='Vacunacion'</sub>(JORNADA))</span>: Muestra las jornadas de vacunación.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo</td><td class="xl-cab">fecha</td><td class="xl-cab">especialidad</td></tr><tr><td class="xl-fila">2</td><td class="">VAC01</td><td class="">2027-01-15</td><td class="">Vacunacion</td></tr><tr><td class="xl-fila">3</td><td class="">VAC03</td><td class="">2027-01-16</td><td class="">Vacunacion</td></tr><tr><td class="xl-fila">4</td><td class="">VAC01</td><td class="">2027-01-17</td><td class="">Vacunacion</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+<section class="panel">
+<h2>Consulta 3</h2>
+
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>codigo_consultorio, bloque</sub>(<span class="op">σ</span><sub>piso='Piso 1'</sub>(CONSULTORIO))</span>: Obtiene los consultorios que quedan en el piso 1.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo_consultorio</td><td class="xl-cab">bloque</td></tr><tr><td class="xl-fila">2</td><td class="">C-101</td><td class="">Bloque A</td></tr><tr><td class="xl-fila">3</td><td class="">C-102</td><td class="">Bloque A</td></tr><tr><td class="xl-fila">4</td><td class="">C-110</td><td class="">Bloque A</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+<section class="panel">
+<h2>Consulta 4</h2>
+
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>codigo_consultorio</sub>(CONSULTORIO) <span class="op">−</span> <span class="op">π</span><sub>codigo_consultorio</sub>(JORNADA)</span>: Identifica los consultorios donde no se ha hecho ninguna jornada.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo_consultorio</td></tr><tr><td class="xl-fila">2</td><td class="">C-102</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+<section class="panel">
+<h2>Consulta 5</h2>
+
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>documento</sub>(ATENCION) <span class="op">∩</span> <span class="op">π</span><sub>documento</sub>(CITA)</span>: Obtiene las personas que han sido médicos y también pacientes.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">documento</td></tr><tr><td class="xl-fila">2</td><td class="">1040</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+<section class="panel">
+<h2>Consulta 6</h2>
+
+<p class="enunciado"><span class="expr-linea"><span class="op">π</span><sub>codigo, fecha, bloque</sub>(JORNADA <span class="op">⋈</span> CONSULTORIO)</span>: Muestra cada jornada con el bloque del consultorio donde se hace.</p>
+<div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo</td><td class="xl-cab">fecha</td><td class="xl-cab">bloque</td></tr><tr><td class="xl-fila">2</td><td class="">ODO02</td><td class="">2027-01-15</td><td class="">Bloque B</td></tr><tr><td class="xl-fila">3</td><td class="">VAC01</td><td class="">2027-01-15</td><td class="">Bloque A</td></tr><tr><td class="xl-fila">4</td><td class="">VAC03</td><td class="">2027-01-16</td><td class="">Bloque A</td></tr><tr><td class="xl-fila">5</td><td class="">LAB05</td><td class="">2027-01-17</td><td class="">Bloque C</td></tr><tr><td class="xl-fila">6</td><td class="">VAC01</td><td class="">2027-01-17</td><td class="">Bloque A</td></tr><tr><td class="xl-fila">7</td><td class="">PED06</td><td class="">2027-01-18</td><td class="">Bloque B</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+  </main>
+
+  <div class="stage-nav" id="siguiente"></div>
+
+  <footer>Universidad El Bosque · Bogotá D.C</footer>
+</div>
+
+<script src="../../js/estrellas.js?v=20261116c"></script>
+<script src="../../js/ejercicios.js?v=20261116c"></script>
+<script>iniciarEtapa("algebra");</script>
+</body>
+</html>

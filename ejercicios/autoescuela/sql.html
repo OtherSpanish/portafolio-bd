@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sentencias SQL · Escuela de conducción — Portafolio de Bases de Datos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../css/estilos.css?v=20261116c">
+</head>
+<body>
+<div class="sky"></div>
+<canvas id="stars"></canvas>
+
+<div class="wrap ancho">
+  <nav class="topbar">
+    <a href="../../index.html">← Portafolio</a>
+    <a href="../../seccion.html?s=sql">Todos los ejercicios de Sentencias SQL</a>
+  </nav>
+
+  <header class="interno">
+    <div class="eyebrow">Ejercicio · Escuela de conducción</div>
+    <h1>Sentencias SQL</h1>
+    <p class="subtitle">Consultas sobre la base de datos (MySQL) con su resultado · Escuela de conducción.</p>
+  </header>
+
+  <div class="ruta" id="ruta"></div>
+
+  <main>
+<section class="panel"><details><summary>Ver enunciado del ejercicio</summary>
+<p>Una escuela de conducción con sedes en varias ciudades quiere organizar sus prácticas en una base de datos.</p>
+<ul>
+  <li>Cada <strong>SEDE</strong> tiene un código de tres letras, nombre, ciudad y país.</li>
+  <li>Cada <strong>INSTRUCTOR</strong> tiene identificación, nombre, número de licencia, horas de instrucción y uno o varios teléfonos. Trabaja en exactamente una sede.</li>
+  <li>Cada <strong>VEHÍCULO</strong> se identifica por su placa y tiene modelo, marca y capacidad. Está en una sede.</li>
+  <li>Una <strong>PRÁCTICA</strong> tiene un identificador, un código (por ejemplo <code>URB01</code>), fecha, hora de inicio y recorrido. La programa una sede y usa un solo vehículo.</li>
+  <li>Cada práctica la dirigen uno o más instructores con un <em>rol</em> (principal o apoyo), y un instructor puede dirigir muchas prácticas.</li>
+  <li>Los <strong>ALUMNOS</strong> se registran con identificación, nombre (nombres y apellidos), fecha de nacimiento, correo y horas de práctica acumuladas; la edad se calcula. Un alumno se inscribe en prácticas y en cada inscripción se guarda su <em>turno</em> y su <em>nivel</em>.</li>
+  <li>Un instructor también puede ser alumno (por ejemplo para sacar otra categoría). Algunos vehículos son carros (se guarda el número de puertas) y otros motos (se guarda el cilindraje); el camión de práctica no es ni lo uno ni lo otro.</li>
+</ul>
+<p class="nota">Entidades base: <strong>Instructor</strong>, <strong>Alumno</strong> y <strong>Sede</strong>. Entidades inventadas para completar el problema: <strong>Vehículo</strong> y <strong>Práctica</strong>.</p></details></section>
+<section class="panel">
+<h2>Consulta 1</h2>
+<p class="enunciado">Alumnos de la práctica 1 con su turno y su nivel.</p><pre class="codigo"><span class="kw">SELECT</span> r.turno, p.nombres, p.apellidos, r.nivel
+<span class="kw">FROM</span> INSCRIPCION r
+<span class="kw">JOIN</span> PERSONA p <span class="kw">ON</span> p.documento = r.documento
+<span class="kw">WHERE</span> r.id_practica = <span class="nu">1</span>
+<span class="kw">ORDER</span> <span class="kw">BY</span> r.nivel <span class="kw">DESC</span>, p.apellidos;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th><th class="xl-col">D</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">turno</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">nivel</td></tr><tr><td class="xl-fila">2</td><td class="xl-num">2</td><td class="">Melissa</td><td class="">Torres Rey</td><td class="">avanzado</td></tr><tr><td class="xl-fila">3</td><td class="xl-num">15</td><td class="">Orlando</td><td class="">Bernal Rojas</td><td class="">basico</td></tr><tr><td class="xl-fila">4</td><td class="xl-num">12</td><td class="">Santiago</td><td class="">Uribe Lara</td><td class="">basico</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+<section class="panel">
+<h2>Consulta 2</h2>
+<p class="enunciado">Cuántas prácticas hay de cada recorrido.</p><pre class="codigo"><span class="kw">SELECT</span> recorrido, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> vuelos
+<span class="kw">FROM</span> PRACTICA
+<span class="kw">GROUP</span> <span class="kw">BY</span> recorrido
+<span class="kw">ORDER</span> <span class="kw">BY</span> vuelos <span class="kw">DESC</span>, recorrido;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">recorrido</td><td class="xl-cab">vuelos</td></tr><tr><td class="xl-fila">2</td><td class="">Ruta urbana</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">3</td><td class="">Carretera</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">4</td><td class="">Circuito motos</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">5</td><td class="">Parqueo</td><td class="xl-num">1</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+<section class="panel">
+<h2>Consulta 3</h2>
+<p class="enunciado">Instructores con la ciudad de su sede.</p><pre class="codigo"><span class="kw">SELECT</span> p.nombres, p.apellidos, p.licencia, b.ciudad
+<span class="kw">FROM</span> PERSONA p
+<span class="kw">JOIN</span> SEDE b <span class="kw">ON</span> b.codigo_sede = p.codigo_sede
+<span class="kw">WHERE</span> p.tipo_persona <span class="kw">IN</span> (<span class="st">'instructor'</span>, <span class="st">'ambos'</span>)
+<span class="kw">ORDER</span> <span class="kw">BY</span> b.ciudad, p.apellidos;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th><th class="xl-col">D</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">licencia</td><td class="xl-cab">ciudad</td></tr><tr><td class="xl-fila">2</td><td class="">Wilson</td><td class="">Ardila Mora</td><td class="">INS-3301</td><td class="">Bogota</td></tr><tr><td class="xl-fila">3</td><td class="">Rafael</td><td class="">Contreras Gil</td><td class="">INS-2208</td><td class="">Bogota</td></tr><tr><td class="xl-fila">4</td><td class="">Angela Maria</td><td class="">Rendon Cruz</td><td class="">INS-5019</td><td class="">Bucaramanga</td></tr><tr><td class="xl-fila">5</td><td class="">Claudia</td><td class="">Benavides Paz</td><td class="">INS-4472</td><td class="">Medellin</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+<section class="panel">
+<h2>Consulta 4</h2>
+<p class="enunciado">Cuántas prácticas ha tenido cada vehículo, incluyendo los que no se han usado.</p><pre class="codigo"><span class="kw">SELECT</span> a.placa, a.modelo, <span class="kw">COUNT</span>(v.id_practica) <span class="kw">AS</span> vuelos
+<span class="kw">FROM</span> VEHICULO a
+<span class="kw">LEFT</span> <span class="kw">JOIN</span> PRACTICA v <span class="kw">ON</span> v.placa = a.placa
+<span class="kw">GROUP</span> <span class="kw">BY</span> a.placa, a.modelo
+<span class="kw">ORDER</span> <span class="kw">BY</span> vuelos <span class="kw">DESC</span>, a.placa;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">placa</td><td class="xl-cab">modelo</td><td class="xl-cab">vuelos</td></tr><tr><td class="xl-fila">2</td><td class="">ABC-101</td><td class="">Spark</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">3</td><td class="">XYZ-205</td><td class="">Logan</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">4</td><td class="">DEF-310</td><td class="">Picanto</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">5</td><td class="">MTO-11F</td><td class="">NKD 125</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">6</td><td class="">TRK-701</td><td class="">NHR</td><td class="xl-num">0</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+<section class="panel">
+<h2>Consulta 5</h2>
+<p class="enunciado">Alumnos inscritos en más de una práctica.</p><pre class="codigo"><span class="kw">SELECT</span> p.nombres, p.apellidos, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> reservas
+<span class="kw">FROM</span> INSCRIPCION r
+<span class="kw">JOIN</span> PERSONA p <span class="kw">ON</span> p.documento = r.documento
+<span class="kw">GROUP</span> <span class="kw">BY</span> p.documento, p.nombres, p.apellidos
+<span class="kw">HAVING</span> <span class="kw">COUNT</span>(*) &gt; <span class="nu">1</span>
+<span class="kw">ORDER</span> <span class="kw">BY</span> reservas <span class="kw">DESC</span>, p.apellidos;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">reservas</td></tr><tr><td class="xl-fila">2</td><td class="">Orlando</td><td class="">Bernal Rojas</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">3</td><td class="">Santiago</td><td class="">Uribe Lara</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">4</td><td class="">Cristian</td><td class="">Galvis Soto</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">5</td><td class="">Juliana</td><td class="">Pineda Mejia</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">6</td><td class="">Melissa</td><td class="">Torres Rey</td><td class="xl-num">2</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+<section class="panel">
+<h2>Consulta 6</h2>
+<p class="enunciado">Instructor principal de cada práctica.</p><pre class="codigo"><span class="kw">SELECT</span> v.codigo, v.fecha, p.nombres, p.apellidos
+<span class="kw">FROM</span> INSTRUCCION t
+<span class="kw">JOIN</span> PRACTICA v <span class="kw">ON</span> v.id_practica = t.id_practica
+<span class="kw">JOIN</span> PERSONA p <span class="kw">ON</span> p.documento = t.documento
+<span class="kw">WHERE</span> t.rol = <span class="st">'principal'</span>
+<span class="kw">ORDER</span> <span class="kw">BY</span> v.fecha, v.codigo;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th><th class="xl-col">D</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo</td><td class="xl-cab">fecha</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td></tr><tr><td class="xl-fila">2</td><td class="">PAR02</td><td class="">2026-12-01</td><td class="">Claudia</td><td class="">Benavides Paz</td></tr><tr><td class="xl-fila">3</td><td class="">URB01</td><td class="">2026-12-01</td><td class="">Wilson</td><td class="">Ardila Mora</td></tr><tr><td class="xl-fila">4</td><td class="">URB03</td><td class="">2026-12-02</td><td class="">Angela Maria</td><td class="">Rendon Cruz</td></tr><tr><td class="xl-fila">5</td><td class="">MOT05</td><td class="">2026-12-03</td><td class="">Rafael</td><td class="">Contreras Gil</td></tr><tr><td class="xl-fila">6</td><td class="">URB01</td><td class="">2026-12-03</td><td class="">Rafael</td><td class="">Contreras Gil</td></tr><tr><td class="xl-fila">7</td><td class="">CAR06</td><td class="">2026-12-04</td><td class="">Claudia</td><td class="">Benavides Paz</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+  </main>
+
+  <div class="stage-nav" id="siguiente"></div>
+
+  <footer>Universidad El Bosque · Bogotá D.C</footer>
+</div>
+
+<script src="../../js/estrellas.js?v=20261116c"></script>
+<script src="../../js/ejercicios.js?v=20261116c"></script>
+<script>iniciarEtapa("sql");</script>
+</body>
+</html>

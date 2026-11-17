@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sentencias SQL · Agencia de turismo — Portafolio de Bases de Datos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../css/estilos.css?v=20261116c">
+</head>
+<body>
+<div class="sky"></div>
+<canvas id="stars"></canvas>
+
+<div class="wrap ancho">
+  <nav class="topbar">
+    <a href="../../index.html">← Portafolio</a>
+    <a href="../../seccion.html?s=sql">Todos los ejercicios de Sentencias SQL</a>
+  </nav>
+
+  <header class="interno">
+    <div class="eyebrow">Ejercicio · Agencia de turismo</div>
+    <h1>Sentencias SQL</h1>
+    <p class="subtitle">Consultas sobre la base de datos (MySQL) con su resultado · Agencia de turismo.</p>
+  </header>
+
+  <div class="ruta" id="ruta"></div>
+
+  <main>
+<section class="panel"><details><summary>Ver enunciado del ejercicio</summary>
+<p>Una agencia de turismo con oficinas en varias ciudades de Colombia quiere llevar sus tours en una base de datos.</p>
+<ul>
+  <li>Cada <strong>OFICINA</strong> tiene un código de tres letras, nombre, ciudad y país.</li>
+  <li>Cada <strong>GUÍA</strong> tiene identificación, nombre, número de registro (RNT), años de experiencia y uno o varios teléfonos. Trabaja en exactamente una oficina.</li>
+  <li>Cada <strong>VEHÍCULO</strong> se identifica por su placa y tiene modelo, marca y capacidad. Está asignado a una oficina.</li>
+  <li>Un <strong>TOUR</strong> tiene un identificador, un código (por ejemplo <code>TAY01</code>), fecha, hora de salida y destino. Lo organiza una oficina y usa un solo vehículo.</li>
+  <li>Cada tour lo guían uno o más guías con un <em>rol</em> (principal o apoyo), y un guía puede guiar muchos tours.</li>
+  <li>Los <strong>TURISTAS</strong> se registran con identificación, nombre (nombres y apellidos), fecha de nacimiento, correo y puntos acumulados; la edad se calcula. Un turista reserva tours y en cada reserva se guarda la <em>silla</em> y el <em>plan</em>.</li>
+  <li>Un guía también puede ir de turista. Algunos vehículos son busetas (se guarda el número de sillas) y otros son lanchas (se guarda la eslora en metros); el carro de apoyo no es ni lo uno ni lo otro.</li>
+</ul>
+<p class="nota">Entidades base: <strong>Guía</strong>, <strong>Turista</strong> y <strong>Oficina</strong>. Entidades inventadas para completar el problema: <strong>Vehículo</strong> y <strong>Tour</strong>.</p></details></section>
+<section class="panel">
+<h2>Consulta 1</h2>
+<p class="enunciado">Turistas del tour 1 con su silla y su plan.</p><pre class="codigo"><span class="kw">SELECT</span> r.silla, p.nombres, p.apellidos, r.plan
+<span class="kw">FROM</span> RESERVA r
+<span class="kw">JOIN</span> PERSONA p <span class="kw">ON</span> p.documento = r.documento
+<span class="kw">WHERE</span> r.id_tour = <span class="nu">1</span>
+<span class="kw">ORDER</span> <span class="kw">BY</span> r.plan <span class="kw">DESC</span>, p.apellidos;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th><th class="xl-col">D</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">silla</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">plan</td></tr><tr><td class="xl-fila">2</td><td class="xl-num">2</td><td class="">Adriana</td><td class="">Leal Ortiz</td><td class="">premium</td></tr><tr><td class="xl-fila">3</td><td class="xl-num">12</td><td class="">Kevin</td><td class="">Moreno Toro</td><td class="">basico</td></tr><tr><td class="xl-fila">4</td><td class="xl-num">15</td><td class="">Hernan</td><td class="">Quiroga Paz</td><td class="">basico</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+<section class="panel">
+<h2>Consulta 2</h2>
+<p class="enunciado">Cuántos tours van a cada destino.</p><pre class="codigo"><span class="kw">SELECT</span> destino, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> vuelos
+<span class="kw">FROM</span> TOUR
+<span class="kw">GROUP</span> <span class="kw">BY</span> destino
+<span class="kw">ORDER</span> <span class="kw">BY</span> vuelos <span class="kw">DESC</span>, destino;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">destino</td><td class="xl-cab">vuelos</td></tr><tr><td class="xl-fila">2</td><td class="">Tayrona</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">3</td><td class="">Bahia Concha</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">4</td><td class="">Guatavita</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">5</td><td class="">Zipaquira</td><td class="xl-num">1</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+<section class="panel">
+<h2>Consulta 3</h2>
+<p class="enunciado">Guías con la ciudad de su oficina.</p><pre class="codigo"><span class="kw">SELECT</span> p.nombres, p.apellidos, p.registro_rnt, b.ciudad
+<span class="kw">FROM</span> PERSONA p
+<span class="kw">JOIN</span> OFICINA b <span class="kw">ON</span> b.codigo_oficina = p.codigo_oficina
+<span class="kw">WHERE</span> p.tipo_persona <span class="kw">IN</span> (<span class="st">'guia'</span>, <span class="st">'ambos'</span>)
+<span class="kw">ORDER</span> <span class="kw">BY</span> b.ciudad, p.apellidos;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th><th class="xl-col">D</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">registro_rnt</td><td class="xl-cab">ciudad</td></tr><tr><td class="xl-fila">2</td><td class="">Viviana</td><td class="">Castro Lugo</td><td class="">RNT-1388</td><td class="">Bogota</td></tr><tr><td class="xl-fila">3</td><td class="">Lina Marcela</td><td class="">Barrera Soto</td><td class="">RNT-1590</td><td class="">Cartagena</td></tr><tr><td class="xl-fila">4</td><td class="">Mauricio</td><td class="">Aguilar Pena</td><td class="">RNT-1201</td><td class="">Santa Marta</td></tr><tr><td class="xl-fila">5</td><td class="">Fernando</td><td class="">Ibarra Nieto</td><td class="">RNT-0975</td><td class="">Santa Marta</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+<section class="panel">
+<h2>Consulta 4</h2>
+<p class="enunciado">Cuántos tours ha hecho cada vehículo, incluyendo los que no han salido.</p><pre class="codigo"><span class="kw">SELECT</span> a.placa, a.modelo, <span class="kw">COUNT</span>(v.id_tour) <span class="kw">AS</span> vuelos
+<span class="kw">FROM</span> VEHICULO a
+<span class="kw">LEFT</span> <span class="kw">JOIN</span> TOUR v <span class="kw">ON</span> v.placa = a.placa
+<span class="kw">GROUP</span> <span class="kw">BY</span> a.placa, a.modelo
+<span class="kw">ORDER</span> <span class="kw">BY</span> vuelos <span class="kw">DESC</span>, a.placa;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">placa</td><td class="xl-cab">modelo</td><td class="xl-cab">vuelos</td></tr><tr><td class="xl-fila">2</td><td class="">TUR-101</td><td class="">Sprinter</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">3</td><td class="">TUR-205</td><td class="">H350</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">4</td><td class="">LAN-601</td><td class="">Bravo 34</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">5</td><td class="">TUR-310</td><td class="">Urvan</td><td class="xl-num">1</td></tr><tr><td class="xl-fila">6</td><td class="">TUR-701</td><td class="">Vito</td><td class="xl-num">0</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+<section class="panel">
+<h2>Consulta 5</h2>
+<p class="enunciado">Turistas con más de una reserva.</p><pre class="codigo"><span class="kw">SELECT</span> p.nombres, p.apellidos, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> reservas
+<span class="kw">FROM</span> RESERVA r
+<span class="kw">JOIN</span> PERSONA p <span class="kw">ON</span> p.documento = r.documento
+<span class="kw">GROUP</span> <span class="kw">BY</span> p.documento, p.nombres, p.apellidos
+<span class="kw">HAVING</span> <span class="kw">COUNT</span>(*) &gt; <span class="nu">1</span>
+<span class="kw">ORDER</span> <span class="kw">BY</span> reservas <span class="kw">DESC</span>, p.apellidos;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td><td class="xl-cab">reservas</td></tr><tr><td class="xl-fila">2</td><td class="">Kevin</td><td class="">Moreno Toro</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">3</td><td class="">Hernan</td><td class="">Quiroga Paz</td><td class="xl-num">3</td></tr><tr><td class="xl-fila">4</td><td class="">Paula</td><td class="">Jimenez Cruz</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">5</td><td class="">Adriana</td><td class="">Leal Ortiz</td><td class="xl-num">2</td></tr><tr><td class="xl-fila">6</td><td class="">Samuel</td><td class="">Velasquez Rey</td><td class="xl-num">2</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+<section class="panel">
+<h2>Consulta 6</h2>
+<p class="enunciado">Guía principal de cada tour.</p><pre class="codigo"><span class="kw">SELECT</span> v.codigo, v.fecha, p.nombres, p.apellidos
+<span class="kw">FROM</span> GUIANZA t
+<span class="kw">JOIN</span> TOUR v <span class="kw">ON</span> v.id_tour = t.id_tour
+<span class="kw">JOIN</span> PERSONA p <span class="kw">ON</span> p.documento = t.documento
+<span class="kw">WHERE</span> t.rol = <span class="st">'principal'</span>
+<span class="kw">ORDER</span> <span class="kw">BY</span> v.fecha, v.codigo;</pre><div class="xl"><table><thead><tr><th class="xl-esq"></th><th class="xl-col">A</th><th class="xl-col">B</th><th class="xl-col">C</th><th class="xl-col">D</th></tr></thead><tbody><tr><td class="xl-fila">1</td><td class="xl-cab">codigo</td><td class="xl-cab">fecha</td><td class="xl-cab">nombres</td><td class="xl-cab">apellidos</td></tr><tr><td class="xl-fila">2</td><td class="">TAY01</td><td class="">2026-12-10</td><td class="">Mauricio</td><td class="">Aguilar Pena</td></tr><tr><td class="xl-fila">3</td><td class="">ZIP02</td><td class="">2026-12-10</td><td class="">Viviana</td><td class="">Castro Lugo</td></tr><tr><td class="xl-fila">4</td><td class="">TAY03</td><td class="">2026-12-11</td><td class="">Lina Marcela</td><td class="">Barrera Soto</td></tr><tr><td class="xl-fila">5</td><td class="">BAH05</td><td class="">2026-12-12</td><td class="">Fernando</td><td class="">Ibarra Nieto</td></tr><tr><td class="xl-fila">6</td><td class="">TAY01</td><td class="">2026-12-12</td><td class="">Fernando</td><td class="">Ibarra Nieto</td></tr><tr><td class="xl-fila">7</td><td class="">GUA06</td><td class="">2026-12-13</td><td class="">Viviana</td><td class="">Castro Lugo</td></tr></tbody></table><div class="xl-pie"><span class="xl-hoja">Resultado</span><span class="xl-mas">+</span></div></div>
+</section>
+  </main>
+
+  <div class="stage-nav" id="siguiente"></div>
+
+  <footer>Universidad El Bosque · Bogotá D.C</footer>
+</div>
+
+<script src="../../js/estrellas.js?v=20261116c"></script>
+<script src="../../js/ejercicios.js?v=20261116c"></script>
+<script>iniciarEtapa("sql");</script>
+</body>
+</html>

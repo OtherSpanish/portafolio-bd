@@ -34,7 +34,15 @@ var EJERCICIOS = [
   { id: "terminal", titulo: "Terminal de transporte", icono: "🚌", carpeta: "ejercicios/terminal/",
     descripcion: "Conductores, viajeros, terminales, buses y viajes." },
   { id: "teatro", titulo: "Teatro", icono: "🎭", carpeta: "ejercicios/teatro/",
-    descripcion: "Actores, espectadores, teatros, salas y funciones." }
+    descripcion: "Actores, espectadores, teatros, salas y funciones." },
+  { id: "turismo", titulo: "Agencia de turismo", icono: "🧭", carpeta: "ejercicios/turismo/",
+    descripcion: "Guías, turistas, oficinas, vehículos y tours." },
+  { id: "clinica", titulo: "Clínica", icono: "🩺", carpeta: "ejercicios/clinica/",
+    descripcion: "Médicos, pacientes, sedes, consultorios y jornadas de salud." },
+  { id: "autoescuela", titulo: "Escuela de conducción", icono: "🚗", carpeta: "ejercicios/autoescuela/",
+    descripcion: "Instructores, alumnos, sedes, vehículos y prácticas." },
+  { id: "biblioteca", titulo: "Red de bibliotecas", icono: "📚", carpeta: "ejercicios/biblioteca/",
+    descripcion: "Bibliotecarios, lectores, sedes, salas y talleres." }
 ];
 
 var NOTACIONES = [

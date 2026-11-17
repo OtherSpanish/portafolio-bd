@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modelo relacional · Agencia de turismo — Portafolio de Bases de Datos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../css/estilos.css?v=20261116c">
+</head>
+<body>
+<div class="sky"></div>
+<canvas id="stars"></canvas>
+
+<div class="wrap ancho">
+  <nav class="topbar">
+    <a href="../../index.html">← Portafolio</a>
+    <a href="../../seccion.html?s=relacional">Todos los ejercicios de Modelo relacional</a>
+  </nav>
+
+  <header class="interno">
+    <div class="eyebrow">Ejercicio · Agencia de turismo</div>
+    <h1>Modelo relacional</h1>
+    <p class="subtitle">Tablas, columnas, tipos y llaves · Agencia de turismo.</p>
+  </header>
+
+  <div class="ruta" id="ruta"></div>
+
+  <main>
+<section class="panel"><details><summary>Ver enunciado del ejercicio</summary>
+<p>Una agencia de turismo con oficinas en varias ciudades de Colombia quiere llevar sus tours en una base de datos.</p>
+<ul>
+  <li>Cada <strong>OFICINA</strong> tiene un código de tres letras, nombre, ciudad y país.</li>
+  <li>Cada <strong>GUÍA</strong> tiene identificación, nombre, número de registro (RNT), años de experiencia y uno o varios teléfonos. Trabaja en exactamente una oficina.</li>
+  <li>Cada <strong>VEHÍCULO</strong> se identifica por su placa y tiene modelo, marca y capacidad. Está asignado a una oficina.</li>
+  <li>Un <strong>TOUR</strong> tiene un identificador, un código (por ejemplo <code>TAY01</code>), fecha, hora de salida y destino. Lo organiza una oficina y usa un solo vehículo.</li>
+  <li>Cada tour lo guían uno o más guías con un <em>rol</em> (principal o apoyo), y un guía puede guiar muchos tours.</li>
+  <li>Los <strong>TURISTAS</strong> se registran con identificación, nombre (nombres y apellidos), fecha de nacimiento, correo y puntos acumulados; la edad se calcula. Un turista reserva tours y en cada reserva se guarda la <em>silla</em> y el <em>plan</em>.</li>
+  <li>Un guía también puede ir de turista. Algunos vehículos son busetas (se guarda el número de sillas) y otros son lanchas (se guarda la eslora en metros); el carro de apoyo no es ni lo uno ni lo otro.</li>
+</ul>
+<p class="nota">Entidades base: <strong>Guía</strong>, <strong>Turista</strong> y <strong>Oficina</strong>. Entidades inventadas para completar el problema: <strong>Vehículo</strong> y <strong>Tour</strong>.</p></details></section>
+<section class="panel">
+<h2>Diagrama del modelo relacional</h2>
+<div class="diagrama tablero"><svg xmlns="http://www.w3.org/2000/svg" viewBox="1 -40 2003 876" font-family="Arial, Helvetica, sans-serif" role="img">
+<defs><pattern id="relacional_g1" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e3e6ea" stroke-width="1"/></pattern><pattern id="relacional_g2" width="100" height="100" patternUnits="userSpaceOnUse"><rect width="100" height="100" fill="url(#relacional_g1)"/><path d="M 100 0 L 0 0 0 100" fill="none" stroke="#cfd4da" stroke-width="1.2"/></pattern></defs>
+<rect x="1" y="-40" width="2003" height="876" fill="#ffffff"/>
+<rect x="1" y="-40" width="2003" height="876" fill="url(#relacional_g2)"/>
+<text x="1003" y="-6" text-anchor="middle" font-size="20" fill="#000">MODELO RELACIONAL</text>
+<polyline points="298.5,116.0 437.5,116.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="682.5,127.5 887.5,127.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1304.0,127.5 1112.5,127.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1755.4,96.0 1536.0,96.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1756.5,256.0 1490.0,256.0 1490.0,212.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1090.0,470.0 1090.0,195.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="1210.0,470.0 1210.0,341.0 1380.0,341.0 1380.0,212.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="700.0,560.0 700.0,436.0 610.0,436.0 610.0,312.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="808.9,634.5 1044.4,634.5" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="300.0,560.0 300.0,436.0 510.0,436.0 510.0,312.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<polyline points="300.0,746.0 300.0,796.0 1150.0,796.0 1150.0,716.0" fill="none" stroke="#000" stroke-width="1.3"/>
+<rect x="437.5" y="40.0" width="245.0" height="272.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="560.0" y="59.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">PERSONA</text><line x1="437.5" y1="68.0" x2="682.5" y2="68.0" stroke="#000" stroke-width="1.1"/><text x="445.5" y="84.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="471.3" y="84.0" font-size="12" fill="#000" text-decoration="underline">documento</text><text x="580.0" y="84.0" font-size="11" fill="#000">VARCHAR (15)</text><text x="445.5" y="104.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="471.3" y="104.0" font-size="12" fill="#000">nombres</text><text x="580.0" y="104.0" font-size="11" fill="#000">VARCHAR (50)</text><text x="445.5" y="124.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="471.3" y="124.0" font-size="12" fill="#000">apellidos</text><text x="580.0" y="124.0" font-size="11" fill="#000">VARCHAR (50)</text><text x="445.5" y="144.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="471.3" y="144.0" font-size="12" fill="#000">fecha_nacimiento</text><text x="580.0" y="144.0" font-size="11" fill="#000">DATE</text><text x="445.5" y="164.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="471.3" y="164.0" font-size="12" fill="#000">tipo_persona</text><text x="580.0" y="164.0" font-size="11" fill="#000">VARCHAR (10)</text><text x="445.5" y="184.0" font-size="11" font-weight="bold" fill="#000">U</text><text x="471.3" y="184.0" font-size="12" fill="#000">registro_rnt</text><text x="580.0" y="184.0" font-size="11" fill="#000">VARCHAR (10)</text><text x="445.5" y="204.0" font-size="11" font-weight="bold" fill="#000"></text><text x="471.3" y="204.0" font-size="12" fill="#000">anios_experiencia</text><text x="580.0" y="204.0" font-size="11" fill="#000">INT</text><text x="445.5" y="224.0" font-size="11" font-weight="bold" fill="#000">F</text><text x="471.3" y="224.0" font-size="12" fill="#000">codigo_oficina</text><text x="580.0" y="224.0" font-size="11" fill="#000">CHAR (3)</text><text x="445.5" y="244.0" font-size="11" font-weight="bold" fill="#000">U</text><text x="471.3" y="244.0" font-size="12" fill="#000">correo</text><text x="580.0" y="244.0" font-size="11" fill="#000">VARCHAR (80)</text><text x="445.5" y="264.0" font-size="11" font-weight="bold" fill="#000"></text><text x="471.3" y="264.0" font-size="12" fill="#000">puntos</text><text x="580.0" y="264.0" font-size="11" fill="#000">INT</text><line x1="437.5" y1="274.0" x2="682.5" y2="274.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="447.5" y="288.0" font-size="11" fill="#000">PERSONA_PK (documento)</text><text x="447.5" y="305.0" font-size="11" fill="#000">PERSONA_OFICINA_FK (codigo_oficina)</text>
+<rect x="41.5" y="60.0" width="257.0" height="112.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="170.0" y="79.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">PER_TELEFONO</text><line x1="41.5" y1="88.0" x2="298.5" y2="88.0" stroke="#000" stroke-width="1.1"/><text x="49.5" y="104.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="79.5" y="104.0" font-size="12" fill="#000" text-decoration="underline">documento</text><text x="150.8" y="104.0" font-size="11" fill="#000">VARCHAR (15)</text><text x="49.5" y="124.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="79.5" y="124.0" font-size="12" fill="#000" text-decoration="underline">telefono</text><text x="150.8" y="124.0" font-size="11" fill="#000">VARCHAR (15)</text><line x1="41.5" y1="134.0" x2="298.5" y2="134.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="51.5" y="148.0" font-size="11" fill="#000">PER_TELEFONO_PK (documento, telefono)</text><text x="51.5" y="165.0" font-size="11" fill="#000">PER_TELEFONO_PERSONA_FK (documento)</text>
+<rect x="887.5" y="60.0" width="225.0" height="135.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1000.0" y="79.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">OFICINA</text><line x1="887.5" y1="88.0" x2="1112.5" y2="88.0" stroke="#000" stroke-width="1.1"/><text x="895.5" y="104.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="921.3" y="104.0" font-size="12" fill="#000" text-decoration="underline">codigo_oficina</text><text x="1010.0" y="104.0" font-size="11" fill="#000">CHAR (3)</text><text x="895.5" y="124.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="921.3" y="124.0" font-size="12" fill="#000">nombre</text><text x="1010.0" y="124.0" font-size="11" fill="#000">VARCHAR (80)</text><text x="895.5" y="144.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="921.3" y="144.0" font-size="12" fill="#000">ciudad</text><text x="1010.0" y="144.0" font-size="11" fill="#000">VARCHAR (50)</text><text x="895.5" y="164.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="921.3" y="164.0" font-size="12" fill="#000">pais</text><text x="1010.0" y="164.0" font-size="11" fill="#000">VARCHAR (50)</text><line x1="887.5" y1="174.0" x2="1112.5" y2="174.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="897.5" y="188.0" font-size="11" fill="#000">OFICINA_PK (codigo_oficina)</text>
+<rect x="1304.0" y="60.0" width="231.9" height="152.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1420.0" y="79.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">VEHICULO</text><line x1="1304.0" y1="88.0" x2="1536.0" y2="88.0" stroke="#000" stroke-width="1.1"/><text x="1312.0" y="104.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="1337.8" y="104.0" font-size="12" fill="#000" text-decoration="underline">placa</text><text x="1426.5" y="104.0" font-size="11" fill="#000">VARCHAR (10)</text><text x="1312.0" y="124.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1337.8" y="124.0" font-size="12" fill="#000">modelo</text><text x="1426.5" y="124.0" font-size="11" fill="#000">VARCHAR (40)</text><text x="1312.0" y="144.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1337.8" y="144.0" font-size="12" fill="#000">marca</text><text x="1426.5" y="144.0" font-size="11" fill="#000">VARCHAR (40)</text><text x="1312.0" y="164.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="1337.8" y="164.0" font-size="12" fill="#000">codigo_oficina</text><text x="1426.5" y="164.0" font-size="11" fill="#000">CHAR (3)</text><line x1="1304.0" y1="174.0" x2="1536.0" y2="174.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="1314.0" y="188.0" font-size="11" fill="#000">VEHICULO_PK (placa)</text><text x="1314.0" y="205.0" font-size="11" fill="#000">VEHICULO_OFICINA_FK (codigo_oficina)</text>
+<rect x="1755.4" y="40.0" width="209.2" height="112.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1860.0" y="59.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">BUSETA</text><line x1="1755.4" y1="68.0" x2="1964.6" y2="68.0" stroke="#000" stroke-width="1.1"/><text x="1763.4" y="84.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="1793.4" y="84.0" font-size="12" fill="#000" text-decoration="underline">placa</text><text x="1862.1" y="84.0" font-size="11" fill="#000">VARCHAR (10)</text><text x="1763.4" y="104.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1793.4" y="104.0" font-size="12" fill="#000">num_sillas</text><text x="1862.1" y="104.0" font-size="11" fill="#000">INT</text><line x1="1755.4" y1="114.0" x2="1964.6" y2="114.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="1765.4" y="128.0" font-size="11" fill="#000">BUSETA_PK (placa)</text><text x="1765.4" y="145.0" font-size="11" fill="#000">BUSETA_VEHICULO_FK (placa)</text>
+<rect x="1756.5" y="200.0" width="206.9" height="112.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1860.0" y="219.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">LANCHA</text><line x1="1756.5" y1="228.0" x2="1963.5" y2="228.0" stroke="#000" stroke-width="1.1"/><text x="1764.5" y="244.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="1794.5" y="244.0" font-size="12" fill="#000" text-decoration="underline">placa</text><text x="1855.9" y="244.0" font-size="11" fill="#000">VARCHAR (10)</text><text x="1764.5" y="264.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1794.5" y="264.0" font-size="12" fill="#000">eslora_m</text><text x="1855.9" y="264.0" font-size="11" fill="#000">DECIMAL (10,2)</text><line x1="1756.5" y1="274.0" x2="1963.5" y2="274.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="1766.5" y="288.0" font-size="11" fill="#000">LANCHA_PK (placa)</text><text x="1766.5" y="305.0" font-size="11" fill="#000">LANCHA_VEHICULO_FK (placa)</text>
+<rect x="1044.4" y="470.0" width="211.2" height="246.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="1150.0" y="489.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">TOUR</text><line x1="1044.4" y1="498.0" x2="1255.6" y2="498.0" stroke="#000" stroke-width="1.1"/><text x="1052.4" y="514.0" font-size="11" font-weight="bold" fill="#000">P *</text><text x="1079.1" y="514.0" font-size="12" fill="#000" text-decoration="underline">id_tour</text><text x="1153.1" y="514.0" font-size="11" fill="#000">BIGINT</text><text x="1052.4" y="534.0" font-size="11" font-weight="bold" fill="#000">U *</text><text x="1079.1" y="534.0" font-size="12" fill="#000">codigo</text><text x="1153.1" y="534.0" font-size="11" fill="#000">VARCHAR (8)</text><text x="1052.4" y="554.0" font-size="11" font-weight="bold" fill="#000">U *</text><text x="1079.1" y="554.0" font-size="12" fill="#000">fecha</text><text x="1153.1" y="554.0" font-size="11" fill="#000">DATE</text><text x="1052.4" y="574.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1079.1" y="574.0" font-size="12" fill="#000">hora_salida</text><text x="1153.1" y="574.0" font-size="11" fill="#000">TIME</text><text x="1052.4" y="594.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="1079.1" y="594.0" font-size="12" fill="#000">destino</text><text x="1153.1" y="594.0" font-size="11" fill="#000">VARCHAR (50)</text><text x="1052.4" y="614.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="1079.1" y="614.0" font-size="12" fill="#000">placa</text><text x="1153.1" y="614.0" font-size="11" fill="#000">VARCHAR (10)</text><text x="1052.4" y="634.0" font-size="11" font-weight="bold" fill="#000">F *</text><text x="1079.1" y="634.0" font-size="12" fill="#000">oficina_tour</text><text x="1153.1" y="634.0" font-size="11" fill="#000">CHAR (3)</text><line x1="1044.4" y1="644.0" x2="1255.6" y2="644.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="1054.4" y="658.0" font-size="11" fill="#000">TOUR_PK (id_tour)</text><text x="1054.4" y="675.0" font-size="11" fill="#000">TOUR_UK (codigo, fecha)</text><text x="1054.4" y="692.0" font-size="11" fill="#000">TOUR_VEHICULO_FK (placa)</text><text x="1054.4" y="709.0" font-size="11" fill="#000">TOUR_OFICINA_FK (oficina_tour)</text>
+<rect x="591.1" y="560.0" width="217.9" height="149.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="700.0" y="579.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">GUIANZA</text><line x1="591.1" y1="588.0" x2="808.9" y2="588.0" stroke="#000" stroke-width="1.1"/><text x="599.1" y="604.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="629.1" y="604.0" font-size="12" fill="#000" text-decoration="underline">documento</text><text x="700.4" y="604.0" font-size="11" fill="#000">VARCHAR (15)</text><text x="599.1" y="624.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="629.1" y="624.0" font-size="12" fill="#000" text-decoration="underline">id_tour</text><text x="700.4" y="624.0" font-size="11" fill="#000">BIGINT</text><text x="599.1" y="644.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="629.1" y="644.0" font-size="12" fill="#000">rol</text><text x="700.4" y="644.0" font-size="11" fill="#000">VARCHAR (10)</text><line x1="591.1" y1="654.0" x2="808.9" y2="654.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="601.1" y="668.0" font-size="11" fill="#000">GUIANZA_PK (documento, id_tour)</text><text x="601.1" y="685.0" font-size="11" fill="#000">GUIANZA_PERSONA_FK (documento)</text><text x="601.1" y="702.0" font-size="11" fill="#000">GUIANZA_TOUR_FK (id_tour)</text>
+<rect x="189.7" y="560.0" width="220.5" height="186.0" fill="#fff" stroke="#000" stroke-width="1.3"/><text x="300.0" y="579.0" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">RESERVA</text><line x1="189.7" y1="588.0" x2="410.3" y2="588.0" stroke="#000" stroke-width="1.1"/><text x="197.7" y="604.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="227.7" y="604.0" font-size="12" fill="#000" text-decoration="underline">documento</text><text x="299.1" y="604.0" font-size="11" fill="#000">VARCHAR (15)</text><text x="197.7" y="624.0" font-size="11" font-weight="bold" fill="#000">PF*</text><text x="227.7" y="624.0" font-size="12" fill="#000" text-decoration="underline">id_tour</text><text x="299.1" y="624.0" font-size="11" fill="#000">BIGINT</text><text x="197.7" y="644.0" font-size="11" font-weight="bold" fill="#000">U *</text><text x="227.7" y="644.0" font-size="12" fill="#000">silla</text><text x="299.1" y="644.0" font-size="11" fill="#000">VARCHAR (4)</text><text x="197.7" y="664.0" font-size="11" font-weight="bold" fill="#000">*</text><text x="227.7" y="664.0" font-size="12" fill="#000">plan</text><text x="299.1" y="664.0" font-size="11" fill="#000">VARCHAR (10)</text><line x1="189.7" y1="674.0" x2="410.3" y2="674.0" stroke="#000" stroke-width="1" stroke-dasharray="4 2"/><text x="199.7" y="688.0" font-size="11" fill="#000">RESERVA_PK (documento, id_tour)</text><text x="199.7" y="705.0" font-size="11" fill="#000">RESERVA_UK (id_tour, silla)</text><text x="199.7" y="722.0" font-size="11" fill="#000">RESERVA_PERSONA_FK (documento)</text><text x="199.7" y="739.0" font-size="11" fill="#000">RESERVA_TOUR_FK (id_tour)</text>
+<polyline points="298.5,107.0 311.5,116.0 298.5,125.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="315.5" y1="108.0" x2="315.5" y2="124.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="430.5" y1="124.0" x2="430.5" y2="108.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="424.5" y1="124.0" x2="424.5" y2="108.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="682.5,118.5 695.5,127.5 682.5,136.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="701.5" cy="127.5" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="880.5" y1="135.5" x2="880.5" y2="119.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="869.5" cy="127.5" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<polyline points="1304.0,136.5 1291.0,127.5 1304.0,118.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="1285.0" cy="127.5" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="1119.5" y1="119.5" x2="1119.5" y2="135.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1125.5" y1="119.5" x2="1125.5" y2="135.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1748.4" y1="104.0" x2="1748.4" y2="88.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="1737.4" cy="96.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="1543.0" y1="88.0" x2="1543.0" y2="104.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1549.0" y1="88.0" x2="1549.0" y2="104.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1749.5" y1="264.0" x2="1749.5" y2="248.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="1738.5" cy="256.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="1498.0" y1="219.0" x2="1482.0" y2="219.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1498.0" y1="225.0" x2="1482.0" y2="225.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1081.0,470.0 1090.0,457.0 1099.0,470.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="1090.0" cy="451.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="1098.0" y1="202.0" x2="1082.0" y2="202.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1098.0" y1="208.0" x2="1082.0" y2="208.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1201.0,470.0 1210.0,457.0 1219.0,470.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="1210.0" cy="451.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="1388.0" y1="219.0" x2="1372.0" y2="219.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1388.0" y1="225.0" x2="1372.0" y2="225.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="691.0,560.0 700.0,547.0 709.0,560.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="700.0" cy="541.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="618.0" y1="319.0" x2="602.0" y2="319.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="618.0" y1="325.0" x2="602.0" y2="325.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="808.9,625.5 821.9,634.5 808.9,643.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="825.9" y1="626.5" x2="825.9" y2="642.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1037.4" y1="642.5" x2="1037.4" y2="626.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1031.4" y1="642.5" x2="1031.4" y2="626.5" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="291.0,560.0 300.0,547.0 309.0,560.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="300.0" cy="541.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="518.0" y1="319.0" x2="502.0" y2="319.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="518.0" y1="325.0" x2="502.0" y2="325.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="309.0,746.0 300.0,759.0 291.0,746.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<circle cx="300.0" cy="765.0" r="5" fill="#fff" stroke="#000" stroke-width="1.4"/>
+<line x1="1158.0" y1="723.0" x2="1142.0" y2="723.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<line x1="1158.0" y1="729.0" x2="1142.0" y2="729.0" stroke="#000" stroke-width="1.4" fill="none"/>
+</svg></div><p class="nota"><strong>P</strong> llave primaria · <strong>F</strong> llave foránea · <strong>U</strong> único · <strong>*</strong> obligatorio. Abajo de cada tabla van sus restricciones de llave.</p>
+</section>
+  </main>
+
+  <div class="stage-nav" id="siguiente"></div>
+
+  <footer>Universidad El Bosque · Bogotá D.C</footer>
+</div>
+
+<script src="../../js/estrellas.js?v=20261116c"></script>
+<script src="../../js/ejercicios.js?v=20261116c"></script>
+<script>iniciarEtapa("relacional");</script>
+</body>
+</html>
